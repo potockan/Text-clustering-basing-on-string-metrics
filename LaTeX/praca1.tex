@@ -1,0 +1,168 @@
+\documentclass[12pt, twoside, openany]{report}
+\usepackage[dvips]{graphicx,color,rotating}
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\usepackage{a4wide}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{verbatim}
+\usepackage[MeX]{polski}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{left=25mm,right=25mm,%
+bindingoffset=10mm, top=25mm, bottom=25mm}
+\usepackage{amssymb, latexsym}
+\usepackage{amsthm}
+\usepackage{palatino}
+\usepackage{array}
+\usepackage{pstricks}
+\usepackage{textcomp}
+\usepackage{hyperref}
+%paginy
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% zmiana liter w~.ywej paginie na ma.e
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} % usu. bie..ce ustawienia pagin
+\fancyhead[LE,RO]{\small\bfseries\thepage}
+\fancyhead[LO]{\small\bfseries\rightmark}
+\fancyhead[RE]{\small\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt} % pionowy odst.p na kresk.
+\fancypagestyle{plain}{%
+\fancyhead{} % usu. p. górne na stronach pozbawionych
+% numeracji (plain)
+\renewcommand{\headrulewidth}{0pt} % pozioma kreska
+}
+%paginy koniec
+
+\theoremstyle{plain}
+\newtheorem{tw}{Twierdzenie}[section]
+\newtheorem{uw}{Uwaga}[section]
+\newtheorem{defi}{Definicja}[section]
+\newtheorem{alg}{Algorytm}[chapter]
+\newtheorem{przyp}{Przypadek}[section]
+\newtheorem{prz}{Przykład}[section]
+\newtheorem{lem}[tw]{Lemat}
+\newtheorem{stw}[tw]{Stwierdzenie}
+\newtheorem{wn}[tw]{Wniosek}
+\newtheorem{cw}{Ćwiczenie}[section]
+\linespread{1.5}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\al}{\alpha}
+\newcommand*{\norm}[1]{\left\Vert{#1}\right\Vert}
+\newcommand*{\abs}[1]{\left\vert{#1}\right\vert}
+\newcommand*{\om}{\omega}
+
+\author{Natalia Potocka}
+\title{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
+
+\begin{document}
+
+
+\begin{titlepage}
+\pagestyle{headings}
+
+\noindent
+\begin{Large}
+\begin{table}[t]
+\centering
+\begin{tabular}[t]{lcr}
+ \includegraphics[width=70pt,height=70pt]{PW.png} & POLITECHNIKA WARSZAWSKA & \includegraphics[width=70pt,height=70pt]{MiNI.png}\\
+& WYDZIAŁ MATEMATYKI & \\
+& I NAUK INFORMACYJNYCH &
+\end{tabular}
+\end{table}
+
+% \vfill
+\begin{center}PRACA DYPLOMOWA MAGISTERSKA \end{center}
+\begin{center}MATEMATYKA\end{center}\end{Large}
+% \vfill
+\begin{center}
+\Huge
+\textbf{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
+\end{center}
+% \vfill\vfill
+\vfill
+\begin{center}
+\Large
+Autor: \\
+\LARGE
+Natalia Potocka
+\end{center}
+\vfill
+\begin{center}
+\Large
+Promotor: \\
+\Large
+dr Marek Gągolewski
+\end{center}
+\vfill
+\begin{center}
+\large
+Warszawa, Wrzesień 2015
+\end{center}
+\newpage
+\hfill
+\begin{table}[b]
+\centering
+\begin{tabular}[t]{ccc}
+............................................. & \hspace*{100pt} & .............................................\\
+podpis promotora & \hspace*{100pt} & podpis autora
+\end{tabular}
+\end{table}
+
+
+% \maketitle
+\end{titlepage}
+\thispagestyle{empty}
+\newpage
+\pagestyle{headings}
+\setcounter{page}{1}
+\hyphenation{Syl-ves-tra}
+\hyphenation{Syl-ves-ter-a}
+\cleardoublepage
+
+\tableofcontents
+
+\begin{abstract}
+
+\end{abstract}
+
+
+%-----------Początek części zasadniczej-----------
+
+
+\chapter*{Wstęp}
+\addcontentsline{toc}{chapter}{Wstęp}
+COŚ tu będzie.
+
+
+
+
+%-----------Koniec części zasadniczej-----------
+
+\begin{thebibliography}{11}
+%\bibitem[1]{M} Arnold W. Miller, \emph{Special Subsets of the Real Line}, The University of Texas, Austin, U.S.A. 1984.
+%\bibitem[2]{H2} J.C. Oxtoby, \emph{Measure and Category}, Springer-Verlag, New York Heidelberg Berlin, 1971.
+%\bibitem[3]{WW} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. I: The Basics.} Graduate Studies in Mathematics vol. 8, American Mathematical Society, Providence, RI, 1996.
+%\bibitem[4]{WW2} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. II: Set-Theoretic Tools for Every Mathematician.}, Graduate Studies in Mathematics vol. 18, American Mathematical Society, Providence, RI, 1997.
+\end{thebibliography}
+\clearpage
+\pagestyle{empty}
+\noindent Warszawa, dnia ...............
+\vspace{5cm}
+\begin{center}
+\LARGE{Oświadczenie}
+\end{center}
+Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
+\vspace{2cm}
+\begin{flushright}
+...........................................
+\end{flushright}
+
+\end{document}

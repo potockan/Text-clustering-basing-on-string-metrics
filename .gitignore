@@ -3,9 +3,9 @@
 .RData
 *.Rproj
 *.log
-*.tex
 *.out
 *.synctex.gz
+*.aux
 .directory
 *.toc
 Data/

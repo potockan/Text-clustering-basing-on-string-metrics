@@ -8,4 +8,5 @@
 *.aux
 .directory
 *.toc
+*.tex.bak
 Data/

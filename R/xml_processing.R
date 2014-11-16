@@ -2,23 +2,20 @@
 
 library(XML)
 library(stringi)
-
-xmlfile <- xmlParse("./Data//XML/plwiki-20141102-pages-articles1-1000linesCW.xml")
-
+library(RSQLite)
 
 
 #### from Rpkg project ####
+# functions which prepares a text to insert it into DB 
+# or if its empty then its NULL
 prepare_string_or_NULL <- function(str) {
   str <- as.character(str)
   n <- length(str)
   if(n==0)
     ret <- "NULL"
   else{
-    which_na <- is.na(str)
-    ret <- character(n)
-    ret[which_na] <- "NULL"
-    stri_replace_all_fixed(str[!which_na], "'", "'''")
-    ret[!which_na] <- stri_paste("'", str[!which_na], "'")
+    ret <- stri_replace_all_regex(str, "'{1,}", "''")
+    ret <- stri_paste("'", ret, "'")
   }
   ret
 }
@@ -27,10 +24,21 @@ prepare_string_or_NULL <- function(str) {
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
 
+#xmlfile <- xmlParse("./Data//XML/plwiki-20141102-pages-articles1-1000linesCW.xml")
+xmlfile <- xmlParse("./Data//XML/gawiki-20140223-pages-articles.xml")
+
+
 xml_list <- xmlToList(xmlfile)
 index <- which(names(xml_list) == "page")
 
 ###################
+#inserting into DB
+#for polish 1000 lines it works
+#for gawiki:
+# Error in is(object, Cl) : 
+#   error in evaluating the argument 'statement' in selecting a method for function 'dbSendQuery': Error in xml_list[[i]][["revision"]][["text"]][["text"]] : 
+#   subscript out of bounds
+
 for(i in index){
   dbSendQuery(conn, sprintf(
     "INSERT INTO wiki_raw (title, text ,redirect)
@@ -46,9 +54,12 @@ for(i in index){
   
 }
 
-stri_extract_all_regex(prepare_string_or_NULL( xml_list[[i]][["revision"]][["text"]][["text"]]), "'''(.+?)'''")
 
-i <- 2
+
+#dbReadTable(conn, "wiki_raw")
+
+dbDisconnect(conn)
+
 #########################
 
 
@@ -123,9 +134,22 @@ i <- 2
 # ldply(xml_list[names(xml_list) == "page"], data.frame)
 # ldply(xml_list[names(xml_list) == "page"][1:6], data.frame)
 # 
+# names(xml_list[["page"]][["revision"]][["text"]][["text"]])
+#
 # index <- which(names(xml_list) == "page")
 # 
 # xml_list[[8]][["redirect"]]
+# 
+#
+# a <- prepare_string_or_NULL( xml_list[[i]][["revision"]][["text"]][["text"]])
+# stri_replace_all_regex("str difv '''nsdk ' mkf ''' msd'' ", "'{1,}", "''")
+# 
+# stri_extract_all_regex(prepare_string_or_NULL( xml_list[[i]][["revision"]][["text"]][["text"]]), "'''(.+?)'''")
+# stri_extract_all_regex( xml_list[[i]][["revision"]][["text"]][["text"]], "'(.+?)'")
+# stri_extract_all_regex(a, "''(.+?)'")
+# 
+# 
+# i <- 2
 
 ##############################
 

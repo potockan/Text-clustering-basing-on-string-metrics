@@ -7,7 +7,7 @@ download.file("http://dumps.wikimedia.org/plwiki/latest/plwiki-latest-pages-meta
 
 # untar("./Data/wiki.xml.bz2", compressed = "bzip2")
 # bzfile("./Data//wiki.xml.bz2")
-#unziped manually
+# unziped manually
 
 
 

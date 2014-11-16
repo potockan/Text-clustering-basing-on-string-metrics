@@ -1,11 +1,13 @@
 install.packages("RSQLite")
 library(RSQLite)
 
+### Raw text database ###
+
 #under Windows: dbConnect("SQLite",...)
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
 dbSendQuery(conn, "CREATE TABLE IF NOT EXISTS wiki_raw (
-  id SERIAL NOT NULL PRIMARY KEY,
+  id INTEGER NOT NULL PRIMARY KEY,
   title VARCHAR(256) NOT NULL,
   text TEXT NOT NULL,
   redirect VARCHAR(256) DEFAULT NULL
@@ -13,6 +15,11 @@ dbSendQuery(conn, "CREATE TABLE IF NOT EXISTS wiki_raw (
 dbListTables(conn)
 
 dbDisconnect(conn)
+
+###################
+
+
+### Worked text database ###
 
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
@@ -59,4 +66,4 @@ dbListTables(con)
 
 dbDisconnect(con)
 
-help(package = "RSQLite")
+#############

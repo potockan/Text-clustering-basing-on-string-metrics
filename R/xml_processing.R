@@ -3,18 +3,23 @@
 library(XML)
 library(stringi)
 
-xmlfile <- xmlParse("./Data//plwiki-20141102-pages-articles1-1000linesCW.xml")
-
+xmlfile <- xmlParse("./Data//XML/plwiki-20141102-pages-articles1-1000linesCW.xml")
 
 
 
 #### from Rpkg project ####
 prepare_string_or_NULL <- function(str) {
   str <- as.character(str)
-  which_na <- is.na(str)
-  ret <- character(length(str))
-  ret[which_na] <- "NULL"
-  ret[!which_na] <- stri_paste("'", str[!which_na], "'")
+  n <- length(str)
+  if(n==0)
+    ret <- "NULL"
+  else{
+    which_na <- is.na(str)
+    ret <- character(n)
+    ret[which_na] <- "NULL"
+    stri_replace_all_fixed(str[!which_na], "'", "'''")
+    ret[!which_na] <- stri_paste("'", str[!which_na], "'")
+  }
   ret
 }
 ##########################
@@ -23,24 +28,28 @@ conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
 
 xml_list <- xmlToList(xmlfile)
+index <- which(names(xml_list) == "page")
+
 ###################
 for(i in index){
   dbSendQuery(conn, sprintf(
-    "INSERT INTO wiki_raw (title, text, redirect)
+    "INSERT INTO wiki_raw (title, text ,redirect)
     VALUES (%s)
     ", stri_flatten(
-    c(prepare_string_or_NULL( xml_list[[i]][["title"]]), 
+    c(prepare_string_or_NULL( xml_list[[i]][["title"]]),
     prepare_string_or_NULL( xml_list[[i]][["revision"]][["text"]][["text"]]), 
-    prepare_string_or_NULL( xml_list[[i]][["redirect"]]))
+    prepare_string_or_NULL(xml_list[[i]][["redirect"]]))
         , collapse=",")
-                          )
-              )
+                )
+        )
   
   
 }
 
+stri_extract_all_regex(prepare_string_or_NULL( xml_list[[i]][["revision"]][["text"]][["text"]]), "'''(.+?)'''")
 
-
+i <- 2
+#########################
 
 
 

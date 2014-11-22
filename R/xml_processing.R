@@ -1,4 +1,4 @@
-#install.packages('XML')
+#install.packages(c('XML', 'stringi', 'RSQLite'))
 
 library(XML)
 library(stringi)
@@ -7,28 +7,30 @@ library(RSQLite)
 
 #### from Rpkg project ####
 # functions which prepares a text to insert it into DB 
-# or if its empty then its NULL
+# or NULL if its empty
+
+
 prepare_string_or_NULL <- function(str) {
   str <- as.character(str)
   n <- length(str)
   if(n==0)
     ret <- "NULL"
   else{
-    ret <- stri_replace_all_regex(str, "'{1,}", "''")
+    Encoding(str) <- "UTF-8"
+    ret <- stri_replace_all_regex(stri_encode(str, "UTF-8", "UTF-8"), "'{1,}", "''")
     ret <- stri_paste("'", ret, "'")
   }
   ret
 }
 ##########################
 
-conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
-
-#xmlfile <- xmlParse("./Data//XML/plwiki-20141102-pages-articles1-1000linesCW.xml")
-xmlfile <- xmlParse("./Data//XML/gawiki-20140223-pages-articles.xml")
+#xmlfile2 <- xmlParse("./Data//XML/plwiki-20141102-pages-articles1-1000linesCW.xml", encoding = "UTF-8")
+xmlfile <- xmlParse("./Data//XML/gawiki-20140223-pages-articles.xml", encoding = "UTF-8")
 
 
 xml_list <- xmlToList(xmlfile)
+#xml_list2 <- xmlToList(xmlfile2)
 index <- which(names(xml_list) == "page")
 
 ###################
@@ -39,7 +41,11 @@ index <- which(names(xml_list) == "page")
 #   error in evaluating the argument 'statement' in selecting a method for function 'dbSendQuery': Error in xml_list[[i]][["revision"]][["text"]][["text"]] : 
 #   subscript out of bounds
 
+conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
+
+#time: ~ 3 min. 
 for(i in index){
+  if(any(names(xml_list[[i]][["revision"]][["text"]])=="text")){
   dbSendQuery(conn, sprintf(
     "INSERT INTO wiki_raw (title, text ,redirect)
     VALUES (%s)
@@ -50,8 +56,8 @@ for(i in index){
         , collapse=",")
                 )
         )
-  
-  
+  print(i)
+  }
 }
 
 
@@ -64,10 +70,11 @@ dbDisconnect(conn)
 
 
 
-
-
-
-
+# dbGetQuery(conn, "select title from wiki_raw limit 32;")
+# 
+# stri_enc_isutf8(xml_list2[[8]][["title"]])
+# stri_encode(as.character(dbGetQuery(conn, "select title from wiki_raw;")), "UTF-8", "UTF-8")
+# as.character(dbGetQuery(conn, "select title from wiki_raw;"))
 
 
 ############# SMIECI ############

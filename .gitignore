@@ -1,6 +1,6 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 *.Rproj
 *.log
 *.out
@@ -10,3 +10,4 @@
 *.toc
 *.tex.bak
 Data/
+

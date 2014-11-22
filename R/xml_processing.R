@@ -31,6 +31,7 @@ xmlfile <- xmlParse("./Data//XML/gawiki-20140223-pages-articles.xml", encoding =
 
 xml_list <- xmlToList(xmlfile)
 #xml_list2 <- xmlToList(xmlfile2)
+#xml_list2[[2]]
 index <- which(names(xml_list) == "page")
 
 ###################
@@ -73,7 +74,10 @@ dbDisconnect(conn)
 # dbGetQuery(conn, "select title from wiki_raw limit 32;")
 # 
 # stri_enc_isutf8(xml_list2[[8]][["title"]])
-# stri_encode(as.character(dbGetQuery(conn, "select title from wiki_raw;")), "UTF-8", "UTF-8")
+# ex <- stri_encode(unlist(
+#   dbGetQuery(conn, "select text from wiki_raw limit 25;")
+#   )[[5]]
+#   , "UTF-8", "UTF-8")
 # as.character(dbGetQuery(conn, "select title from wiki_raw;"))
 
 

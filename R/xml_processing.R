@@ -27,7 +27,7 @@ prepare_string_or_NULL <- function(str) {
 
 #xmlfile2 <- xmlParse("./Data//XML/plwiki-20141102-pages-articles1-1000linesCW.xml", encoding = "UTF-8")
 xmlfile <- xmlParse("./Data//XML/gawiki-20140223-pages-articles.xml", encoding = "UTF-8")
-
+xmlfile <- xmlParse("./Data//XML/plwiki-20141102-pages-articles2.xml", encoding = "UTF-8")
 
 xml_list <- xmlToList(xmlfile)
 #xml_list2 <- xmlToList(xmlfile2)
@@ -43,7 +43,7 @@ index <- which(names(xml_list) == "page")
 #   subscript out of bounds
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
-
+a <- Sys.time()
 #time: ~ 3 min. 
 for(i in index){
   if(any(names(xml_list[[i]][["revision"]][["text"]])=="text")){
@@ -60,8 +60,7 @@ for(i in index){
   print(i)
   }
 }
-
-
+b <- Sys.time()
 
 #dbReadTable(conn, "wiki_raw")
 

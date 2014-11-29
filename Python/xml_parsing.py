@@ -5,6 +5,10 @@ Created on Sat Nov 29 14:22:42 2014
 @author: natalia
 """
 
+## to do: 
+# 1. prepare title, text and redirect for inserting into db
+# 2. insert it into db
+
 import xml.etree.ElementTree as ET #element tree for parsing XML
 import re #regular expressions
 import sqlite3 #sqlite

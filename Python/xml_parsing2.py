@@ -9,7 +9,10 @@ Created on Sat Nov 29 14:22:42 2014
 # 1. prepare title, text and redirect for inserting into db
 # 2. insert it into db
 
-import xml.etree.ElementTree as ET #element tree for parsing XML
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
+    import xml.etree.ElementTree as ET#element tree for parsing XML
 import re #regular expressions
 import sqlite3 #sqlite
 
@@ -31,28 +34,32 @@ root = tree.getroot()
 conn = sqlite3.connect('/home/natalia/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki_raw.sqlite')
 
 i = 0
-for event, elem in ET.iterparse(path):
-    redirect = "'NULL'"
-    if elem.tag=='{http://www.mediawiki.org/xml/export-0.9/}title':
-        title = prepare_string_or_NULL(elem.text)
-        print(title)
-        i = i+1
-    elif elem.tag=='{http://www.mediawiki.org/xml/export-0.9/}redirect':
-        redirect = prepare_string_or_NULL(elem.text)
-        i = i+1
-    elif elem.tag=='{http://www.mediawiki.org/xml/export-0.9/}text':
-        text = prepare_string_or_NULL(elem.text)
-        i = i+1
-    elem.clear()
-    if i>= 2:
-        stmt = '''
-        INSERT INTO wiki_raw (title, text, redirect)
-        VALUES (%s, %s, %s)
-        '''
-        query = stmt % (title, text, redirect)
-        conn.execute(query)
-        conn.commit()
-        i = 0
+for event, elem in ET.iterparse(path, events=("start", "end")):
+    if event == "start":
+        if elem.tag is not ('{http://www.mediawiki.org/xml/export-0.9/}title' or '{http://www.mediawiki.org/xml/export-0.9/}redirect' or '{http://www.mediawiki.org/xml/export-0.9/}text') :
+            continue
+    else:
+        redirect = "'NULL'"
+        if elem.tag=='{http://www.mediawiki.org/xml/export-0.9/}title':
+            title = prepare_string_or_NULL(elem.text)
+            print(title)
+            i = i+1
+        elif elem.tag=='{http://www.mediawiki.org/xml/export-0.9/}redirect':
+            redirect = prepare_string_or_NULL(elem.text)
+            i = i+1
+        elif elem.tag=='{http://www.mediawiki.org/xml/export-0.9/}text':
+            text = prepare_string_or_NULL(elem.text)
+            i = i+1
+        elem.clear()
+        if i>= 2:
+            stmt = '''
+            INSERT INTO wiki_raw (title, text, redirect)
+            VALUES (%s, %s, %s)
+            '''
+            query = stmt % (title, text, redirect)
+            conn.execute(query)
+            conn.commit()
+            i = 0
             
      
 

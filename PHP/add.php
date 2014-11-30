@@ -2,7 +2,7 @@
 
 function prepare_string_or_NULL($s)
 {
-   if (is_null($s)) return "NULL";
+   if (is_null($s)) return 'NULL';
    return "'".preg_replace("'{1,}","''",$s)."'";
 }
 
@@ -21,7 +21,7 @@ $xml_file -> open('/home/natalia/Text-clustering-basing-on-string-metrics/Data/X
 
 $doc = new DOMDocument;
 
-// move to the first <row> node
+// move to the first <page> node
 while ($xml_file -> read() && $xml_file -> name !== 'page');
 
 $i = 0;
@@ -29,23 +29,36 @@ while ($xml_file -> read())
 {
   $xml_file -> read();
   if ($xml_file -> nodeType == XMLReader::ELEMENT && $xml_file -> name == 'page') {
-   
-	  $title = $xml_file -> getAttribute('title');
-	  $title = prepare_string_or_NULL($title);
-	  $text  = $xml_file -> getAttribute('text');
-	  $text = prepare_string_or_NULL($text);
-	  $redirect = NULL;
-	  $redirect  = $xml_file -> getAttribute('redirect');
-	  $redirect = prepare_string_or_NULL($redirect);
+	$xml_file -> moveToElement('title');
+	  $title = $xml_file -> readString(); //wywala wszystko z page'a bez tagów
 	  
-	  $sql = "INSERT INTO wiki_raw (title, text ,redirect) VALUES ($title, $text, $redirect)";
-	  $db -> exec($sql);
-	  print "Finished Item $i /n";
+	  print "$title \n";
+	  print "tu jeden";
+	  $title = $xml_file -> value;
+	  print "$title \n";
+	  print "tu drugi";
+	
+	if ($xml_file -> name == 'text') {
+	  $text = $xml_file -> value();
+	  $text = prepare_string_or_NULL($text);
+	  print "$title \n";
+	}
+	if ($xml_file -> name == 'redirect') {
+	  $redirect = $xml_file -> readString();
+	  $redirect = prepare_string_or_NULL($redirect);
+	  print "$title \n";
+	}
+
+	  
+	 
+	  print "Finished Item $i \n";
   }
     $i = $i +1;
 
     $xml_file -> next('page');
 }
+
+
 
 
 $db -> close();

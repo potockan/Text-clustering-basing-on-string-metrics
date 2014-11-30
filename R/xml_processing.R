@@ -62,7 +62,7 @@ for(i in index){
 }
 b <- Sys.time()
 
-#dbReadTable(conn, "wiki_raw")
+dbReadTable(conn, "wiki_raw")
 
 dbDisconnect(conn)
 

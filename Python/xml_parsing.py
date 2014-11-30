@@ -13,48 +13,46 @@ import xml.etree.ElementTree as ET #element tree for parsing XML
 import re #regular expressions
 import sqlite3 #sqlite
  
-conn = sqlite3.connect('../Data/DataBase/wiki_raw.sqlite')
-
 
 def prepare_string_or_NULL(str):
-  n = len(str)
-  if n==0:
-    ret = "NULL"
-  else:
     ret = re.sub("'{1,}", "''", str)
     ret = "'" + ret + "'"
-  return ret
+    return ret
 
 
 
-path = '../Data/XML/plwiki-20141102-pages-articles1-1000linesCW.xml'
+path = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles1-1000lines.xml'
+#path = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles1.xml'
 tree = ET.parse(open(path))
 root = tree.getroot()
 
 
-
+conn = sqlite3.connect('/home/natalia/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki_raw.sqlite')
 
 element = root.getchildren()[0].getchildren()[0]
 ch = root.getchildren()
 for i in range(len(ch)):
     if ch[i].tag=='{http://www.mediawiki.org/xml/export-0.9/}page':
+        redirect = "'NULL'"
         for j in range(len(ch[i].getchildren())):
             ch2 = ch[i].getchildren()[j]
             if ch2.tag == '{http://www.mediawiki.org/xml/export-0.9/}title':
-                title = ch2.text
+                print(type(ch2.text))
+                title = prepare_string_or_NULL(ch2.text)
                 print(title)
             elif ch2.tag == '{http://www.mediawiki.org/xml/export-0.9/}redirect':
-                redirect = ch2.text
+                redirect = prepare_string_or_NULL(ch2.text)
                 print(redirect)
             elif ch2.tag == '{http://www.mediawiki.org/xml/export-0.9/}revision':
-                text = ch2.getchildren()[5].text
+                text = prepare_string_or_NULL(ch2.getchildren()[5].text)
                 print(text)
-        
-
-
-
-stmt = "INSERT INTO test VALUES(?, ?, ?, ?)"
-con.executemany(stmt, data)
-con.commit()
+        stmt = '''
+        INSERT INTO wiki_raw (title, text, redirect)
+        VALUES (%s, %s, %s)
+        '''
+        print(i)
+        query = stmt % (title, text, redirect)
+        conn.execute(query)
+        conn.commit()
 
 

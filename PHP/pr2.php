@@ -31,13 +31,14 @@ function contents($parser, $data)
 	global $i;
 	global $title;
 	global $red;
+	//if(strlen($red1)>0)
+	//{	$red = $red1; }
+	
 	global $ns;
     global $text;
-    //print ("contents\n");
-    //$tabl["red".$i] = NULL;
     global $current_tag;
     $name = $current_tag;
-    //print($name."\n");
+    $red1 = $red;
     switch ($name) {
     	case "PAGE":
     	
@@ -50,22 +51,16 @@ function contents($parser, $data)
     			$q .= prepare_string_or_NULL($text);
     			$q .= ",";
     			$q .= prepare_string_or_NULL($red);
-    			$q .= "), ";
-    			//print($q);
- 
+    			$q .= "), "; 
     		}
+    		
     		
     		
     		$i++;
     		print($i."\n");
-    		//print_r(array_keys($tabl));
-    		//print_r(array_values($tabl));
     		if($i%101 == 0)
 			{
-				//print("100!\n");
-				if($i == 17)
-				{print($red);}
-				//print($q."\n");
+				
 				$q .= "(";
     			$q .= $ns;
     			$q .= ","; 
@@ -75,14 +70,9 @@ function contents($parser, $data)
     			$q .= ",";
     			$q .= prepare_string_or_NULL($red);
     			$q .= ") ";
-				//$q = "$q ($ns, prepare_string_or_NULL($title), prepare_string_or_NULL($text), prepare_string_or_NULL($red)) ";
-				//print($q);	
 				$sql = "INSERT INTO wiki_raw (ns, title, text, redirect) VALUES $q";
-				//print($sql);
 		  		$db->exec($sql);
 		  		print "Finished Item $title \n";
-		  		//unset($tabl);
-		  		//global $tabl;
 		  		$q="";
 		  		$i = 1;
 			}
@@ -90,31 +80,19 @@ function contents($parser, $data)
 			$title = "";
     		$ns = "";
     		$test = "";
+    		$red = NULL;
 		   	
 			
 	    case "TITLE":
-	    	//print("title\n");
-			
-			//print($i."\n");
-			
-			//print("title".$i."\n");
 			$title = $title.$data;
-			//print($tabl["title".$i]);
-			//print($data);
         	break;
+        	
        case "NS":
-       		//print("ns".$i."\n");
-       		//print("ns\n");
-            $ns = $ns.$data;
-            //print($data);
+       		$ns = $ns.$data;
             break;
+            
 	   case "TEXT":
-	   		//print("text".$i);
-	   		//if($i>=0 && $i<=10)
-	   		//{ print($data); }	   		
 			$text = $text.$data;
-			//$j=$i-1;
-			//print($tabl["ns".$i]);
 			break;
 	    
 		
@@ -127,27 +105,30 @@ function contents($parser, $data)
 
 function start_tag($parser, $name, $attr)
 {
-	//print ("start\n");
+
 	global $current_tag;
 	global $red;
-	$red=NULL;
 	$current_tag = $name;
-	if($name == "REDIRECT");
+	if(array_key_exists("TITLE",$attr))
 	{
-		print_r($attr);
-		$red = $attr[0]['TITLE'];
-		print($red);
+		$red = $attr['TITLE'];
+		//print_r($attr);
+		print($red . "TAK");
 	
 	}
-	//print($name."\n");
+	/*if($current_tag == "REDIRECT");
+	{
+		$red1 = $attr['TITLE'];
+		//print_r($attr);
+		//print($red . "TAK");
+	
+	}*/
     
 }
 
 function end_tag($parser, $name) 
 {
-    //print ("end\n");
-    $current_tag = $name;
-    //$this->inside_data = false;
+    $current_tag = '';
 }
 
 
@@ -174,8 +155,7 @@ while ($data = fread($fp, 4096))
 		die(sprintf("XML error: %s at line %d",$error,$line));
     }
     
-    
-    //print("elment handler\n");
+   
 	xml_set_element_handler($xml_parser, "start_tag", "end_tag");	
 	if($current_tag == 'PAGE' || $current_tag == 'TITLE' ||  $current_tag == 'NS' ||  $current_tag == 'REDIRECT')
 	{

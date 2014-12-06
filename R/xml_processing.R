@@ -62,7 +62,9 @@ for(i in index){
 }
 b <- Sys.time()
 
-#dbReadTable(conn, "wiki_raw")
+conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
+dbGetQuery(conn, "select ns, title, redirect from wiki_raw limit 20")
+#head(dbReadTable(conn, "wiki_raw"))
 
 dbDisconnect(conn)
 

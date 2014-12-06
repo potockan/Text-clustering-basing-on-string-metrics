@@ -4,6 +4,7 @@
 function prepare_string_or_NULL($s)
 {
    if (is_null($s)) return "NULL";
+   if (strlen($s)==0) return "NULL";
    $res = SQLite3::escapeString($s);
    return "'".$res."'";
 }
@@ -50,7 +51,7 @@ function contents($parser, $data)
     			$q .= ",";
     			$q .= prepare_string_or_NULL($red);
     			$q .= "), ";
-    			/print($q);
+    			//print($q);
  
     		}
     		
@@ -62,6 +63,8 @@ function contents($parser, $data)
     		if($i%101 == 0)
 			{
 				//print("100!\n");
+				if($i == 17)
+				{print($red);}
 				//print($q."\n");
 				$q .= "(";
     			$q .= $ns;
@@ -84,10 +87,9 @@ function contents($parser, $data)
 		  		$i = 1;
 			}
 			
-			$title="";
-    		$ns="";
-    		$test="";
-    		$red=NULL;
+			$title = "";
+    		$ns = "";
+    		$test = "";
 		   	
 			
 	    case "TITLE":
@@ -114,10 +116,7 @@ function contents($parser, $data)
 			//$j=$i-1;
 			//print($tabl["ns".$i]);
 			break;
-	    case "REDIRECT":
-	    	//print("red".$i."\n");
-			$red = $red.$data;
-			break;
+	    
 		
          
     }
@@ -126,11 +125,20 @@ function contents($parser, $data)
     
 }
 
-function start_tag($parser, $name)
+function start_tag($parser, $name, $attr)
 {
 	//print ("start\n");
 	global $current_tag;
+	global $red;
+	$red=NULL;
 	$current_tag = $name;
+	if($name == "REDIRECT");
+	{
+		print_r($attr);
+		$red = $attr[0]['TITLE'];
+		print($red);
+	
+	}
 	//print($name."\n");
     
 }

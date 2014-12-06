@@ -40,7 +40,7 @@ function contents($parser, $data)
     switch ($name) {
     	case "PAGE":
     	
-    		if($i > 0 && $i<100){
+    		if($i > 0 && $i<10){
     			$q .= "(";
     			$q .= $ns;
     			$q .= ","; 
@@ -56,7 +56,7 @@ function contents($parser, $data)
     		
     		$i++;
     		print($i."\n");
-    		if($i%101 == 0)
+    		if($i%11 == 0)
 			{
 				
 				$q .= "(";
@@ -155,6 +155,9 @@ while ($data = fread($fp, 4096))
 
     	
 }
+
+if($i < 11)
+{
 	$q .= "(";
 	$q .= $ns;
 	$q .= ","; 
@@ -164,13 +167,13 @@ while ($data = fread($fp, 4096))
 	$q .= ",";
 	$q .= prepare_string_or_NULL($red);
 	$q .= ") ";
-//	$q = "$q ($ns, prepare_string_or_NULL($title), prepare_string_or_NULL($text), prepare_string_or_NULL($red)) ";
 	$sql = "INSERT INTO wiki_raw (ns, title, text, redirect) VALUES " . $q;
 	$db->exec($sql);
 	print "Finished Item " . $title ."\n";
 	$i = 0;
+	$q = "";
 			
-    
+}    
 
 
 xml_parser_free($xml_parser);

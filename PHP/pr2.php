@@ -1,5 +1,6 @@
 <?php
 
+ini_set("memory_limit", 	"512M");
 
 function prepare_string_or_NULL($s)
 {
@@ -31,9 +32,6 @@ function contents($parser, $data)
 	global $i;
 	global $title;
 	global $red;
-	//if(strlen($red1)>0)
-	//{	$red = $red1; }
-	
 	global $ns;
     global $text;
     global $current_tag;
@@ -112,18 +110,8 @@ function start_tag($parser, $name, $attr)
 	if(array_key_exists("TITLE",$attr))
 	{
 		$red = $attr['TITLE'];
-		//print_r($attr);
-		print($red . "TAK");
 	
 	}
-	/*if($current_tag == "REDIRECT");
-	{
-		$red1 = $attr['TITLE'];
-		//print_r($attr);
-		//print($red . "TAK");
-	
-	}*/
-    
 }
 
 function end_tag($parser, $name) 

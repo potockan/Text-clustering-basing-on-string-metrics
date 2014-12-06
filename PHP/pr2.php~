@@ -3,8 +3,9 @@
 
 function prepare_string_or_NULL($s)
 {
-   if (is_null($s)) return 'NULL';
-   return "'".preg_replace("#'{1,}#","''",$s)."'";
+   if (is_null($s)) return "NULL";
+   $res = SQLite3::escapeString($s);
+   return "'".$res."'";
 }
 
 class MyDB extends SQLite3
@@ -25,50 +26,69 @@ $db = new MyDB();
 function contents($parser, $data)
 {
 	global $db;
+	global $q;
 	global $i;
+	global $title;
+	global $red;
+	global $ns;
+    global $text;
     //print ("contents\n");
-    global $tabl;
-    $tabl["red".$i] = NULL;
+    //$tabl["red".$i] = NULL;
     global $current_tag;
     $name = $current_tag;
     //print($name."\n");
     switch ($name) {
     	case "PAGE":
-    		$tabl["title".$i] = "";
-    		$tabl["ns".$i] = "";
-   			$tabl["text".$i] = "";
+    	
+    		if($i > 0 && $i<100){
+    			$q .= "(";
+    			$q .= $ns;
+    			$q .= ","; 
+    			$q .= prepare_string_or_NULL($title);
+    			$q .= ",";
+    			$q .= prepare_string_or_NULL($text);
+    			$q .= ",";
+    			$q .= prepare_string_or_NULL($red);
+    			$q .= "), ";
+    			/print($q);
+ 
+    		}
+    		
+    		
     		$i++;
-    		//print($current_tag."\n");
     		print($i."\n");
-    		print_r(array_keys($tabl));
-    		print_r(array_values($tabl));
+    		//print_r(array_keys($tabl));
+    		//print_r(array_values($tabl));
     		if($i%101 == 0)
 			{
 				//print("100!\n");
-				$val = "";
-				for($j = 1; $j<100; $j++)
-				{
-					$ns = $tabl["ns".$j];
-					$title = prepare_string_or_NULL($tabl["title".$j]);
-					print($tabl["title".$j]."\n");
-					print($title."\n");
-					$text = prepare_string_or_NULL($tabl["text".$j]) ;
-					$redirect = prepare_string_or_NULL($tabl["red".$j]);
-					//print($title."\n");
-					if($j==99)
-					{	$val = "$val ( $ns , $title, $text, $redirect ) "; }
-					else
-					{	$val = "$val ( $ns , $title, $text, $redirect ) , ";  }
-				}
-				
-			$sql = "INSERT INTO wiki_raw (ns, title, text, redirect) VALUES " . $val;
-	  		$db->exec($sql);
-	  		print "Finished Item \n";
-	  		$i = 1;
+				//print($q."\n");
+				$q .= "(";
+    			$q .= $ns;
+    			$q .= ","; 
+    			$q .= prepare_string_or_NULL($title);
+    			$q .= ",";
+    			$q .= prepare_string_or_NULL($text);
+    			$q .= ",";
+    			$q .= prepare_string_or_NULL($red);
+    			$q .= ") ";
+				//$q = "$q ($ns, prepare_string_or_NULL($title), prepare_string_or_NULL($text), prepare_string_or_NULL($red)) ";
+				//print($q);	
+				$sql = "INSERT INTO wiki_raw (ns, title, text, redirect) VALUES $q";
+				//print($sql);
+		  		$db->exec($sql);
+		  		print "Finished Item $title \n";
+		  		//unset($tabl);
+		  		//global $tabl;
+		  		$q="";
+		  		$i = 1;
 			}
-		   	$tabl["title".$i] = "";
-    		$tabl["ns".$i] = "";
-   			$tabl["text".$i] = "";
+			
+			$title="";
+    		$ns="";
+    		$test="";
+    		$red=NULL;
+		   	
 			
 	    case "TITLE":
 	    	//print("title\n");
@@ -76,27 +96,27 @@ function contents($parser, $data)
 			//print($i."\n");
 			
 			//print("title".$i."\n");
-			$tabl["title".$i] = $tabl["title".$i].$data;
+			$title = $title.$data;
 			//print($tabl["title".$i]);
 			//print($data);
         	break;
        case "NS":
        		//print("ns".$i."\n");
        		//print("ns\n");
-            $tabl["ns".$i] = $tabl["ns".$i] . $data;
+            $ns = $ns.$data;
             //print($data);
             break;
 	   case "TEXT":
 	   		//print("text".$i);
 	   		//if($i>=0 && $i<=10)
 	   		//{ print($data); }	   		
-			$tabl["text".$i] = $tabl["text".$i] . $data;
+			$text = $text.$data;
 			//$j=$i-1;
 			//print($tabl["ns".$i]);
 			break;
 	    case "REDIRECT":
 	    	//print("red".$i."\n");
-			$tabl["red".$i] = $tabl["red".$i] . $data;
+			$red = $red.$data;
 			break;
 		
          
@@ -129,6 +149,7 @@ function end_tag($parser, $name)
 $xml_parser = xml_parser_create();
 $file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles1.xml';
 $i = 0;
+$q = "";
 
  if (!($fp = fopen($file, "r"))) 
  {
@@ -158,23 +179,20 @@ while ($data = fread($fp, 4096))
 
     	
 }
-
-				$val = "";
-				for($j = 0; $j<$i; $j++)
-				{
-					$ns = $tabl["ns".$j];
-					$title = prepare_string_or_NULL($tabl["title".$j]);
-					$text = prepare_string_or_NULL($tabl["text".$j]);
-					$redirect = prepare_string_or_NULL($tabl["red".$j]);
-					if($j==$i-1)
-					{	$val = "$val ( $ns , $title, $text, $redirect )  "; }
-					else
-					{	$val = "$val ( $ns , $title, $text, $redirect ) , ";  }
-				}
-			$sql = "INSERT INTO wiki_raw (ns, title, text, redirect) VALUES " . $val;
-	  		$db->exec($sql);
-	  		print "Finished Item " . $title ."\n";
-	  		$i = 0;
+	$q .= "(";
+	$q .= $ns;
+	$q .= ","; 
+	$q .= prepare_string_or_NULL($title);
+	$q .= ",";
+	$q .= prepare_string_or_NULL($text);
+	$q .= ",";
+	$q .= prepare_string_or_NULL($red);
+	$q .= ") ";
+//	$q = "$q ($ns, prepare_string_or_NULL($title), prepare_string_or_NULL($text), prepare_string_or_NULL($red)) ";
+	$sql = "INSERT INTO wiki_raw (ns, title, text, redirect) VALUES " . $q;
+	$db->exec($sql);
+	print "Finished Item " . $title ."\n";
+	$i = 0;
 			
     
 

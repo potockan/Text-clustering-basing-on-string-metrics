@@ -77,7 +77,7 @@ function contents($parser, $data)
 			
 			$title = "";
     		$ns = "";
-    		$test = "";
+    		$text = "";
     		$red = NULL;
 		   	
 			

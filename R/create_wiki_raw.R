@@ -1,3 +1,5 @@
+#!/usr/bin/Rscript --vanilla
+
 #install.packages("RSQLite")
 library(RSQLite)
 

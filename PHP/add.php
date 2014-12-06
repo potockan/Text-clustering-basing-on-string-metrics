@@ -30,6 +30,7 @@ while ($xml_file -> read())
   $xml_file -> read();
   if ($xml_file -> nodeType == XMLReader::ELEMENT && $xml_file -> name == 'page') {
 	$xml_file -> moveToElement('title');
+	  
 	  $title = $xml_file -> readString(); //wywala wszystko z page'a bez tagów
 	  
 	  print "$title \n";
@@ -38,16 +39,7 @@ while ($xml_file -> read())
 	  print "$title \n";
 	  print "tu drugi";
 	
-	if ($xml_file -> name == 'text') {
-	  $text = $xml_file -> value();
-	  $text = prepare_string_or_NULL($text);
-	  print "$title \n";
-	}
-	if ($xml_file -> name == 'redirect') {
-	  $redirect = $xml_file -> readString();
-	  $redirect = prepare_string_or_NULL($redirect);
-	  print "$title \n";
-	}
+	
 
 	  
 	 

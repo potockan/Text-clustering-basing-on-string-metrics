@@ -124,7 +124,7 @@ function end_tag($parser, $name)
 
 
 $xml_parser = xml_parser_create();
-$file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles1.xml';
+$file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles4.xml';
 $i = 0;
 $q = "";
 

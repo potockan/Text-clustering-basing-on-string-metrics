@@ -42,7 +42,7 @@ function contents($parser, $data)
     	
     		if($i > 0 && $i<10){
     			$q .= "(";
-    			$q .= rtrim(ltrim($ns));
+    			$q .= $ns;
     			$q .= ","; 
     			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
     			$q .= ",";
@@ -60,7 +60,7 @@ function contents($parser, $data)
 			{
 				
 				$q .= "(";
-    			$q .= rtrim(ltrim($ns));
+    			$q .= $ns;
     			$q .= ","; 
     			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
     			$q .= ",";
@@ -159,7 +159,7 @@ while ($data = fread($fp, 4096))
 if($i < 11)
 {
 	$q .= "(";
-	$q .= rtrim(ltrim($ns));
+	$q .= $ns;
 	$q .= ","; 
 	$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
 	$q .= ",";

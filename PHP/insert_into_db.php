@@ -6,7 +6,7 @@ function prepare_string_or_NULL($s)
 {
    if (is_null($s)) return "NULL";
    if (strlen($s)==0) return "NULL";
-   $res = SQLite3::escapeString($s);
+   $res = SQLite3::escapeString(strtolower($s));
    return "'".$res."'";
 }
 
@@ -42,9 +42,9 @@ function contents($parser, $data)
     	
     		if($i > 0 && $i<10){
     			$q .= "(";
-    			$q .= rtrim(ltrim($ns));
+    			$q .= $ns;
     			$q .= ","; 
-    			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
+    			$q .= prepare_string_or_NULL($title);
     			$q .= ",";
     			$q .= prepare_string_or_NULL($text);
     			$q .= ",";
@@ -60,9 +60,9 @@ function contents($parser, $data)
 			{
 				
 				$q .= "(";
-    			$q .= rtrim(ltrim($ns));
+    			$q .= $ns;
     			$q .= ","; 
-    			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
+    			$q .= prepare_string_or_NULL($title);
     			$q .= ",";
     			$q .= prepare_string_or_NULL($text);
     			$q .= ",";
@@ -159,9 +159,9 @@ while ($data = fread($fp, 4096))
 if($i < 11)
 {
 	$q .= "(";
-	$q .= rtrim(ltrim($ns));
+	$q .= $ns;
 	$q .= ","; 
-	$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
+	$q .= prepare_string_or_NULL($title);
 	$q .= ",";
 	$q .= prepare_string_or_NULL($text);
 	$q .= ",";

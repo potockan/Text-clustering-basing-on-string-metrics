@@ -3,10 +3,14 @@ library(RSQLite)
 library(stringi)
 ### Raw text database ###
 
+## TO DO: 
+# (?) zaladowac od nowa baze, tak zeby wszystko bylo lower case. PHP zmieniony
+# dziala dla lower(title), ale lower chyba dziala tylko dla ascii por. https://www.sqlite.org/lang_corefunc.html
+
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
-i <- 3
+i <- 15
 aa <-
 dbGetQuery(conn, sprintf("select * from wiki_raw 
            where id = %d", i))
@@ -57,24 +61,49 @@ if(any(hashtag))
 
 # leaving only the links that lead to other pages
 m2 <- m[which(stri_length(m[,2])>0),]
-m3 <- unique(m2[,2])
+m3 <- stri_trans_tolower(unique(m2[,2]))
 
-#connecting with db
-id_to <- dbGetQuery(conn, sprintf("select id, title from wiki_raw where title in ('%s')", 
+
+#extracting id's where we link to
+(id_to <- dbGetQuery(conn, sprintf("select id from wiki_raw where lower(title) in ('%s')", 
                          stri_flatten( m3, collapse = "', '")
                          )
            )
-
+)
+# 
+# (id_to <- dbGetQuery(conn, sprintf("select id, title from wiki_raw where lower(title) in ('%s')", 
+#                                    stri_flatten( m3, collapse = "', '")
+#                                    )
+#                     )
+# )
 
 ##########
 
 
+######## SYF #######
 
 
 
+# not links: [[x:y]] - we want y only if x is "Kategoria"
+
+#extractng all the not-links 
+(not_link <- stri_extract_all_regex(text2, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")[[1]])
 
 
-not_link <- stri_extract_all_regex(t, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")
+#matching those with "Kategoria"
+(not_link2 <- stri_match_all_regex(not_link, "\\[\\[Kategoria:(.+?)\\]\\]"))
+
+m <- matrix(unlist(not_link2), ncol=2, byrow=TRUE)
+
+# TO DO: spr, czy juz istnieje taka kat.
+
+# jak nie, to ja wrzucic, dostac id, 
+# jak tak, to wyciagnac id
+
+# i do zapisania do drugiej tabeli (wiki_cat_text)
+
+#############
+
 
 
 

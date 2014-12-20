@@ -14,7 +14,7 @@ class MyDB extends SQLite3
 {
     function __construct()
     {
-        $this -> open('/home/natalia/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki_raw.sqlite');
+        $this -> open('/media/natalia//FLASH DRIVE//Text-clustering-based-on-string-metrics/Data/DataBase/wiki_raw.sqlite');
     }
 }
 
@@ -42,7 +42,7 @@ function contents($parser, $data)
     	
     		if($i > 0 && $i<10){
     			$q .= "(";
-    			$q .= $ns;
+    			$q .= rtrim(ltrim($ns));
     			$q .= ","; 
     			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
     			$q .= ",";
@@ -60,7 +60,7 @@ function contents($parser, $data)
 			{
 				
 				$q .= "(";
-    			$q .= $ns;
+    			$q .= rtrim(ltrim($ns));
     			$q .= ","; 
     			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
     			$q .= ",";
@@ -124,7 +124,7 @@ function end_tag($parser, $name)
 
 
 $xml_parser = xml_parser_create();
-$file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles4.xml';
+$file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles1.xml';
 $i = 0;
 $q = "";
 
@@ -159,7 +159,7 @@ while ($data = fread($fp, 4096))
 if($i < 11)
 {
 	$q .= "(";
-	$q .= $ns;
+	$q .= rtrim(ltrim($ns));
 	$q .= ","; 
 	$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
 	$q .= ",";

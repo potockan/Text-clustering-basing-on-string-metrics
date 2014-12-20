@@ -9,7 +9,7 @@ library(RSQLite)
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_page (
-  id SERIAL NOT NULL PRIMARY KEY,
+  id NOT NULL PRIMARY KEY,
   title INTEGER NOT NULL,
   text TEXT NOT NULL
 );")
@@ -78,4 +78,3 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_card (
 dbDisconnect(con)
 
 #############
-

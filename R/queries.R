@@ -17,7 +17,30 @@ i <- 15
 aa <-
 dbGetQuery(conn, sprintf("select * from wiki_raw 
            where id = %d", i))
+
+redirect <- aa$redirect
 id_from <- aa$id
+if(!is.na(redirect))
+{
+  redirect <- stri_trans_tolower(redirect)
+  id_to <- dbGetQuery(conn, sprintf("
+            SELECT id 
+            FROM wiki_raw 
+            WHERE lower(title)='%s'", redirect))
+  
+  dbSendQuery(con, sprintf("
+              INSERT INTO wiki_redirect(id_from, id_to)
+              VALUES (%d, %d)
+              ", id_from, id_to[,1])
+  )
+  
+}
+else
+{
+  #everything that's below
+}
+  
+
 text <- stri_trans_tolower(aa$text)
 
 #extracting all the tags and all the content within curly brackets to save it in the DB
@@ -29,14 +52,14 @@ text <- stri_trans_tolower(aa$text)
 
 
 #removing all the comment, tags and all the content within curly brackets
-## DO TO :
 patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}", "zobacz tez", "linki zewnętrzne")
 text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
 
 
 
 #################################################
-### LINKS: [[x|y]] (x is the link, y the string to be viewed) or [[x]] (x is both)
+### LINKS ###
+##[[x|y]] (x is the link, y the string to be viewed) or [[x]] (x is both)
 
 #extractng all the links 
 (link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")[[1]])
@@ -83,7 +106,7 @@ m3 <- stri_trans_tolower(unique(m2[,2]))
 # )
 
 ################################################
-#LINKS: NOT-LINKS
+### LINKS: NOT-LINKS ###
 #those that had only [[x]] we want to replace with x
 #[[x|y]] we want to replace with y
 no_string <- which(stri_length(m[,3])==0)
@@ -108,7 +131,7 @@ m[no_string,3] <- m[no_string, 2]
 (not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\]\\]"))
 
 (not_link3 <- matrix(unlist(not_link2), ncol=2, byrow=TRUE))
-not_link3[,2]  <- c("a", "b", "c", "d" ," e", "fff")
+
 ## inserting categories into db, if it's not already there
 dbSendQuery(con, sprintf(
             "INSERT OR IGNORE INTO 
@@ -123,21 +146,51 @@ id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
           )
 
 
-
-
-
 ### removing all the [[x:y]] from the text
 (text4 <- stri_replace_all_fixed(text3, not_link, "", vectorize_all = FALSE)
 )
 
 #############
 
-
-
-### WORD COUNTING
+### WORD COUNTING ###
 words_all  <- stri_extract_all_words(text4)[[1]]
-words <- unique(words_all)
+### TO DO: 
+#text jako jedna b. dluga linia, bez interpunkcji (stri_flatten words_all)
+#czy raczej wyrzucic wszystko co nie jest [a-z], \s lub \d
+#czy zostawic jak jest z *,=, milionem \n itd.
 
+
+words <- unique(words_all)
+words <- stri_replace_all_fixed(words, "'", "''")
+### TO DO:
+# INSERT DOESN'T WORK!!!
+# Error in sqliteSendQuery(conn, statement) : 
+# error in statement: too many terms in compound SELECT
+# http://stackoverflow.com/questions/9527851/sqlite-error-too-many-terms-in-compound-select
+# SQLITE_MAX_COMPOUND_SELECT id 500
+# Powiekszamy, czy bawimy sie w pare/nascie insertow?
+# words <- c("całą","historię","l''île", "des","pingouins","1908")
+dbSendQuery(con, sprintf(
+  "INSERT OR IGNORE INTO 
+            wiki_word(word)
+            VALUES ('%s')",
+  stri_flatten(words[1:500], collapse = "'), ('")
+  )
+)
+
+id_words <- dbGetQuery(con, sprintf(
+            "
+            SELECT id FROM wiki_word
+            WHERE word IN ('%s')
+            "), stri_flatten(words, collapse = "', '")
+)
+
+#### TO DO: LICZNOSCI
+### WORD COUNTING ###
+
+################################
+
+####################################################
 
 #### INSERTING INTO DB
 
@@ -192,6 +245,7 @@ dbSendQuery(con, sprintf(
   )
 )
 )
+
 
 ### DB DISCONNECT
 

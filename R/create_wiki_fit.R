@@ -38,10 +38,8 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_link (
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_redirect (
   id INTEGER NOT NULL PRIMARY KEY,
-  id_title_from INTEGER NOT NULL,
-  id_title_to INTEGER NOT NULL,
-  FOREIGN KEY (id_title_from) REFERENCES wiki_page(id),
-  FOREIGN KEY (id_title_to) REFERENCES wiki_page(id)
+  id_from INTEGER NOT NULL,
+  id_to INTEGER NOT NULL
 );")
 
 

@@ -25,13 +25,17 @@ text <- stri_trans_tolower(aa$text)
 (curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
 
 
+
+
+
 #removing all the comment, tags and all the content within curly brackets
-text <- stri_replace_all_regex(text,  "<!--(.)*?-->", "")
-text1 <- stri_replace_all_regex(text,  "<.*?>(.)*?<.*?>", "")
-text2 <- stri_replace_all_regex(text1,  "\\{\\{[^\\}]*?\\}\\}", "")
+## DO TO :
+patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}", "zobacz tez", "linki zewnętrzne")
+text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
 
-#text2 <- c("[[United States#History|History]] kglf [[United States]] mf [[United States#History]] nkds [[#Links and URLs]]")
 
+
+#################################################
 ### LINKS: [[x|y]] (x is the link, y the string to be viewed) or [[x]] (x is both)
 
 #extractng all the links 
@@ -69,6 +73,8 @@ m3 <- stri_trans_tolower(unique(m2[,2]))
                          )
            )
 )
+
+
 # 
 # (id_to <- dbGetQuery(conn, sprintf("select id, title from wiki_raw where lower(title) in ('%s')", 
 #                                    stri_flatten( m3, collapse = "', '")
@@ -76,15 +82,19 @@ m3 <- stri_trans_tolower(unique(m2[,2]))
 #                     )
 # )
 
+################################################
+#LINKS: NOT-LINKS
 #those that had only [[x]] we want to replace with x
 #[[x|y]] we want to replace with y
 no_string <- which(stri_length(m[,3])==0)
 m[no_string,3] <- m[no_string, 2]
 
+
+### removing all [[x]] and [[x|y]] from the text
 (text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
                           vectorize_all=FALSE)
 )
-##########
+###########################################
 
 ### KATEGORIE ###
 
@@ -97,34 +107,95 @@ m[no_string,3] <- m[no_string, 2]
 #matching those with "kategoria"
 (not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\]\\]"))
 
-(m <- matrix(unlist(not_link2), ncol=2, byrow=TRUE))
-
-
+(not_link3 <- matrix(unlist(not_link2), ncol=2, byrow=TRUE))
+not_link3[,2]  <- c("a", "b", "c", "d" ," e", "fff")
+## inserting categories into db, if it's not already there
 dbSendQuery(con, sprintf(
-            "INSERT INTO 
+            "INSERT OR IGNORE INTO 
             wiki_category_name(name)
             VALUES ('%s')",
-            stri_flatten(m[,2], collapse = "'), ('")
+            stri_flatten(not_link3[,2], collapse = "'), ('")
                     )
             )
 
-(text4 <- stri_replace_all_fixed(text3, not_link, "")
+id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
+                WHERE name IN ('%s')", stri_flatten(not_link3[,2], collapse = "', '"))
+          )
+
+
+
+
+
+### removing all the [[x:y]] from the text
+(text4 <- stri_replace_all_fixed(text3, not_link, "", vectorize_all = FALSE)
 )
 
 #############
 
 
 
+### WORD COUNTING
+words_all  <- stri_extract_all_words(text4)[[1]]
+words <- unique(words_all)
 
-######## SYF #######
 
+#### INSERTING INTO DB
 
-klamr <- stri_extract_all_regex(text1, "\\{\\{(.)*?\\}\\}")
-troj <- stri_extract_all_regex(t, "<.*?>(.)*?<.*?>")
-opcj <- unique(unlist(stri_extract_all_regex(unlist(troj), "</(.)+?>")))
+### TO DO:
+### This has to be done at the end, after inserting the text, cause
+### id_title is FK from wiki_page
+#inserting the tags
+dbSendQuery(con, sprintf(
+  "INSERT INTO 
+            wiki_tag(id_title, text)
+            VALUES (%s')",
+  stri_paste(id_from, " , '", stri_flatten(tags))
+)
+)
 
-#dbGetQuery(conn, "select count(1) as ile from wiki_raw where ns=0")
+#inserting curly brackets
+dbSendQuery(con, sprintf(
+  "INSERT INTO 
+            wiki_curly(id_title, text)
+            VALUES (%s')",
+  stri_paste(id_from, " , '", stri_flatten(curly))
+)
+)
+###########
+### TO DO:
+### This has to be done at the end, after inserting the text, cause
+### id_from is FK from wiki_page
+#inserting links
+dbSendQuery(con, sprintf(
+  "INSERT INTO 
+            wiki_links(id_from, id_to)
+            VALUES (%s)",
+  stri_paste(id_from, ", ", 
+             stri_flatten(id_to[,1], collapse = 
+                            stri_paste("), (", id_from, ", ")))
+)
+)
+
+#########3
+## TO DO:
+### This has to be done at the end, after inserting the text, cause
+### id_from is FK from wiki_page
+#inserting categories
+dbSendQuery(con, sprintf(
+  "INSERT INTO 
+            wiki_category_text(id_title, id_category)
+            VALUES (%s)",
+  stri_paste(id_from, ", ",
+             stri_flatten( id_cat[,1], collapse = 
+                             stri_paste("), (", id_from, ", ")
+             )
+  )
+)
+)
+
+### DB DISCONNECT
 
 dbDisconnect(conn)
+dbDisconnect(con)
 
 ###################

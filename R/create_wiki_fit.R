@@ -16,7 +16,7 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_page (
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_name (
   id SERIAL NOT NULL PRIMARY KEY,
-  name VARCHAR(256)
+  name VARCHAR(256) UNIQUE
 );")
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_text (
@@ -63,7 +63,8 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_curly (
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word (
   id SERIAL NOT NULL PRIMARY KEY,
-  word VARCHAR(256) NOT NULL
+  word VARCHAR(256) NOT NULL,
+  UNIQUE(word)
 );")
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_card (

@@ -1,4 +1,6 @@
+#!/usr/bin/Rscript --vanilla
 
+#install.packages("stringi")
 library(RSQLite)
 library(stringi)
 ### Raw text database ###
@@ -9,27 +11,24 @@ library(stringi)
 
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
+con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
 i <- 15
 aa <-
 dbGetQuery(conn, sprintf("select * from wiki_raw 
            where id = %d", i))
 id_from <- aa$id
-text <- aa$text
+text <- stri_trans_tolower(aa$text)
 
 #extracting all the tags and all the content within curly brackets to save it in the DB
-(tagi <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
-(klamr <- stri_extract_all_regex(text, "\\{\\{(.)*?\\}\\}")[[1]])
+(tags <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
+(curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
 
-#removing all the tags and all the content within curly brackets
+
+#removing all the comment, tags and all the content within curly brackets
+text <- stri_replace_all_regex(text,  "<!--(.)*?-->", "")
 text1 <- stri_replace_all_regex(text,  "<.*?>(.)*?<.*?>", "")
-text2 <- stri_replace_all_regex(text1,  "\\{\\{(.)*?\\}\\}", "")
-
-
-#cyt <- stri_extract_all_regex(t, "<ref>(.)*?</ref>")
-#link <- stri_extract_all_regex(t, "\\[\\[[^:\\s\\]]+?\\]\\]")
-#link <- stri_extract_all_regex(t, "\\[\\[[^:\\]]+?:\\s.+?\\]\\]")
-#unlist(lapply(link, length))
+text2 <- stri_replace_all_regex(text1,  "\\{\\{[^\\}]*?\\}\\}", "")
 
 #text2 <- c("[[United States#History|History]] kglf [[United States]] mf [[United States#History]] nkds [[#Links and URLs]]")
 
@@ -77,34 +76,47 @@ m3 <- stri_trans_tolower(unique(m2[,2]))
 #                     )
 # )
 
+#those that had only [[x]] we want to replace with x
+#[[x|y]] we want to replace with y
+no_string <- which(stri_length(m[,3])==0)
+m[no_string,3] <- m[no_string, 2]
+
+(text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
+                          vectorize_all=FALSE)
+)
 ##########
 
+### KATEGORIE ###
 
-######## SYF #######
-
-
-
-# not links: [[x:y]] - we want y only if x is "Kategoria"
+# not links: [[x:y]] - we want y only if x is "kategoria"
 
 #extractng all the not-links 
-(not_link <- stri_extract_all_regex(text2, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")[[1]])
+(not_link <- stri_extract_all_regex(text3, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")[[1]])
 
 
-#matching those with "Kategoria"
-(not_link2 <- stri_match_all_regex(not_link, "\\[\\[Kategoria:(.+?)\\]\\]"))
+#matching those with "kategoria"
+(not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\]\\]"))
 
-m <- matrix(unlist(not_link2), ncol=2, byrow=TRUE)
+(m <- matrix(unlist(not_link2), ncol=2, byrow=TRUE))
 
-# TO DO: spr, czy juz istnieje taka kat.
 
-# jak nie, to ja wrzucic, dostac id, 
-# jak tak, to wyciagnac id
+dbSendQuery(con, sprintf(
+            "INSERT INTO 
+            wiki_category_name(name)
+            VALUES ('%s')",
+            stri_flatten(m[,2], collapse = "'), ('")
+                    )
+            )
 
-# i do zapisania do drugiej tabeli (wiki_cat_text)
+(text4 <- stri_replace_all_fixed(text3, not_link, "")
+)
 
 #############
 
 
+
+
+######## SYF #######
 
 
 klamr <- stri_extract_all_regex(text1, "\\{\\{(.)*?\\}\\}")

@@ -10,7 +10,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_page (
   id INTEGER NOT NULL PRIMARY KEY,
-  title INTEGER NOT NULL,
+  title VARCHAR(256) NOT NULL UNIQUE,
   text TEXT NOT NULL
 );")
 

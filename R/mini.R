@@ -85,7 +85,7 @@ if(!is.na(redirect))
             FROM wiki_raw 
             WHERE lower(title)='%s'", redirect))  
 
-  write.table(stri_paste(id_from, ";", id_to[,]), current_file, append = TRUE, sep=";", row.names = FALSE, col.names=FALSE)
+  cat(stri_paste(id_from, ";", id_to[,]), file=current_file, append = TRUE)
  
 }
 }

@@ -5,27 +5,61 @@ library(RSQLite)
 library(stringi)
 ### Raw text database ###
 
+dir_file_create <- function(dir, sub_dir, i){
+  file_size <- 20000000
+  dir_size <- 1000
+  outdir <- file.path(dir, stri_paste(sub_dir, i))
+  file <- file.path(outdir, stri_paste(sub_dir, i, ".csv"))
+  ls <- list.dirs(dir, recursive = FALSE)
+  current_dir <- ls[length(ls)]
+  if(length(current_dir)==0)
+    dir.create(outdir)
+  lf <- list.files(current_dir, full.names = TRUE)
+  n <- length(lf)
+  current_file <- lf[n]
+  file_info <- file.info(current_file)
+  if(length(file_info$size)==0){
+    file.create(file)
+    ret <- file
+  }else{
+    if(file_info$size>=file_size){
+      if(n>=dir_size)
+        dir.create(outdir)
+      else{
+        file.create(file)
+      }
+    }else{
+      ret <- current_file
+    }
+  }
+  return(ret)
+}
+
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
+dir_red <- "./Data/redirect"
+dir_links <- "./Data/links"
+dir_categories_name <- "./Data/categories_name"
+dir_words <- "./Data/words"
+dir_words_cnt <- "./Data/words_cnt"
+
 dirs2create <- file.path(
-  c("./Data/redirect", 
-    "./Data/links", 
-    "./Data/categories_name", 
-    "./Data/words", 
-    "./Data/words_count"))
+  c(dir_red, dir_links, dir_categories_name, dir_words, dir_words_cnt))
 
 
 dirs2create <- dirs2create[!file.exists(dirs2create)]
 for (outdir3 in dirs2create) dir.create(outdir3, recursive=TRUE)
 
-size <- 
+
 
 for(i in 1:1654533){
 aa <-
   dbGetQuery(conn, sprintf("select * from wiki_raw 
                            where id = %d and ns=0", i))
+index <- dbGetQuery(conn, "select id from wiki_raw 
+                           where redirect!=NULL limit 200")
 if(nrow(aa)!=0){ 
   #everything that's below
 }
@@ -33,27 +67,13 @@ redirect <- aa$redirect
 id_from <- aa$id
 if(!is.na(redirect))
 {
-  outdir <- file.path("./Data/redirect", stri_paste("red_", i))
-  file <- file.path(outdir, stri_paste("red_", i, ".csv"))
-  ls <- list.dirs("./Data/redirect/", recursive = FALSE)
-  current_dir <- ls[length(ls)]
-  lf <- list.files(current_dir, full.names = TRUE)
-  current_file <- lf[length(lf)]
-  if(file.info(current_file)$size>=20000000){
-    if()
-      dir.create(outdir)
-    else{
-      file.create(file.path(c(outdir, "red_", index)))
-    }
-  }
+  current_file <- dir_file_create(dir_red, "red_", i)
   redirect <- stri_trans_tolower(redirect)
-  i_red <- i_red+1
-  
-  
-  
-  
-  id_from, id_to[,1]
-  )
+  id_to <- dbGetQuery(conn, sprintf("
+            SELECT id 
+            FROM wiki_raw 
+            WHERE lower(title)='%s'", redirect))  
+  stri_write_lines(c(id_from, id_to[,1]), current_file)
   
 }
 else

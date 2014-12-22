@@ -5,33 +5,54 @@ library(RSQLite)
 library(stringi)
 ### Raw text database ###
 
-## TO DO: 
-# (?) zaladowac od nowa baze, tak zeby wszystko bylo lower case. PHP zmieniony
-# dziala dla lower(title), ale lower chyba dziala tylko dla ascii por. https://www.sqlite.org/lang_corefunc.html
-
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
-i <- 15
-aa <-
-dbGetQuery(conn, sprintf("select * from wiki_raw 
-           where id = %d", i))
+dirs2create <- file.path(
+  c("./Data/redirect", 
+    "./Data/links", 
+    "./Data/categories_name", 
+    "./Data/words", 
+    "./Data/words_count"))
 
+
+dirs2create <- dirs2create[!file.exists(dirs2create)]
+for (outdir3 in dirs2create) dir.create(outdir3, recursive=TRUE)
+
+size <- 
+
+for(i in 1:1654533){
+aa <-
+  dbGetQuery(conn, sprintf("select * from wiki_raw 
+                           where id = %d and ns=0", i))
+if(nrow(aa)!=0){ 
+  #everything that's below
+}
 redirect <- aa$redirect
 id_from <- aa$id
 if(!is.na(redirect))
 {
+  outdir <- file.path("./Data/redirect", stri_paste("red_", i))
+  file <- file.path(outdir, stri_paste("red_", i, ".csv"))
+  ls <- list.dirs("./Data/redirect/", recursive = FALSE)
+  current_dir <- ls[length(ls)]
+  lf <- list.files(current_dir, full.names = TRUE)
+  current_file <- lf[length(lf)]
+  if(file.info(current_file)$size>=20000000){
+    if()
+      dir.create(outdir)
+    else{
+      file.create(file.path(c(outdir, "red_", index)))
+    }
+  }
   redirect <- stri_trans_tolower(redirect)
-  id_to <- dbGetQuery(conn, sprintf("
-            SELECT id 
-            FROM wiki_raw 
-            WHERE lower(title)='%s'", redirect))
+  i_red <- i_red+1
   
-  dbSendQuery(con, sprintf("
-              INSERT INTO wiki_redirect(id_from, id_to)
-              VALUES (%d, %d)
-              ", id_from, id_to[,1])
+  
+  
+  
+  id_from, id_to[,1]
   )
   
 }
@@ -39,7 +60,7 @@ else
 {
   #everything that's below
 }
-  
+
 
 text <- stri_trans_tolower(aa$text)
 
@@ -80,7 +101,7 @@ if(any(hashtag))
 {
   #matching the page title and the section, transforming it into matrix
   hash_m <- matrix(unlist(stri_match_all_regex(m[hashtag,2], "(.*?)\\#(.+)")), ncol=3, byrow=TRUE)
-
+  
   #replacing with title page
   m[hashtag, 2]  <- hash_m[,2]
 }
@@ -92,9 +113,9 @@ m3 <- stri_trans_tolower(unique(m2[,2]))
 
 #extracting id's where we link to
 (id_to <- dbGetQuery(conn, sprintf("select id from wiki_raw where lower(title) in ('%s')", 
-                         stri_flatten( m3, collapse = "', '")
-                         )
-           )
+                                   stri_flatten( m3, collapse = "', '")
+)
+)
 )
 
 
@@ -115,7 +136,7 @@ m[no_string,3] <- m[no_string, 2]
 
 ### removing all [[x]] and [[x|y]] from the text
 (text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
-                          vectorize_all=FALSE)
+                                 vectorize_all=FALSE)
 )
 ###########################################
 
@@ -134,16 +155,16 @@ m[no_string,3] <- m[no_string, 2]
 
 ## inserting categories into db, if it's not already there
 dbSendQuery(con, sprintf(
-            "INSERT OR IGNORE INTO 
-            wiki_category_name(name)
-            VALUES ('%s')",
-            stri_flatten(not_link3[,2], collapse = "'), ('")
-                    )
-            )
+  "INSERT OR IGNORE INTO 
+  wiki_category_name(name)
+  VALUES ('%s')",
+  stri_flatten(not_link3[,2], collapse = "'), ('")
+)
+)
 
 id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
-                WHERE name IN ('%s')", stri_flatten(not_link3[,2], collapse = "', '"))
-          )
+                                  WHERE name IN ('%s')", stri_flatten(not_link3[,2], collapse = "', '"))
+)
 
 
 ### removing all the [[x:y]] from the text
@@ -172,17 +193,17 @@ words <- stri_replace_all_fixed(words, "'", "''")
 # words <- c("całą","historię","l''île", "des","pingouins","1908")
 dbSendQuery(con, sprintf(
   "INSERT OR IGNORE INTO 
-            wiki_word(word)
-            VALUES ('%s')",
+  wiki_word(word)
+  VALUES ('%s')",
   stri_flatten(words[1:500], collapse = "'), ('")
-  )
+)
 )
 
 id_words <- dbGetQuery(con, sprintf(
-            "
-            SELECT id FROM wiki_word
-            WHERE word IN ('%s')
-            "), stri_flatten(words, collapse = "', '")
+  "
+  SELECT id FROM wiki_word
+  WHERE word IN ('%s')
+  "), stri_flatten(words, collapse = "', '")
 )
 
 #### TO DO: LICZNOSCI
@@ -201,19 +222,19 @@ id_words <- dbGetQuery(con, sprintf(
 #inserting the tags
 dbSendQuery(con, sprintf(
   "INSERT INTO 
-            wiki_tag(id_title, text)
-            VALUES (%s')",
+  wiki_tag(id_title, text)
+  VALUES (%s')",
   stri_paste(id_from, " , '", stri_flatten(tags))
-)
+  )
 )
 
 #inserting curly brackets
 dbSendQuery(con, sprintf(
   "INSERT INTO 
-            wiki_curly(id_title, text)
-            VALUES (%s')",
+  wiki_curly(id_title, text)
+  VALUES (%s')",
   stri_paste(id_from, " , '", stri_flatten(curly))
-)
+  )
 )
 ###########
 ### TO DO:
@@ -222,8 +243,8 @@ dbSendQuery(con, sprintf(
 #inserting links
 dbSendQuery(con, sprintf(
   "INSERT INTO 
-            wiki_links(id_from, id_to)
-            VALUES (%s)",
+  wiki_links(id_from, id_to)
+  VALUES (%s)",
   stri_paste(id_from, ", ", 
              stri_flatten(id_to[,1], collapse = 
                             stri_paste("), (", id_from, ", ")))
@@ -247,7 +268,7 @@ dbSendQuery(con, sprintf(
 )
 )
 
-
+}
 ### DB DISCONNECT
 
 dbDisconnect(conn)

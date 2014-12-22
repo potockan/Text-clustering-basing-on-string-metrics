@@ -6,18 +6,25 @@ library(stringi)
 ### Raw text database ###
 
 dir_file_create <- function(dir, sub_dir, i){
+  #max. file size is 20MB
   file_size <- 20000000
+  #max. dir size is 1000 files
   dir_size <- 1000
+  #dir and file to potentially create
   outdir <- file.path(dir, stri_paste(sub_dir, i))
   file <- file.path(outdir, stri_paste(sub_dir, i, ".csv"))
+  
   ls <- list.dirs(dir, recursive = FALSE)
-  current_dir <- ls[length(ls)]
+  ## DUNNO IF IT EXTRACTS THE LATEST ONE!!!
+  current_dir <- ls[length(ls)] 
+  #if there are no dirs in the parent dir directory then we create it
   if(length(current_dir)==0)
     dir.create(outdir)
   lf <- list.files(current_dir, full.names = TRUE)
   n <- length(lf)
   current_file <- lf[n]
   file_info <- file.info(current_file)
+  # the same with files
   if(length(file_info$size)==0){
     file.create(file)
     ret <- file
@@ -32,6 +39,7 @@ dir_file_create <- function(dir, sub_dir, i){
       ret <- current_file
     }
   }
+  #returning the file.path to the current file we should save lines to
   return(ret)
 }
 
@@ -55,26 +63,31 @@ for (outdir3 in dirs2create) dir.create(outdir3, recursive=TRUE)
 
 
 for(i in 1:1654533){
+  for(i in index[1:10,1]){
 aa <-
   dbGetQuery(conn, sprintf("select * from wiki_raw 
                            where id = %d and ns=0", i))
-index <- dbGetQuery(conn, "select id from wiki_raw 
-                           where redirect!=NULL limit 200")
-if(nrow(aa)!=0){ 
-  #everything that's below
-}
+# index <- dbGetQuery(conn, "select id from wiki_raw 
+#                            where redirect!='NA' limit 2000")
+# if(nrow(aa)!=0){ 
+#   #everything that's below
+# }
 redirect <- aa$redirect
 id_from <- aa$id
 if(!is.na(redirect))
 {
+  
   current_file <- dir_file_create(dir_red, "red_", i)
+  print(current_file)
   redirect <- stri_trans_tolower(redirect)
   id_to <- dbGetQuery(conn, sprintf("
             SELECT id 
             FROM wiki_raw 
             WHERE lower(title)='%s'", redirect))  
-  stri_write_lines(c(id_from, id_to[,1]), current_file)
-  
+
+  write.table(stri_paste(id_from, ";", id_to[,]), current_file, append = TRUE, sep=";", row.names = FALSE, col.names=FALSE)
+ 
+}
 }
 else
 {
@@ -83,14 +96,6 @@ else
 
 
 text <- stri_trans_tolower(aa$text)
-
-#extracting all the tags and all the content within curly brackets to save it in the DB
-(tags <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
-(curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
-
-
-
-
 
 #removing all the comment, tags and all the content within curly brackets
 patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}", "zobacz tez", "linki zewnętrzne")
@@ -174,6 +179,8 @@ m[no_string,3] <- m[no_string, 2]
 (not_link3 <- matrix(unlist(not_link2), ncol=2, byrow=TRUE))
 
 ## inserting categories into db, if it's not already there
+
+######## TO DO!!!
 dbSendQuery(con, sprintf(
   "INSERT OR IGNORE INTO 
   wiki_category_name(name)
@@ -194,23 +201,14 @@ id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
 #############
 
 ### WORD COUNTING ###
+
+######## TO DO!!!
 words_all  <- stri_extract_all_words(text4)[[1]]
-### TO DO: 
-#text jako jedna b. dluga linia, bez interpunkcji (stri_flatten words_all)
-#czy raczej wyrzucic wszystko co nie jest [a-z], \s lub \d
-#czy zostawic jak jest z *,=, milionem \n itd.
 
 
 words <- unique(words_all)
 words <- stri_replace_all_fixed(words, "'", "''")
-### TO DO:
-# INSERT DOESN'T WORK!!!
-# Error in sqliteSendQuery(conn, statement) : 
-# error in statement: too many terms in compound SELECT
-# http://stackoverflow.com/questions/9527851/sqlite-error-too-many-terms-in-compound-select
-# SQLITE_MAX_COMPOUND_SELECT id 500
-# Powiekszamy, czy bawimy sie w pare/nascie insertow?
-# words <- c("całą","historię","l''île", "des","pingouins","1908")
+
 dbSendQuery(con, sprintf(
   "INSERT OR IGNORE INTO 
   wiki_word(word)

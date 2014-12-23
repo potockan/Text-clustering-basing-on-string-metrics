@@ -63,7 +63,6 @@ for (outdir3 in dirs2create) dir.create(outdir3, recursive=TRUE)
 
 
 for(i in 1:1654533){
-  for(i in index[1:100,1]){
 aa <-
   dbGetQuery(conn, sprintf("select * from wiki_raw 
                            where id = %d and ns=0", i))
@@ -88,7 +87,6 @@ if(!is.na(redirect))
 
   cat(stri_paste(id_from, ";", id_to[,], "\n"), file=current_file, append = TRUE)
  
-}
 }
 else
 {

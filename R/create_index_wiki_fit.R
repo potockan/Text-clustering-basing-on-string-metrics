@@ -9,4 +9,9 @@ dbSendQuery(con,"
             ON wiki_word(word)
             ")
 
+dbSendQuery(con,"
+            CREATE UNIQUE INDEX index_cat
+            ON wiki_category_name(name)
+            ")
+
 dbDisconnect(conn)

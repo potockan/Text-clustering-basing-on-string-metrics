@@ -8,10 +8,10 @@ library(RSQLite)
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
-dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_card;")
+dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_word_freq;")
 dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_word;")
-dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_curly;")
-dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_tag;")
+# dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_curly;")
+# dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_tag;")
 dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_redirect;")
 dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_link;")
 dbSendQuery(conn, "DROP TABLE IF EXISTS wiki_category_text;")

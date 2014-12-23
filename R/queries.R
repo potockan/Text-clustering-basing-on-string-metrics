@@ -10,6 +10,14 @@ library(stringi)
 # dziala dla lower(title), ale lower chyba dziala tylko dla ascii por. https://www.sqlite.org/lang_corefunc.html
 
 
+prepare_string <- function(str, source_encoding='UTF-8') {
+  str <- as.character(str)
+  stopifnot(!is.na(str))
+  ret <- stri_replace_all_fixed(str, "'", "''")
+  ret <- stri_paste("'",ret,"'")
+  ret
+}
+
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
@@ -26,6 +34,7 @@ if(!is.na(redirect))
   id_to <- dbGetQuery(conn, sprintf("
             SELECT id 
             FROM wiki_raw 
+            INDEXED BY my_index
             WHERE lower(title)='%s'", redirect))
   
   dbSendQuery(con, sprintf("
@@ -38,21 +47,26 @@ if(!is.na(redirect))
 else
 {
   #everything that's below
+  title <- aa$title
+  dbSendQuery(con, sprintf("
+              INSERT INTO wiki_page(id, title)
+              VALUES (%d, %s)
+              ", id_from, prepare_string(title)))
 }
   
 
 text <- stri_trans_tolower(aa$text)
 
-#extracting all the tags and all the content within curly brackets to save it in the DB
-(tags <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
-(curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
+# #extracting all the tags and all the content within curly brackets to save it in the DB
+# (tags <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
+# (curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
 
 
 
 
 
 #removing all the comment, tags and all the content within curly brackets
-patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}", "zobacz tez", "linki zewnętrzne")
+patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}", "zobacz tez", "linki zewnętrzne", "bibliografia", "przypisy")
 text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
 
 
@@ -91,8 +105,12 @@ m3 <- stri_trans_tolower(unique(m2[,2]))
 
 
 #extracting id's where we link to
-(id_to <- dbGetQuery(conn, sprintf("select id from wiki_raw where lower(title) in ('%s')", 
-                         stri_flatten( m3, collapse = "', '")
+(id_to <- dbGetQuery(conn, 
+        sprintf("SELECT id 
+                FROM wiki_raw 
+                INDEXED BY my_index 
+                WHERE lower(title) in (%s)", 
+          stri_flatten( prepare_string(m3), collapse = ", ")
                          )
            )
 )
@@ -136,13 +154,16 @@ m[no_string,3] <- m[no_string, 2]
 dbSendQuery(con, sprintf(
             "INSERT OR IGNORE INTO 
             wiki_category_name(name)
-            VALUES ('%s')",
-            stri_flatten(not_link3[,2], collapse = "'), ('")
+            VALUES (%s)",
+            stri_flatten(prepare_string(not_link3[,2])
+                      , collapse = "), (")
                     )
             )
 
 id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
-                WHERE name IN ('%s')", stri_flatten(not_link3[,2], collapse = "', '"))
+                WHERE name IN (%s)", 
+                stri_flatten(prepare_string(not_link3[,2]),
+                  collapse = ", "))
           )
 
 
@@ -155,13 +176,10 @@ id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
 ### WORD COUNTING ###
 words_all  <- stri_extract_all_words(text4)[[1]]
 ### TO DO: 
-#text jako jedna b. dluga linia, bez interpunkcji (stri_flatten words_all)
-#czy raczej wyrzucic wszystko co nie jest [a-z], \s lub \d
-#czy zostawic jak jest z *,=, milionem \n itd.
 
 
 words <- unique(words_all)
-words <- stri_replace_all_fixed(words, "'", "''")
+words <- prepare_string(words)
 ### TO DO:
 # INSERT DOESN'T WORK!!!
 # Error in sqliteSendQuery(conn, statement) : 
@@ -170,24 +188,72 @@ words <- stri_replace_all_fixed(words, "'", "''")
 # SQLITE_MAX_COMPOUND_SELECT id 500
 # Powiekszamy, czy bawimy sie w pare/nascie insertow?
 # words <- c("całą","historię","l''île", "des","pingouins","1908")
+n_words <- length(words)
+for(j in 1:floor(n_words/500))
+{
+  dbSendQuery(con, sprintf(
+    "INSERT OR IGNORE INTO 
+              wiki_word(word)
+              VALUES (%s)",
+    stri_flatten(words[((j-1)*500+1) : (j*500)], collapse = "), (")
+    )
+  )
+}
+
 dbSendQuery(con, sprintf(
   "INSERT OR IGNORE INTO 
-            wiki_word(word)
-            VALUES ('%s')",
-  stri_flatten(words[1:500], collapse = "'), ('")
-  )
+              wiki_word(word)
+              VALUES (%s)",
+  stri_flatten(words[(j*500+1) : (j*500+n_words%%500)], collapse = "), (")
+)
 )
 
-id_words <- dbGetQuery(con, sprintf(
-            "
-            SELECT id FROM wiki_word
-            WHERE word IN ('%s')
-            "), stri_flatten(words, collapse = "', '")
-)
+# id_words <- dbGetQuery(con, sprintf(
+#             "
+#             SELECT * FROM wiki_word
+#             WHERE word IN (%s)
+#             ", stri_flatten(words, collapse = ", ")
+#             )
+# )
 
 #### TO DO: LICZNOSCI
 ### WORD COUNTING ###
-(words_text <- table(words_all))
+(words_text <- as.data.frame(table(words_all)))
+words_text[,1] <- prepare_string(words_text[,1])
+
+
+
+
+n_words_text <- nrow(words_text)
+for(j in 1:floor(n_words_text/500))
+{
+  
+  ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
+        VALUES "
+  values <- apply(words_text[((j-1)*500+1) : (j*500),], 1, function(w)
+  {
+    sel <- stri_paste("SELECT id FROM wiki_word WHERE word=", w[1])
+    str <- stri_paste("(", id_from, ", (", sel, "), ", w[2], ")")
+    str
+  })
+  str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
+  dbSendQuery(con, str)
+
+}
+
+
+ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
+VALUES "
+values <- apply(words_text[(i*500+1) : (i*500+n_words%%500),], 1, function(w)
+{
+  sel <- stri_paste("SELECT id FROM wiki_word WHERE word=", w[1])
+  str <- stri_paste("(", id_from, ", (", sel, "), ", w[2], ")")
+  str
+})
+str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
+dbSendQuery(con, str)
+
+
 
 ################################
 
@@ -198,23 +264,23 @@ id_words <- dbGetQuery(con, sprintf(
 ### TO DO:
 ### This has to be done at the end, after inserting the text, cause
 ### id_title is FK from wiki_page
-#inserting the tags
-dbSendQuery(con, sprintf(
-  "INSERT INTO 
-            wiki_tag(id_title, text)
-            VALUES (%s')",
-  stri_paste(id_from, " , '", stri_flatten(tags))
-)
-)
-
-#inserting curly brackets
-dbSendQuery(con, sprintf(
-  "INSERT INTO 
-            wiki_curly(id_title, text)
-            VALUES (%s')",
-  stri_paste(id_from, " , '", stri_flatten(curly))
-)
-)
+# #inserting the tags
+# dbSendQuery(con, sprintf(
+#   "INSERT INTO 
+#             wiki_tag(id_title, text)
+#             VALUES (%s')",
+#   stri_paste(id_from, " , '", stri_flatten(tags))
+# )
+# )
+# 
+# #inserting curly brackets
+# dbSendQuery(con, sprintf(
+#   "INSERT INTO 
+#             wiki_curly(id_title, text)
+#             VALUES (%s')",
+#   stri_paste(id_from, " , '", stri_flatten(curly))
+# )
+# )
 ###########
 ### TO DO:
 ### This has to be done at the end, after inserting the text, cause

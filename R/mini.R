@@ -63,15 +63,15 @@ for (outdir3 in dirs2create) dir.create(outdir3, recursive=TRUE)
 
 
 for(i in 1:1654533){
-  for(i in index[1:10,1]){
+  for(i in index[1:100,1]){
 aa <-
   dbGetQuery(conn, sprintf("select * from wiki_raw 
                            where id = %d and ns=0", i))
-# index <- dbGetQuery(conn, "select id from wiki_raw 
-#                            where redirect!='NA' limit 2000")
-# if(nrow(aa)!=0){ 
-#   #everything that's below
-# }
+index <- dbGetQuery(conn, "select count(id) from wiki_raw 
+                           where redirect!='NA'")
+if(nrow(aa)!=0){ 
+  #everything that's below
+}
 redirect <- aa$redirect
 id_from <- aa$id
 if(!is.na(redirect))
@@ -83,9 +83,10 @@ if(!is.na(redirect))
   id_to <- dbGetQuery(conn, sprintf("
             SELECT id 
             FROM wiki_raw 
+            INDEXED BY my_index
             WHERE lower(title)='%s'", redirect))  
 
-  cat(stri_paste(id_from, ";", id_to[,]), file=current_file, append = TRUE)
+  cat(stri_paste(id_from, ";", id_to[,], "\n"), file=current_file, append = TRUE)
  
 }
 }

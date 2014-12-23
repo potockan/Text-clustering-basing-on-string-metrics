@@ -41,20 +41,20 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_redirect (
   id_to INTEGER NOT NULL
 );")
 
-
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_tag (
-  id INTEGER NOT NULL PRIMARY KEY,
-  id_title INTEGER NOT NULL,
-  text TEXT NOT NULL,
-  FOREIGN KEY (id_title) REFERENCES wiki_page(id)
-);")
-
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_curly (
-  id INTEGER NOT NULL PRIMARY KEY,
-  id_title INTEGER NOT NULL,
-  text TEXT NOT NULL,
-  FOREIGN KEY (id_title) REFERENCES wiki_page(id)
-);")
+# 
+# dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_tag (
+#   id INTEGER NOT NULL PRIMARY KEY,
+#   id_title INTEGER NOT NULL,
+#   text TEXT NOT NULL,
+#   FOREIGN KEY (id_title) REFERENCES wiki_page(id)
+# );")
+# 
+# dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_curly (
+#   id INTEGER NOT NULL PRIMARY KEY,
+#   id_title INTEGER NOT NULL,
+#   text TEXT NOT NULL,
+#   FOREIGN KEY (id_title) REFERENCES wiki_page(id)
+# );")
 
 dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word (
   id INTEGER NOT NULL PRIMARY KEY,
@@ -62,9 +62,10 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word (
   UNIQUE(word)
 );")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_card (
+dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word_freq (
   id_title INTEGER NOT NULL,
   id_word INTEGER NOT NULL,
+  freq INTEGER NOT NULL,
   FOREIGN KEY (id_title) REFERENCES wiki_page(id),
   FOREIGN KEY (id_word) REFERENCES wiki_word(id)
 );")

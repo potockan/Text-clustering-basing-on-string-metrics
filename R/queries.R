@@ -24,7 +24,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 
-for(i in 635:1000){
+for(i in 679:1000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -77,9 +77,14 @@ for(i in 635:1000){
       
       
       #removing all the comment, tags and all the content within curly brackets
-      patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}")
-      text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
+      patterns <- c("<.*?>(.)*?</.*?>", "\\{\\{[^\\}]*?\\}\\}", "<!--(.)*?-->")
+      patterns <- c("<(.+?)>[^<]+</\\1>", "\\{\\{[^\\}]*?\\}\\}", "<!--(.)*?-->")
+      stri_match_all_regex(text, patterns[1])
       
+      text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
+      text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
+      pat <- "<(.+?)>([^<]+?)</\\1>" #to jest ok
+    
       
       #################################################
       ### LINKS ###
@@ -94,7 +99,7 @@ for(i in 635:1000){
       
       #transformation to matrix
       m <- matrix(unlist(link2), ncol=3, byrow = TRUE)
-      m <- m[which(!is.na(m[,1])),]
+      m <- matrix(m[which(!is.na(m[,1])),], ncol=3)
       
       #if a link contains a hashtag (#) then the link leads to a section of the page
       #(can be the same page itself)

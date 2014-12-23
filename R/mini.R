@@ -88,6 +88,7 @@ if(!is.na(redirect))
   cat(stri_paste(id_from, ";", id_to[,], "\n"), file=current_file, append = TRUE)
  
 }
+
 else
 {
   #everything that's below

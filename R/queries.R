@@ -24,7 +24,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 
-for(i in 383:1000){
+for(i in 428:1000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -143,15 +143,17 @@ for(i in 383:1000){
       }
       }else
         j <- 0
-      dbSendQuery(con, sprintf(
-        "INSERT INTO 
-                    wiki_link(id_from, id_to)
-                    VALUES (%s)",
-        stri_paste(id_from, ", ", 
-                   stri_flatten(id_to[(j*500+1) : (j*500+n_links%%500),1], collapse = 
-                                  stri_paste("), (", id_from, ", ")))
-      )
-      )
+      mod_links <- n_links%%500
+      if(mod_links>0)
+        dbSendQuery(con, sprintf(
+          "INSERT INTO 
+                      wiki_link(id_from, id_to)
+                      VALUES (%s)",
+          stri_paste(id_from, ", ", 
+                     stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
+                                    stri_paste("), (", id_from, ", ")))
+        )
+        )
       
       
 
@@ -246,13 +248,15 @@ for(i in 383:1000){
         }
       }else
         j <- 0
-      dbSendQuery(con, sprintf(
-        "INSERT OR IGNORE INTO 
-                    wiki_word(word)
-                    VALUES (%s)",
-        stri_flatten(words[(j*500+1) : (j*500+n_words%%500)], collapse = "), (")
-      )
-      )
+      mod_words <- n_words%%500
+      if(mod_words>0)
+        dbSendQuery(con, sprintf(
+          "INSERT OR IGNORE INTO 
+                      wiki_word(word)
+                      VALUES (%s)",
+          stri_flatten(words[(j*500+1) : (j*500+mod_words%%500)], collapse = "), (")
+        )
+        )
       
       
 
@@ -283,18 +287,19 @@ for(i in 383:1000){
         }
       }else
         j <- 0
-      
-      ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
-      VALUES "
-      values <- apply(words_text[(j*500+1) : (j*500+n_words%%500),], 1, function(w)
-      {
-        sel <- stri_paste("SELECT id FROM wiki_word INDEXED BY index_word WHERE word=", w[1])
-        str <- stri_paste("(", id_from, ", (", sel, "), ", w[2], ")")
-        str
-      })
-      str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
-      dbSendQuery(con, str)
-      
+      mod_words_text <- n_words_text%%500
+      if(mod_words_text>0){
+        ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
+        VALUES "
+        values <- apply(words_text[(j*500+1) : (j*500+mod_words_text),], 1, function(w)
+        {
+          sel <- stri_paste("SELECT id FROM wiki_word INDEXED BY index_word WHERE word=", w[1])
+          str <- stri_paste("(", id_from, ", (", sel, "), ", w[2], ")")
+          str
+        })
+        str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
+        dbSendQuery(con, str)
+      }
       
       
       ################################

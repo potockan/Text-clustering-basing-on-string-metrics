@@ -24,7 +24,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 
-for(i in 1:1000){
+for(i in 383:1000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -46,12 +46,12 @@ for(i in 1:1000){
                 FROM wiki_raw 
                 INDEXED BY my_index
                 WHERE lower(title)='%s'", redirect))
-      
-      dbSendQuery(con, sprintf("
-                  INSERT INTO wiki_redirect(id_from, id_to)
-                  VALUES (%d, %d)
-                  ", id_from, id_to[,1])
-      )
+      if(nrow(id_to)==1)
+        dbSendQuery(con, sprintf("
+                    INSERT INTO wiki_redirect(id_from, id_to)
+                    VALUES (%d, %d)
+                    ", id_from, id_to[,1])
+        )
       
     }
     else
@@ -77,9 +77,8 @@ for(i in 1:1000){
       
       
       #removing all the comment, tags and all the content within curly brackets
-      patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}", "zobacz tez", "linki zewnętrzne", "bibliografia", "przypisy")
+      patterns <- c("<!--(.)*?-->", "<.*?>(.)*?<.*?>", "\\{\\{[^\\}]*?\\}\\}")
       text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
-      
       
       
       #################################################
@@ -183,39 +182,44 @@ for(i in 1:1000){
       #matching those with "kategoria"
       not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\]\\]")
       not_link2 <- unlist(not_link2)
-      not_link3 <- matrix(not_link2[!is.na(not_link2)], ncol=2, byrow=TRUE)
-      
-      ## inserting categories into db, if it's not already there
-      dbSendQuery(con, sprintf(
-                  "INSERT OR IGNORE INTO 
-                  wiki_category_name(name)
-                  VALUES (%s)",
-                  stri_flatten(prepare_string(not_link3[,2])
-                            , collapse = "), (")
-                          )
+      if(any(!is.na(not_link2))){
+        not_link3 <- matrix(not_link2[!is.na(not_link2)], ncol=2, byrow=TRUE)
+        
+        ## inserting categories into db, if it's not already there
+        dbSendQuery(con, sprintf(
+                    "INSERT OR IGNORE INTO 
+                    wiki_category_name(name)
+                    VALUES (%s)",
+                    stri_flatten(prepare_string(not_link3[,2])
+                              , collapse = "), (")
+                            )
+                    )
+        # selectng categories id
+        id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
+                        WHERE name IN (%s)", 
+                        stri_flatten(prepare_string(not_link3[,2]),
+                          collapse = ", "))
                   )
-      # selectng categories id
-      id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
-                      WHERE name IN (%s)", 
-                      stri_flatten(prepare_string(not_link3[,2]),
-                        collapse = ", "))
-                )
-      
-      #inserting categories
-      dbSendQuery(con, sprintf(
-        "INSERT INTO 
-                  wiki_category_text(id_title, id_category)
-                  VALUES (%s)",
-        stri_paste(id_from, ", ",
-                   stri_flatten( id_cat[,1], collapse = 
-                                   stri_paste("), (", id_from, ", ")
-                   )
+        
+        #inserting categories
+        dbSendQuery(con, sprintf(
+          "INSERT INTO 
+                    wiki_category_text(id_title, id_category)
+                    VALUES (%s)",
+          stri_paste(id_from, ", ",
+                     stri_flatten( id_cat[,1], collapse = 
+                                     stri_paste("), (", id_from, ", ")
+                     )
+          )
         )
-      )
-      )
-      
+        )
+      }
       ### removing all the [[x:y]] from the text
-      text4 <- stri_replace_all_fixed(text3, not_link, "", vectorize_all = FALSE)
+      if(any(!is.na(not_link))){
+        text4 <- stri_replace_all_fixed(text3, c(not_link[!is.na(not_link)], "zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
+      }else
+        text4 <- stri_replace_all_fixed(text3, c("zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
+      
       
       
       #############
@@ -255,7 +259,7 @@ for(i in 1:1000){
       ### WORD COUNTING ###
       print('words counting')
       #counting a number of words that occur in the text
-      (words_text <- as.data.frame(table(words_all)))
+      words_text <- as.data.frame(table(words_all))
       words_text[,1] <- prepare_string(words_text[,1])
       
       #inserting it int db

@@ -24,7 +24,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 
-for(i in 1:20){
+for(i in 1:1000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -39,6 +39,7 @@ for(i in 1:20){
     #if a page is redirect, then we add it to redirect table
     if(!is.na(redirect))
     {
+      print('redirect')
       redirect <- stri_trans_tolower(redirect)
       id_to <- dbGetQuery(conn, sprintf("
                 SELECT id 
@@ -55,7 +56,7 @@ for(i in 1:20){
     }
     else
     {
-      
+      print('page')
       #inserting id and title of a page
       title <- aa$title
       dbSendQuery(con, sprintf("
@@ -85,11 +86,12 @@ for(i in 1:20){
       ### LINKS ###
       ##[[x|y]] (x is the link, y the string to be viewed) or [[x]] (x is both)
       
+      print('links')
       #extractng all the links 
-      (link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")[[1]])
+      link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")[[1]]
       
       #matching those with pipe and without it
-      (link2 <- stri_match_all_regex(link, "\\[\\[([^\\|]+)\\|?+([^\\|]*?)\\]\\]"))
+      link2 <- stri_match_all_regex(link, "\\[\\[([^\\|]+)\\|?+([^\\|]*?)\\]\\]")
       
       #transformation to matrix
       m <- matrix(unlist(link2), ncol=3, byrow = TRUE)
@@ -115,7 +117,7 @@ for(i in 1:20){
       
       
       #extracting id's where we link to
-      (id_to <- dbGetQuery(conn, 
+      id_to <- dbGetQuery(conn, 
               sprintf("SELECT id 
                       FROM wiki_raw 
                       INDEXED BY my_index 
@@ -123,7 +125,7 @@ for(i in 1:20){
                 stri_flatten( prepare_string(m3), collapse = ", ")
                                )
                  )
-      )
+      
       
       #inserting links
       n_links <- nrow(id_to)
@@ -170,8 +172,8 @@ for(i in 1:20){
       
       ###########################################
       
-      ### KATEGORIE ###
-      
+      ### CATEGORIES ###
+      print('categories')
       # not links: [[x:y]] - we want y only if x is "kategoria"
       
       #extractng all the not-links 
@@ -180,8 +182,8 @@ for(i in 1:20){
       
       #matching those with "kategoria"
       not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\]\\]")
-      
-      not_link3 <- matrix(unlist(not_link2), ncol=2, byrow=TRUE)
+      not_link2 <- unlist(not_link2)
+      not_link3 <- matrix(not_link2[!is.na(not_link2)], ncol=2, byrow=TRUE)
       
       ## inserting categories into db, if it's not already there
       dbSendQuery(con, sprintf(
@@ -218,7 +220,8 @@ for(i in 1:20){
       
       #############
       
-      ### WORD COUNTING ###
+      ### WORD INSERTING ###
+      print('words')
       #extracting all the words
       words_all  <- stri_extract_all_words(text4)[[1]]      
       
@@ -250,6 +253,7 @@ for(i in 1:20){
       
 
       ### WORD COUNTING ###
+      print('words counting')
       #counting a number of words that occur in the text
       (words_text <- as.data.frame(table(words_all)))
       words_text[,1] <- prepare_string(words_text[,1])

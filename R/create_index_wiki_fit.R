@@ -14,4 +14,4 @@ dbSendQuery(con,"
             ON wiki_category_name(name)
             ")
 
-dbDisconnect(conn)
+dbDisconnect(con)

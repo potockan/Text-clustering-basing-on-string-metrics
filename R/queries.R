@@ -24,7 +24,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 
-for(i in 428:1000){
+for(i in 635:1000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -94,6 +94,7 @@ for(i in 428:1000){
       
       #transformation to matrix
       m <- matrix(unlist(link2), ncol=3, byrow = TRUE)
+      m <- m[which(!is.na(m[,1])),]
       
       #if a link contains a hashtag (#) then the link leads to a section of the page
       #(can be the same page itself)
@@ -111,50 +112,50 @@ for(i in 428:1000){
       }
       
       # leaving only the links that lead to other pages
-      m2 <- m[which(stri_length(m[,2])>0),]
+      m2 <- matrix(m[which(stri_length(m[,2])>0),], ncol=3)
       m3 <- stri_trans_tolower(unique(m2[,2]))
       
-      
-      #extracting id's where we link to
-      id_to <- dbGetQuery(conn, 
-              sprintf("SELECT id 
-                      FROM wiki_raw 
-                      INDEXED BY my_index 
-                      WHERE lower(title) in (%s)", 
-                stri_flatten( prepare_string(m3), collapse = ", ")
-                               )
-                 )
-      
-      
-      #inserting links
-      n_links <- nrow(id_to)
-      #inserting max 500 at once - sqlite limit
-      if(n_links>500){
-      for(j in 1:floor(n_links/500)){
-        dbSendQuery(con, sprintf(
-                    "INSERT INTO 
-                    wiki_link(id_from, id_to)
-                    VALUES (%s)",
-          stri_paste(id_from, ", ", 
-                     stri_flatten(id_to[((j-1)*500+1) : (j*500),1], collapse = 
-                                    stri_paste("), (", id_from, ", ")))
-                            )
-                  )
-      }
-      }else
-        j <- 0
-      mod_links <- n_links%%500
-      if(mod_links>0)
-        dbSendQuery(con, sprintf(
-          "INSERT INTO 
+      if(length(m3)>0){
+        #extracting id's where we link to
+        id_to <- dbGetQuery(conn, 
+                sprintf("SELECT id 
+                        FROM wiki_raw 
+                        INDEXED BY my_index 
+                        WHERE lower(title) in (%s)", 
+                  stri_flatten( prepare_string(m3), collapse = ", ")
+                                 )
+                   )
+        
+        
+        #inserting links
+        n_links <- nrow(id_to)
+        #inserting max 500 at once - sqlite limit
+        if(n_links>500){
+        for(j in 1:floor(n_links/500)){
+          dbSendQuery(con, sprintf(
+                      "INSERT INTO 
                       wiki_link(id_from, id_to)
                       VALUES (%s)",
-          stri_paste(id_from, ", ", 
-                     stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
-                                    stri_paste("), (", id_from, ", ")))
-        )
-        )
-      
+            stri_paste(id_from, ", ", 
+                       stri_flatten(id_to[((j-1)*500+1) : (j*500),1], collapse = 
+                                      stri_paste("), (", id_from, ", ")))
+                              )
+                    )
+        }
+        }else
+          j <- 0
+        mod_links <- n_links%%500
+        if(mod_links>0)
+          dbSendQuery(con, sprintf(
+            "INSERT INTO 
+                        wiki_link(id_from, id_to)
+                        VALUES (%s)",
+            stri_paste(id_from, ", ", 
+                       stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
+                                      stri_paste("), (", id_from, ", ")))
+          )
+          )
+      }
       
 
       
@@ -182,7 +183,7 @@ for(i in 428:1000){
       
       
       #matching those with "kategoria"
-      not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\]\\]")
+      not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\|{0,1}[^\\|]*?\\]\\]")
       not_link2 <- unlist(not_link2)
       if(any(!is.na(not_link2))){
         not_link3 <- matrix(not_link2[!is.na(not_link2)], ncol=2, byrow=TRUE)

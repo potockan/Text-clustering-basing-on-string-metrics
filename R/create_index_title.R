@@ -2,7 +2,7 @@
 
 #install.packages("stringi")
 library(RSQLite)
-conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw_up.sqlite")
+conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
 dbSendQuery(conn,"
             CREATE INDEX my_index

@@ -23,34 +23,39 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # aa <-
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
-
-for(i in 1:1000){
+cnt <- 10
+for(i in 679:1000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
-                           where id = %d and ns=0", i))
+                             where id between %d and %d and ns=0", i, i+cnt-1))
   #   index <- dbGetQuery(conn, "select count(id) from wiki_raw 
   #                            where redirect!='NA'")
   
-  #we can select and empty row, when ns!=0 that why:
+  #we can select and empty row, when ns!=0 that's why:
   if(nrow(aa)!=0){ 
     redirect <- aa$redirect
     id_from <- aa$id
     #if a page is redirect, then we add it to redirect table
-    if(!is.na(redirect))
+    red_na <- which(is.na(redirect))
+    red_not_na <- setdiff(1:cnt, red_na)
+    if(length(red_not_na)>0)
     {
       print('redirect')
-      redirect <- stri_trans_tolower(redirect)
+      redirect <- prepare_string(redirect[red_not_na])
       id_to <- dbGetQuery(conn, sprintf("
-                SELECT id 
-                FROM wiki_raw 
-                INDEXED BY my_index
-                WHERE lower(title)='%s'", redirect))
-      if(nrow(id_to)==1)
+                                        SELECT id 
+                                        FROM wiki_raw 
+                                        INDEXED BY my_index
+                                        WHERE lower(title) in (%s)", 
+                                        stri_flatten(redirect, collapse = ", ")))
+      if(nrow(id_to)>0)
         dbSendQuery(con, sprintf("
-                    INSERT INTO wiki_redirect(id_from, id_to)
-                    VALUES (%d, %d)
-                    ", id_from, id_to[,1])
+                                 INSERT INTO wiki_redirect(id_from, id_to)
+                                 VALUES (%s)
+                                 ", id_from, stri_flatten(id_to[,1], collapse = 
+                                  stri_paste("), (", id_from[red_not_na], ", "))
+                        )
         )
       
     }
@@ -60,9 +65,9 @@ for(i in 1:1000){
       #inserting id and title of a page
       title <- aa$title
       dbSendQuery(con, sprintf("
-                  INSERT OR IGNORE INTO wiki_page(id, title)
-                  VALUES (%d, %s)
-                  ", id_from, prepare_string(title)))
+                               INSERT OR IGNORE INTO wiki_page(id, title)
+                               VALUES (%d, %s)
+                               ", id_from, prepare_string(title)))
       
       
       
@@ -125,9 +130,9 @@ for(i in 1:1000){
           #extracting id's where we link to
           id_to <- dbGetQuery(conn, 
                               sprintf("SELECT id 
-                        FROM wiki_raw 
-                        INDEXED BY my_index 
-                        WHERE lower(title) in (%s)", 
+                                      FROM wiki_raw 
+                                      INDEXED BY my_index 
+                                      WHERE lower(title) in (%s)", 
                                       stri_flatten( prepare_string(m3), collapse = ", ")
                               )
           )
@@ -140,13 +145,13 @@ for(i in 1:1000){
             for(j in 1:floor(n_links/500)){
               dbSendQuery(con, sprintf(
                 "INSERT INTO 
-                      wiki_link(id_from, id_to)
-                      VALUES (%s)",
+                wiki_link(id_from, id_to)
+                VALUES (%s)",
                 stri_paste(id_from, ", ", 
                            stri_flatten(id_to[((j-1)*500+1) : (j*500),1], collapse = 
                                           stri_paste("), (", id_from, ", ")))
               )
-              )
+          )
             }
           }else
             j <- 0
@@ -154,13 +159,13 @@ for(i in 1:1000){
           if(mod_links>0)
             dbSendQuery(con, sprintf(
               "INSERT INTO 
-                        wiki_link(id_from, id_to)
-                        VALUES (%s)",
+              wiki_link(id_from, id_to)
+              VALUES (%s)",
               stri_paste(id_from, ", ", 
                          stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
                                         stri_paste("), (", id_from, ", ")))
             )
-            )
+                )
         }
         
         
@@ -177,10 +182,11 @@ for(i in 1:1000){
         ### removing all [[x]] and [[x|y]] from the text
         text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
                                         vectorize_all=FALSE)
-      }else
-        text3 <- text2
+        }else
+          text3 <- text2
       
       ###########################################
+      
       
       ### CATEGORIES ###
       print('categories')
@@ -199,15 +205,15 @@ for(i in 1:1000){
         ## inserting categories into db, if it's not already there
         dbSendQuery(con, sprintf(
           "INSERT OR IGNORE INTO 
-                    wiki_category_name(name)
-                    VALUES (%s)",
+          wiki_category_name(name)
+          VALUES (%s)",
           stri_flatten(prepare_string(not_link3[,2])
                        , collapse = "), (")
         )
         )
         # selectng categories id
         id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
-                        WHERE name IN (%s)", 
+                                          WHERE name IN (%s)", 
                                           stri_flatten(prepare_string(not_link3[,2]),
                                                        collapse = ", "))
         )
@@ -215,8 +221,8 @@ for(i in 1:1000){
         #inserting categories
         dbSendQuery(con, sprintf(
           "INSERT INTO 
-                    wiki_category_text(id_title, id_category)
-                    VALUES (%s)",
+          wiki_category_text(id_title, id_category)
+          VALUES (%s)",
           stri_paste(id_from, ", ",
                      stri_flatten( id_cat[,1], collapse = 
                                      stri_paste("), (", id_from, ", ")
@@ -249,8 +255,8 @@ for(i in 1:1000){
         {
           dbSendQuery(con, sprintf(
             "INSERT OR IGNORE INTO 
-                      wiki_word(word)
-                      VALUES (%s)",
+            wiki_word(word)
+            VALUES (%s)",
             stri_flatten(words[((j-1)*500+1) : (j*500)], collapse = "), (")
           )
           )
@@ -261,8 +267,8 @@ for(i in 1:1000){
       if(mod_words>0)
         dbSendQuery(con, sprintf(
           "INSERT OR IGNORE INTO 
-                      wiki_word(word)
-                      VALUES (%s)",
+          wiki_word(word)
+          VALUES (%s)",
           stri_flatten(words[(j*500+1) : (j*500+mod_words%%500)], collapse = "), (")
         )
         )
@@ -282,7 +288,7 @@ for(i in 1:1000){
         {
           
           ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
-                VALUES "
+          VALUES "
           #a string with values, selecting id of a word
           values <- apply(words_text[((j-1)*500+1) : (j*500),], 1, function(w)
           {
@@ -311,29 +317,7 @@ for(i in 1:1000){
       }
       
       
-      ################################
       
-      ####################################################
-      
-      #### INSERTING INTO DB
-      
-      # #inserting the tags
-      # dbSendQuery(con, sprintf(
-      #   "INSERT INTO 
-      #             wiki_tag(id_title, text)
-      #             VALUES (%s')",
-      #   stri_paste(id_from, " , '", stri_flatten(tags))
-      # )
-      # )
-      # 
-      # #inserting curly brackets
-      # dbSendQuery(con, sprintf(
-      #   "INSERT INTO 
-      #             wiki_curly(id_title, text)
-      #             VALUES (%s')",
-      #   stri_paste(id_from, " , '", stri_flatten(curly))
-      # )
-      # )
     }
   }
 }

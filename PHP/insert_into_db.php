@@ -40,7 +40,7 @@ function contents($parser, $data)
     switch ($name) {
     	case "PAGE":
     	
-    		if($i > 0 && $i<10){
+    		if($i > 0 && $i<500){
     			$q .= "(";
     			$q .= $ns;
     			$q .= ","; 
@@ -56,7 +56,7 @@ function contents($parser, $data)
     		
     		$i++;
     		print($i."\n");
-    		if($i%11 == 0)
+    		if($i%501 == 0)
 			{
 				
 				$q .= "(";
@@ -147,7 +147,7 @@ while ($data = fread($fp, 4096))
 	xml_set_element_handler($xml_parser, "start_tag", "end_tag");	
 	if($current_tag == 'PAGE' || $current_tag == 'TITLE' ||  $current_tag == 'NS' ||  $current_tag == 'REDIRECT')
 	{
-	print("character_data\n");
+	#print("character_data\n");
 	xml_set_character_data_handler($xml_parser, "contents");
 	}
 	
@@ -156,7 +156,7 @@ while ($data = fread($fp, 4096))
     	
 }
 
-if($i < 11)
+if($i < 501)
 {
 	$q .= "(";
 	$q .= $ns;

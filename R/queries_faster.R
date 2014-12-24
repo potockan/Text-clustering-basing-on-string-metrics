@@ -5,10 +5,6 @@ library(RSQLite)
 library(stringi)
 ### Raw text database ###
 
-## TO DO: 
-# (?) zaladowac od nowa baze, tak zeby wszystko bylo lower case. PHP zmieniony
-# dziala dla lower(title), ale lower chyba dziala tylko dla ascii por. https://www.sqlite.org/lang_corefunc.html
-
 
 prepare_string <- function(str) {
   ret <- stri_replace_all_fixed(str, "'", "''")
@@ -16,7 +12,7 @@ prepare_string <- function(str) {
   ret
 }
 
-conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw_up.sqlite")
+conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
 # i <- 15
@@ -47,15 +43,16 @@ for(i in 679:1000){
                                         SELECT id 
                                         FROM wiki_raw 
                                         INDEXED BY my_index
-                                        WHERE lower(title) in (%s)", 
+                                        WHERE title in (%s)", 
                                         stri_flatten(redirect, collapse = ", ")))
       if(nrow(id_to)>0)
         dbSendQuery(con, sprintf("
                                  INSERT INTO wiki_redirect(id_from, id_to)
                                  VALUES (%s)
                                  ", id_from, stri_flatten(id_to[,1], collapse = 
-                                  stri_paste("), (", id_from[red_not_na], ", "))
-                        )
+                                                            stri_paste("), (", id_from[red_not_na], ", "))
+                                 #TO DO: powinno być id_from[1], id_to[1,1], ...
+        )
         )
       
     }
@@ -71,16 +68,13 @@ for(i in 679:1000){
       
       
       
-      text <- stri_trans_tolower(aa$text)
+      text <- aa$text
       
       # #extracting all the tags and all the content within curly brackets to save it in the DB
       # (tags <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
       # (curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
       
       
-      
-      
-      ###TO DO:
       #removing all the comment, tags and all the content within curly brackets
       patterns <- c("<(.+?)>[^<]+</\\1>", "\\{\\{[^\\}]*?\\}\\}", "<!--(.)*?-->")
       
@@ -132,7 +126,7 @@ for(i in 679:1000){
                               sprintf("SELECT id 
                                       FROM wiki_raw 
                                       INDEXED BY my_index 
-                                      WHERE lower(title) in (%s)", 
+                                      WHERE title in (%s)", 
                                       stri_flatten( prepare_string(m3), collapse = ", ")
                               )
           )
@@ -151,7 +145,7 @@ for(i in 679:1000){
                            stri_flatten(id_to[((j-1)*500+1) : (j*500),1], collapse = 
                                           stri_paste("), (", id_from, ", ")))
               )
-          )
+              )
             }
           }else
             j <- 0
@@ -165,7 +159,7 @@ for(i in 679:1000){
                          stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
                                         stri_paste("), (", id_from, ", ")))
             )
-                )
+            )
         }
         
         
@@ -182,11 +176,10 @@ for(i in 679:1000){
         ### removing all [[x]] and [[x|y]] from the text
         text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
                                         vectorize_all=FALSE)
-        }else
-          text3 <- text2
+      }else
+        text3 <- text2
       
       ###########################################
-      
       
       ### CATEGORIES ###
       print('categories')
@@ -317,6 +310,7 @@ for(i in 679:1000){
       }
       
       
+      ################################
       
     }
   }

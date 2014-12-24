@@ -16,7 +16,7 @@ prepare_string <- function(str) {
   ret
 }
 
-conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw_up.sqlite")
+conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
 # i <- 15
@@ -40,12 +40,11 @@ for(i in 1:1000){
     if(!is.na(redirect))
     {
       print('redirect')
-      redirect <- stri_trans_tolower(redirect)
       id_to <- dbGetQuery(conn, sprintf("
                 SELECT id 
                 FROM wiki_raw 
                 INDEXED BY my_index
-                WHERE lower(title)='%s'", redirect))
+                WHERE title='%s'", redirect))
       if(nrow(id_to)==1)
         dbSendQuery(con, sprintf("
                     INSERT INTO wiki_redirect(id_from, id_to)
@@ -66,16 +65,13 @@ for(i in 1:1000){
       
       
       
-      text <- stri_trans_tolower(aa$text)
+      text <- aa$text
       
       # #extracting all the tags and all the content within curly brackets to save it in the DB
       # (tags <- stri_extract_all_regex(text, "<.*?>(.)*?<.*?>")[[1]])
       # (curly <- stri_extract_all_regex(text, "\\{\\{[^\\}]*?\\}\\}")[[1]])
       
       
-      
-      
-      ###TO DO:
       #removing all the comment, tags and all the content within curly brackets
       patterns <- c("<(.+?)>[^<]+</\\1>", "\\{\\{[^\\}]*?\\}\\}", "<!--(.)*?-->")
       
@@ -127,8 +123,8 @@ for(i in 1:1000){
                               sprintf("SELECT id 
                         FROM wiki_raw 
                         INDEXED BY my_index 
-                        WHERE lower(title) in (%s)", 
-                                      stri_flatten( prepare_string(m3), collapse = ", ")
+                        WHERE title in (%s)", 
+                        stri_flatten( prepare_string(m3), collapse = ", ")
                               )
           )
           
@@ -154,8 +150,8 @@ for(i in 1:1000){
           if(mod_links>0)
             dbSendQuery(con, sprintf(
               "INSERT INTO 
-                        wiki_link(id_from, id_to)
-                        VALUES (%s)",
+                wiki_link(id_from, id_to)
+                VALUES (%s)",
               stri_paste(id_from, ", ", 
                          stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
                                         stri_paste("), (", id_from, ", ")))
@@ -208,8 +204,8 @@ for(i in 1:1000){
         # selectng categories id
         id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
                         WHERE name IN (%s)", 
-                                          stri_flatten(prepare_string(not_link3[,2]),
-                                                       collapse = ", "))
+                        stri_flatten(prepare_string(not_link3[,2]),
+                        collapse = ", "))
         )
         
         #inserting categories

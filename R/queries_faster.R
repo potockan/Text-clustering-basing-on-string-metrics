@@ -20,7 +20,8 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 cnt <- 10
-for(i in 100:10000){
+for(i in 488:10000){
+# for(i in 1: 165453){
   print(i*cnt)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -34,7 +35,8 @@ for(i in 100:10000){
     id_from <- aa$id
     #if a page is redirect, then we add it to redirect table
     red_na <- which(is.na(redirect))
-    red_not_na <- setdiff(1:(cnt-1), red_na)
+    n <- nrow(aa)
+    red_not_na <- setdiff(1:n, red_na)
     n_not_na <- length(red_not_na)
     if(n_not_na>0)
     {
@@ -61,7 +63,7 @@ for(i in 100:10000){
       
       rm(aa_red, id_to, redirect)
     }
-    if(n_not_na<cnt-1)
+    if(n_not_na<n)
     {
       
       print('page')
@@ -120,12 +122,12 @@ for(i in 100:10000){
       
       if(any(dl>0)){
         
-        
-        
         #transformation to matrix
         m <- cbind(matrix(unlist(link2), ncol=3, byrow = TRUE), rep(id_from, times=dl))
         m <- matrix(m[which(!is.na(m[,1])),], ncol=4)
-        m <- m[-which(duplicated(m[,c(1,4)])),]
+        dup <- which(duplicated(m[,c(1,4)]))
+        if(length(dup)>0)
+          m <- m[-dup,]
         
         #if a link contains a hashtag (#) then the link leads to a section of the page
         #(can be the same page itself)
@@ -203,7 +205,7 @@ for(i in 100:10000){
         #[[x|y]] we want to replace with y
         no_string <- which(stri_length(m[,3])==0)
         m[no_string,3] <- m[no_string, 2]
-        
+        m <- m[which(!is.na(m[,3])),]
         
         ### removing all [[x]] and [[x|y]] from the text
         text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
@@ -293,6 +295,7 @@ for(i in 100:10000){
       if(n_words>500){
         for(j in 1:floor(n_words/500))
         {
+          
           dbSendQuery(con, sprintf(
             "INSERT OR IGNORE INTO 
             wiki_word(word)
@@ -300,11 +303,12 @@ for(i in 100:10000){
             stri_flatten(words[((j-1)*500+1) : (j*500)], collapse = "), (")
           )
           )
+          
         }
       }else
         j <- 0
       mod_words <- n_words%%500
-      if(mod_words>0)
+      if(mod_words>0){
         dbSendQuery(con, sprintf(
           "INSERT OR IGNORE INTO 
           wiki_word(word)
@@ -312,7 +316,7 @@ for(i in 100:10000){
           stri_flatten(words[(j*500+1) : (j*500+mod_words%%500)], collapse = "), (")
         )
         )
-      
+      }
       id_word <- dbGetQuery(con, sprintf("SELECT id, word from wiki_word
                                          WHERE word IN (%s)", 
                                          stri_flatten(words,
@@ -335,7 +339,7 @@ for(i in 100:10000){
       }
       
       
-      id_text1 <- merge(words_text1, id_word, by.x='x', by.y='word')
+      words_text1 <- merge(words_text1, id_word, by.x='x', by.y='word')
       
       rm(words_text, dl, id_word)
       
@@ -352,7 +356,7 @@ for(i in 100:10000){
             wiki_word_freq(id_title, id_word, freq)
             VALUES (%s)",
             stri_paste(
-              stri_paste(id_text1$id.x[ind], id_text1$id.y[ind], id_text1$Freq[ind], sep=", "), 
+              stri_paste(words_text1$id.x[ind], words_text1$id.y[ind], words_text1$Freq[ind], sep=", "), 
               collapse = "), (")
           )
           )
@@ -363,20 +367,20 @@ for(i in 100:10000){
         j <- 0
       mod_words_text <- n_words_text%%500
       if(mod_words_text>0){
-        ind <- ((j-1)*500+1) : (j*500)
+        ind <- (j*500+1) : (j*500+mod_words_text)
         dbSendQuery(con, sprintf(
           "INSERT INTO 
           wiki_word_freq(id_title, id_word, freq)
           VALUES (%s)",
           stri_paste(
-            stri_paste(id_text1$id.x[ind], id_text1$id.y[ind], id_text1$Freq[ind], sep=", "), 
+            stri_paste(words_text1$id.x[ind], words_text1$id.y[ind], words_text1$Freq[ind], sep=", "), 
             collapse = "), (")
         )
         )
         
       }
       
-      rm(n_words_text, mod_words_text, ind, id_text1)
+      rm(n_words_text, mod_words_text, ind)
       
       ################################
       

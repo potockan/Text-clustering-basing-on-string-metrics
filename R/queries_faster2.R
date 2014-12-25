@@ -313,15 +313,7 @@ for(i in 77:100){
         )
         )
       
-      id_word <- dbGetQuery(con, sprintf("SELECT id, word from wiki_word
-                                        WHERE word IN (%s)", 
-                                         stri_flatten(words,
-                                                      collapse = ", "))
-      )
-      
       rm(words, n_words, mod_words)
-      
-  
       
       ### WORD COUNTING ###
       print('words counting')
@@ -334,49 +326,50 @@ for(i in 77:100){
         words_text1 <- rbind(words_text1, cbind(as.data.frame(words_text[j]), id=rep(id_from, dl[j])))
       }
       
+      rm(words_text, dl)
       
-      id_text1 <- merge(words_text1, id_word, by.x='x', by.y='word')
+      words_text1[,1] <- prepare_string(words_text1[,1])
       
-      rm(words_text, dl, id_word)
-      
-      #inserting into db
+      #inserting it into db
       n_words_text <- nrow(words_text1)
       if(n_words_text>500){
         for(j in 1:floor(n_words_text/500))
         {
           
-        ind <- ((j-1)*500+1) : (j*500)
+          ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
+          VALUES "
+          #a string with values, selecting id of a word
+          values <- apply(words_text1[((j-1)*500+1) : (j*500),], 1, function(w)
+          {
+            sel <- stri_paste("SELECT id FROM wiki_word INDEXED BY index_word WHERE word=", w[1])
+            str <- stri_paste("(", w[3], ", (", sel, "), ", w[2], ")")
+            str
+          })
+          str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
+          dbSendQuery(con, str)
           
-          dbSendQuery(con, sprintf(
-            "INSERT INTO 
-        wiki_word_freq(id_title, id_word, freq)
-        VALUES (%s)",
-            stri_paste(
-              stri_paste(id_text1$id.x[ind], id_text1$id.y[ind], id_text1$Freq[ind], sep=", "), 
-              collapse = "), (")
-          )
-          )
-
+          rm(ins, values, str)
           
         }
       }else
         j <- 0
       mod_words_text <- n_words_text%%500
       if(mod_words_text>0){
-        ind <- ((j-1)*500+1) : (j*500)
-        dbSendQuery(con, sprintf(
-          "INSERT INTO 
-        wiki_word_freq(id_title, id_word, freq)
-        VALUES (%s)",
-          stri_paste(
-            stri_paste(id_text1$id.x[ind], id_text1$id.y[ind], id_text1$Freq[ind], sep=", "), 
-            collapse = "), (")
-        )
-        )
+        ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
+        VALUES "
+        values <- apply(words_text1[(j*500+1) : (j*500+mod_words_text),], 1, function(w)
+        {
+          sel <- stri_paste("SELECT id FROM wiki_word INDEXED BY index_word WHERE word=", w[1])
+          str <- stri_paste("(", w[3], ", (", sel, "), ", w[2], ")")
+          str
+        })
+        str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
+        dbSendQuery(con, str)
         
+        rm(ins, values, str)
       }
       
-      rm(n_words_text, mod_words_text, ind, id_text1)
+      rm(n_words_text, mod_words_text)
       
       ################################
       

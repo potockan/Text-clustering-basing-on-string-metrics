@@ -20,7 +20,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 cnt <- 10
-for(i in 679:1000){
+for(i in 1:100){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -48,7 +48,7 @@ for(i in 679:1000){
                                         WHERE title in (%s)", 
                                         stri_flatten(redirect, collapse = ", ")))
       id_to <- merge(aa_red, id_to, by.x='redirect', by.y='title')
-      if(nrow(id_to>0)
+      if(nrow(id_to>0))
          dbSendQuery(con, sprintf("
                     INSERT INTO wiki_redirect(id_from, id_to)
                     VALUES (%s)
@@ -61,10 +61,12 @@ for(i in 679:1000){
          
          rm(aa_red, id_to, redirect)
     }
-    else
+    if(red_not_na<cnt)
     {
+      
       print('page')
       aa <- aa[red_na,]
+      rm(red_na, red_not_na, n_not_na)
       #inserting id and title of a page
       id_from <- aa$id
       title <- aa$title
@@ -78,6 +80,7 @@ for(i in 679:1000){
       )
       )
       
+      rm(title)
       
       
       text <- aa$text
@@ -95,7 +98,7 @@ for(i in 679:1000){
       text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
       text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
       
-      rm(patterns)
+      rm(patterns, text)
       
       #pat <- "<(.+?)>([^<]+?)</\\1>" #to jest ok
       
@@ -122,7 +125,7 @@ for(i in 679:1000){
         #transformation to matrix
         m <- cbind(matrix(unlist(link2), ncol=3, byrow = TRUE), rep(id_from, times=dl))
         m <- matrix(m[which(!is.na(m[,1])),], ncol=4)
-        m <- m[-which(duplicated(m[,1])),]
+        m <- m[-which(duplicated(m[,c(1,4)])),]
         
         #if a link contains a hashtag (#) then the link leads to a section of the page
         #(can be the same page itself)
@@ -209,7 +212,7 @@ for(i in 679:1000){
         rm(dl, m, hashtag, m2, m3, id_to, m4, n_links, mod_links, no_string)
       }else
         text3 <- text2
-      rm(link, link2)
+      rm(link, link2, text2)
       
       
       
@@ -260,11 +263,11 @@ for(i in 679:1000){
           wiki_category_text(id_title, id_category)
           VALUES (%s)",
           stri_paste(
-            stri_paste(id_cat1[,3], id_cat1$id, sep=", "), 
+            stri_paste(id_cat[,3], id_cat$id, sep=", "), 
             collapse = "), (")
         )
         )
-        rm(not_link3, id_cat, id_cat1)
+        rm(not_link3, id_cat)
       }
       ### removing all the [[x:y]] from the text
       if(any(!is.na(not_link))){
@@ -273,7 +276,7 @@ for(i in 679:1000){
       }else
         text4 <- stri_replace_all_fixed(text3, c("zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
       
-      rm(not_link, not_link2, not_link4)
+      rm(not_link, not_link2, not_link4, text3)
       
       
       #############
@@ -310,23 +313,25 @@ for(i in 679:1000){
         )
         )
       
-      
+      rm(words, n_words, mod_words)
       
       ### WORD COUNTING ###
       print('words counting')
       #counting a number of words that occur in the text
       words_text <- lapply(words_all, function(x){ table(x) })
+      rm(words_all)
       dl <- unlist(lapply(words_text, length))
       words_text1 <- data.frame()
       for(j in 1:length(dl)){
         words_text1 <- rbind(cbind(as.data.frame(words_text[j]), id=rep(id_from, dl[j])))
-        
       }
-      #words_text <- as.data.frame(table(words_all))
-      words_text1[,1] <- prepare_string(words_text[,1])
       
-      #inserting it int db
-      n_words_text <- nrow(words_text)
+      rm(words_text, dl)
+      
+      words_text1[,1] <- prepare_string(words_text1[,1])
+      
+      #inserting it into db
+      n_words_text <- nrow(words_text1)
       if(n_words_text>500){
         for(j in 1:floor(n_words_text/500))
         {
@@ -343,6 +348,8 @@ for(i in 679:1000){
           str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
           dbSendQuery(con, str)
           
+          rm(ins, values, str)
+          
         }
       }else
         j <- 0
@@ -358,8 +365,11 @@ for(i in 679:1000){
         })
         str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
         dbSendQuery(con, str)
+        
+        rm(ins, values, str)
       }
       
+      rm(n_words_text, mod_words_text, )
       
       ################################
       

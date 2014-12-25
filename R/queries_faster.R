@@ -24,7 +24,7 @@ for(i in 1:100){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
-                             where id between %d and %d and ns=0", i, i+cnt-1))
+                             where id between %d and %d and ns=0", (i-1)*cnt+1, i*cnt))
   #   index <- dbGetQuery(conn, "select count(id) from wiki_raw 
   #                            where redirect!='NA'")
   
@@ -61,7 +61,7 @@ for(i in 1:100){
          
          rm(aa_red, id_to, redirect)
     }
-    if(red_not_na<cnt)
+    if(n_not_na<cnt)
     {
       
       print('page')
@@ -323,7 +323,7 @@ for(i in 1:100){
       dl <- unlist(lapply(words_text, length))
       words_text1 <- data.frame()
       for(j in 1:length(dl)){
-        words_text1 <- rbind(cbind(as.data.frame(words_text[j]), id=rep(id_from, dl[j])))
+        words_text1 <- rbind(words_text1, cbind(as.data.frame(words_text[j]), id=rep(id_from, dl[j])))
       }
       
       rm(words_text, dl)
@@ -369,7 +369,7 @@ for(i in 1:100){
         rm(ins, values, str)
       }
       
-      rm(n_words_text, mod_words_text, )
+      rm(n_words_text, mod_words_text)
       
       ################################
       

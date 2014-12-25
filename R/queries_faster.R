@@ -35,36 +35,56 @@ for(i in 679:1000){
     #if a page is redirect, then we add it to redirect table
     red_na <- which(is.na(redirect))
     red_not_na <- setdiff(1:cnt, red_na)
-    if(length(red_not_na)>0)
+    n_not_na <- length(red_not_na)
+    if(n_not_na>0)
     {
       print('redirect')
       redirect <- prepare_string(redirect[red_not_na])
       id_to <- dbGetQuery(conn, sprintf("
-                                        SELECT id 
+                                        SELECT id, title
                                         FROM wiki_raw 
                                         INDEXED BY my_index
                                         WHERE title in (%s)", 
                                         stri_flatten(redirect, collapse = ", ")))
-      if(nrow(id_to)>0)
+      if(n_not_na>0)
         dbSendQuery(con, sprintf("
-                                 INSERT INTO wiki_redirect(id_from, id_to)
-                                 VALUES (%s)
-                                 ", id_from, stri_flatten(id_to[,1], collapse = 
-                                                            stri_paste("), (", id_from[red_not_na], ", "))
-                                 #TO DO: powinno być id_from[1], id_to[1,1], ...
+                    INSERT INTO wiki_redirect(id_from, id_to)
+                    VALUES (%s)
+                    ", 
+                stri_paste(
+                stri_paste(id_from[red_not_na], id_to[,1], sep=", "), 
+                collapse = "), (")
         )
         )
+      
+#       ins <- "INSERT INTO wiki_redirect(id_from, id_to)
+#                     VALUES  "
+#       str <- character(n)
+#      for(j in 1:n){
+#         sel <- stri_paste("SELECT id 
+#                            FROM wiki_raw 
+#                            INDEXED BY my_index
+#                            WHERE title=", redirect[j])
+#         str[j] <- stri_paste("(", id_from[j], ", (", sel, ") )")
+#       }
+#       stmnt <- stri_paste(ins, stri_flatten(str, collapse = ", "))
+#       dbSendQuery(con, stmnt)
       
     }
     else
     {
       print('page')
+      aa <- aa[red_na,]
       #inserting id and title of a page
       title <- aa$title
       dbSendQuery(con, sprintf("
-                               INSERT OR IGNORE INTO wiki_page(id, title)
-                               VALUES (%d, %s)
-                               ", id_from, prepare_string(title)))
+                               INSERT INTO wiki_page(id, title)
+                               VALUES (%s)
+                               ", 
+                    stri_paste(
+                      stri_paste(id_from, prepare_string(title), sep=", ")
+                      , collapse = "), (")
+                    ))
       
       
       
@@ -76,7 +96,9 @@ for(i in 679:1000){
       
       
       #removing all the comment, tags and all the content within curly brackets
+      #TO DO: zapetlone nie dzialaja!
       patterns <- c("<(.+?)>[^<]+</\\1>", "\\{\\{[^\\}]*?\\}\\}", "<!--(.)*?-->")
+
       
       text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
       text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
@@ -91,7 +113,7 @@ for(i in 679:1000){
       
       print('links')
       #extractng all the links 
-      link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")[[1]]
+      link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")
       
       if(any(!is.na(link))){
         #matching those with pipe and without it

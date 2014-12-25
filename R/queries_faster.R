@@ -20,7 +20,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 cnt <- 10
-for(i in 488:10000){
+for(i in 3429:10000){
 # for(i in 1: 165453){
   print(i*cnt)
   aa <-
@@ -98,7 +98,11 @@ for(i in 488:10000){
       
       
       text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
+      patterns <- c(patterns, "<(.+?)>[^<]*?</(.+?)>")
       text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
+      text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
+      
+      
       
       rm(patterns, text)
       
@@ -274,10 +278,14 @@ for(i in 488:10000){
       ### removing all the [[x:y]] from the text
       if(any(!is.na(not_link))){
         not_link <- unlist(not_link)
+        #doesn't work
+        #text4 <- stri_replace_all_fixed(text3, c(not_link[!is.na(not_link)], "zobacz też", "linki zewnętrzne", "bibliografia", "przypisy", "\\[.+?\\]"), "", vectorize_all = FALSE)
         text4 <- stri_replace_all_fixed(text3, c(not_link[!is.na(not_link)], "zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
-      }else
-        text4 <- stri_replace_all_fixed(text3, c("zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
-      
+        text4 <- stri_replace_all_regex(text4, "\\[.+?\\]", "")
+      }else{
+        text4 <- stri_replace_all_fixed(text3, c("zobacz też", "linki zewnętrzne", "bibliografia", "przypisy", "\\[.+?\\]"), "", vectorize_all = FALSE)
+        text4 <- stri_replace_all_regex(text4, "\\[.+?\\]", "")
+      }
       rm(not_link, not_link2, not_link4, text3)
       
       
@@ -290,6 +298,7 @@ for(i in 488:10000){
       
       #unique words
       words <- prepare_string(unique(unlist(words_all)))
+      words <- words[!is.na(words)]
       
       n_words <- length(words)
       if(n_words>500){

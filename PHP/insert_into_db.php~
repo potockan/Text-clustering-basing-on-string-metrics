@@ -42,9 +42,9 @@ function contents($parser, $data)
     	
     		if($i > 0 && $i<500){
     			$q .= "(";
-    			$q .= $ns;
+    			$q .= rtrim(ltrim($ns));
     			$q .= ","; 
-    			$q .= prepare_string_or_NULL($title);
+    			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
     			$q .= ",";
     			$q .= prepare_string_or_NULL($text);
     			$q .= ",";
@@ -60,9 +60,9 @@ function contents($parser, $data)
 			{
 				
 				$q .= "(";
-    			$q .= $ns;
+    			$q .= rtrim(ltrim($ns));
     			$q .= ","; 
-    			$q .= prepare_string_or_NULL($title);
+    			$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
     			$q .= ",";
     			$q .= prepare_string_or_NULL($text);
     			$q .= ",";
@@ -124,7 +124,7 @@ function end_tag($parser, $name)
 
 
 $xml_parser = xml_parser_create();
-$file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles3.xml';
+$file = '/home/natalia/Text-clustering-basing-on-string-metrics/Data/XML/plwiki-20141102-pages-articles4.xml';
 $i = 0;
 $q = "";
 
@@ -159,9 +159,9 @@ while ($data = fread($fp, 4096))
 if($i < 501)
 {
 	$q .= "(";
-	$q .= $ns;
+	$q .= rtrim(ltrim($ns));
 	$q .= ","; 
-	$q .= prepare_string_or_NULL($title);
+	$q .= prepare_string_or_NULL(rtrim(ltrim($title)));
 	$q .= ",";
 	$q .= prepare_string_or_NULL($text);
 	$q .= ",";

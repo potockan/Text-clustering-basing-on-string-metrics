@@ -5,9 +5,6 @@ library(RSQLite)
 library(stringi)
 ### Raw text database ###
 
-## TO DO: 
-# (?) zaladowac od nowa baze, tak zeby wszystko bylo lower case. PHP zmieniony
-# dziala dla lower(title), ale lower chyba dziala tylko dla ascii por. https://www.sqlite.org/lang_corefunc.html
 
 
 prepare_string <- function(str) {
@@ -24,7 +21,7 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 
-for(i in 1:1000){
+for(i in 1001:2000){
   print(i)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
@@ -115,7 +112,7 @@ for(i in 1:1000){
         
         # leaving only the links that lead to other pages
         m2 <- matrix(m[which(stri_length(m[,2])>0),], ncol=3)
-        m3 <- stri_trans_tolower(unique(m2[,2]))
+        m3 <- unique(m2[,2])
         
         if(length(m3)>0){
           #extracting id's where we link to

@@ -118,7 +118,7 @@ for(i in 679:1000){
         
         # leaving only the links that lead to other pages
         m2 <- matrix(m[which(stri_length(m[,2])>0),], ncol=3)
-        m3 <- stri_trans_tolower(unique(m2[,2]))
+        m3 <- unique(m2[,2])
         
         if(length(m3)>0){
           #extracting id's where we link to

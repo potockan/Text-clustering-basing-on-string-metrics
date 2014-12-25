@@ -57,9 +57,9 @@ for(i in 77:100){
                                    stri_paste(id_to$id.x, id_to$id.y, sep=", "), 
                                    collapse = "), (")
         )
-        )
-      
-      rm(aa_red, id_to, redirect)
+    )
+    
+    rm(aa_red, id_to, redirect)
     }
     if(n_not_na<cnt-1)
     {
@@ -173,12 +173,12 @@ for(i in 77:100){
                   stri_paste(m4[((j-1)*500+1) : (j*500),"V4"], m4[((j-1)*500+1) : (j*500), "id"], sep=", "), 
                   collapse = "), (")
               )
-              )
-              
-              
-              
+          )
+          
+          
+          
             }
-            
+          
           }else
             j <- 0
           mod_links <- n_links%%500
@@ -191,7 +191,7 @@ for(i in 77:100){
                 stri_paste(m4[(j*500+1) : (j*500+mod_links),"V4"], m4[(j*500+1) : (j*500+mod_links), "id"], sep=", "), 
                 collapse = "), (")
             )
-            )
+              )
         }
         
         
@@ -246,7 +246,7 @@ for(i in 77:100){
           stri_flatten(prepare_string(unique(not_link3[,2]))
                        , collapse = "), (")
         )
-        )
+            )
         # selectng categories id
         id_cat <- dbGetQuery(con, sprintf("SELECT id, name from wiki_category_name
                                           WHERE name IN (%s)", 
@@ -266,7 +266,7 @@ for(i in 77:100){
             stri_paste(id_cat[,3], id_cat$id, sep=", "), 
             collapse = "), (")
         )
-        )
+            )
         rm(not_link3, id_cat)
       }
       ### removing all the [[x:y]] from the text
@@ -314,14 +314,14 @@ for(i in 77:100){
         )
       
       id_word <- dbGetQuery(con, sprintf("SELECT id, word from wiki_word
-                                         WHERE word IN (%s)", 
+                                        WHERE word IN (%s)", 
                                          stri_flatten(words,
                                                       collapse = ", "))
       )
       
       rm(words, n_words, mod_words)
       
-      
+  
       
       ### WORD COUNTING ###
       print('words counting')
@@ -345,18 +345,18 @@ for(i in 77:100){
         for(j in 1:floor(n_words_text/500))
         {
           
-          ind <- ((j-1)*500+1) : (j*500)
+        ind <- ((j-1)*500+1) : (j*500)
           
           dbSendQuery(con, sprintf(
             "INSERT INTO 
-            wiki_word_freq(id_title, id_word, freq)
-            VALUES (%s)",
+        wiki_word_freq(id_title, id_word, freq)
+        VALUES (%s)",
             stri_paste(
               stri_paste(id_text1$id.x[ind], id_text1$id.y[ind], id_text1$Freq[ind], sep=", "), 
               collapse = "), (")
           )
           )
-          
+
           
         }
       }else
@@ -366,8 +366,8 @@ for(i in 77:100){
         ind <- ((j-1)*500+1) : (j*500)
         dbSendQuery(con, sprintf(
           "INSERT INTO 
-          wiki_word_freq(id_title, id_word, freq)
-          VALUES (%s)",
+        wiki_word_freq(id_title, id_word, freq)
+        VALUES (%s)",
           stri_paste(
             stri_paste(id_text1$id.x[ind], id_text1$id.y[ind], id_text1$Freq[ind], sep=", "), 
             collapse = "), (")
@@ -380,9 +380,9 @@ for(i in 77:100){
       
       ################################
       
+      }
     }
-  }
-}
+    }
 
 ### DB DISCONNECT
 

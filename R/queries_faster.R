@@ -20,8 +20,8 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 cnt <- 10
-for(i in 77:100){
-  print(i)
+for(i in 100:10000){
+  print(i*cnt)
   aa <-
     dbGetQuery(conn, sprintf("select * from wiki_raw 
                              where id between %d and %d and ns=0", (i-1)*cnt+1, i*cnt))

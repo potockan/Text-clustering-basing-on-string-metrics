@@ -59,7 +59,7 @@ for(i in 679:1000){
          )
          )
          
-         
+         rm(aa_red, id_to, redirect)
     }
     else
     {
@@ -75,8 +75,8 @@ for(i in 679:1000){
                                stri_paste(
                                  stri_paste(id_from, prepare_string(title), sep=", ")
                                  , collapse = "), (")
-                               )
-                  )
+      )
+      )
       
       
       
@@ -95,6 +95,7 @@ for(i in 679:1000){
       text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
       text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
       
+      rm(patterns)
       
       #pat <- "<(.+?)>([^<]+?)</\\1>" #to jest ok
       
@@ -111,186 +112,108 @@ for(i in 679:1000){
           #matching those with pipe and without it
           link2 <- stri_match_all_regex(link, "\\[\\[([^\\|]+)\\|?+([^\\|]*?)\\]\\]")
         }})
-        
-        
-        
-          dl <- unlist(lapply(link2, length))
       
-          #transformation to matrix
-          m <- cbind(matrix(unlist(link2), ncol=3, byrow = TRUE), rep(id_from, times=dl))
-          m <- matrix(m[which(!is.na(m[,1])),], ncol=4)
+      dl <- unlist(lapply(link2, length))  
+      
+      if(any(dl>0)){
+        
+        
+        
+        #transformation to matrix
+        m <- cbind(matrix(unlist(link2), ncol=3, byrow = TRUE), rep(id_from, times=dl))
+        m <- matrix(m[which(!is.na(m[,1])),], ncol=4)
+        m <- m[-which(duplicated(m[,1])),]
+        
+        #if a link contains a hashtag (#) then the link leads to a section of the page
+        #(can be the same page itself)
+        #we want a link to the page not to the section so we're extracting it here
+        
+        
+        hashtag <- which(stri_detect_fixed(m[,2], "#"))
+        if(any(hashtag))
+        {
+          #matching the page title and the section, transforming it into matrix
+          hash_m <- matrix(unlist(stri_match_all_regex(m[hashtag,2], "(.*?)\\#(.+)")), ncol=3, byrow=TRUE)
           
-          #if a link contains a hashtag (#) then the link leads to a section of the page
-          #(can be the same page itself)
-          #we want a link to the page not to the section so we're extracting it here
-          
-          
-          hashtag <- which(stri_detect_fixed(m[,2], "#"))
-          if(any(hashtag))
-          {
-            #matching the page title and the section, transforming it into matrix
-            hash_m <- matrix(unlist(stri_match_all_regex(m[hashtag,2], "(.*?)\\#(.+)")), ncol=3, byrow=TRUE)
-            
-            #replacing with title page
-            m[hashtag, 2]  <- hash_m[,2]
-          }
-          
-          # leaving only the links that lead to other pages
-          m2 <- matrix(m[which(stri_length(m[,2])>0),], ncol=4)
-          m3 <- unique(m2[,2])
-          
-          if(length(m3)>0){
-            #extracting id's where we link to
-            id_to <- dbGetQuery(conn, 
-                                sprintf("SELECT id, title 
+          #replacing with title page
+          m[hashtag, 2]  <- hash_m[,2]
+          rm(hash_m)
+        }
+        
+        # leaving only the links that lead to other pages
+        m2 <- matrix(m[which(stri_length(m[,2])>0),], ncol=4)
+        m3 <- unique(m2[,2])
+        
+        if(length(m3)>0){
+          #extracting id's where we link to
+          id_to <- dbGetQuery(conn, 
+                              sprintf("SELECT id, title 
                                         FROM wiki_raw 
                                         INDEXED BY my_index 
                                         WHERE title in (%s)", 
-                                        stri_flatten( prepare_string(m3), collapse = ", ")
-                                )
-            )
-            
-            m4 <- merge(x=as.data.frame(m2), y=id_to, by.x="V2", by.y="title")
-            
-            #inserting links
-            n_links <- nrow(m4)
-            #inserting max 500 at once - sqlite limit
-            if(n_links>500){
-              for(j in 1:floor(n_links/500)){
-                dbSendQuery(con, sprintf(
-                  "INSERT INTO 
-                  wiki_link(id_from, id_to)
-                  VALUES (%s)",
-                  stri_paste(
-                    stri_paste(m4[((j-1)*500+1) : (j*500),"V4"], m4[((j-1)*500+1) : (j*500), "id"], sep=", "), 
-                    collapse = "), (")
-                )
-            )
-            
-           
-            
-              }
-            }else
-              j <- 0
-            mod_links <- n_links%%500
-            if(mod_links>0)
+                                      stri_flatten( prepare_string(m3), collapse = ", ")
+                              )
+          )
+          
+          m4 <- merge(x=as.data.frame(m2), y=id_to, by.x="V2", by.y="title")
+          
+          #inserting links
+          n_links <- nrow(m4)
+          #inserting max 500 at once - sqlite limit
+          if(n_links>500){
+            for(j in 1:floor(n_links/500)){
               dbSendQuery(con, sprintf(
                 "INSERT INTO 
-                wiki_link(id_from, id_to)
-                VALUES (%s)",
+                  wiki_link(id_from, id_to)
+                  VALUES (%s)",
                 stri_paste(
-                  stri_paste(m4[(j*500+1) : (j*500+mod_links),"V4"], m4[(j*500+1) : (j*500+mod_links), "id"], sep=", "), 
+                  stri_paste(m4[((j-1)*500+1) : (j*500),"V4"], m4[((j-1)*500+1) : (j*500), "id"], sep=", "), 
                   collapse = "), (")
               )
-                  )
-          }
-          
+              )
+              
+              
+              
+            }
+           
+          }else
+            j <- 0
+          mod_links <- n_links%%500
+          if(mod_links>0)
+            dbSendQuery(con, sprintf(
+              "INSERT INTO 
+                wiki_link(id_from, id_to)
+                VALUES (%s)",
+              stri_paste(
+                stri_paste(m4[(j*500+1) : (j*500+mod_links),"V4"], m4[(j*500+1) : (j*500+mod_links), "id"], sep=", "), 
+                collapse = "), (")
+            )
+            )
+        }
+        
+        
+        
+        ################################################
+        ### LINKS: NOT-LINKS ###
+        
+        #those that had only [[x]] we want to replace with x (in the text)
+        #[[x|y]] we want to replace with y
+        no_string <- which(stri_length(m[,3])==0)
+        m[no_string,3] <- m[no_string, 2]
+        
+        
+        ### removing all [[x]] and [[x|y]] from the text
+        text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
+                                        vectorize_all=FALSE)
+        
+        rm(dl, m, hashtag, m2, m3, id_to, m4, n_links, mod_links, no_string)
+      }else
+        text3 <- text2
+      rm(link, link2)
       
-          
-          ################################################
-          ### LINKS: NOT-LINKS ###
-          
-          #those that had only [[x]] we want to replace with x (in the text)
-          #[[x|y]] we want to replace with y
-          no_string <- which(stri_length(m[,3])==0)
-          m[no_string,3] <- m[no_string, 2]
-          
-          
-          ### removing all [[x]] and [[x|y]] from the text
-          text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
-                                          vectorize_all=FALSE)
-#           }else
-#             text3 <- text2
-        
-        
-        
       
-#       if(any(!is.na(link))){
-#         #matching those with pipe and without it
-#         link2 <- stri_match_all_regex(link, "\\[\\[([^\\|]+)\\|?+([^\\|]*?)\\]\\]")
-#         
-#         #transformation to matrix
-#         m <- matrix(unlist(link2), ncol=3, byrow = TRUE)
-#         m <- matrix(m[which(!is.na(m[,1])),], ncol=3)
-#         
-#         #if a link contains a hashtag (#) then the link leads to a section of the page
-#         #(can be the same page itself)
-#         #we want a link to the page not to the section so we're extracting it here
-#         
-#         
-#         hashtag <- which(stri_detect_fixed(m[,2], "#"))
-#         if(any(hashtag))
-#         {
-#           #matching the page title and the section, transforming it into matrix
-#           hash_m <- matrix(unlist(stri_match_all_regex(m[hashtag,2], "(.*?)\\#(.+)")), ncol=3, byrow=TRUE)
-#           
-#           #replacing with title page
-#           m[hashtag, 2]  <- hash_m[,2]
-#         }
-#         
-#         # leaving only the links that lead to other pages
-#         m2 <- matrix(m[which(stri_length(m[,2])>0),], ncol=3)
-#         m3 <- unique(m2[,2])
-#         
-#         if(length(m3)>0){
-#           #extracting id's where we link to
-#           id_to <- dbGetQuery(conn, 
-#                               sprintf("SELECT id 
-#                                       FROM wiki_raw 
-#                                       INDEXED BY my_index 
-#                                       WHERE title in (%s)", 
-#                                       stri_flatten( prepare_string(m3), collapse = ", ")
-#                               )
-#           )
-#           
-#           
-#           #inserting links
-#           n_links <- nrow(id_to)
-#           #inserting max 500 at once - sqlite limit
-#           if(n_links>500){
-#             for(j in 1:floor(n_links/500)){
-#               dbSendQuery(con, sprintf(
-#                 "INSERT INTO 
-#                 wiki_link(id_from, id_to)
-#                 VALUES (%s)",
-#                 stri_paste(id_from, ", ", 
-#                            stri_flatten(id_to[((j-1)*500+1) : (j*500),1], collapse = 
-#                                           stri_paste("), (", id_from, ", ")))
-#               )
-#               )
-#             }
-#           }else
-#             j <- 0
-#           mod_links <- n_links%%500
-#           if(mod_links>0)
-#             dbSendQuery(con, sprintf(
-#               "INSERT INTO 
-#               wiki_link(id_from, id_to)
-#               VALUES (%s)",
-#               stri_paste(id_from, ", ", 
-#                          stri_flatten(id_to[(j*500+1) : (j*500+mod_links%%500),1], collapse = 
-#                                         stri_paste("), (", id_from, ", ")))
-#             )
-#             )
-#         }
-#         
-#         
-#         
-#         ################################################
-#         ### LINKS: NOT-LINKS ###
-#         
-#         #those that had only [[x]] we want to replace with x (in the text)
-#         #[[x|y]] we want to replace with y
-#         no_string <- which(stri_length(m[,3])==0)
-#         m[no_string,3] <- m[no_string, 2]
-#         
-#         
-#         ### removing all [[x]] and [[x|y]] from the text
-#         text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
-#                                         vectorize_all=FALSE)
-#       }else
-#         text3 <- text2
-#       
+      
+           
       ###########################################
       
       ### CATEGORIES ###
@@ -298,50 +221,59 @@ for(i in 679:1000){
       # not links: [[x:y]] - we want y only if x is "kategoria"
       
       #extractng all the not-links 
-      not_link <- stri_extract_all_regex(text3, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")[[1]]
+      not_link <- stri_extract_all_regex(text3, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")
       
+    
       
       #matching those with "kategoria"
-      not_link2 <- stri_match_all_regex(not_link, "\\[\\[kategoria:(.+?)\\|{0,1}[^\\|]*?\\]\\]")
+      not_link2 <- lapply(not_link, function(not_link){
+          stri_match_all_regex(not_link, "\\[\\[kategoria:([^\\|]+)\\|{0,1}[^\\|]*?\\]\\]")
+      })
+      dl <- unlist(lapply(not_link2, length))  
       not_link2 <- unlist(not_link2)
-      if(any(!is.na(not_link2))){
-        not_link3 <- matrix(not_link2[!is.na(not_link2)], ncol=2, byrow=TRUE)
+      not_link4 <- cbind(matrix(not_link2, ncol=2, byrow=TRUE), rep(id_from, times=dl))
+      if(any(!is.na(not_link4[,2]))){
+        not_link3 <- matrix(not_link4[!is.na(not_link4[,2]),], ncol=3)
         
         ## inserting categories into db, if it's not already there
         dbSendQuery(con, sprintf(
           "INSERT OR IGNORE INTO 
           wiki_category_name(name)
           VALUES (%s)",
-          stri_flatten(prepare_string(not_link3[,2])
+          stri_flatten(prepare_string(unique(not_link3[,2]))
                        , collapse = "), (")
         )
         )
         # selectng categories id
-        id_cat <- dbGetQuery(con, sprintf("SELECT id from wiki_category_name
+        id_cat <- dbGetQuery(con, sprintf("SELECT id, name from wiki_category_name
                                           WHERE name IN (%s)", 
                                           stri_flatten(prepare_string(not_link3[,2]),
                                                        collapse = ", "))
         )
         
+        not_link3 <- data.frame(not_link3)
+        id_cat <- merge(not_link3, id_cat, by.x=names(not_link3)[2], by.y='name')
+      
         #inserting categories
         dbSendQuery(con, sprintf(
           "INSERT INTO 
           wiki_category_text(id_title, id_category)
           VALUES (%s)",
-          stri_paste(id_from, ", ",
-                     stri_flatten( id_cat[,1], collapse = 
-                                     stri_paste("), (", id_from, ", ")
-                     )
-          )
+          stri_paste(
+            stri_paste(id_cat1[,3], id_cat1$id, sep=", "), 
+            collapse = "), (")
         )
         )
+        rm(not_link3, id_cat, id_cat1)
       }
       ### removing all the [[x:y]] from the text
       if(any(!is.na(not_link))){
+        not_link <- unlist(not_link)
         text4 <- stri_replace_all_fixed(text3, c(not_link[!is.na(not_link)], "zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
       }else
         text4 <- stri_replace_all_fixed(text3, c("zobacz też", "linki zewnętrzne", "bibliografia", "przypisy"), "", vectorize_all = FALSE)
       
+      rm(not_link, not_link2, not_link4)
       
       
       #############
@@ -349,11 +281,11 @@ for(i in 679:1000){
       ### WORD INSERTING ###
       print('words')
       #extracting all the words
-      words_all  <- stri_extract_all_words(text4)[[1]]      
+      words_all  <- stri_extract_all_words(text4)     
       
       #unique words
-      words <- unique(words_all)
-      words <- prepare_string(words)
+      words <- prepare_string(unique(unlist(words_all)))
+      
       n_words <- length(words)
       if(n_words>500){
         for(j in 1:floor(n_words/500))
@@ -383,8 +315,15 @@ for(i in 679:1000){
       ### WORD COUNTING ###
       print('words counting')
       #counting a number of words that occur in the text
-      words_text <- as.data.frame(table(words_all))
-      words_text[,1] <- prepare_string(words_text[,1])
+      words_text <- lapply(words_all, function(x){ table(x) })
+      dl <- unlist(lapply(words_text, length))
+      words_text1 <- data.frame()
+      for(j in 1:length(dl)){
+        words_text1 <- rbind(cbind(as.data.frame(words_text[j]), id=rep(id_from, dl[j])))
+        
+      }
+      #words_text <- as.data.frame(table(words_all))
+      words_text1[,1] <- prepare_string(words_text[,1])
       
       #inserting it int db
       n_words_text <- nrow(words_text)
@@ -395,10 +334,10 @@ for(i in 679:1000){
           ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
           VALUES "
           #a string with values, selecting id of a word
-          values <- apply(words_text[((j-1)*500+1) : (j*500),], 1, function(w)
+          values <- apply(words_text1[((j-1)*500+1) : (j*500),], 1, function(w)
           {
             sel <- stri_paste("SELECT id FROM wiki_word INDEXED BY index_word WHERE word=", w[1])
-            str <- stri_paste("(", id_from, ", (", sel, "), ", w[2], ")")
+            str <- stri_paste("(", w[3], ", (", sel, "), ", w[2], ")")
             str
           })
           str <- stri_paste(ins, stri_flatten(values, collapse = ", "))
@@ -411,10 +350,10 @@ for(i in 679:1000){
       if(mod_words_text>0){
         ins <- "INSERT INTO wiki_word_freq(id_title, id_word, freq)
         VALUES "
-        values <- apply(words_text[(j*500+1) : (j*500+mod_words_text),], 1, function(w)
+        values <- apply(words_text1[(j*500+1) : (j*500+mod_words_text),], 1, function(w)
         {
           sel <- stri_paste("SELECT id FROM wiki_word INDEXED BY index_word WHERE word=", w[1])
-          str <- stri_paste("(", id_from, ", (", sel, "), ", w[2], ")")
+          str <- stri_paste("(", w[3], ", (", sel, "), ", w[2], ")")
           str
         })
         str <- stri_paste(ins, stri_flatten(values, collapse = ", "))

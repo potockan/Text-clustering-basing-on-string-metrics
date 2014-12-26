@@ -42,17 +42,11 @@ dbExecQuery(con, "create table tmp_word_freq (
             )")
 
 
-
-
-# i <- 15
-# aa <-
-# dbGetQuery(conn, sprintf("select * from wiki_raw 
-#            where id = %d", i))
 cnt <- 200
 all_pages <- dbGetQuery(conn, "select count(1) from wiki_raw")[1,1]
 #for(i in 1:10){
-i <- 170
-for(i in 1:ceiling(all_pages/cnt)){
+for(i in 1:ceiling(all_pages/cnt))
+{
   print(i*cnt)
   aa <-
     dbGetQuery(conn, sprintf("select id, title, text, redirect from wiki_raw 
@@ -162,10 +156,10 @@ for(i in 1:ceiling(all_pages/cnt)){
     #print('categories')
     # not links: [[x:y]] - we want y only if x is "kategoria"
     categories <- stri_match_all_regex(text3, "\\[\\[kategoria:([^|]+?)(?:\\|.*?)?\\]\\]", omit_no_match = TRUE)
-    m <- cbind(do.call(rbind, categories), rep(id_from, times=sapply(categories, nrow)))[,-1]
+    m <- cbind(do.call(rbind, categories), rep(id_from, times=sapply(categories, nrow)))
     
     
-    to_insert <- sprintf("(%s, %s)", m[,2], prepare_string(m[,1]))
+    to_insert <- sprintf("(%s, %s)", m[,3], prepare_string(m[,2]))
     to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), length.out=length(to_insert)))          
     
     lapply(to_insert, function(to_insert) {

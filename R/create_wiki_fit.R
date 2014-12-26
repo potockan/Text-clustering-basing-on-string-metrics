@@ -58,8 +58,7 @@ dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_redirect (
 
 dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word (
   id INTEGER NOT NULL PRIMARY KEY,
-  word VARCHAR(256) NOT NULL,
-  UNIQUE(word)
+  word VARCHAR(256) NOT NULL UNIQUE
 );")
 
 dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word_freq (

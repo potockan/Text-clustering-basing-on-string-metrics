@@ -3,65 +3,77 @@
 #install.packages("stringi")
 library(RSQLite)
 library(stringi)
+library(compiler)
+
+source("./R/db_exec.R")
+
 ### Raw text database ###
 
 
-prepare_string <- function(str) {
-  ret <- stri_replace_all_fixed(str, "'", "''")
-  ret <- stri_paste("'", ret, "'")
-  ret
-}
+prepare_string <- cmpfun(function(str) {
+  stri_paste("'", stri_replace_all_fixed(str, "'", "''"), "'")
+})
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
+
+dbExecQuery(con, "create temporary table tmp_redirect (
+            id INTEGER NOT NULL PRIMARY KEY,
+            id_from INTEGER NOT NULL,
+            title_to VARCHAR(256) NOT NULL
+            )")
+
 
 # i <- 15
 # aa <-
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
 cnt <- 10
-for(i in 3429:10000){
-# for(i in 1: 165453){
+for(i in 1:10){
+# for(i in 1: 1654533){
   print(i*cnt)
   aa <-
-    dbGetQuery(conn, sprintf("select * from wiki_raw 
+    dbGetQuery(conn, sprintf("select id, title, text, redirect from wiki_raw 
                              where id between %d and %d and ns=0", (i-1)*cnt+1, i*cnt))
   #   index <- dbGetQuery(conn, "select count(id) from wiki_raw 
   #                            where redirect!='NA'")
   
   #we can select and empty row, when ns!=0 that's why:
-  if(nrow(aa)!=0){ 
+  n <- nrow(aa)
+  if(n==0)
+    next
+  
+   
     redirect <- aa$redirect
     id_from <- aa$id
     #if a page is redirect, then we add it to redirect table
     red_na <- which(is.na(redirect))
-    n <- nrow(aa)
-    red_not_na <- setdiff(1:n, red_na)
+    red_not_na <- which(!is.na(redirect))
     n_not_na <- length(red_not_na)
     if(n_not_na>0)
     {
       print('redirect')
       aa_red <- aa[red_not_na,]
       redirect <- prepare_string(aa_red$redirect)
-      id_to <- dbGetQuery(conn, sprintf("
-                                        SELECT id, title
-                                        FROM wiki_raw 
-                                        INDEXED BY my_index
-                                        WHERE title in (%s)", 
-                                        stri_flatten(redirect, collapse = ", ")))
-      id_to <- merge(aa_red, id_to, by.x='redirect', by.y='title')
-      if(nrow(id_to>0))
-        dbSendQuery(con, sprintf("
-                                 INSERT INTO wiki_redirect(id_from, id_to)
+#       id_to <- dbGetQuery(conn, sprintf("
+#                                         SELECT id, title
+#                                         FROM wiki_raw 
+#                                         INDEXED BY my_index
+#                                         WHERE title in (%s)", 
+#                                         stri_flatten(redirect, collapse = ", ")))
+#       id_to <- merge(aa_red, id_to, by.x='redirect', by.y='title')
+     # if(nrow(id_to>0))
+        dbExecQuery(con, sprintf("
+                                 INSERT INTO tmp_redirect(id_from, title_to)
                                  VALUES (%s)
                                  ", 
                                  stri_paste(
-                                   stri_paste(id_to$id.x, id_to$id.y, sep=", "), 
+                                   stri_paste(id_from[red_not_na], redirect, sep=", "), 
                                    collapse = "), (")
-        )
+                                  )
         )
       
-      rm(aa_red, id_to, redirect)
+      rm(aa_red, redirect)
     }
     if(n_not_na<n)
     {
@@ -72,7 +84,7 @@ for(i in 3429:10000){
       #inserting id and title of a page
       id_from <- aa$id
       title <- aa$title
-      dbSendQuery(con, sprintf("
+      dbExecQuery(con, sprintf("
                                INSERT INTO wiki_page(id, title)
                                VALUES (%s)
                                ", 
@@ -94,19 +106,17 @@ for(i in 3429:10000){
       
       #removing all the comment, tags and all the content within curly brackets
       #TO DO: zapetlone nie dzialaja!
-      patterns <- c("<(.+?)>[^<]+</\\1>", "\\{\\{[^\\}]*?\\}\\}", "<!--(.)*?-->")
+      patterns <- c("<([a-zA-Z][a-zA-Z0-9]*).*?>.*?</\\1>", 
+                    "\\{\\{[^\\}]*?\\}\\}", "<!--.*?-->")
       
       
       text2 <- stri_replace_all_regex(text, patterns , "", vectorize_all = FALSE)
-      patterns <- c(patterns, "<(.+?)>[^<]*?</(.+?)>")
-      text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
-      text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
-      
-      
+      #patterns <- c(patterns, "<(.+?)>[^<]*?</(.+?)>")
+      #text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
+      #text2 <- stri_replace_all_regex(text2, patterns , "", vectorize_all = FALSE)
+          
       
       rm(patterns, text)
-      
-      #pat <- "<(.+?)>([^<]+?)</\\1>" #to jest ok
       
       
       #################################################
@@ -114,16 +124,19 @@ for(i in 3429:10000){
       ##[[x|y]] (x is the link, y the string to be viewed) or [[x]] (x is both)
       
       print('links')
-      #extractng all the links 
-      link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")
-      link2 <- lapply(link, function(link){
-        if(any(!is.na(link))){
-          #matching those with pipe and without it
-          link2 <- stri_match_all_regex(link, "\\[\\[([^\\|]+)\\|?+([^\\|]*?)\\]\\]")
-        }})
+#       stri_match_all_regex("[[ala: gowno|fknsel]]", "\\[\\[([^:|]+?)(?:(?:(?:: )|(?:\\|))([^|]+?))?\\]\\]")
+      links <- stri_match_all_regex(text2, "\\[\\[([^:|]+?)(?:\\|([^|]+?))?\\]\\]")
+      dl <- sapply(links, length)
       
-      dl <- unlist(lapply(link2, length))  
-      
+#       #extractng all the links 
+#       link <- stri_extract_all_regex(text2, "\\[\\[([^:\\]]+?:\\s(.)+?|[^:\\]]+?)\\]\\]")
+#       link2 <- lapply(link, function(link){
+#         if(any(!is.na(link))){
+#           #matching those with pipe and without it
+#           link2 <- stri_match_all_regex(link, "\\[\\[([^\\|]+)\\|?+([^\\|]*?)\\]\\]")
+#         }})
+#       dl <- unlist(lapply(link2, length))  
+#       
       if(any(dl>0)){
         
         #transformation to matrix
@@ -394,8 +407,16 @@ for(i in 3429:10000){
       ################################
       
     }
-  }
+  
 }
+
+dbExecQuery(con, "insert into wiki_redirect (id_from, id_to)
+            select y.id_from, x.id as id_to from tmp_redirect as y
+            join
+            wiki_page as x 
+            on
+            x.title=y.title_to")
+
 
 ### DB DISCONNECT
 

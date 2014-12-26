@@ -2,13 +2,13 @@
 
 #install.packages("RSQLite")
 library(RSQLite)
-
+source("./R/db_exec.R")
 ### Raw text database ###
 
 
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 
-dbSendQuery(conn, "CREATE TABLE IF NOT EXISTS wiki_raw (
+dbExecQuery(conn, "CREATE TABLE IF NOT EXISTS wiki_raw (
   id INTEGER NOT NULL PRIMARY KEY,
   ns INEGER NOT NULL,
   title VARCHAR(256) NOT NULL,

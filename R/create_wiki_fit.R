@@ -3,22 +3,22 @@
 #install.packages("RSQLite")
 library(RSQLite)
 
-
+source("./R/db_exec.R")
 ### Worked text database ###
 
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_page (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_page (
   id INTEGER NOT NULL PRIMARY KEY,
   title VARCHAR(256) NOT NULL
 );")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_name (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_name (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(256) UNIQUE
 );")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_text (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_text (
   id INTEGER NOT NULL PRIMARY KEY,
   id_title INTEGER NOT NULL,
   id_category INTEGER NOT NULL,
@@ -26,7 +26,7 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_text (
   FOREIGN KEY (id_category) REFERENCES wiki_category(id)
 );")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_link (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_link (
   id INTEGER NOT NULL PRIMARY KEY,
   id_from INTEGER NOT NULL,
   id_to INTEGER NOT NULL,
@@ -35,34 +35,34 @@ dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_link (
 
 
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_redirect (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_redirect (
   id INTEGER NOT NULL PRIMARY KEY,
   id_from INTEGER NOT NULL,
   id_to INTEGER NOT NULL
 );")
 
 # 
-# dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_tag (
+# dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_tag (
 #   id INTEGER NOT NULL PRIMARY KEY,
 #   id_title INTEGER NOT NULL,
 #   text TEXT NOT NULL,
 #   FOREIGN KEY (id_title) REFERENCES wiki_page(id)
 # );")
 # 
-# dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_curly (
+# dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_curly (
 #   id INTEGER NOT NULL PRIMARY KEY,
 #   id_title INTEGER NOT NULL,
 #   text TEXT NOT NULL,
 #   FOREIGN KEY (id_title) REFERENCES wiki_page(id)
 # );")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word (
   id INTEGER NOT NULL PRIMARY KEY,
   word VARCHAR(256) NOT NULL,
   UNIQUE(word)
 );")
 
-dbSendQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word_freq (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_word_freq (
   id_title INTEGER NOT NULL,
   id_word INTEGER NOT NULL,
   freq INTEGER NOT NULL,

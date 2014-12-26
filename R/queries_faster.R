@@ -235,19 +235,19 @@ for(i in 1:10){
                                     "\\[\\[(?:[^:|\\]]+?\\|)(.+?)\\]\\]", "$1")    
     text3 <- stri_replace_all_regex(text3, 
                                 "\\[\\[([^:#\\]]+?)(?:(?:#.*?\\]\\])|(?:\\]\\]))", "$1")    ; text3
- no_string <- which(stri_length(m[,3])==0)
-    m[no_string,3] <- m[no_string, 2]
-    m <- m[which(!is.na(m[,3])),]
+#  no_string <- which(stri_length(m[,3])==0)
+#     m[no_string,3] <- m[no_string, 2]
+#     m <- m[which(!is.na(m[,3])),]
+#     
+#     ### removing all [[x]] and [[x|y]] from the text
+#     text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
+#                                     vectorize_all=FALSE)
     
-    ### removing all [[x]] and [[x|y]] from the text
-    text3 <- stri_replace_all_fixed(text2, m[,1], m[,3], 
-                                    vectorize_all=FALSE)
-    
-    rm(dl, m, hashtag, m2, m3, id_to, m4, n_links, mod_links, no_string)
-  }else
-    text3 <- text2
-  rm(link, link2, text2)
-  
+ #   rm(dl, m, hashtag, m2, m3, id_to, m4, n_links, mod_links, no_string)
+#   }else
+#     text3 <- text2
+#   rm(link, link2, text2)
+    }  
   
   
   
@@ -256,7 +256,7 @@ for(i in 1:10){
   ### CATEGORIES ###
   print('categories')
   # not links: [[x:y]] - we want y only if x is "kategoria"
-  
+#   
   #extractng all the not-links 
   not_link <- stri_extract_all_regex(text3, "\\[\\[[^:\\]]+?:\\S[^:]+?\\]\\]")
   
@@ -322,12 +322,11 @@ for(i in 1:10){
   ### WORD INSERTING ###
   print('words')
   #extracting all the words
-  words_all  <- stri_extract_all_words(text4)     
-  
+  words_all  <- stri_extract_all_words(text4, omit_no_match = TRUE)     
+
   #unique words
   words <- prepare_string(unique(unlist(words_all)))
-  words <- words[!is.na(words)]
-  
+  U
   n_words <- length(words)
   if(n_words>500){
     for(j in 1:floor(n_words/500))

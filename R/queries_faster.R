@@ -48,10 +48,11 @@ dbExecQuery(con, "create table tmp_word_freq (
 # aa <-
 # dbGetQuery(conn, sprintf("select * from wiki_raw 
 #            where id = %d", i))
-cnt <- 500
+cnt <- 200
 all_pages <- dbGetQuery(conn, "select count(1) from wiki_raw")[1,1]
-for(i in 1:10){
-#for(i in 1:ceiling(all_pages/cnt)){
+#for(i in 1:10){
+i <- 170
+for(i in 1:ceiling(all_pages/cnt)){
   print(i*cnt)
   aa <-
     dbGetQuery(conn, sprintf("select id, title, text, redirect from wiki_raw 
@@ -186,7 +187,10 @@ for(i in 1:10){
     words_all  <- stri_extract_all_words(text4, omit_no_match = TRUE)     
     words_text <- lapply(seq_along(words_all), function(x){
       t <- table(words_all[x])
-      cbind(as.numeric(t), names(t), id_from[x])  
+      if(length(t)>0)
+        cbind(as.numeric(t), names(t), id_from[x])  
+      else
+        matrix(ncol=3, nrow=0)
     })
     
     m <- do.call(rbind, words_text)

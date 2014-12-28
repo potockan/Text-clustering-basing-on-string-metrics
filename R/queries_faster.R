@@ -5,18 +5,19 @@ library(RSQLite)
 library(stringi)
 library(compiler)
 
+## dbExecQuery function
 source("./R/db_exec.R")
 
-### Raw text database ###
-
-
+## function preparing strong to insert it to db
 prepare_string <- cmpfun(function(str) {
   stri_paste("'", stri_replace_all_fixed(str, "'", "''"), "'")
 })
 
+## connecting with dbs
 conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
 con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
+## creating "temporary" tables: tmp_redirect, tmp_link, tmp_category_text, tmp_word_freq
 dbExecQuery(con, "create table tmp_redirect (
             id INTEGER NOT NULL PRIMARY KEY,
             id_from INTEGER NOT NULL,
@@ -42,17 +43,18 @@ dbExecQuery(con, "create table tmp_word_freq (
             )")
 
 
-cnt <- 200
-all_pages <- dbGetQuery(conn, "select count(1) from wiki_raw")[1,1]
-#for(i in 1:10){
+cnt <- 200 # number of pages inserted to db at once
+all_pages <- dbGetQuery(conn, "select count(1) from wiki_raw")[1,1] # number of all pages
 for(i in 1:ceiling(all_pages/cnt))
 {
   print(i*cnt)
+  
+  ## getting the pages out
   aa <-
     dbGetQuery(conn, sprintf("select id, title, text, redirect from wiki_raw 
                              where id between %d and %d and ns=0", (i-1)*cnt+1, i*cnt))
  
-  #we can select and empty row, when ns!=0 that's why:
+  #we can select empty rows, when ns!=0 that's why:
   n <- nrow(aa)
   if(n==0)
     next
@@ -60,10 +62,12 @@ for(i in 1:ceiling(all_pages/cnt))
   
   redirect <- aa$redirect
   id_from <- aa$id
-  #if a page is redirect, then we add it to redirect table
+
   red_na <- which(is.na(redirect))
   red_not_na <- which(!is.na(redirect))
   n_not_na <- length(red_not_na)
+  
+  #if a page is redirect, then we add it to redirect table
   if(n_not_na>0)
   {
     #print('redirect')
@@ -103,11 +107,13 @@ for(i in 1:ceiling(all_pages/cnt))
     
     rm(title)
     
+    ############################################
     
+    ### Text clearing ###
     text <- aa$text
     
   
-    #removing all the comment, tags and all the content within curly brackets
+    #removing comments, tags and all the content within curly brackets
     patterns <- c("<([a-zA-Z][a-zA-Z0-9]*).*?>.*?</\\1>", 
                   "\\{\\{[^\\}]*?\\}\\}", "<!--.*?-->")
   
@@ -121,7 +127,8 @@ for(i in 1:ceiling(all_pages/cnt))
     ##[[x|y]] (x is the link, y the string to be viewed) or [[x]] (x is both)
     
     #print(links')
-    links <- stri_match_all_regex(text2, "\\[\\[([^:|#]+?)(?:#[^|]+?)?(?:\\|(.+?))?\\]\\]",omit_no_match = TRUE)
+    links <- stri_match_all_regex(text2, "\\[\\[([^:|#]+?)(?:#[^|]+?)?(?:\\|(.+?))?\\]\\]",
+                                  omit_no_match = TRUE)
     dl <- sapply(links, nrow)
     
    
@@ -131,7 +138,8 @@ for(i in 1:ceiling(all_pages/cnt))
       
    
       to_insert <- sprintf("(%s, %s)", m[,4], prepare_string(m[,2]))
-      to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), length.out=length(to_insert)))          
+      to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), 
+                                        length.out=length(to_insert)))          
       
       lapply(to_insert, function(to_insert) {
         dbExecQuery(con, sprintf("INSERT into tmp_link(id_from, title_to)
@@ -156,11 +164,14 @@ for(i in 1:ceiling(all_pages/cnt))
     #print('categories')
     # not links: [[x:y]] - we want y only if x is "kategoria"
     categories <- stri_match_all_regex(text3, "\\[\\[kategoria:([^|]+?)(?:\\|.*?)?\\]\\]", omit_no_match = TRUE)
-    m <- cbind(do.call(rbind, categories), rep(id_from, times=sapply(categories, nrow)))
+    m <- cbind(do.call(rbind, categories), 
+               rep(id_from, times=sapply(categories, nrow)))
     
     
     to_insert <- sprintf("(%s, %s)", m[,3], prepare_string(m[,2]))
-    to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), length.out=length(to_insert)))          
+    to_insert <- split(to_insert, 
+                       rep(1:ceiling(length(to_insert)/500), 
+                           length.out=length(to_insert)))          
     
     lapply(to_insert, function(to_insert) {
       dbExecQuery(con, sprintf("INSERT into tmp_category_text(id_title, name)
@@ -201,6 +212,11 @@ for(i in 1:ceiling(all_pages/cnt))
   
 }
 
+###################################
+
+### INSERTING INTO DB ###
+
+## redirect
 dbExecQuery(con,"
             CREATE INDEX tmp_index_red
             ON tmp_redirect(title_to)
@@ -220,6 +236,8 @@ dbExecQuery(con, "insert into wiki_redirect (id_from, id_to)
 
 dbExecQuery(con, "drop table tmp_redirect")
 
+## links
+
 dbExecQuery(con,"
             CREATE INDEX tmp_index_link
             ON tmp_link(title_to)
@@ -233,6 +251,8 @@ dbExecQuery(con, "insert into wiki_link (id_from, id_to)
             x.title=y.title_to")
 
 dbExecQuery(con, "drop table tmp_link")
+
+## categories
 
 dbExecQuery(con,"
             CREATE INDEX tmp_index_cat
@@ -255,6 +275,8 @@ dbExecQuery(con, "insert into wiki_category_text (id_title, id_category)
             x.name=y.name")
 
 dbExecQuery(con, "drop table tmp_category_text")
+
+## wrods
 
 dbExecQuery(con,"
             CREATE INDEX tmp_index_word
@@ -281,7 +303,7 @@ dbExecQuery(con, "insert into wiki_word_freq (id_title, id_word, freq)
 dbExecQuery(con, "drop table tmp_word_freq")
 
 
-### DB DISCONNECT
+### DB DISCONNECT ###
 
 dbDisconnect(conn)
 dbDisconnect(con)

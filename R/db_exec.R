@@ -1,6 +1,4 @@
-# CHANGELOG:
-# AC, 2014-07-22 [first version]
-# MG, 2014-07-31 [get_affected_rows param added]
+#from RPKG
 
 
 #' @title Send an SQL query to PostgreSQL db and clear the results

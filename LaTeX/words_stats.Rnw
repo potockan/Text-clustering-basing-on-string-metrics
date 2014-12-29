@@ -1,0 +1,93 @@
+\documentclass[12pt, twoside, openany]{report}
+\usepackage[dvips]{rotating}
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\usepackage{a4wide}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{verbatim}
+\usepackage[MeX]{polski}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{left=25mm,right=25mm,%
+bindingoffset=10mm, top=25mm, bottom=25mm}
+\usepackage{amssymb, latexsym}
+\usepackage{amsthm}
+\usepackage{palatino}
+\usepackage{array}
+\usepackage{pstricks}
+\usepackage{textcomp}
+\usepackage{hyperref}
+%paginy
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% zmiana liter w~.ywej paginie na ma.e
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} % usu. bie..ce ustawienia pagin
+\fancyhead[LE,RO]{\small\bfseries\thepage}
+\fancyhead[LO]{\small\bfseries\rightmark}
+\fancyhead[RE]{\small\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt} % pionowy odst.p na kresk.
+\fancypagestyle{plain}{%
+\fancyhead{} % usu. p. górne na stronach pozbawionych
+% numeracji (plain)
+\renewcommand{\headrulewidth}{0pt} % pozioma kreska
+}
+%paginy koniec
+
+\theoremstyle{plain}
+\newtheorem{tw}{Twierdzenie}[section]
+\newtheorem{uw}{Uwaga}[section]
+\newtheorem{defi}{Definicja}[section]
+\newtheorem{alg}{Algorytm}[chapter]
+\newtheorem{przyp}{Przypadek}[section]
+\newtheorem{prz}{Przykład}[section]
+\newtheorem{lem}[tw]{Lemat}
+\newtheorem{stw}[tw]{Stwierdzenie}
+\newtheorem{wn}[tw]{Wniosek}
+\newtheorem{cw}{Ćwiczenie}[section]
+\linespread{1.5}
+
+
+\author{Natalia Potocka}
+\title{Słowa - statystyki}
+
+\begin{document}
+
+\maketitle
+
+\hyphenation{Syl-ves-tra}
+\hyphenation{Syl-ves-ter-a}
+
+\newpage
+
+<<echo=FALSE>>=
+opts_chunk$set(echo=FALSE, cache=TRUE, eval=TRUE, message=FALSE)
+options(scipen = 1, digits = 2)
+library(stringi)
+library(xtable)
+@
+
+<<ws>>=
+word_stat <- readRDS("../Data/RObjects/words_cnt.rds")
+n_words <- nrow(word_stat)
+n_once <- sum(word_stat$word_cnt==1)/n_words*100
+@
+
+
+W polskiej Wikipedii znaleziono \Sexpr{n_words} unikalnych słów. \Sexpr{n_once}\% z nich występuje dokładnie raz we wszystkich tekstach. Słowa o największej liczności to:
+
+<<results='asis'>>=
+top10 <- head(word_stat, 10)
+top10 <- cbind(top10, top10[,1])[,-1]
+names(top10) <- c("Słowo", "Liczność")
+kable(top10, caption="Lista dziesięciu najczęściej występujących słów.")
+@
+
+
+
+\end{document}

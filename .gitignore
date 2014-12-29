@@ -12,3 +12,5 @@
 Data/
 *.spyderworkspace
 *.spyderproject
+LaTeX/cache/
+*concordance.tex

@@ -1,0 +1,158 @@
+\documentclass[12pt, twoside, openany]{report}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[dvips]{rotating}
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\usepackage{a4wide}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{verbatim}
+\usepackage[MeX]{polski}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{left=25mm,right=25mm,%
+bindingoffset=10mm, top=25mm, bottom=25mm}
+\usepackage{amssymb, latexsym}
+\usepackage{amsthm}
+\usepackage{palatino}
+\usepackage{array}
+\usepackage{pstricks}
+\usepackage{textcomp}
+\usepackage{hyperref}
+%paginy
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% zmiana liter w~.ywej paginie na ma.e
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} % usu. bie..ce ustawienia pagin
+\fancyhead[LE,RO]{\small\bfseries\thepage}
+\fancyhead[LO]{\small\bfseries\rightmark}
+\fancyhead[RE]{\small\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt} % pionowy odst.p na kresk.
+\fancypagestyle{plain}{%
+\fancyhead{} % usu. p. górne na stronach pozbawionych
+% numeracji (plain)
+\renewcommand{\headrulewidth}{0pt} % pozioma kreska
+}
+%paginy koniec
+
+\theoremstyle{plain}
+\newtheorem{tw}{Twierdzenie}[section]
+\newtheorem{uw}{Uwaga}[section]
+\newtheorem{defi}{Definicja}[section]
+\newtheorem{alg}{Algorytm}[chapter]
+\newtheorem{przyp}{Przypadek}[section]
+\newtheorem{prz}{Przykład}[section]
+\newtheorem{lem}[tw]{Lemat}
+\newtheorem{stw}[tw]{Stwierdzenie}
+\newtheorem{wn}[tw]{Wniosek}
+\newtheorem{cw}{Ćwiczenie}[section]
+\linespread{1.5}
+
+
+\author{Natalia Potocka}
+\title{Słowa - statystyki}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\maketitle
+
+\hyphenation{Syl-ves-tra}
+\hyphenation{Syl-ves-ter-a}
+
+\newpage
+
+
+
+
+
+
+W polskiej Wikipedii znaleziono 4143353 unikalnych słów. 55.05\% z nich występuje dokładnie raz we wszystkich tekstach. Słowa o największej liczności to:
+
+\begin{table}
+
+\caption{Lista dziesięciu najczęściej występujących słów.}
+\begin{tabular}{l|r}
+\hline
+Słowo & Liczność\\
+\hline
+w & 1002731\\
+\hline
+i & 728424\\
+\hline
+na & 690433\\
+\hline
+z & 652071\\
+\hline
+do & 561449\\
+\hline
+się & 536522\\
+\hline
+roku & 419538\\
+\hline
+a & 382204\\
+\hline
+od & 378804\\
+\hline
+jest & 342802\\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+\end{document}

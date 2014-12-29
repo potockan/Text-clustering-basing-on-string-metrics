@@ -181,7 +181,7 @@ for(i in 1:ceiling(all_pages/cnt))
 
     ### removing all the [[x:y]] from the text
     
-    text4 <- stri_replace_all_regex(text3, "\\[.+?\\]|zobacz też|linki zewnętrzne|bibliografia|przypisy", "")
+    text4 <- stri_replace_all_regex(text3, "\\[.+?\\]|== zobacz też ==|== linki zewnętrzne ==|== bibliografia ==|&nbsp;|\\{[^\\}]*?\\}", "")
     
     
     #############

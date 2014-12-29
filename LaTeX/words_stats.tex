@@ -119,14 +119,49 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 
 
 
-W polskiej Wikipedii znaleziono 4143353 unikalnych słów. 55.05\% z nich występuje dokładnie raz we wszystkich tekstach. Słowa o największej liczności to:
+W polskiej Wikipedii znaleziono 4143353 unikalnych słów. 55.05\% z nich występuje dokładnie tylko w jednym tekście. Dobrze obrazuje to poniższy histogram.
 
-\begin{table}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/hist-1} 
+
+\end{knitrout}
+
+Słowa występujące tylko w jednym tekście to zazwyczaj liczby oraz słowa w obcych językach, przykładowo:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+ [1] "interaktiver"      "gloveria"          "d’axa"            
+ [4] "pl516"             "jahrhundertbrücke" "111860"           
+ [7] "kundelinga"        "bajaprog"          "konkretniejsza"   
+[10] "julgneville"      
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      4       5      10     145      30 1000000 
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+Słowa, które występują przynajmniej w czterech stanowią zaledwie 25.06\% wszystkich słów.
+
+Słowa występujące w największej liczbie tekstów to:
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{table}
 
 \caption{Lista dziesięciu najczęściej występujących słów.}
 \begin{tabular}{l|r}
 \hline
-Słowo & Liczność\\
+Słowo & Liczba artykułów\\
 \hline
 w & 1002731\\
 \hline
@@ -152,7 +187,60 @@ jest & 342802\\
 \end{table}
 
 
+\end{knitrout}
 
+%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%%%%%
+%%%% wgrac (slowo, licznosc slowa ogolem) %%%%
+Są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{verbatim}
+  [1] "ach"         "aj"          "albo"        "bardzo"      "bez"        
+  [6] "bo"          "być"         "ci"          "cię"         "ciebie"     
+ [11] "co"          "czy"         "daleko"      "dla"         "dlaczego"   
+ [16] "dlatego"     "do"          "dobrze"      "dokąd"       "dość"       
+ [21] "dużo"        "dwa"         "dwaj"        "dwie"        "dwoje"      
+ [26] "dziś"        "dzisiaj"     "gdyby"       "gdzie"       "go"         
+ [31] "ich"         "ile"         "im"          "inny"        "ja"         
+ [36] "ją"          "jak"         "jakby"       "jaki"        "je"         
+ [41] "jeden"       "jedna"       "jedno"       "jego"        "jej"        
+ [46] "jemu"        "jeśli"       "jest"        "jestem"      "jeżeli"     
+ [51] "już"         "każdy"       "kiedy"       "kierunku"    "kto"        
+ [56] "ku"          "lub"         "ma"          "mają"        "mam"        
+ [61] "mi"          "mną"         "mnie"        "moi"         "mój"        
+ [66] "moja"        "moje"        "może"        "mu"          "my"         
+ [71] "na"          "nam"         "nami"        "nas"         "nasi"       
+ [76] "nasz"        "nasza"       "nasze"       "natychmiast" "nią"        
+ [81] "nic"         "nich"        "nie"         "niego"       "niej"       
+ [86] "niemu"       "nigdy"       "nim"         "nimi"        "niż"        
+ [91] "obok"        "od"          "około"       "on"          "ona"        
+ [96] "one"         "oni"         "ono"         "owszem"      "po"         
+[101] "pod"         "ponieważ"    "przed"       "przedtem"    "są"         
+[106] "sam"         "sama"        "się"         "skąd"        "tak"        
+[111] "taki"        "tam"         "ten"         "to"          "tobą"       
+[116] "tobie"       "tu"          "tutaj"       "twoi"        "twój"       
+[121] "twoja"       "twoje"       "ty"          "wam"         "wami"       
+[126] "was"         "wasi"        "wasz"        "wasza"       "wasze"      
+[131] "we"          "więc"        "wszystko"    "wtedy"       "wy"         
+[136] "żaden"       "zawsze"      "że"         
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+% 
+% <<rm_stp>>=
+% words <- data.frame(word=setdiff(word_stat$word[stat_cnt], stopwords))
+% word_no_stp <- merge(word_stat, words)
+% n_no_stp <- nrow(words)
+% @
+% 
+% 
+% Po usunięciu wyżej wymienionych słów pozostaje n_no_stp unikalnych słów do analizy.
+% 
+% <<hist_stp>>=
+% ggplot(word_no_stp, aes(x=word)) +
+%   geom_histogram(fill="white", colour="black")
+% print(summary(word_no_stp$word_cnt)
+% @
 
 \end{document}

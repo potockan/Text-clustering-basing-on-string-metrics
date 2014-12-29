@@ -14,3 +14,4 @@ Data/
 *.spyderproject
 LaTeX/cache/
 *concordance.tex
+LaTeX/figure

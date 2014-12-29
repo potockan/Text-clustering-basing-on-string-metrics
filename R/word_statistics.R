@@ -2,6 +2,7 @@
 
 library(RSQLite)
 library(stringi)
+library(ggplot2)
 #library(compiler)
 
 ## dbExecQuery function
@@ -33,11 +34,41 @@ n_has_no_letter <- sum(stri_detect_regex(word_stat$word, "\\P{L}"))
 n_has_letter <- sum(stri_detect_regex(word_stat$word, "\\P{L}"))
 n_one_let <- sum(stri_length(word_stat$word)==1)
 
-hist(word_stat$word_cnt[which(word_stat$word_cnt>100000)])
 
+hist(word_stat$word_cnt[which(word_stat$word_cnt>cnt)], 
+     xlab="Liczba wystapien w tekstach", 
+     ylab="Licznosc",
+     main=stri_paste("Histogram dla licznosci powyzej ", cnt," wystapien" ))
+cnt <- 10
+qplot(word_stat$word_cnt[which(word_stat$word_cnt>cnt)], binwidth=10000,
+      ylim=c(0,200),
+      xlab="Liczba wystapien w tekstach", 
+      ylab="Licznosc",
+      main=stri_paste("Histogram dla licznosci powyzej ", cnt," wystapien" ))
+
+qplot(word_stat$word_cnt, binwidth=10000,
+      ylim=c(0,170),
+      xlab="Liczba wystapien slow w tekstach", 
+      ylab="Licznosc",
+      main=stri_paste("Histogram dla liczby wystapien slow w tekscie" ))
+
+hist(word_stat$word_cnt)
+
+
+
+mean(word_stat$word_cnt)
+
+
+ggplot(word_stat[which(word_stat$word_cnt>cnt),], aes(x=word_cnt)) +
+  geom_histogram(fill="white", colour="black")
+
+ggplot(word_stat[which(word_stat$word_cnt>cnt),], 
+       aes(x=1, y=word_cnt)) + geom_boxplot()
+cnt <- 3
+summary(word_stat$word_cnt[which(word_stat$word_cnt>cnt)])
 
 stopwords <- as.vector(as.matrix(read.table("./Data//RObjects//stopwords.txt", sep=",")[1,]))
 stopwords2 <- as.vector(read.table("./Data//RObjects//stopwords2.txt", sep="
-                         ")[,1])
+                         ")[,1]) 
 
 

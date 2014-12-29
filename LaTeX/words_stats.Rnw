@@ -66,10 +66,11 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \newpage
 
 <<echo=FALSE>>=
-opts_chunk$set(echo=FALSE, cache=TRUE, eval=TRUE, message=FALSE)
+opts_chunk$set(echo=FALSE, cache=TRUE, eval=TRUE, message=FALSE, comment="")
 options(scipen = 1, digits = 2)
 library(stringi)
 library(xtable)
+library(ggplot2)
 @
 
 <<ws>>=
@@ -79,15 +80,62 @@ n_once <- sum(word_stat$word_cnt==1)/n_words*100
 @
 
 
-W polskiej Wikipedii znaleziono \Sexpr{n_words} unikalnych słów. \Sexpr{n_once}\% z nich występuje dokładnie raz we wszystkich tekstach. Słowa o największej liczności to:
+W polskiej Wikipedii znaleziono \Sexpr{n_words} unikalnych słów. \Sexpr{n_once}\% z nich występuje dokładnie tylko w jednym tekście. Dobrze obrazuje to poniższy histogram.
 
-<<results='asis'>>=
-top10 <- head(word_stat, 10)
-top10 <- cbind(top10, top10[,1])[,-1]
-names(top10) <- c("Słowo", "Liczność")
-kable(top10, caption="Lista dziesięciu najczęściej występujących słów.")
+<<hist>>=
+ggplot(word_stat, aes(x=word_cnt)) +
+  geom_histogram(fill="white", colour="black")
+@
+
+Słowa występujące tylko w jednym tekście to zazwyczaj liczby oraz słowa w obcych językach, przykładowo:
+<<once>>=
+set.seed(108)
+sample(word_stat$word[word_stat$word_cnt==1], 10)
+@
+
+Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
+
+<<stat_3>>=
+cnt <- 3
+stat_cnt <- which(word_stat$word_cnt>cnt)
+print(summary(word_stat$word_cnt[stat_cnt]))
+n_stat_3 <- length(stat_cnt)/n_words*100
 @
 
 
+Słowa, które występują przynajmniej w czterech stanowią zaledwie \Sexpr{n_stat_3}\% wszystkich słów.
+
+Słowa występujące w największej liczbie tekstów to:
+
+<<top10>>=
+top10 <- head(word_stat, 10)
+top10 <- cbind(top10, top10[,1])[,-1]
+names(top10) <- c("Słowo", "Liczba artykułów")
+kable(top10, caption="Lista dziesięciu najczęściej występujących słów.")
+@
+
+%%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%%%%%
+%%%% wgrac (slowo, licznosc slowa ogolem) %%%%
+Są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
+
+<<stopwords>>=
+stopwords <- as.vector(read.table("../Data//RObjects//stopwords2.txt", sep="")[,1]) 
+print(stopwords)
+@
+% 
+% <<rm_stp>>=
+% words <- data.frame(word=setdiff(word_stat$word[stat_cnt], stopwords))
+% word_no_stp <- merge(word_stat, words)
+% n_no_stp <- nrow(words)
+% @
+% 
+% 
+% Po usunięciu wyżej wymienionych słów pozostaje \Sexpr{n_no_stp} unikalnych słów do analizy.
+% 
+% <<hist_stp>>=
+% ggplot(word_no_stp, aes(x=word)) +
+%   geom_histogram(fill="white", colour="black")
+% print(summary(word_no_stp$word_cnt)
+% @
 
 \end{document}

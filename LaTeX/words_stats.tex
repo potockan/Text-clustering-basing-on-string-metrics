@@ -119,7 +119,8 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 
 
 
-W polskiej Wikipedii znaleziono 4143353 unikalnych słów. 55.05\% z nich występuje dokładnie tylko w jednym tekście. Dobrze obrazuje to poniższy histogram.
+
+W polskiej Wikipedii znaleziono 3802968 unikalnych słów. 56.74\% z nich występuje dokładnie w jednym tekście, natomiast 51.7\% występuje tylko raz. Dobrze obrazuje to poniższy histogram.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
@@ -128,70 +129,57 @@ W polskiej Wikipedii znaleziono 4143353 unikalnych słów. 55.05\% z nich wystę
 \end{knitrout}
 
 Słowa występujące tylko w jednym tekście to zazwyczaj liczby oraz słowa w obcych językach, przykładowo:
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
- [1] "interaktiver"      "gloveria"          "d’axa"            
- [4] "pl516"             "jahrhundertbrücke" "111860"           
- [7] "kundelinga"        "bajaprog"          "konkretniejsza"   
-[10] "julgneville"      
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-      4       5      10     145      30 1000000 
+ [1] "300346"        "bua2"          "przechowujesz" "168524"       
+ [5] "bedoin"        "78341"         "2020551446"    "niewspomniani"
+ [9] "terdsakiem"    "anamorf"      
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
+choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \emph{przechowujesz} jest odmianą czasownika \emph{przechowywać}. Należy wziąć pod uwagę takie słowa, gdyż mogą one polepszyć jakość dopasowania tekstów pod względem tematycznym.
 
-Słowa, które występują przynajmniej w czterech stanowią zaledwie 25.06\% wszystkich słów.
+% Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
+% 
+% <<stat_3, dependson='ws'>>=
+% cnt <- 3
+% stat_cnt <- which(word_stat$word_cnt>cnt)
+% print(summary(word_stat$word_cnt[stat_cnt]))
+% n_stat_3 <- length(stat_cnt)/n_words*100
+% @
+% 
+% 
+% Słowa, które występują przynajmniej w czterech stanowią zaledwie n_stat_3\% wszystkich słów.
 
-Słowa występujące w największej liczbie tekstów to:
+Słowa występujące w największej liczbie tekstów to:\\
 
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{table}
-
-\caption{Lista dziesięciu najczęściej występujących słów.}
-\begin{tabular}{l|r}
-\hline
-Słowo & Liczba artykułów\\
-\hline
-w & 1002731\\
-\hline
-i & 728424\\
-\hline
-na & 690433\\
-\hline
-z & 652071\\
-\hline
-do & 561449\\
-\hline
-się & 536522\\
-\hline
-roku & 419538\\
-\hline
-a & 382204\\
-\hline
-od & 378804\\
-\hline
-jest & 342802\\
-\hline
+% latex table generated in R 3.1.2 by xtable 1.7-4 package
+% Tue Dec 30 15:58:22 2014
+\begin{tabular}{rlrr}
+  \hline
+ & Słowo & Liczba artykułów & Liczba wystąpień słowa \\ 
+  \hline
+1 & w & 1001499 & 10246420 \\ 
+  2 & i & 723899 & 4240658 \\ 
+  3 & na & 687441 & 3183731 \\ 
+  4 & z & 647318 & 3218341 \\ 
+  5 & do & 557602 & 2273872 \\ 
+  6 & się & 535273 & 2066420 \\ 
+  7 & roku & 418980 & 1284882 \\ 
+  8 & a & 377247 & 908846 \\ 
+  9 & od & 376645 & 926187 \\ 
+  10 & jest & 342055 & 977374 \\ 
+   \hline
 \end{tabular}
-\end{table}
 
-
-\end{knitrout}
 
 %%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%%%%%
 %%%% wgrac (slowo, licznosc slowa ogolem) %%%%
-Są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
+
+W większości przypadków są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}

@@ -25,8 +25,6 @@ word_stat <- dbGetQuery(con, "
 saveRDS(word_stat, file="./Data/RObjects/words_cnt.rds")
 
 #x <- readRDS("./Data//RObjects//words_cnt.rds")
-
-#"words" occuring only once starting with no letter
 435125/length(word_stat$word[which(word_stat$word_cnt==1)])
 
 #x <- word_stat$word[sample(nrow(word_stat), 5000)]
@@ -70,5 +68,15 @@ summary(word_stat$word_cnt[which(word_stat$word_cnt>cnt)])
 stopwords <- as.vector(as.matrix(read.table("./Data//RObjects//stopwords.txt", sep=",")[1,]))
 stopwords2 <- as.vector(read.table("./Data//RObjects//stopwords2.txt", sep="
                          ")[,1]) 
+
+x <- stri_extract_all_regex(word_stat[,2], "\\p{script=latin}+")
+ind <- sapply(x, function(x){
+  which(!is.na(x))
+})
+x <- x[ind]
+
+length(ind)
+
+which(is.na(x))
 
 

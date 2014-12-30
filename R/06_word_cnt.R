@@ -7,6 +7,8 @@ con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
 
 n_words_freq <- dbGetQuery(con, "select count(1) from wiki_word_freq")[1,1]
 
+saveRDS(word_stat, file="./Data/RObjects/n_word_freq.rds")
+
 #cnt == in how many texts a word occured
 word_stat <- dbGetQuery(con, "
                         select count(a.freq) as word_cnt, b.word as word
@@ -27,6 +29,7 @@ word_stat_all <- dbGetQuery(con, "
                             wiki_word b
                             on a.id_word=b.id
                             group by a.id_word
+                            order by word_cnt_all desc
                             ")
 
 saveRDS(word_stat_all, file="./Data/RObjects/words_cnt_all.rds")

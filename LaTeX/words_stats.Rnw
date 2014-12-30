@@ -79,44 +79,59 @@ n_words <- nrow(word_stat)
 n_once <- sum(word_stat$word_cnt==1)/n_words*100
 @
 
+<<ws_all>>=
+word_stat_all <- readRDS("../Data/RObjects/words_cnt_all.rds")
+n_words_all <- nrow(word_stat_all)
+n_once_all <- sum(word_stat_all$word_cnt==1)/n_words_all*100
+@
 
-W polskiej Wikipedii znaleziono \Sexpr{n_words} unikalnych słów. \Sexpr{n_once}\% z nich występuje dokładnie tylko w jednym tekście. Dobrze obrazuje to poniższy histogram.
+W polskiej Wikipedii znaleziono \Sexpr{n_words} unikalnych słów. \Sexpr{n_once}\% z nich występuje dokładnie w jednym tekście, natomiast \Sexpr{n_once_all}\% występuje tylko raz. Dobrze obrazuje to poniższy histogram.
 
-<<hist>>=
-ggplot(word_stat, aes(x=word_cnt)) +
-  geom_histogram(fill="white", colour="black")
+<<hist, dependson='ws'>>=
+ggplot(word_stat, aes(x=word_cnt), main="Liczba występowania słów w artykułach") +  geom_histogram(fill="white", colour="black")
 @
 
 Słowa występujące tylko w jednym tekście to zazwyczaj liczby oraz słowa w obcych językach, przykładowo:
-<<once>>=
-set.seed(108)
+
+<<once, dependson='ws'>>=
+set.seed(2156)
 sample(word_stat$word[word_stat$word_cnt==1], 10)
 @
 
-Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
+choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \emph{przechowujesz} jest odmianą czasownika \emph{przechowywać}. Należy wziąć pod uwagę takie słowa, gdyż mogą one polepszyć jakość dopasowania tekstów pod względem tematycznym.
 
-<<stat_3>>=
-cnt <- 3
-stat_cnt <- which(word_stat$word_cnt>cnt)
-print(summary(word_stat$word_cnt[stat_cnt]))
-n_stat_3 <- length(stat_cnt)/n_words*100
-@
+% Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
+% 
+% <<stat_3, dependson='ws'>>=
+% cnt <- 3
+% stat_cnt <- which(word_stat$word_cnt>cnt)
+% print(summary(word_stat$word_cnt[stat_cnt]))
+% n_stat_3 <- length(stat_cnt)/n_words*100
+% @
+% 
+% 
+% Słowa, które występują przynajmniej w czterech stanowią zaledwie \Sexpr{n_stat_3}\% wszystkich słów.
 
+Słowa występujące w największej liczbie tekstów to:\\
 
-Słowa, które występują przynajmniej w czterech stanowią zaledwie \Sexpr{n_stat_3}\% wszystkich słów.
-
-Słowa występujące w największej liczbie tekstów to:
-
-<<top10>>=
+<<top10, dependson=c('ws', 'ws_all'), results='asis'>>=
 top10 <- head(word_stat, 10)
 top10 <- cbind(top10, top10[,1])[,-1]
-names(top10) <- c("Słowo", "Liczba artykułów")
-kable(top10, caption="Lista dziesięciu najczęściej występujących słów.")
+top10_all <- numeric(10)
+for(i in 1:length(top10[,1])){
+  top10_all[i] <- word_stat_all$word_cnt_all[which(word_stat_all$word==top10[i,1])]
+}
+top10 <- cbind(top10, top10_all)
+names(top10) <- c("Słowo", "Liczba artykułów", "Liczba wystąpień słowa")
+tab <- xtable(top10, caption="Lista dziesięciu najczęściej występujących słów.") 
+digits(tab)[c(3,4)] <- 0
+print(tab, floating=FALSE, latex.environments='center')
 @
 
 %%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%%%%%
 %%%% wgrac (slowo, licznosc slowa ogolem) %%%%
-Są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
+
+W większości przypadków są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
 
 <<stopwords>>=
 stopwords <- as.vector(read.table("../Data//RObjects//stopwords2.txt", sep="")[,1]) 

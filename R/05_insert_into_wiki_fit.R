@@ -189,7 +189,9 @@ for(i in 1:ceiling(all_pages/cnt))
     ### WORD INSERTING ###
     #print('words')
     #extracting all the words
-    words_all  <- stri_extract_all_regex(text4, "\\p{script=latin}+",omit_no_match = TRUE)     
+    text5 <- stri_trans_general(text4, "NFKC; NFC; Any-lower")
+    words <- stri_extract_all_words(text5)
+    words_all <- lapply(words, stri_subset_regex, "^\\p{script=latin}+$", omit_na=TRUE)
     words_text <- lapply(seq_along(words_all), function(x){
       t <- table(words_all[x])
       if(length(t)>0)

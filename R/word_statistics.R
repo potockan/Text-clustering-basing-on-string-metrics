@@ -29,7 +29,7 @@ saveRDS(word_stat, file="./Data/RObjects/words_cnt.rds")
 
 #x <- word_stat$word[sample(nrow(word_stat), 5000)]
 n_has_no_letter <- sum(stri_detect_regex(word_stat$word, "\\P{L}"))
-n_has_letter <- sum(stri_detect_regex(word_stat$word, "\\P{L}"))
+n_has_letter <- sum(stri_detect_regex(word_stat$word, "\\p{L}"))
 n_one_let <- sum(stri_length(word_stat$word)==1)
 
 

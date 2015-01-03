@@ -1,53 +1,4 @@
-\documentclass[12pt, twoside, openany]{report}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
-\makeatletter
-\def\maxwidth{ %
-  \ifdim\Gin@nat@width>\linewidth
-    \linewidth
-  \else
-    \Gin@nat@width
-  \fi
-}
-\makeatother
-
-\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
-\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
-\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
-\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
-\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
-\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
-\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
-\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
-\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
-
-\usepackage{framed}
-\makeatletter
-\newenvironment{kframe}{%
- \def\at@end@of@kframe{}%
- \ifinner\ifhmode%
-  \def\at@end@of@kframe{\end{minipage}}%
-  \begin{minipage}{\columnwidth}%
- \fi\fi%
- \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
- \colorbox{shadecolor}{##1}\hskip-\fboxsep
-     % There is no \\@totalrightmargin, so:
-     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
- \MakeFramed {\advance\hsize-\width
-   \@totalleftmargin\z@ \linewidth\hsize
-   \@setminipage}}%
- {\par\unskip\endMakeFramed%
- \at@end@of@kframe}
-\makeatother
-
-\definecolor{shadecolor}{rgb}{.97, .97, .97}
-\definecolor{messagecolor}{rgb}{0, 0, 0}
-\definecolor{warningcolor}{rgb}{1, 0, 1}
-\definecolor{errorcolor}{rgb}{1, 0, 0}
-\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
-
-\usepackage{alltt}
+\documentclass[12pt, twoside, openany]{report}
 \usepackage[dvips]{rotating}
 \usepackage[utf8]{inputenc}
 \usepackage{t1enc}
@@ -87,7 +38,6 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \renewcommand{\headrulewidth}{0pt} % pozioma kreska
 }
 %paginy koniec
-
 \theoremstyle{plain}
 \newtheorem{tw}{Twierdzenie}[section]
 \newtheorem{uw}{Uwaga}[section]
@@ -100,18 +50,12 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \newtheorem{wn}[tw]{Wniosek}
 \newtheorem{cw}{Ćwiczenie}[section]
 \linespread{1.5}
-
-
 \author{Natalia Potocka}
 \title{Słowa - statystyki}
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-
 \maketitle
-
 \hyphenation{Syl-ves-tra}
 \hyphenation{Syl-ves-ter-a}
-
 \newpage
 
 
@@ -119,8 +63,7 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 
 
 
-
-W polskiej Wikipedii znaleziono 3802968 unikalnych słów. 56.74\% z nich występuje dokładnie w jednym tekście, natomiast 51.7\% występuje tylko raz. Dobrze obrazuje to poniższy histogram.
+W polskiej Wikipedii znaleziono 2867036 unikalnych słów. 50.11\% z nich występuje dokładnie w jednym tekście, natomiast 44.93\% występuje tylko raz. Dobrze obrazuje to poniższy histogram.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
@@ -133,54 +76,53 @@ Słowa występujące tylko w jednym tekście to zazwyczaj liczby oraz słowa w o
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
- [1] "300346"        "bua2"          "przechowujesz" "168524"       
- [5] "bedoin"        "78341"         "2020551446"    "niewspomniani"
- [9] "terdsakiem"    "anamorf"      
+ [1] "pikosatelitami" "mahiane"        "zaindeksowana"  "uchybiają"     
+ [5] "omiécourt"      "nittle"         "clériga"        "mozon"         
+ [9] "jūhuì"          "wardz"         
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
-choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \emph{przechowujesz} jest odmianą czasownika \emph{przechowywać}. Należy wziąć pod uwagę takie słowa, gdyż mogą one polepszyć jakość dopasowania tekstów pod względem tematycznym.
+choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \emph{uchybiają} jest odmianą czasownika \emph{uchybiać}. Należy wziąć pod uwagę takie słowa, gdyż mogą one polepszyć jakość dopasowania tekstów pod względem tematycznym.
 
 % Po usunięciu słów występujących w jednym, dwóch lub trzech tekstach otrzymujemy następujące statystyki:
-% 
+%
 % <<stat_3, dependson='ws'>>=
 % cnt <- 3
 % stat_cnt <- which(word_stat$word_cnt>cnt)
 % print(summary(word_stat$word_cnt[stat_cnt]))
 % n_stat_3 <- length(stat_cnt)/n_words*100
 % @
-% 
-% 
+%
+%
 % Słowa, które występują przynajmniej w czterech stanowią zaledwie n_stat_3\% wszystkich słów.
 
 Słowa występujące w największej liczbie tekstów to:\\
 
 % latex table generated in R 3.1.2 by xtable 1.7-4 package
-% Tue Dec 30 15:58:22 2014
+% Sat Jan  3 11:13:11 2015
 \begin{tabular}{rlrr}
   \hline
  & Słowo & Liczba artykułów & Liczba wystąpień słowa \\ 
   \hline
-1 & w & 1001499 & 10246420 \\ 
-  2 & i & 723899 & 4240658 \\ 
-  3 & na & 687441 & 3183731 \\ 
-  4 & z & 647318 & 3218341 \\ 
-  5 & do & 557602 & 2273872 \\ 
-  6 & się & 535273 & 2066420 \\ 
-  7 & roku & 418980 & 1284882 \\ 
-  8 & a & 377247 & 908846 \\ 
-  9 & od & 376645 & 926187 \\ 
-  10 & jest & 342055 & 977374 \\ 
+1 & w & 1001691 & 10266388 \\ 
+  2 & i & 725134 & 4260343 \\ 
+  3 & na & 687524 & 3185292 \\ 
+  4 & z & 647672 & 3223226 \\ 
+  5 & do & 559857 & 2280198 \\ 
+  6 & się & 535836 & 2070729 \\ 
+  7 & a & 419801 & 1066807 \\ 
+  8 & roku & 419064 & 1285444 \\ 
+  9 & od & 377392 & 929421 \\ 
+  10 & jest & 342071 & 977477 \\ 
    \hline
 \end{tabular}
 
 
+
 %%%%%%%%%%%%%%%%% TO DO %%%%%%%%%%%%%%%%%%%%%%
 %%%% wgrac (slowo, licznosc slowa ogolem) %%%%
-
 W większości przypadków są to słowa nie istotne w kontekście analizy tematycznej tekstu. Podobnych słów jest więcej. Ich pełna lista zostaje przedstawiona poniżej:
-
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
@@ -215,20 +157,17 @@ W większości przypadków są to słowa nie istotne w kontekście analizy temat
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-% 
-% <<rm_stp>>=
-% words <- data.frame(word=setdiff(word_stat$word[stat_cnt], stopwords))
-% word_no_stp <- merge(word_stat, words)
-% n_no_stp <- nrow(words)
-% @
-% 
-% 
-% Po usunięciu wyżej wymienionych słów pozostaje n_no_stp unikalnych słów do analizy.
-% 
-% <<hist_stp>>=
-% ggplot(word_no_stp, aes(x=word)) +
-%   geom_histogram(fill="white", colour="black")
-% print(summary(word_no_stp$word_cnt)
-% @
 
-\end{document}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error in as.vector(x): object 'stat\_cnt' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error in as.data.frame(y): object 'words' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{Error in nrow(words\_no\_stp\$words): object 'words\_no\_stp' not found}}\end{kframe}
+\end{knitrout}
+
+
+

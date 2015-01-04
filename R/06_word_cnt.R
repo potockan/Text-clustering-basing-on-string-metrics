@@ -13,6 +13,10 @@ message("Counting articles...")
 n_articles <- dbGetQuery(con, "select count(1) from wiki_page")[1,1]
 saveRDS(n_articles, file="./Data/RObjects/n_articles.rds")
 
+message("Counting categories...")
+n_categories <- dbGetQuery(con, "select count(1) from wiki_category_name")[1,1]
+saveRDS(n_categories, file="./Data/RObjects/n_categories.rds")
+
 
 message("Counting words...")
 #cnt == in how many texts a word occured

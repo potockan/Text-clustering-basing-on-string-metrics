@@ -93,12 +93,18 @@ for(j in 1:nclust){
 
 
 
+#########################################
 
 ######### word order #########
-words_order <- character(n_no_stp)
-index_in <- numeric(n_no_stp)
-for(i in 1:n_no_stp){
-  a <- stringdist(words[-1], words[1])
+### one by one ###
+method <- 'lv'
+used <- 1
+dist_index <- which.min(stringdist(words[-used], words[1], method = method))
+words_order <- words[c(1,distances)]
+for(i in 2:n_no_stp){
+  used <- c(used, dist_index)
+  distances <- which.min(stringdist(words[-used], words[dist_index], method = method))
+  words_order <- c(words_order, words[dist_index])
 }
 
 
@@ -109,7 +115,7 @@ for(i in 1:n_no_stp){
 
 
 
-
+#########################################
 
 ########### two nearest points ##########
 cl_1 <- which(kmeans_lv$cluster==1)

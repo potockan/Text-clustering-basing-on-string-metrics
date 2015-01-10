@@ -3,19 +3,19 @@
 library(RSQLite)
 
 
-con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
+con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
 message("Counting word_freq...")
 n_words_freq <- dbGetQuery(con, "select count(1) from wiki_word_freq")[1,1]
-saveRDS(n_words_freq, file="./Data/RObjects/n_word_freq.rds")
+saveRDS(n_words_freq, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/n_word_freq.rds")
 
 message("Counting articles...")
 n_articles <- dbGetQuery(con, "select count(1) from wiki_page")[1,1]
-saveRDS(n_articles, file="./Data/RObjects/n_articles.rds")
+saveRDS(n_articles, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/n_articles.rds")
 
 message("Counting categories...")
 n_categories <- dbGetQuery(con, "select count(1) from wiki_category_name")[1,1]
-saveRDS(n_categories, file="./Data/RObjects/n_categories.rds")
+saveRDS(n_categories, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/n_categories.rds")
 
 
 message("Counting words...")
@@ -30,7 +30,7 @@ word_stat <- dbGetQuery(con, "
                         order by word_cnt desc")
 
 
-saveRDS(word_stat, file="./Data/RObjects/words_cnt.rds")
+saveRDS(word_stat, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_cnt.rds")
 
 message("Counting words appearance...")
 word_stat_all <- dbGetQuery(con, "
@@ -43,7 +43,7 @@ word_stat_all <- dbGetQuery(con, "
                             order by word_cnt_all desc
                             ")
 
-saveRDS(word_stat_all, file="./Data/RObjects/words_cnt_all.rds")
+saveRDS(word_stat_all, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_cnt_all.rds")
 
 
 dbDisconnect(con)

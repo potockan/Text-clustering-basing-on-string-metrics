@@ -6,7 +6,7 @@ source("./R/db_exec.R")
 ### Raw text database ###
 
 
-conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
+conn <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki_raw.sqlite")
 
 dbExecQuery(conn, "CREATE TABLE IF NOT EXISTS wiki_raw (
   id INTEGER NOT NULL PRIMARY KEY,

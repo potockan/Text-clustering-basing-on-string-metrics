@@ -3,11 +3,11 @@ library(stringdist)
 library(stringi)
 
 word_stat <- 
-  readRDS("./Data/RObjects/words_cnt.rds")
-n_words <- nrow(word_stat)
-n_once <- sum(word_stat$word_cnt==1)/n_words*100
-
-n_articles <- readRDS("./Data//RObjects//n_articles.rds")
+  readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_cnt.rds")
+# n_words <- nrow(word_stat)
+# n_once <- sum(word_stat$word_cnt==1)/n_words*100
+# 
+# n_articles <- readRDS("./Data//RObjects//n_articles.rds")
 # 
 # word_stat_all <- 
 #   readRDS("./Data/RObjects/words_cnt_all.rds")
@@ -26,7 +26,7 @@ n_articles <- readRDS("./Data//RObjects//n_articles.rds")
 # top10 <- cbind(top10, top10_all)
 # names(top10) <- c("Słowo", "Liczba artykułów", "Liczba wystąpień słowa")
 
-stopwords <- as.vector(read.table("./Data//RObjects//stopwords2.txt", sep="")[,1])
+stopwords <- as.vector(read.table("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords2.txt", sep="")[,1])
 
 words <- c(word=setdiff(word_stat$word, 
                         c(stopwords, word_stat$word[2806173:2806765])))

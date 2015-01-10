@@ -6,7 +6,7 @@ library(RSQLite)
 source("./R/db_exec.R")
 ### Worked text database ###
 
-con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
+con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
 dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_page (
   id INTEGER NOT NULL PRIMARY KEY,

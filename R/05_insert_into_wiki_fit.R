@@ -14,8 +14,8 @@ prepare_string <- cmpfun(function(str) {
 })
 
 ## connecting with dbs
-conn <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki_raw.sqlite")
-con <- dbConnect(SQLite(), dbname = "./Data/DataBase/wiki.sqlite")
+conn <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki_raw.sqlite")
+con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
 ## creating "temporary" tables: tmp_redirect, tmp_link, tmp_category_text, tmp_word_freq
 dbExecQuery(con, "create table tmp_redirect (
@@ -218,6 +218,7 @@ for(i in 1:ceiling(all_pages/cnt))
 
 ### INSERTING INTO DB ###
 
+message("Redirect...")
 ## redirect
 dbExecQuery(con,"
             CREATE INDEX tmp_index_red
@@ -239,7 +240,7 @@ dbExecQuery(con, "insert into wiki_redirect (id_from, id_to)
 dbExecQuery(con, "drop table tmp_redirect")
 
 ## links
-
+message("Links...")
 dbExecQuery(con,"
             CREATE INDEX tmp_index_link
             ON tmp_link(title_to)
@@ -255,7 +256,7 @@ dbExecQuery(con, "insert into wiki_link (id_from, id_to)
 dbExecQuery(con, "drop table tmp_link")
 
 ## categories
-
+message("Categories...")
 dbExecQuery(con,"
             CREATE INDEX tmp_index_cat
             ON tmp_category_text(name)
@@ -279,7 +280,7 @@ dbExecQuery(con, "insert into wiki_category_text (id_title, id_category)
 dbExecQuery(con, "drop table tmp_category_text")
 
 ## wrods
-
+message("Words...")
 dbExecQuery(con,"
             CREATE INDEX tmp_index_word
             ON tmp_word_freq(word)

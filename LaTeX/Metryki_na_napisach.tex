@@ -1,0 +1,87 @@
+\documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% Set line spacing
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage[margin=1in]{geometry}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Natalia Potocka},
+            pdftitle={Metryki na przestrzeni ciągów znaków},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+\setlength{\droptitle}{-2em}
+  \title{Metryki na przestrzeni ciągów znaków}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Natalia Potocka}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{Luty, 2015}
+
+
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Metryki na przestrzeni ciągów
+znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
+
+Def. \emph{Alfabetem} nazywamy niepusty zbiór \emph{liter}. Oznaczmy go
+przez $\Sigma$. Przez \emph{słowo} nad alfabetem $\Sigma$ rozumiemy
+skończony ciąg elementów z $\Sigma$. Zbiór wszystkich słów z $\Sigma$
+oznaczamy przez $\Sigma^*$. \emph{Językiem} nad $\Sigma$ nazywamy każdy
+podzbiór $\Sigma^*$.
+
+Def. Pusty ciąg znaków, oznaczony przez $\varepsilon$, jest nazywamy
+\emph{pustym napisem}. Dla słowa $w$, $|w|$ oznacza długość $w$. Dla
+każdego $a \in \Sigma$, $|w|_a$ oznacza liczba wystąpień $a$ w $w$.Dla
+każdego $i \in {1,2, \ldots, |w|}$, $w[i]$ oznacza $i$-tą literę z $w$.
+Mając dane dwa słowa, $x$ i $y$, poprzez $xy$ rozumiemy \emph{złączenie}
+$x$ i $y$. Dla każdego $n \in \mathbb{N}$, definiujemy $x^n$ jako $n$-tą
+potęgę $x$, to znaczy złączenie $n$ kopii słowa $x$ (zauważmy, że
+$x^0=\varepsilon$). Dla każdego $L \subseteq \Sigma^*$ i dla każdego
+$w \in \Sigma^*$ , oznaczamy $Lw = {xw: x \in L}$.
+
+\end{document}

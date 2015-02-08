@@ -1,0 +1,22 @@
+---
+title: "Metryki na przestrzeni ciągów znaków"
+author: "Natalia Potocka"
+date: "Luty, 2015"
+output:
+  pdf_document:
+    keep_tex: true
+---
+
+Metryki na przestrzeni ciągów znaków
+====================
+
+Def. *Alfabetem* nazywamy niepusty zbiór *liter*. Oznaczmy go przez $\Sigma$. Przez *słowo* nad alfabetem $\Sigma$ rozumiemy skończony ciąg elementów z $\Sigma$. Zbiór wszystkich słów z $\Sigma$ oznaczamy przez $\Sigma^*$. *Językiem* nad $\Sigma$ nazywamy każdy podzbiór $\Sigma^*$.
+
+Def. Pusty ciąg znaków, oznaczony przez $\varepsilon$, jest nazywamy *pustym napisem*. Dla słowa $w$, $|w|$ oznacza długość $w$. Dla każdego $a \in \Sigma$, $|w|_a$ oznacza liczba wystąpień $a$ w $w$.Dla każdego $i \in {1,2, \ldots, |w|}$, $w[i]$ oznacza $i$-tą literę z $w$. Mając dane dwa słowa, $x$ i $y$, poprzez $xy$ rozumiemy *złączenie* $x$ i $y$. Dla każdego $n \in \mathbb{N}$, definiujemy $x^n$ jako $n$-tą potęgę $x$, to znaczy złączenie $n$ kopii słowa $x$ (zauważmy, że $x^0=\varepsilon$). Dla każdego $L \subseteq \Sigma^*$ i dla każdego $w \in \Sigma^*$ , oznaczamy $Lw = {xw: x \in L}$.
+
+
+
+
+
+
+

@@ -105,12 +105,19 @@ used <- numeric(n_no_stp)
 used <- 1
 dist_index <- which.min(stringdist(words[-used], words[1], method = method))
 #words_order <- words[c(1,distances)]
-for(i in 1692:n_no_stp){
-  used[i] <- dist_index
-  dist_index <- which.min(stringdist(words[-used], words[dist_index], method = method))
-  if(i%%1000==0)
+for(i in 2:1000){
+  used[i] <- which(words==words[-used][dist_index])
+  dist_index <- which.min(stringdist(words[-used], words[used[i]], method = method))
+  if(i%%100==0)
     print(i)
 }
+
+
+saveRDS(used, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used.rds")
+words_order <- words[used]
+odl <- (stringdist(words_order[1:1833], words_order[2:1834], method = method))
+mean(odl)
+max(odl)
 
 
 ### one group by another ###

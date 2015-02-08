@@ -30,11 +30,17 @@ stopwords <- as.vector(read.table("/dragon/Text-clustering-basing-on-string-metr
 
 words <- c(word=setdiff(word_stat$word, 
                         c(stopwords, word_stat$word[2806173:2806765])))
+
+
 words <- words[-(which(stri_length(words)==1))]
 #word_no_stp <- merge(word_stat, words)
 n_no_stp <- length(words)
 
 ############ clustering ############
+
+set.seed(128)
+dimm <- 3
+sam <- sample(1:n_no_stp, dimm)
 
 ble <- stringdistmatrix(words[sam], words[sam], method = 'lv')
 s  <- numeric(20)
@@ -44,9 +50,6 @@ s <- s/19
 mean(s)
 
 
-set.seed(128)
-dimm <- 3
-sam <- sample(1:n_no_stp, dimm)
 nclust <- 20
 dist_lv2 <- stringdistmatrix(words, words[sam], method = 'lv')
 kmeans_lv <- kmeans(dist_lv2, centers=nclust, iter.max=20)
@@ -98,18 +101,19 @@ for(j in 1:nclust){
 ######### word order #########
 ### one by one ###
 method <- 'lv'
+used <- numeric(n_no_stp)
 used <- 1
 dist_index <- which.min(stringdist(words[-used], words[1], method = method))
-words_order <- words[c(1,distances)]
-for(i in 2:n_no_stp){
-  used <- c(used, dist_index)
-  distances <- which.min(stringdist(words[-used], words[dist_index], method = method))
-  words_order <- c(words_order, words[dist_index])
+#words_order <- words[c(1,distances)]
+for(i in 1692:n_no_stp){
+  used[i] <- dist_index
+  dist_index <- which.min(stringdist(words[-used], words[dist_index], method = method))
+  if(i%%1000==0)
+    print(i)
 }
 
 
-
-
+### one group by another ###
 
 
 

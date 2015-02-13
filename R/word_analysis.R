@@ -104,8 +104,9 @@ method <- 'lv'
 used <- numeric(n_no_stp)
 used <- 1
 dist_index <- which.min(stringdist(words[-used], words[1], method = method))
+N <- 1000
 #words_order <- words[c(1,distances)]
-for(i in 2:1000){
+for(i in 2:N){
   used[i] <- which(words==words[-used][dist_index])
   dist_index <- which.min(stringdist(words[-used], words[used[i]], method = method))
   if(i%%100==0)
@@ -114,10 +115,51 @@ for(i in 2:1000){
 
 
 saveRDS(used, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used.rds")
+used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used.rds")
 words_order <- words[used]
-odl <- (stringdist(words_order[1:1833], words_order[2:1834], method = method))
+
+as.vector(words_order)
+
+odl <- (stringdist(words_order[1:(N-1)], words_order[2:N], method = method))
 mean(odl)
 max(odl)
+
+odl_all <- stringdistmatrix(words_order, words_order)
+odl_all[,1:10]
+
+apply(odl_all, 1, mean)
+mean(odl_all)
+max(odl_all)
+
+which(odl_all[1,]>=5)[1]
+as.vector(words_order[1:65])
+which(odl_all[66,-c(1:66)]>=5)[1]
+as.vector(words_order[66:73])
+which(odl_all[74,-c(1:74)]>=5)[1]
+
+j <- 1
+cnt <- 6
+i <- 1
+used2[i] <- 1
+while(j<1000){
+  i <- i+1
+  kt <- which(odl_all[j,-c(1:j)]>=cnt)
+  if(length(kt)>0)
+    j <- used2[i] <- kt[1]+used2[i-1]
+  else
+    j <- used2[i] <- N
+}
+
+i <- 2
+as.vector(words_order[used2[i]:(used2[i+1]-1)])
+
+
+# 3 podejscia:
+# 1. patrzymy na skrajne
+# 2. patrzymy na srodkowe
+# 3. k-medoidy
+
+
 
 
 ### one group by another ###

@@ -279,7 +279,7 @@ dbExecQuery(con, "insert into wiki_category_text (id_title, id_category)
 
 dbExecQuery(con, "drop table tmp_category_text")
 
-## wrods
+## words
 message("Words...")
 dbExecQuery(con,"
             CREATE INDEX tmp_index_word

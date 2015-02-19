@@ -129,39 +129,25 @@ mean(diff(used3))
 # przeliczamy srodek, 
 # patrzymy czy max. odl. w klastrze nie przekracza zadanej liczby
 
-#max distance in cluster:
-
-
-# kt <- which.min(odl_all[-cluster,middle[1]])+1
-# cluster[kt] <- 1
-# 
-# kt <- which.min(odl_all[-used5, 1])
-# cluster[kt] <- 1
-# used5 <- which(!is.na(cluster))
-# used_all <- used5
-# middle[1] <- used5[which.min(apply(odl_all[used5, used5], 1, sum))]
-i <- 1
-j <- 1
-# words[-used][dist_index]
-# dist_index <-> kt
-# used<->used5
-# words<->odl_all
-
-cnt <- 4
+cnt <- 6
 cluster <- numeric(0)
 middle <- numeric(0)
-used_all <- numeric(1000)
-cluster[1] <- 1
-middle[1] <- 1
-used5 <- used_all <- 1
+used_all <- numeric(0)
+# cluster[1] <- 1
+# middle[1] <- 1
+# used5 <- used_all <- 1
 counter <- 1:N
+used_all <- N+1
+i <- 0
 
-
-for(i in 1:10){
+while(sum(!is.na(used_all))<N+1){
+  i <- i+1
+  used5 <- middle[i] <- sample(counter[-used_all], 1)
+  cluster[used5] <- i
+  used_all <- c(used_all, used5)
   while(all(odl_all[used5, used5]<cnt)){
     kt <- which.min(odl_all[-used_all, middle[i]])
     kt <- counter[-used_all][kt]
-    #kt <- kt+ifelse(all(kt<=used5), used5[length(used5)], cumsum(used5<=kt)[length(used5)])
     cluster[kt] <- i
     used5 <- which(cluster==i)
     used_all <- c(used_all, used5)
@@ -170,10 +156,11 @@ for(i in 1:10){
   cluster[kt] <- NA
   used5 <- used5[-which(used5==kt)]
   used_all <- unique(c(used_all, used5))
-  used_all <- used_all[-which(used_all==kt)]
-  used5 <- middle[i+1] <- sample(counter[-used_all], 1)
+  
 }
-words_order[used5]
+i
+for(j in 1:i)
+  print(words_order[which(cluster==j)])
 
 
 #words in i-th cluster

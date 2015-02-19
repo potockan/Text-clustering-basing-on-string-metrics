@@ -18,8 +18,8 @@ n_no_stp <- length(words)
 
 #making an order on words such that the first has small distances to the second, the second to the third...
 #without repetition of words
-method <- 'lv'
-N <- 1000
+# method <- 'lv'
+# N <- 1000
 # 
 # used <- numeric(n_no_stp)
 # used <- 1
@@ -39,7 +39,7 @@ N <- 1000
 used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used.rds")
 words_order <- words[used]
 
-as.vector(words_order)
+words_order <- as.vector(words_order)
 
 #distance from i-th to (i+1)-th word + statistics
 odl <- (stringdist(words_order[1:(N-1)], words_order[2:N], method = method))
@@ -129,11 +129,51 @@ mean(diff(used3))
 # przeliczamy srodek, 
 # patrzymy czy max. odl. w klastrze nie przekracza zadanej liczby
 
-#number of clusters:
-cnt <- 8
+#max distance in cluster:
 
 
+# kt <- which.min(odl_all[-cluster,middle[1]])+1
+# cluster[kt] <- 1
+# 
+# kt <- which.min(odl_all[-used5, 1])
+# cluster[kt] <- 1
+# used5 <- which(!is.na(cluster))
+# used_all <- used5
+# middle[1] <- used5[which.min(apply(odl_all[used5, used5], 1, sum))]
+i <- 1
+j <- 1
+# words[-used][dist_index]
+# dist_index <-> kt
+# used<->used5
+# words<->odl_all
 
+cnt <- 4
+cluster <- numeric(0)
+middle <- numeric(0)
+used_all <- numeric(1000)
+cluster[1] <- 1
+middle[1] <- 1
+used5 <- used_all <- 1
+counter <- 1:N
+
+
+for(i in 1:10){
+  while(all(odl_all[used5, used5]<cnt)){
+    kt <- which.min(odl_all[-used_all, middle[i]])
+    kt <- counter[-used_all][kt]
+    #kt <- kt+ifelse(all(kt<=used5), used5[length(used5)], cumsum(used5<=kt)[length(used5)])
+    cluster[kt] <- i
+    used5 <- which(cluster==i)
+    used_all <- c(used_all, used5)
+    middle[i] <- used5[which.min(apply(odl_all[used5, used5], 1, sum))]
+  }
+  cluster[kt] <- NA
+  used5 <- used5[-which(used5==kt)]
+  used_all <- unique(c(used_all, used5))
+  used_all <- used_all[-which(used_all==kt)]
+  used5 <- middle[i+1] <- sample(counter[-used_all], 1)
+}
+words_order[used5]
 
 
 #words in i-th cluster

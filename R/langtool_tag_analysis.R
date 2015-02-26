@@ -2,6 +2,9 @@ library(RSQLite)
 library(stringi)
 library(compiler)
 
+#java -jar languagetool-commandline.jar -l pl -c UTF-8 -t words.txt > words_tag.txt
+
+
 ## dbExecQuery function
 source("./R/db_exec.R")
 
@@ -12,6 +15,13 @@ prepare_string <- cmpfun(function(str) {
 
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+
+dbExecQuery(con, "drop table if exists wiki_langtools_tag_clust")
+dbExecQuery(con, "drop table if exists wiki_hunspell_clust")
+dbExecQuery(con, "drop table if exists tmp_tag")
+dbExecQuery(con, "drop table if exists tmp_hunspell")
+
+
 
 dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_langtools_tag_clust (
             id_word INTEGER NOT NULL,
@@ -51,7 +61,7 @@ while (length(out <- readLines(con = f, n=3)) > 0) {
                                     length.out=length(to_insert)))          
   
   lapply(to_insert, function(to_insert) {
-    dbExecQuery(con, sprintf("INSERT into tmp_hunspell(word, stem_word)
+    dbExecQuery(con, sprintf("INSERT into tmp_tag(word, stem_word)
                              values %s", stri_flatten(to_insert, collapse=",")))
   })
   
@@ -60,11 +70,11 @@ while (length(out <- readLines(con = f, n=3)) > 0) {
 
 close(f)
 
-dbExecQuery(con, "INSERT into wiki_hunspell_clust(id_word, id_stem_word)
+dbExecQuery(con, "INSERT into wiki_langtools_tag_clust(id_word, id_stem_word)
             select c.id_word as id_word, d.id as id_stem_word
             from
               (select a.word, a.stem_word, b.id as id_word
-              from tmp_hunspell a
+              from tmp_tag a
               join
               wiki_word b
               on a.word = b.word) c
@@ -73,9 +83,10 @@ dbExecQuery(con, "INSERT into wiki_hunspell_clust(id_word, id_stem_word)
           on c.stem_word = d.word
             ")
 
-dbExecQuery(con, "drop table tmp_hunspell")
+dbExecQuery(con, "drop table tmp_tag")
 
-dbGetQuery(con, "select count (distinct id_stem_word) from wiki_hunspell_clust")
+dbGetQuery(con, "select count (distinct id_stem_word) from wiki_langtools_tag_clust")
+dbGetQuery(con, "select count (distinct id_word) from wiki_langtools_tag_clust")
 
 dbDisconnect(con)
 

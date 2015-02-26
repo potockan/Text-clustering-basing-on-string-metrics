@@ -54,7 +54,7 @@ while (length(out <- readLines(con = f, n=3)) > 0) {
  
   
   m1 <- matrix(unlist(out2), ncol = 2, byrow = TRUE)
-  m1 <- m1[-which(is.na(m1[,1])),]
+  m1 <- m1[which(!is.na(m1[,1]) & !is.na(m1[,2])),]
   
   to_insert <- sprintf("(%s, %s)", prepare_string(m1[,1]), prepare_string(m1[,2]))
   to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), 

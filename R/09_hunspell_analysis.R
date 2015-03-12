@@ -32,10 +32,9 @@ file7 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_
 
 for(lang in languages){
   message(lang)
-  system2("hunspell", sprintf("-i utf-8 -d %s -m -G %s > %s", 
+  system2("hunspell", sprintf("-i utf-8 -d %s -m -G %s", 
                               lang,
-                              "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt", 
-                              "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"))
+                              file5), stdout = file1)
   hunspell_analysis(file1, file2)
   words_diff(file3, file4, file5, file6, file7)
   message("Upper")

@@ -1,4 +1,10 @@
 
+### 655 287 polish words
+### 48 704 == 703991 - 655287 english words
+### 33 150 == 737141 - 703991 french words
+### 24 174 == 761315 - 737141 german words
+
+
 library(RSQLite)
 library(stringi)
 library(compiler)
@@ -28,6 +34,8 @@ dbGetQuery(con, sprintf("
             wiki_word b
             on a.id_word = b.id
             ", stri_flatten(prepare_string(stopwords[!is.na(stopwords)]), collapse=",")))
+
+
 dbGetQuery(con, "select *
            from wiki_word_freq where freq = 2605")
 dbGetQuery(con, "select *

@@ -7,6 +7,10 @@ source("./R/db_exec.R")
 prepare_string <- cmpfun(function(str) {
   stri_paste("'", stri_replace_all_fixed(str, "'", "''"), "'")
 })
+
+
+#this function takes the stemmed words (saved in file1) and inserts them into db
+#it saves the words that were NOT stemmed in file2
 hunspell_analysis <- function(file1, file2){
   message("DB connect")
   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
@@ -21,14 +25,18 @@ hunspell_analysis <- function(file1, file2){
             word VARCHAR(256) NOT NULL,
             stem_word VARCHAR(256) NOT NULL
 )")
+  
+  #if the file with analyzed words exists, we should delete it, as we want only newly stemmed words
   if(file.exists(file2))
     file.remove(file2)
   message("File reading")
   f <- file(file1, "r")
   #i <- 0
+  #reading the stemmed words
   while (length(txt <- readLines(con = f, n=8192)) > 0) {
     #i <- i+1
     #print(i)
+    #choosins only stemmed words
     txt <- txt[stri_detect_fixed(txt, " ")]
     txt <- txt[which(stri_length(txt)>0)]
     txt_split <- lapply(stri_split_fixed(txt, " "), function(txt){
@@ -48,13 +56,15 @@ hunspell_analysis <- function(file1, file2){
       #print(3)
       if(length(dupl)>0)
         m1 <- matrix(m1[-dupl,], ncol = 2)
+      
+      #saving words that were stemmed
       cat(m1[,1], file = file2, append = TRUE, sep = '\n')
       #print(4)
       to_insert <- sprintf("(%s, %s)", prepare_string(stri_trans_tolower(m1[,1])), prepare_string(stri_trans_tolower(m1[,2])))
       #print(5)
       to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500),
                                         length.out=length(to_insert)))
-      #print(6)
+      #inserting into tmp table
       tryCatch({
         lapply(to_insert, function(to_insert) {
           dbExecQuery(con, sprintf("INSERT into tmp_hunspell(word, stem_word)
@@ -67,6 +77,7 @@ hunspell_analysis <- function(file1, file2){
   message("File closing")
   close(f)
   message("DB inserting")
+  #inserting into db
   dbExecQuery(con, "INSERT into wiki_hunspell_clust(id_word, id_stem_word)
 select c.id_word as id_word, d.id as id_stem_word
 from

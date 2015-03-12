@@ -17,6 +17,8 @@ source("./R/words_diff_after_stem.R")
 
 #first stemming
 # hunspell -i utf-8 -d pl_PL -m  -G  words.txt > words_analiza_morfologiczna.txt
+#file1 - morfologik analysis
+#file2 - save analyzed
 file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
 file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
 hunspell_analysis(file1, file2)
@@ -38,7 +40,11 @@ words_diff(file1, file2, file3, file4, file5)
 
 #second stemming
 # hunspell -i utf-8 -d pl_PL -m  -G  words_to_analize_upper.txt > words_analiza_morfologiczna.txt
-hunspell_analysis("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt")
+#file1 - morfologik analysis
+#file2 - save analyzed
+file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
+file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
+hunspell_analysis(file1, file2)
 
 
 #file1 - RDS_all
@@ -47,7 +53,7 @@ hunspell_analysis("/dragon/Text-clustering-basing-on-string-metrics/Data/RObject
 #file4 - save to analyze upper case
 #file5 - save_RDS_left
 file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.rds"
-file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
+file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
 file3 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt"
 file4 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize_upper.txt"
 file5 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.rds"
@@ -58,7 +64,11 @@ words_diff(file1, file2, file3, file4, file5)
 
 #third stemming
 # hunspell -i utf-8 -d en_GB -m  -G  words_to_analize.txt > words_analiza_morfologiczna.txt
-hunspell_analysis("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt")
+#file1 - morfologik analysis
+#file2 - save analyzed
+file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
+file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
+hunspell_analysis(file1, file2)
 
 
 #file1 - RDS_all
@@ -67,9 +77,39 @@ hunspell_analysis("/dragon/Text-clustering-basing-on-string-metrics/Data/RObject
 #file4 - save to analyze upper case
 #file5 - save_RDS_left
 file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.rds"
-file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
+file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
 file3 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt"
 file4 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize_upper.txt"
 file5 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.rds"
 
 words_diff(file1, file2, file3, file4, file5)
+
+
+
+#forth stemming
+# hunspell -i utf-8 -d en_GB -m  -G  words_to_analize_upper.txt > words_analiza_morfologiczna.txt
+#file1 - morfologik analysis
+#file2 - save analyzed
+file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
+file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
+hunspell_analysis(file1, file2)
+
+
+#file1 - RDS_all
+#file2 - analyzed
+#file3 - save to analyze
+#file4 - save to analyze upper case
+#file5 - save_RDS_left
+file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.rds"
+file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
+file3 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt"
+file4 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize_upper.txt"
+file5 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.rds"
+
+words_diff(file1, file2, file3, file4, file5)
+
+
+
+
+
+

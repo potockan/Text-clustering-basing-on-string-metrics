@@ -28,9 +28,14 @@ hunspell_analysis <- function(file1, file2){
             word VARCHAR(256) NOT NULL,
             stem_word VARCHAR(256) NOT NULL
 )")
+  if(file.exists(file2))
+    file.remove(file2)
   message("File reading")
   f <- file(file1, "r")
+  #i <- 0
   while (length(txt <- readLines(con = f, n=8192)) > 0) {
+    #i <- i+1
+    #print(i)
     txt <- txt[stri_detect_fixed(txt, " ")]
     txt <- txt[which(stri_length(txt)>0)]
     
@@ -45,14 +50,22 @@ hunspell_analysis <- function(file1, file2){
     })
     #txt_split
     if(length(txt_split)>0){
+      #print(1)
       m1 <- matrix(unlist(txt_split), ncol = 2, byrow = TRUE)
-      m1 <- matrix(m1[-which(duplicated(m1[,1])),], ncol = 2, byrow = TRUE)
+      #print(2)
+      dupl <- which(duplicated(m1[,1]))
+      #print(3)
+      if(length(dupl)>0)
+        m1 <- matrix(m1[-dupl,], ncol = 2)
       cat(m1[,1], file = file2, append = TRUE, sep = '\n')
+      #print(4)
       
-      #print(head(m1[,1]))
+      
       to_insert <- sprintf("(%s, %s)", prepare_string(stri_trans_tolower(m1[,1])), prepare_string(stri_trans_tolower(m1[,2])))
+      #print(5)
       to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), 
-                                        length.out=length(to_insert)))          
+                                        length.out=length(to_insert)))    
+      #print(6)
       tryCatch({ 
         lapply(to_insert, function(to_insert) {
           dbExecQuery(con, sprintf("INSERT into tmp_hunspell(word, stem_word)

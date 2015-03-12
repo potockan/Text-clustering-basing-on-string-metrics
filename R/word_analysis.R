@@ -28,6 +28,9 @@ word_stat <-
 
 stopwords <- as.vector(read.table("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords2.txt", sep="")[,1])
 
+cat(c(stopwords, word_stat$word[2806173:2806765], word_stat$word[which(stri_length(word_stat$word)==1)]), 
+    file = "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords3.txt")
+
 words <- c(word=setdiff(word_stat$word, 
                         c(stopwords, word_stat$word[2806173:2806765])))
 

@@ -16,10 +16,10 @@ prepare_string <- cmpfun(function(str) {
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
-dbExecQuery(con, "drop table if exists wiki_langtools_tag_clust")
-dbExecQuery(con, "drop table if exists wiki_hunspell_clust")
-dbExecQuery(con, "drop table if exists tmp_tag")
-dbExecQuery(con, "drop table if exists tmp_hunspell")
+#dbExecQuery(con, "drop table if exists wiki_langtools_tag_clust")
+# #dbExecQuery(con, "drop table if exists wiki_hunspell_clust")
+#dbExecQuery(con, "drop table if exists tmp_tag")
+#dbExecQuery(con, "drop table if exists tmp_hunspell")
 
 
 
@@ -37,8 +37,9 @@ dbExecQuery(con, "create table tmp_tag (
 
 
 f <- file("/home/natalia/LanguageTool-2.8/words_tag.txt", "r")
-
-while (length(out <- readLines(con = f, n=3)) > 0) {
+i <- 0
+while (length(out <- readLines(con = f, n=10)) > 0) {
+  i <- i+1
   out1 <- 
     stri_split_fixed(unlist(stri_split_fixed(out, "]", omit_empty = TRUE)), "[", omit_empty = TRUE)
   out2 <- lapply(out1, function(x){
@@ -54,7 +55,9 @@ while (length(out <- readLines(con = f, n=3)) > 0) {
  
   
   m1 <- matrix(unlist(out2), ncol = 2, byrow = TRUE)
-  m1 <- m1[which(!is.na(m1[,1]) & !is.na(m1[,2])),]
+  na_col <- which(is.na(m1[,2]))
+  if(length(na_col)>0)
+    m1 <- m1[-na_col,]
   
   to_insert <- sprintf("(%s, %s)", prepare_string(m1[,1]), prepare_string(m1[,2]))
   to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500), 
@@ -64,7 +67,8 @@ while (length(out <- readLines(con = f, n=3)) > 0) {
     dbExecQuery(con, sprintf("INSERT into tmp_tag(word, stem_word)
                              values %s", stri_flatten(to_insert, collapse=",")))
   })
-  
+  if(i %% 500 == 0)
+    print(i)
   
 }
 
@@ -87,6 +91,7 @@ dbExecQuery(con, "drop table tmp_tag")
 
 dbGetQuery(con, "select count (distinct id_stem_word) from wiki_langtools_tag_clust")
 dbGetQuery(con, "select count (distinct id_word) from wiki_langtools_tag_clust")
+dbGetQuery(con, "select count (*) from wiki_langtools_tag_clust where id_word != id_stem_word")
 
 dbDisconnect(con)
 

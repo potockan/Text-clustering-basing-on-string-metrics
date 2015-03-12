@@ -35,6 +35,8 @@ words <- c(word=setdiff(word_stat$word,
 words <- words[-(which(stri_length(words)==1))]
 #word_no_stp <- merge(word_stat, words)
 n_no_stp <- length(words)
+saveRDS(words, "/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words_no_stpw.rds")
+cat(words, file = "/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects//words.txt", sep='\n')
 
 ############ clustering ############
 

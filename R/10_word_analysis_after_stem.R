@@ -20,7 +20,7 @@ con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-me
 stopwords <- readLines("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords3.txt")
 
 #words and their freq in articles that were NOT clustered and are not a stopword/a word of length 1
-dbGetQuery(con, sprintf("
+word_to_analize <- dbGetQuery(con, sprintf("
           select a.freq, b.word 
           from
           (select sum(freq) as freq, id_word
@@ -29,12 +29,38 @@ dbGetQuery(con, sprintf("
                 and id_word not in (select id from wiki_word where word in (%s))
            group by id_word
            order by freq desc
-        limit 100
            ) a
             join
             wiki_word b
             on a.id_word = b.id
             ", stri_flatten(prepare_string(stopwords[!is.na(stopwords)]), collapse=",")))
+
+dbGetQuery(con, "
+          select sum(freq) as freq
+          from wiki_word_freq
+          where freq=1
+          group by id_word
+            ")
+
+dbGetQuery(con, "
+          select count(*)
+          from(
+            select sum(freq) as freq
+            from wiki_word_freq
+            where freq=1
+            group by id_word
+          )
+          where freq = 1
+            ")
+
+dbGetQuery(con, "
+          select count(*)
+          from wiki_word_freq
+          group by id_word
+            ")
+
+plot(1:1000, word_to_analize$freq[1:1000])
+sum(word_to_analize$freq>100)
 
 
 dbGetQuery(con, "select count(distinct id_word) as cnt

@@ -1,8 +1,8 @@
-
+### stemmed: 733 828 / 2 805 858 == 26.15 %
 ### 655 287 polish words
-### 48 704 == 703991 - 655287 english words
-### 33 150 == 737141 - 703991 french words
-### 24 174 == 761315 - 737141 german words
+### 41 069 == 696356 - 655287 english words
+### 20 426 == 716782 - 696356 french words
+### 17 046 == 733828 - 716782 german words
 
 
 library(RSQLite)
@@ -17,16 +17,17 @@ prepare_string <- cmpfun(function(str) {
 
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
-stopwords <- as.vector(as.matrix(read.table("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords3.txt")))
+stopwords <- readLines("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords3.txt")
 
 #words and their freq in articles that were NOT clustered and are not a stopword/a word of length 1
 dbGetQuery(con, sprintf("
           select a.freq, b.word 
           from
-          (select freq, id_word
+          (select sum(freq) as freq, id_word
            from wiki_word_freq 
               where id_word not in (select id_word from wiki_hunspell_clust) 
                 and id_word not in (select id from wiki_word where word in (%s))
+           group by id_word
            order by freq desc
         limit 100
            ) a
@@ -36,8 +37,10 @@ dbGetQuery(con, sprintf("
             ", stri_flatten(prepare_string(stopwords[!is.na(stopwords)]), collapse=",")))
 
 
-dbGetQuery(con, "select *
-           from wiki_word_freq where freq = 2605")
+dbGetQuery(con, "select count(distinct id_word) as cnt
+           from wiki_hunspell_clust")
+dbGetQuery(con, "select count(distinct id_stem_word) as cnt
+           from wiki_hunspell_clust")
 dbGetQuery(con, "select *
            from wiki_word where id = 2671160")
 dbDisconnect(con)

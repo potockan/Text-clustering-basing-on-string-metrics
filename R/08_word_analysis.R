@@ -29,7 +29,7 @@ word_stat <-
 stopwords <- as.vector(read.table("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords2.txt", sep="")[,1])
 
 cat(c(stopwords, word_stat$word[2806173:2806765], word_stat$word[which(stri_length(word_stat$word)==1)]), 
-    file = "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords3.txt")
+    file = "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects//stopwords3.txt", sep='\n')
 
 words <- c(word=setdiff(word_stat$word, 
                         c(stopwords, word_stat$word[2806173:2806765])))
@@ -38,7 +38,7 @@ words <- c(word=setdiff(word_stat$word,
 words <- words[-(which(stri_length(words)==1))]
 #word_no_stp <- merge(word_stat, words)
 n_no_stp <- length(words)
-saveRDS(words, "/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words_no_stpw.rds")
+saveRDS(words, "/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words_to_analize.rds")
 cat(words, file = "/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects//words.txt", sep='\n')
 
 ############ clustering ############

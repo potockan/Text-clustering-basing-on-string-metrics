@@ -4,6 +4,8 @@ library(compiler)
 
 #java -jar languagetool-commandline.jar -l pl -c UTF-8 -t words.txt > words_tag.txt
 
+system2(command = "java", args = "-jar /home/natalia/LanguageTool-2.8/languagetool-commandline.jar -l pl -c UTF-8 -t /home/natalia/LanguageTool-2.8/words_to_analize.txt",
+        stdout = "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_tag.txt")
 
 ## dbExecQuery function
 source("./R/db_exec.R")
@@ -36,7 +38,7 @@ dbExecQuery(con, "create table tmp_tag (
 )")
 
 
-f <- file("/home/natalia/LanguageTool-2.8/words_tag.txt", "r")
+f <- file("/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_tag.txt", "r")
 i <- 0
 while (length(out <- readLines(con = f, n=10)) > 0) {
   i <- i+1

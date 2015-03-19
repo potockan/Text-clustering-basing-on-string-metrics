@@ -1,8 +1,8 @@
 ### stemmed: 733 828 / 2 805 858 == 26.15 %
-### 655 287 polish words
-### 41 069 == 696356 - 655287 english words
-### 20 426 == 716782 - 696356 french words
-### 17 046 == 733828 - 716782 german words
+### 655 287 Polish words
+### 41 069 == 696356 - 655287 English words
+### 20 426 == 716782 - 696356 French words
+### 17 046 == 733828 - 716782 German words
 
 
 library(RSQLite)
@@ -35,13 +35,18 @@ word_to_analize <- dbGetQuery(con, sprintf("
             on a.id_word = b.id
             ", stri_flatten(prepare_string(stopwords[!is.na(stopwords)]), collapse=",")))
 
+cat(word_to_analize$word, file = "/home/natalia/LanguageTool-2.8/words_to_analize.txt", sep = "\n")
+cat(word_to_analize$word[word_to_analize$freq>1], file = "/home/natalia/LanguageTool-2.8/words_to_analize2.txt", sep = "\n")
+
+
+#words that appeared only once in all the articles
 dbGetQuery(con, "
           select sum(freq) as freq
           from wiki_word_freq
           where freq=1
           group by id_word
             ")
-
+#number of words that appeared only once in all the articles
 dbGetQuery(con, "
           select count(*)
           from(
@@ -53,15 +58,18 @@ dbGetQuery(con, "
           where freq = 1
             ")
 
+
 dbGetQuery(con, "
-          select count(*)
+          select count(*) from
+          (
+          select count(*) as cnt
           from wiki_word_freq
-          group by id_word
+          group by id_word)
             ")
 
 plot(1:1000, word_to_analize$freq[1:1000])
-sum(word_to_analize$freq>100)
-
+sum(word_to_analize$freq==1)
+# 1 098 192 - number of words that appeared only once in all the articles
 
 dbGetQuery(con, "select count(distinct id_word) as cnt
            from wiki_hunspell_clust")

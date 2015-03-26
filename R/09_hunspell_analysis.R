@@ -6,7 +6,7 @@ source("./R/words_diff_after_stem.R")
 
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
-dbExecQuery(con, "drop table wiki_hunspell_clust")
+# # #dbExecQuery(con, "drop table wiki_hunspell_clust")
 dbDisconnect(con)
 
 languages <- c("pl_PL", "en_GB", "fr_FR", "de_DE")

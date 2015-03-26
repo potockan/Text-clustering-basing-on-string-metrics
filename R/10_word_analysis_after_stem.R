@@ -36,6 +36,8 @@ word_to_analize <- dbGetQuery(con, sprintf("
             ", stri_flatten(prepare_string(stopwords[!is.na(stopwords)]), collapse=",")))
 
 cat(word_to_analize$word, file = "/home/natalia/LanguageTool-2.8/words_to_analize.txt", sep = "\n")
+
+#words that apperead more than once
 cat(word_to_analize$word[word_to_analize$freq>1], file = "/home/natalia/LanguageTool-2.8/words_to_analize2.txt", sep = "\n")
 
 
@@ -67,7 +69,7 @@ dbGetQuery(con, "
           group by id_word)
             ")
 
-plot(1:1000, word_to_analize$freq[1:1000])
+plot(1:nrow(word_to_analize), word_to_analize$freq, log='y', type='l')
 sum(word_to_analize$freq==1)
 # 1 098 192 - number of words that appeared only once in all the articles
 

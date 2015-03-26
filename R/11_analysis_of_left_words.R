@@ -72,6 +72,7 @@ lapply(to_insert, function(to_insert) {
 
 
 
+
 dbExecQuery(con, "INSERT into wiki_hunspell_clust(id_word, id_stem_word)
 
 select b.id as id_word, a.id_stem_word as id_stem_word

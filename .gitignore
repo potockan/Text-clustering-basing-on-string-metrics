@@ -16,3 +16,5 @@ LaTeX/cache/
 *concordance.tex
 LaTeX/figure
 *.RDataTmp
+*.rds
+*.RDS

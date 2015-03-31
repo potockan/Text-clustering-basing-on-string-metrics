@@ -1,48 +1,57 @@
 
-install.packages('rvest')
-library(rvest)
-gazeta <- html("http://pl.wikipedia.org/wiki/Kategoria:Matematyka")
-cast <- html_nodes(gazeta, ".CategoryTreeLabelCategory")
-tyt <- html_text(cast)
-calosc <- character(0)
 
+library("stringi")
+library("rvest")
 
-sesja <- html_session("http://pl.wikipedia.org/wiki/Kategoria:Matematyka")
-tyt <- html_text(html_nodes(sesja, ".CategoryTreeLabelCategory"))
-
-
-while(length(tyt) > 0)
-  sesja <- sesja %>% follow_link(tyt[2])
-  current_tyt <- html_text(html_nodes(sesja, ".CategoryTreeLabelCategory"))
-  if(length(current_tyt) == 0){
-    sesja <- sesja %>% back()
-    calosc <- c(calosc, tyt[1])
-    tyt <- tyt[-1]
-    current_tyt <- tyt
-  }  
+znajdz_tytuly <- function(link){
+  strona <- html(link)
+  kategorie <- html_nodes(strona, ".CategoryTreeLabelCategory")
+  if(length(kategorie)==0) return(NA)
+  linki <- stri_paste("http://pl.wikipedia.org", html_attr(kategorie, "href"))
+  tytuly <- html_text(kategorie)
+  tytuly
 }
 
+znajdz_linki <- function(link){
+  strona <- html(link)
+  kategorie <- html_nodes(strona, ".CategoryTreeLabelCategory")
+  if(length(kategorie)==0) return(NA)
+  linki <- stri_paste("http://pl.wikipedia.org", html_attr(kategorie, "href"))
+  tytuly <- html_text(kategorie)
+  linki
+}
+
+wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Matematyka")
+# wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Historia_sztuki")
+# wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Wojny")
 
 
-# i <- 1
-# while(length(tyt2)>0){
-#   ses1 <- sesja %>% follow_link(tyt2[i])
-#   tyt2 <- html_text(html_nodes(ses1, ".CategoryTreeLabelCategory"))  
-#   
-# }
-# 
-# cat_extract <- function(sesja, tyt, calosc){
-#   n <- length(tyt)
-#   if(n == 0){  
-#     sesja <- sesja %>% back(sesja)
-#     return calosc
-#   }else{
-#     for(i in 1:n){
-#       sesja <- sesja %>% follow_link(tyt[i])
-#       tyt <- html_text(html_nodes(sesja, ".CategoryTreeLabelCategory"))
-#       calosc <- calosc(tyt)
-#       tyt <- tyt[-1]
-#       calosc <- c(calosc, cat_extract(sesja, tyt, calosc))
-#     }
-#   }
-# }
+kategorie <- html_nodes(wiki, ".CategoryTreeLabelCategory")
+linki <- stri_paste("http://pl.wikipedia.org", html_attr(kategorie, "href"))
+tytuly <- html_text(kategorie)
+
+wszystkie_tytuly <- tytuly 
+wszystkie_linki <- linki
+
+n1 <- 586
+n <- length(wszystkie_linki)
+while(n1 < n){
+  n1 <- n
+  for(i in 1:n){
+    nowe_linki <- znajdz_linki(wszystkie_linki[i])
+    if(!any(is.na(nowe_linki))) wszystkie_linki <- c(wszystkie_linki, nowe_linki)
+    nowe_tytuly <- znajdz_tytuly(wszystkie_linki[i])
+    if(!any(is.na(nowe_tytuly))) wszystkie_tytuly <- c(wszystkie_tytuly, nowe_tytuly)
+  }
+  n <- length(wszystkie_linki)
+}
+wszystkie_tytuly
+saveRDS(wszystkie_tytuly, "./wszystkietyt.rds")
+
+
+
+
+
+
+
+

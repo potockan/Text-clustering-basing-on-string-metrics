@@ -112,19 +112,22 @@ art_word_mat <- left_join(left_join(art_word_mat, dict_art ), dict_word)
 
 mattr <- sparseMatrix(art_word_mat$nr_row, art_word_mat$nr_col, x = art_word_mat$freq)
 
+
+
 non_zero_art <- numeric(0)
 for(i in 1:ncol(mattr)){
   non_zero_art <- c(non_zero_art, sum(mattr[,i]>0))
 }
 
+apply(mattr, 2, max)
+
 
 #dbExecQuery(con, "drop table tmp_hunspell")
 dbDisconnect(con)
 
+library(sparcl)
 
-
-
-
+clusts <- KMeansSparseCluster(mattr, K = 3)
 
 
 

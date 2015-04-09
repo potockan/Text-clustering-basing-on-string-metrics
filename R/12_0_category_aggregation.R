@@ -47,7 +47,8 @@ while(n1 < n){
 }
 wszystkie_tytuly
 saveRDS(wszystkie_tytuly, "./wszystkietyt.rds")
-
+# saveRDS(wszystkie_tytuly, "./wszystkietyt2.rds")
+# saveRDS(wszystkie_tytuly, "./wszystkietyt3.rds")
 
 
 

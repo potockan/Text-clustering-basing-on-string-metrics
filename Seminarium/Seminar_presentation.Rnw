@@ -223,8 +223,59 @@ Metryka ta nie spełnia nierówności trójkąta: $2 = d_{osa}('ba', 'ab') + d_{
 \end{frame}
 
 \begin{frame}{Postępy prac}
+Co zostało zrobione?\\
+\begin{itemize}
+\item wczytano $1\ 075 \ 568$ artykułów z polskiej Wikipedii \pause
+\item razem to $2\ 806\ 765$ różnych słów... \pause
+\item ... z czego $49\%$ wystąpiło tylko w \textbf{jednym} tekście
+\item ... a $44\%$ wystąpiło tylko \textbf{jeden raz} we wszystkich tekstach
+\end{itemize}
+\pause
+Po usunięciu tzw. \emph{stopwords}, czyli słów nieistotnych w kontekście analizy, jak np. \emph{a, bo, co, jak, to, w, z, że}, słów jednoliterowych oraz słów w językach obcych z niełacińskiego alfabetu, pozostało $2\ 805\ 858$ słów do analizy.\\
+\pause
+Początkową pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do klastrowania metodą k-medoidów, przy czym maksymalna odległość w klastrze miała nie przekraczać zadanej liczby.
+\end{frame}
+
+
+
+\begin{frame}{Postępy prac}
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=12cm] {lv}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki Levenshteina. Maksymalna odległość w klastrze to $7$}
+    \end{figure}
 
 \end{frame}
+
+
+
+\begin{frame}{Postępy prac}
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=12cm] {lcs}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki $lcs$. Maksymalna odległość w klastrze to $7$}
+    \end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}{Postępy prac}
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=12cm] {osa}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki $osa$. Maksymalna odległość w klastrze to $7$}
+    \end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}{Postępy prac}
+
+\end{frame}
+
+
 
 % \begin{frame}{Bibliografia}
 % 

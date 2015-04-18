@@ -41,18 +41,22 @@ words_order <- words[used]
 
 words_order <- as.vector(words_order)
 
+#  method <- 'lcs'
+# method <- 'lv'
+method <- 'osa'
+N <- 1000
 #distance from i-th to (i+1)-th word + statistics
-odl <- (stringdist(words_order[1:(N-1)], words_order[2:N], method = method))
+#odl <- (stringdist(words_order[1:(N-1)], words_order[2:N], method = method))
 
-mean(odl)
-max(odl)
+# mean(odl)
+# max(odl)
 
 #distance from every word to any other word + statistics
-odl_all <- stringdistmatrix(words_order, words_order)
+odl_all <- stringdistmatrix(words_order, words_order, method = method)
 
-apply(odl_all, 1, mean)
-mean(odl_all)
-max(odl_all)
+# apply(odl_all, 1, mean)
+# mean(odl_all)
+# max(odl_all)
 
 
 
@@ -128,8 +132,8 @@ mean(diff(used3))
 # znajdujemy kandydata na dolozenie do klastra, 
 # przeliczamy srodek, 
 # patrzymy czy max. odl. w klastrze nie przekracza zadanej liczby
-
-cnt <- 6
+set.seed(8482)
+cnt <- 8
 cluster <- numeric(0)
 middle <- numeric(0)
 used_all <- numeric(0)
@@ -161,6 +165,23 @@ while(sum(!is.na(used_all))<N+1){
 i
 for(j in 1:i)
   print(words_order[which(cluster==j)])
+
+
+words_order[which(cluster==1)]
+words_order[which(cluster==3)]
+words_order[which(cluster==7)]
+ 
+# saveRDS(words_order[which(cluster==1)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/lcs_1.rds")
+# saveRDS(words_order[which(cluster==3)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/lcs_3.rds")
+# saveRDS(words_order[which(cluster==7)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/lcs_7.rds")
+
+# saveRDS(words_order[which(cluster==1)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/lv_1.rds")
+# saveRDS(words_order[which(cluster==3)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/lv_3.rds")
+# saveRDS(words_order[which(cluster==7)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/lv_7.rds")
+
+# saveRDS(words_order[which(cluster==1)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/osa_1.rds")
+# saveRDS(words_order[which(cluster==3)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/osa_3.rds")
+# saveRDS(words_order[which(cluster==7)], "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/osa_7.rds")
 
 
 #words in i-th cluster

@@ -33,6 +33,7 @@ word_stat <- dbGetQuery(con, "
 saveRDS(word_stat, file="/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_cnt.rds")
 
 message("Counting words appearance...")
+#word_cnt_all == how many times a word apperead in all texts
 word_stat_all <- dbGetQuery(con, "
                             select sum(a.freq) as word_cnt_all, b.word as word
                             from wiki_word_freq a

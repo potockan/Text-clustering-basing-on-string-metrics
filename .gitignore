@@ -18,3 +18,5 @@ LaTeX/figure
 *.RDataTmp
 *.rds
 *.RDS
+*.nav
+*.snm

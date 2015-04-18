@@ -187,25 +187,28 @@ kl2 <- skmeans(mattr, 3, method = 'pclust')
 outcome2 <- cbind(dict_art_kat, cluster = kl2$cluster)
 percentage <- c(percentage, sum(outcome2$kat_id2 == outcome2$cluster)/nrow(outcome2))
 
+#saveRDS(percentage, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/atr_cl_percentage.rds")
+
 #method: genetic
-kl3 <- skmeans(mattr, 3, method = 'genetic')
-outcome3 <- cbind(dict_art_kat, cluster = kl3$cluster)
-percentage <- c(percentage, sum(outcome3$kat_id2 == outcome3$cluster)/nrow(outcome3))
+#very poor!
+# kl3 <- skmeans(mattr, 3, method = 'genetic')
+# outcome3 <- cbind(dict_art_kat, cluster = kl3$cluster)
+# percentage <- c(percentage, sum(outcome3$kat_id2 == outcome3$cluster)/nrow(outcome3))
 
 #method: CLUTO
-kl4 <- skmeans(mattr, 3, method = 'CLUTO')
-outcome4 <- cbind(dict_art_kat, cluster = kl4$cluster)
-percentage <- c(percentage, sum(outcome4$kat_id2 == outcome4$cluster)/nrow(outcome4))
-
-#method: gmeans
-kl5 <- skmeans(mattr, 3, method = 'gmeans')
-outcome5 <- cbind(dict_art_kat, cluster = kl5$cluster)
-percentage <- c(percentage, sum(outcome5$kat_id2 == outcome5$cluster)/nrow(outcome5))
-
-#method: kmndirs
-kl6 <- skmeans(mattr, 3, method = 'kmndirs')
-outcome6 <- cbind(dict_art_kat, cluster = kl6$cluster)
-percentage <- c(percentage, sum(outcome6$kat_id2 == outcome6$cluster)/nrow(outcome6))
+# kl4 <- skmeans(mattr, 3, method = 'CLUTO')
+# outcome4 <- cbind(dict_art_kat, cluster = kl4$cluster)
+# percentage <- c(percentage, sum(outcome4$kat_id2 == outcome4$cluster)/nrow(outcome4))
+# 
+# #method: gmeans
+# kl5 <- skmeans(mattr, 3, method = 'gmeans')
+# outcome5 <- cbind(dict_art_kat, cluster = kl5$cluster)
+# percentage <- c(percentage, sum(outcome5$kat_id2 == outcome5$cluster)/nrow(outcome5))
+# 
+# #method: kmndirs
+# kl6 <- skmeans(mattr, 3, method = 'kmndirs')
+# outcome6 <- cbind(dict_art_kat, cluster = kl6$cluster)
+# percentage <- c(percentage, sum(outcome6$kat_id2 == outcome6$cluster)/nrow(outcome6))
 
 
 dbDisconnect(con)

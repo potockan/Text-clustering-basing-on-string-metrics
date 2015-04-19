@@ -17,7 +17,7 @@ words <- dbGetQuery(con, "
           select a.word, a.id 
           from wiki_word a
           join
-          (select distinct id_stem_word
+          (select id_stem_word
           from wiki_hunspell_clust) b
           on
           a.id = b.id_stem_word

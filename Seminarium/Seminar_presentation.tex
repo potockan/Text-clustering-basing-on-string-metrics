@@ -179,7 +179,7 @@ Celem pracy jest skategoryzowanie tekstów z polskiej Wikipedii pod względem te
 
 
 \begin{frame}{Cel pracy}
-Co ze słowami podobnymi? Przykładowo słowa \emph{niewłaściwy} i \emph{niewłaściwa} mają ten sam temat, różnią się tylko rodzajem (męski / żeński). W tekstach mogą też występować błędy ortograficzne, błędy spowodowane brakami znaków diaktrycznych (\emph{ą, ę, ł, ...}) itd. Takie słowa również chcielibyśmy traktować jak "podobne". W celu określenia jak bardzo dwa słowa są do siebie podobne, posłużą \emph{metryki określone na napisach}.
+Co ze słowami podobnymi? Przykładowo słowa \emph{niewłaściwy} i \emph{niewłaściwa} mają ten sam temat, różnią się tylko rodzajem (męski / żeński). W tekstach mogą też występować błędy ortograficzne, błędy spowodowane brakami znaków diaktrycznych (\emph{ą, ę, ł, ...}) itd. Takie słowa również chcielibyśmy traktować jak ,,podobne''. W celu określenia jak bardzo dwa słowa są do siebie podobne, posłużą \emph{metryki określone na napisach}.
 \end{frame}
 
 
@@ -282,7 +282,7 @@ Co zostało zrobione?\\
 \pause
 Po usunięciu tzw. \emph{stopwords}, czyli słów nieistotnych w kontekście analizy, jak np. \emph{a, bo, co, jak, to, w, z, że}, słów jednoliterowych oraz słów w językach obcych z niełacińskiego alfabetu, pozostało $2\ 805\ 858$ słów do analizy.\\
 \pause
-Początkową pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do klastrowania metodą k-medoidów, przy czym maksymalna odległość w klastrze miała nie przekraczać zadanej liczby.
+Początkowy pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do klastrowania metodą k-medoidów, przy czym maksymalna odległość w klastrze miała nie przekraczać zadanej liczby.
 \end{frame}
 
 
@@ -291,9 +291,8 @@ Początkową pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do
 \begin{figure}[h]
       \centering
       \includegraphics[width=12cm] {lv}
-      \caption{Przykładowe klastry utworzone przy pomocy metryki Levenshteina. Maksymalna odległość w klastrze to $7$}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki Levenshteina. Maksymalna odległość w klastrze to $7$.}
     \end{figure}
-
 \end{frame}
 
 
@@ -302,9 +301,8 @@ Początkową pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do
 \begin{figure}[h]
       \centering
       \includegraphics[width=12cm] {lcs}
-      \caption{Przykładowe klastry utworzone przy pomocy metryki $lcs$. Maksymalna odległość w klastrze to $7$}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki $lcs$. Maksymalna odległość w klastrze to $7$.}
     \end{figure}
-
 \end{frame}
 
 
@@ -313,17 +311,124 @@ Początkową pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do
 \begin{figure}[h]
       \centering
       \includegraphics[width=12cm] {osa}
-      \caption{Przykładowe klastry utworzone przy pomocy metryki $osa$. Maksymalna odległość w klastrze to $7$}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki $osa$. Maksymalna odległość w klastrze to $7$.}
     \end{figure}
-
 \end{frame}
 
 
 
 \begin{frame}{Postępy prac}
-
+Z powodu słabej jakości klastrowania oraz braku możliwości obliczeniowej dokonano klastrowania przy pomocy tzw. \emph{stemmingu}. Polega on na przyporządkowaniu do słowa jego rdzenia, a więc takiej jego części, która jest odporna na odmiany przez rodzaje, przyimki, przypadki itd.\\
+Przykładowo dla słowa \emph{używająca} rdzeniem jest \emph{żyw}.\\
+\pause
+Do stemmingu użyto narzędzia Hunspell, które sprawdza pisownię dla wielu programów, takich jak:  OpenOffice, Mozilla Firefox, Thunderbird czy Google Chrome.\\
+Dzięki niemu udało się poklastrować $733\ 828$ słów ($\approx 26\%$ wszystkich) z czego $89\%$ stanowiły polskie słowa $5,5\%$ - słowa angielskie, a po ponad $2\%$ - słowa francuskie i niemieckie. Innych języków nie sprawdzano. Liczba uzyskanów klastrów to $186\ 942$.\\
+\pause
+Co z pozostałymi słowami?\\
+Słowa, które wystąpiły więcej niż raz we wszystkich tekstach, dołączono do już istniejących klastrów przy pomocy metryk. Takich słów było $973\ 855$, co dało łącznie poklastrowanych słów w liczbie $1\ 707\ 683$.
 \end{frame}
 
+
+\begin{frame}{Postępy prac}
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=12cm] {clust_all2}
+      \caption{Przykładowe klastry utworzone przy pomocy Hunspella oraz metryki $lcs$.}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Postępy prac}
+Następnie dla próbki tekstów z trzech kategorii: matematyka, historia sztuki oraz wojny dokonano klasteryzacji artykułów. Kryterium było liczność \textbf{grup słów} występujących w danym tekście. Do klastrowania użyto metody \emph{sferycznych $k$-średnich}.\\
+\pause
+\begin{block}{Przypomnienie}
+W metodzie $k$-średnich minimalizujemy
+$$
+\sum_i d(x_i, p_{c(i)}),
+$$
+gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
+\end{block}
+\end{frame}
+
+\begin{frame}{Postępy prac}
+W metodzie $k$-średnich minimalizujemy
+$$
+\sum_i d(x_i, p_{c(i)}),
+$$
+gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
+\begin{block}{Metoda sferyczna}
+W metodzie sferycznych $k$-średnich minimalizujemy
+$$
+\sum_i d(x_i, p_{c(i)}) = \sum_i 1-\cos(x_i, p_{c(i)}) = \sum_i 1-\frac{<x_i, p_{c(i)}>}{||x_i||\cdot ||p_{c(i)}||},
+$$
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Postępy prac}
+W metodzie $k$-średnich minimalizujemy
+$$
+\sum_i d(x_i, p_{c(i)}),
+$$
+gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
+\begin{block}{Metoda sferyczna}
+W metodzie sferycznych $k$-średnich minimalizujemy
+$$
+\sum_i d(x_i, p_{c(i)}) = \sum_i 1-\cos(x_i, p_{c(i)}) = \sum_i 1-\frac{<x_i, p_{c(i)}>}{||x_i||\cdot ||p_{c(i)}||},
+$$
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Postępy prac}
+Opierając się na kategoriach z Wikipedii, poprawnie sklasyfikowanych zostało $61\%$ z $59\ 403$ artykułów.
+\begin{tabular}{|l|l|r|r|}
+  \hline
+tytuł & kat & id\_kat & kl \\ 
+  \hline
+kościół św. rocha w poznaniu & szt & 1 & 1 \\ 
+  portret & szt & 1 & 2 \\ 
+  quantum of solace (gra komputerowa) & szt & 1 & 2 \\ 
+  kurka wodna (seria gier) & szt & 1 & 2 \\ 
+  technika macierzy rzadkich & mat & 2 & 2 \\ 
+  kryterium walda & mat & 2 & 2 \\ 
+  generalized markup language & mat & 2 & 2 \\ 
+  czesław falkiewicz & woj & 3 & 3 \\ 
+  william goodenough & woj & 3 & 3 \\ 
+  kazimierz gallas & woj & 3 & 3 \\ 
+  wacław krzywiec & woj & 3 & 3 \\ 
+  fabian aleksandrowicz & woj & 3 & 3 \\ 
+   \hline
+\end{tabular}
+
+% 
+% <<echo=FALSE>>=
+% library(xtable)
+% outcome2 <- readRDS("/home/natalia/Text-clustering-basing-on-string-metrics/Seminarium/art_clust_res2.rds")
+% rzedy <- sample(1:nrow(outcome2), 12)
+% tab <- outcome2[rzedy, c('title', 'kat_id','kat_id2', 'cluster')]
+% tab <- tab[order(tab$kat_id2),]
+% names(tab) <- c("tytuł", "kat", "id_kat", "kl")
+% tab_out <- xtable(tab)
+% digits(tab_out) <- 0
+% align(tab_out) <- "|r|l|l|r|r|"
+% print((tab_out),include.rownames=FALSE,floating=FALSE)
+% @
+% 
+\end{frame}
+
+
+\begin{frame}{Co dalej?}
+\begin{itemize}
+\item znaleźć metodę odpowiednią do poklastrowania wszystkich artykułów (SGD?)
+\item napisać pracę :)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bibliografia}
+%\bibliographystyle{apacite}
+\bibliography{bibliography.bib}
+\end{frame}
 
 
 % \begin{frame}{Bibliografia}

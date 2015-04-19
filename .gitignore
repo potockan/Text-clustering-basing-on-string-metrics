@@ -20,3 +20,4 @@ LaTeX/figure
 *.RDS
 *.nav
 *.snm
+*.bbl

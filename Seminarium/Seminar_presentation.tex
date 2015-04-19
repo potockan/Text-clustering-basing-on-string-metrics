@@ -61,6 +61,7 @@
 \usepackage{graphicx}            % jeśli chcemy wstawiać grafikę
 \usepackage{hyperref}            % odnośniki internetowe, zaawansowane ust. PDF
 %\hypersetup{pdfstartview={FitW}}
+\usepackage{natbib}
 %%%%%%%%%%%% MOJE ULUBIONE USTAWIENIA BEAMERA %%%%%%%%%%%%%
 %
 \usetheme{Boadilla} % Warsaw to nazwa stylu - zmień na SWOJĄ ulubioną
@@ -163,14 +164,14 @@
 
 
 \begin{frame}{Cel pracy}
-Celem pracy jest skategoryzowanie tekstów z polskiej Wikipedii pod względem tematu na podstawie liczności słów występujących w tekście. Można się spodziewać, że jeśli w dwóch tekstach występuje dużo podobnych do siebie słów, to pochodzą one z tej samej kategorii tematycznej. \\
+Celem pracy jest skategoryzowanie tekstów z~polskiej Wikipedii pod względem tematu na~podstawie liczności słów występujących w~tekście. Można się spodziewać, że~jeśli w~dwóch tekstach występuje dużo podobnych do~siebie słów, to~pochodzą one z~tej samej kategorii tematycznej. \\
 \pause
 \begin{tabular}{ |l r|l r|l r|l r| }
   \hline
   \multicolumn{2}{|c|}{A} & \multicolumn{2}{|c|}{B} & \multicolumn{2}{|c|}{C} & \multicolumn{2}{|c|}{D} \\
 %  \multicolumn{8}{|c|c|c|c|}{A & B & C & D} \\
   \hline
-  całka & 10 & całka & 5 & niewłaściwy & 3 & ułamek & 4 \\
+  całka & 10 & całka & 5 & niewłaściwe & 3 & ułamek & 4 \\
   pochodna & 5 & pochodna & 15 & powieść & 7 & mianownik & 5 \\
   niewłaściwa & 4 & granica & 7 & granica & 15 & niewłaściwy & 6 \\
   \hline
@@ -179,37 +180,39 @@ Celem pracy jest skategoryzowanie tekstów z polskiej Wikipedii pod względem te
 
 
 \begin{frame}{Cel pracy}
-Co ze słowami podobnymi? Przykładowo słowa \emph{niewłaściwy} i \emph{niewłaściwa} mają ten sam temat, różnią się tylko rodzajem (męski / żeński). W tekstach mogą też występować błędy ortograficzne, błędy spowodowane brakami znaków diaktrycznych (\emph{ą, ę, ł, ...}) itd. Takie słowa również chcielibyśmy traktować jak ,,podobne''. W celu określenia jak bardzo dwa słowa są do siebie podobne, posłużą \emph{metryki określone na napisach}.
+Co~ze~słowami podobnymi?\\
+Przykładowo słowa \emph{niewłaściwy} i~\emph{niewłaściwa} mają ten sam temat, różnią się tylko rodzajem (męski / żeński). W tekstach mogą też występować błędy ortograficzne, błędy spowodowane brakami znaków diaktrycznych (\emph{ą, ę, ł, ...}) itd. Takie słowa również chcielibyśmy traktować jako ,,podobne''. W celu określenia jak bardzo dwa słowa są~do~siebie podobne, posłużą \emph{metryki określone na napisach}.
 \end{frame}
 
 
 \begin{frame}{O metrykach słów kilka}
 \begin{block}{Definicja}
-\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze znaków z $\Sigma$ oznaczamy przez $\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do $\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$, $t$ oraz $u$, a ich \emph{długość}, czyli liczbę znaków w napisie, przez $|s|$.
+\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze~skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze~znaków z $\Sigma$ oznaczamy przez $\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do~$\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$,~$t$~oraz $u$,~a~ich \emph{długość}, czyli liczbę znaków w napisie, przez $|s|$.
 \end{block}
 \pause
-Przykład. Niech $\Sigma$ będzie alfabetem złożonym z $26$ małych liter alfabetu łacińskiego oraz niech $s = 'ala'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Pojedyncze znaki oznaczamy przez indeks dolny, stąd mamy $s_1 = 'a'$, $s_2 = 'l'$, $s_3 = 'a'$. Podnapis oznaczamy przez $m:n$ w indeksie dolnym, np. $s_{1:2} = 'al'$. Jeśli $n < m$, to $s_{m:n} = \varepsilon$, czyli napis pusty.
+Przykład. Niech $\Sigma$ będzie alfabetem złożonym z $26$ małych liter alfabetu łacińskiego oraz niech $s = 'ala'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Pojedyncze znaki oznaczamy przez indeks dolny, stąd mamy $s_1 = 'a'$, $s_2 = 'l'$, $s_3 = 'a'$. %Podnapis oznaczamy przez $m:n$ w indeksie dolnym, np. $s_{1:2} = 'al'$. Jeśli $n < m$, to $s_{m:n} = \varepsilon$, czyli napis pusty.
+\cite{Loo2014:stringdist}
 \end{frame}
 
 
 \begin{frame}{O metrykach słów kilka}
 \begin{block}{Definicja}
-Funkcję $d$ nazywamy \emph{metryką} na $\Sigma^*$, jeśli ma poniższe własności:
+Funkcję $d$ nazywamy \emph{metryką} na~$\Sigma^*$, jeśli ma~poniższe własności:
 \begin{itemize}
 \item $d(s,t) \geq 0$
 \item $d(s,t) = 0$ wtw $s = t$
 \item $d(s,t) = d(t,s)$
 \item $d(s,u) \leq d(s,t) + d(t,u)$,
 \end{itemize}
-gdzie $s$, $t$, $u$ są napisami.
+gdzie $s$,~$t$,~$u$~są~napisami.
 \end{block}
 \pause
-Nie wszystkie metryki na napisach posiadają wszystkie z wyżej wymienionych właśności.\\
+Nie wszystkie metryki na~napisach posiadają wszystkie z~wyżej wymienionych właśności.\\
 \pause
-Metryki na napisach można podzielić na trzy grupy:
+Metryki na napisach można podzielić na~trzy grupy:
 \begin{itemize}
-\item oparte na operacjach edytowania (\emph{edit operations})
-\item oparte na $q$-gramach
+\item oparte na~operacjach edytowania (\emph{edit operations})
+\item oparte na~$q$-gramach
 \item miary heurystyczne
 \end{itemize}
 \end{frame}
@@ -217,58 +220,59 @@ Metryki na napisach można podzielić na trzy grupy:
 
 \begin{frame}{O metrykach słów kilka}
 \begin{block}{Definicja}
-Funkcję $d$ nazywamy \emph{metryką} na $\Sigma^*$, jeśli ma poniższe własności:
+Funkcję $d$ nazywamy \emph{metryką} na~$\Sigma^*$, jeśli ma~poniższe własności:
 \begin{itemize}
 \item $d(s,t) \geq 0$
 \item $d(s,t) = 0$ wtw $s = t$
 \item $d(s,t) = d(t,s)$
 \item $d(s,u) \leq d(s,t) + d(t,u)$,
 \end{itemize}
-gdzie $s$, $t$, $u$ są napisami.
+gdzie $s$,~$t$,~$u$~są~napisami.
 \end{block}
-Nie wszystkie metryki na napisach posiadają wszystkie z wyżej wymienionych właśności.\\
-Metryki na napisach można podzielić na trzy grupy:
+Nie wszystkie metryki na~napisach posiadają wszystkie z~wyżej wymienionych właśności.\\
+Metryki na napisach można podzielić na~trzy grupy:
 \begin{itemize}
-\item \textbf{oparte na operacjach edytowania} (\emph{edit operations})
-\item oparte na $q$-gramach
+\item \textbf{oparte na~operacjach edytowania} (\emph{edit operations})
+\item oparte na~$q$-gramach
 \item miary heurystyczne
 \end{itemize}
 \end{frame}
+
 
 
 \begin{frame}{Operacje edytowania}
-Metryki oparte na operacjach edytowania zliczają liczbę opercji potrzebnych do przetworzenia jednego napisu w drugi. Najczęściej wymieniamymi operacjami są:
+Metryki oparte na operacjach edytowania zliczają liczbę opercji potrzebnych do~przetworzenia jednego napisu w~drugi. Najczęściej wymieniamymi operacjami~są:
 \begin{itemize}
 \item zamiana znaku, np. $'ala' \rightarrow 'ela'$
 \item usunięcie znaku, np. $'ala' \rightarrow 'aa'$
 \item wstawienie znaku, np. $'ala' \rightarrow 'alka'$
 \item transpozycja dwóch przylegających znaków, np. $'ala' \rightarrow 'laa'$
 \end{itemize}
-
+\pause
 Przykładowe metryki: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina.
 
 \end{frame}
 
 \begin{frame}{Metryki oparte na operacjach edytowania}
-Metryka \textbf{najdłuższego wspólnego podnapisu}, ozn. $d_{lcs}$, zlicza liczbę usunięć i wstawień, potrzebnych do przetworzenia jednego napisu w drugi. Np. $d_{lsc}('leia', 'leela') = 3$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{us.\ l} lea  \xrightarrow{wst.\ i} leia$.\\
+Metryka \textbf{najdłuższego wspólnego podnapisu}, ozn. $d_{lcs}$, zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{lsc}('leia', 'leela') = 3$, bo~$leela  \xrightarrow{us.\ e} lela  \xrightarrow{us.\ l} lea  \xrightarrow{wst.\ i} leia$.\\
 \pause
-Uogólniona \textbf{odległość Levenshteina}, ozn. $d_{lv}$ zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do przetworzenia jednego napisu w drugi. \\
+Uogólniona \textbf{odległość Levenshteina}, ozn. $d_{lv}$ zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. \\
 
 
 \pause
-Gdy za wagi przyjmuje się $1$ mamy do czynienia ze zwykłą odległością Levenshteina, np. \\
+Gdy za~wagi przyjmuje się $1$ mamy do~czynienia ze~zwykłą odległością Levenshteina, np. \\
 $d_{lv}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
 \pause
-Gdy za wagi przyjmiemy np. $(0.1, 1, 1)$, \\
-$d_{lv}('leia', 'leela') = 1.1$, bo $leela  \xrightarrow[0.1]{us.\ e} lela  \xrightarrow[1]{zm.\ l\ na\ i} leia$ 
+Gdy za~wagi przyjmiemy np. $(0.1, 1, 1)$, \\
+$d_{lv}('leia', 'leela') = 1.1$, bo~$leela  \xrightarrow[0.1]{us.\ e} lela  \xrightarrow[1]{zm.\ l\ na\ i} leia$ 
 \end{frame}
 
 
 
 \begin{frame}{Metryki oparte na operacjach edytowania}
-Metryka \textbf{optymalnego dopasowania napisów}, ozn. $d_{osa}$, zlicza liczbę usunięć, wstawień, zamian oraz transpozycji przylegających znaków, potrzebnych do przetworzenia jednego napisu w drugi. Np. $d_{osa}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
+Metryka \textbf{optymalnego dopasowania napisów}, ozn. $d_{osa}$, zlicza liczbę usunięć, wstawień, zamian oraz transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{osa}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
 \pause
-Metryka ta nie spełnia nierówności trójkąta: $2 = d_{osa}('ba', 'ab') + d_{osa}('ab', 'acb') \leq d_{osa}('ba', 'acb') = 3$\\
+Metryka ta~nie spełnia nierówności trójkąta: $2 = d_{osa}('ba', 'ab') + d_{osa}('ab', 'acb') \leq d_{osa}('ba', 'acb') = 3$\\
 \end{frame}
 
 \begin{frame}{Postępy prac}
@@ -277,12 +281,12 @@ Co zostało zrobione?\\
 \item wczytano $1\ 075 \ 568$ artykułów z polskiej Wikipedii \pause
 \item razem to $2\ 806\ 765$ różnych słów... \pause
 \item ... z czego $49\%$ wystąpiło tylko w \textbf{jednym} tekście
-\item ... a $44\%$ wystąpiło tylko \textbf{jeden raz} we wszystkich tekstach
+\item ... a $44\%$ wystąpiło tylko \textbf{jeden raz} we~wszystkich tekstach
 \end{itemize}
 \pause
-Po usunięciu tzw. \emph{stopwords}, czyli słów nieistotnych w kontekście analizy, jak np. \emph{a, bo, co, jak, to, w, z, że}, słów jednoliterowych oraz słów w językach obcych z niełacińskiego alfabetu, pozostało $2\ 805\ 858$ słów do analizy.\\
+Po usunięciu tzw. \emph{stopwords}, czyli słów nieistotnych w~kontekście analizy, jak np. \emph{a, bo, co, jak, to, w, z, że}, słów jednoliterowych oraz słów w~językach obcych z~niełacińskiego alfabetu, pozostało $2\ 805\ 858$ słów do~analizy.\\
 \pause
-Początkowy pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do klastrowania metodą k-medoidów, przy czym maksymalna odległość w klastrze miała nie przekraczać zadanej liczby.
+Początkowy pomysł polegał na~wykorzystaniu wcześniej wspomnianych metryk do~klastrowania słów metodą k-medoidów, przy czym maksymalna odległość w~klastrze miała nie przekraczać zadanej liczby.
 \end{frame}
 
 
@@ -291,7 +295,7 @@ Początkowy pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do 
 \begin{figure}[h]
       \centering
       \includegraphics[width=12cm] {lv}
-      \caption{Przykładowe klastry utworzone przy pomocy metryki Levenshteina. Maksymalna odległość w klastrze to $7$.}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki Levenshteina. Maksymalna odległość w~klastrze to~$7$.}
     \end{figure}
 \end{frame}
 
@@ -301,7 +305,7 @@ Początkowy pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do 
 \begin{figure}[h]
       \centering
       \includegraphics[width=12cm] {lcs}
-      \caption{Przykładowe klastry utworzone przy pomocy metryki $lcs$. Maksymalna odległość w klastrze to $7$.}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki $lcs$. Maksymalna odległość w~klastrze to~$7$.}
     \end{figure}
 \end{frame}
 
@@ -311,21 +315,21 @@ Początkowy pomysł polegał na wykorzystaniu wcześniej wspomnianych metryk do 
 \begin{figure}[h]
       \centering
       \includegraphics[width=12cm] {osa}
-      \caption{Przykładowe klastry utworzone przy pomocy metryki $osa$. Maksymalna odległość w klastrze to $7$.}
+      \caption{Przykładowe klastry utworzone przy pomocy metryki $osa$. Maksymalna odległość w~klastrze to~$7$.}
     \end{figure}
 \end{frame}
 
 
 
 \begin{frame}{Postępy prac}
-Z powodu słabej jakości klastrowania oraz braku możliwości obliczeniowej dokonano klastrowania przy pomocy tzw. \emph{stemmingu}. Polega on na przyporządkowaniu do słowa jego rdzenia, a więc takiej jego części, która jest odporna na odmiany przez rodzaje, przyimki, przypadki itd.\\
+Z~powodu słabej jakości klastrowania oraz braku możliwości obliczeniowych dokonano klastrowania przy pomocy tzw. \emph{stemmingu}. Polega on~na~przyporządkowaniu do~słowa jego rdzenia, a~więc takiej jego części, która jest odporna na odmiany przez rodzaje, przyimki, przypadki itd.\\
 Przykładowo dla słowa \emph{używająca} rdzeniem jest \emph{żyw}.\\
 \pause
-Do stemmingu użyto narzędzia Hunspell, które sprawdza pisownię dla wielu programów, takich jak:  OpenOffice, Mozilla Firefox, Thunderbird czy Google Chrome.\\
-Dzięki niemu udało się poklastrować $733\ 828$ słów ($\approx 26\%$ wszystkich) z czego $89\%$ stanowiły polskie słowa $5,5\%$ - słowa angielskie, a po ponad $2\%$ - słowa francuskie i niemieckie. Innych języków nie sprawdzano. Liczba uzyskanów klastrów to $186\ 942$.\\
+Do~stemmingu użyto narzędzia Hunspell, które sprawdza pisownię dla wielu programów, takich jak:  OpenOffice, Mozilla Firefox, Thunderbird czy Google Chrome.\\
+Dzięki niemu udało się poklastrować $733\ 828$ słów ($\approx 26\%$ wszystkich) z~czego $89\%$ stanowiły polskie słowa $5,5\%$ - słowa angielskie, a~po~ponad $2\%$ - słowa francuskie i niemieckie. Innych języków nie sprawdzano. Liczba uzyskanów klastrów to~$186\ 942$.\\
 \pause
 Co z pozostałymi słowami?\\
-Słowa, które wystąpiły więcej niż raz we wszystkich tekstach, dołączono do już istniejących klastrów przy pomocy metryk. Takich słów było $973\ 855$, co dało łącznie poklastrowanych słów w liczbie $1\ 707\ 683$.
+Słowa, które wystąpiły więcej niż raz we~wszystkich tekstach, dołączono do~już istniejących klastrów przy pomocy metryk. Takich słów było $973\ 855$, co~dało łącznie poklastrowanych słów w~liczbie $1\ 707\ 683$.
 \end{frame}
 
 
@@ -339,49 +343,49 @@ Słowa, które wystąpiły więcej niż raz we wszystkich tekstach, dołączono 
 
 
 \begin{frame}{Postępy prac}
-Następnie dla próbki tekstów z trzech kategorii: matematyka, historia sztuki oraz wojny dokonano klasteryzacji artykułów. Kryterium było liczność \textbf{grup słów} występujących w danym tekście. Do klastrowania użyto metody \emph{sferycznych $k$-średnich}.\\
+Następnie dla próbki tekstów z~trzech kategorii: matematyka, historia sztuki oraz wojny, dokonano klasteryzacji artykułów. Kryterium była liczność \textbf{grup słów} występujących w~danym tekście. Do klastrowania użyto metody \emph{sferycznych $k$-średnich}.\\
 \pause
 \begin{block}{Przypomnienie}
-W metodzie $k$-średnich minimalizujemy
+W~metodzie $k$-średnich minimalizujemy
 $$
 \sum_i d(x_i, p_{c(i)}),
 $$
-gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
+gdzie $x_i$ to~zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to~indentyfikator klastra, $p_1,\ldots,p_k$ to~środek klastra, a~$d$~to~odległość euklidesowa.
 \end{block}
 \end{frame}
 
 \begin{frame}{Postępy prac}
-W metodzie $k$-średnich minimalizujemy
+W~metodzie $k$-średnich minimalizujemy
 $$
 \sum_i d(x_i, p_{c(i)}),
 $$
-gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
+gdzie $x_i$ to~zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to~indentyfikator klastra, $p_1,\ldots,p_k$ to~środek klastra, a~$d$~to~odległość euklidesowa.
 \begin{block}{Metoda sferyczna}
-W metodzie sferycznych $k$-średnich minimalizujemy
+W~metodzie sferycznych $k$-średnich minimalizujemy \cite{Hornik2012:sphkmeans, Wild2002:sphkmeans}
 $$
 \sum_i d(x_i, p_{c(i)}) = \sum_i 1-\cos(x_i, p_{c(i)}) = \sum_i 1-\frac{<x_i, p_{c(i)}>}{||x_i||\cdot ||p_{c(i)}||},
 $$
 \end{block}
 \end{frame}
 
+% 
+% \begin{frame}{Postępy prac}
+% W metodzie $k$-średnich minimalizujemy
+% $$
+% \sum_i d(x_i, p_{c(i)}),
+% $$
+% gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
+% \begin{block}{Metoda sferyczna}
+% W metodzie sferycznych $k$-średnich minimalizujemy
+% $$
+% \sum_i d(x_i, p_{c(i)}) = \sum_i 1-\cos(x_i, p_{c(i)}) = \sum_i 1-\frac{<x_i, p_{c(i)}>}{||x_i||\cdot ||p_{c(i)}||},
+% $$
+% \end{block}
+% \end{frame}
+
 
 \begin{frame}{Postępy prac}
-W metodzie $k$-średnich minimalizujemy
-$$
-\sum_i d(x_i, p_{c(i)}),
-$$
-gdzie $x_i$ to zbiór wektorów cech, $c(i) \in \{1,\ldots,k\}$ to indentyfikator klastra, $p_1,\ldots,p_k$ to środek klastra, a $d$ to odległość euklidesowa.
-\begin{block}{Metoda sferyczna}
-W metodzie sferycznych $k$-średnich minimalizujemy
-$$
-\sum_i d(x_i, p_{c(i)}) = \sum_i 1-\cos(x_i, p_{c(i)}) = \sum_i 1-\frac{<x_i, p_{c(i)}>}{||x_i||\cdot ||p_{c(i)}||},
-$$
-\end{block}
-\end{frame}
-
-
-\begin{frame}{Postępy prac}
-Opierając się na kategoriach z Wikipedii, poprawnie sklasyfikowanych zostało $61\%$ z $59\ 403$ artykułów.
+Opierając się na~kategoriach z~Wikipedii, poprawnie sklasyfikowanych zostało $61\%$ z $59\ 403$ artykułów.
 \begin{tabular}{|l|l|r|r|}
   \hline
 tytuł & kat & id\_kat & kl \\ 
@@ -420,14 +424,17 @@ kościół św. rocha w poznaniu & szt & 1 & 1 \\
 
 \begin{frame}{Co dalej?}
 \begin{itemize}
-\item znaleźć metodę odpowiednią do poklastrowania wszystkich artykułów (SGD?)
+\item znaleźć metodę odpowiednią do~poklastrowania wszystkich artykułów (SGD?), której jakość byłaby zadowalająca
 \item napisać pracę :)
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Bibliografia}
-%\bibliographystyle{apacite}
-\bibliography{bibliography.bib}
+\nocite{Hornik2012:sphkmeans}
+\nocite{Wild2002:sphkmeans}
+\nocite{Loo2014:stringdist}
+\bibliographystyle{plain}
+\bibliography{bibliography}
 \end{frame}
 
 

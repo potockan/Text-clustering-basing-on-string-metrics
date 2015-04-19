@@ -1,0 +1,154 @@
+\documentclass[11pt,pdftex,mathserif]{beamer}
+% ewentualnie (w trakcie przygotowania prezentacji):
+% \documentclass[...,handout]{beamer} % jedna 'frame' == jeden slajd
+\usepackage[T1]{polski}        % jeśli po angielsku, to skasuj
+\usepackage[polish]{babel}     % jeśli po angielsku, to skasuj
+\selectlanguage{polish}        % jeśli po angielsku, to skasuj
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}  % kodowanie polskich znaków CP1250 (windows)
+% Alternatywnie - latin2 dla kodowania ISO-8859-2 (raczej nie Windows)
+% latex/pdflatex nie wspiera niestety Unicode (np. UTF-8)
+\usepackage{amsmath,amssymb}     % więcej symboli matematycznych
+\usepackage{graphicx}            % jeśli chcemy wstawiać grafikę
+\usepackage{hyperref}            % odnośniki internetowe, zaawansowane ust. PDF
+%\hypersetup{pdfstartview={FitW}}
+\usepackage{natbib}
+%%%%%%%%%%%% MOJE ULUBIONE USTAWIENIA BEAMERA %%%%%%%%%%%%%
+%
+\usetheme{Boadilla} % Warsaw to nazwa stylu - zmień na SWOJĄ ulubioną
+\usecolortheme{spruce}
+\useoutertheme{infolines}
+\useinnertheme{circles}
+\usefonttheme{structuresmallcapsserif}
+%%
+\setbeamertemplate{navigation symbols}{} % WYŁĄCZA PASEK NAWIGACJI U DOŁU
+\setbeamercovered{invisible} % WPŁYWA NA WYŚWIETLANIE "SPAUZOWANYCH" ELEMENTÓW
+
+%
+\setbeamertemplate{theorems}[numbered]
+\definecolor{green2}{rgb}{0.3, 0.6 ,0.4}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\title[Abraham Wald]{Abraham Wald}
+\author[N. Potocka]{Natalia Potocka}
+%\institute[MiNI PW]{}
+\date[21.04.2015]{21.04.2015}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newtheorem{twierdzenie}{Twierdzenie}
+\renewcommand{\proofname}{Dowód}
+\newtheorem{lemat}[twierdzenie]{Lemat}
+\newtheorem{wniosek}[twierdzenie]{Wniosek}
+\newtheorem{stwierdzenie}[twierdzenie]{Stwierdzenie}
+
+\theoremstyle{definition}
+\newtheorem*{definicja}{Definicja}
+\newtheorem*{oznaczenie}{Oznaczenie}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\xsr}{\overline{X}_n}
+\newcommand{\skw}{S_n^2}
+\newcommand{\al}{\alpha}
+\newcommand*{\om}{\omega}
+
+
+\newenvironment{zrodlo}{\emph{Źródło: }}{\par}
+
+\begin{document}   % jedziemy :-)
+%%%%%%%%%%%%% SLAJD TYTUŁOWY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}% wyłącza paski na górze i na dole
+\begin{frame}%
+
+   \begin{center}%
+%
+%
+%   %%%%%%%%%%%% NAGLOWEK %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+      \begin{columns}%
+         \begin{column}[c]{1.2cm}\centering%
+         \includegraphics[height=1.0cm]{logopw.pdf} \\%
+         \end{column}
+
+         \begin{column}[c]{7cm}\centering
+            {\footnotesize{Politechnika Warszawska}}\\%
+            {\footnotesize{Wydział Matematyki i~Nauk Informacyjnych}}%
+         \end{column}
+
+         \begin{column}[c]{1.2cm}\centering%
+         \includegraphics[height=1.0cm]{logomini.pdf} \\%
+         \end{column}%
+      \end{columns}
+
+   %%%%%%%% TYTUL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+      \vspace*{2em}
+
+      \colorbox{green2}{\parbox{10cm}{\color{black}\centering\LARGE{Abraham Wald}}}
+
+      \vspace*{1.5em}%
+      {\Large{Natalia Potocka}}\\%
+%      {\color{blue}\footnotesize\texttt{M.Gagolewski@mini.pw.edu.pl}}
+
+      %\vspace*{2.5em}%
+      {\it\footnotesize Warszawa, 21.04.2014}  % DATA
+
+   \end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%CZESC NATALII%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{frame}{Plan działania}
+
+\end{frame}
+
+
+\begin{frame}{Cel pracy}
+
+\end{frame}
+
+
+\begin{frame}{Cel pracy}
+
+\end{frame}
+
+
+\begin{frame}{Bibliografia}
+\nocite{Wolfowitz1951:wald}
+\nocite{Wild2002:sphkmeans}
+\nocite{Loo2014:stringdist}
+\bibliographystyle{plain}
+\bibliography{wald_bib}
+\end{frame}
+
+
+% \begin{frame}{Bibliografia}
+% 
+% \begin{thebibliography}{}
+% \bibitem[1]{AS} Ananda Sen, \textit{On the Interrelation Between the Sample Mean and Sample Variance}, The American Statistician, 66 (2012), 112-117.
+% %\bibitem[2]{CZ} L. N. de Castro, F. J. Von Zuben, "\href{http://www.dca.fee.unicamp.br/~vonzuben/research/lnunes_dout/artigos/gecco00.pdf}{\textit{The Clonal Selection Algorithm with Engineering Applications}}", GECCO 2000, Workshop on
+% %        Artificial Immune Systems and Their Applications, Las Vegas, USA, str.
+% %        36-37, 2000.
+% %\bibitem[3]{M} \href{http://mst.mimuw.edu.pl/lecture.php?lecture=mbm&part=Ch12}{http://mst.mimuw.edu.pl/lecture.php?lecture=mbm&part=Ch12}
+% %\bibitem[4]{IPIPAN} \href{www.ipipan.waw.pl/\~{}stw/ais/daaisy.html}{www.ipipan.waw.pl/\~{}stw/ais/daaisy.html}
+% 
+% 
+% 
+% \end{thebibliography}
+% \end{frame}
+
+\begin{frame}{}
+   \begin{center}
+      \Huge{Dziękuję za uwagę.}
+   \end{center}
+\end{frame}
+
+
+
+\end{document}

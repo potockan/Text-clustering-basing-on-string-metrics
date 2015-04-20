@@ -104,25 +104,71 @@
 
 
 
-\begin{frame}{Plan działania}
-
+\begin{frame}{Pochodzenie}
+\begin{itemize}
+\item urodzony 31 października 1902 w Kolozsvdar (Austrowęgry, obecnie Cluj w Rumunii)
+\item żydowska rodzina, syn biznesmena, wnuk rabina
+\item pięcioro rodzeństwa
+\item prawie cała rodzina zginęła w niemieckich obozach koncentracyjnych
+\end{itemize}
 \end{frame}
 
 
-\begin{frame}{Cel pracy}
-
+\begin{frame}{Wczesne lata}
+Wald nie uczęszczał do~szkoły, gdyż z~powodów religijnych nie mógł chodzić do~niej w~soboty. Uczyli go~rodzice aż~do~czasu college'u. Dostał się do~Universytetu w Cluj. Z~powodu restrykcji Żydów w tym czasie, nie dostał się do~Uniwersytetu Wiedeńskiego. Uczył się więc przez rok w~szkole inżynierskiej w~Wiedniu. \pause Ostatecznie dostał się na~Uniwersytet Wiedeński w~1927, gdzie pracował z~Karlem Mengerem. Doktorat zdobył w~1931 roku. Ponieważ w~latach 30-tych XX w. podjęcie pracy na~Uniwersytecie dla Żyda było wyjątkowo trudne, podjął on~pracę dla czołowego w~tamtych czasach bankiera i~ekonomistę austriackiego, Karla Schlesingera, równocześnie wciąż się ucząc. \pause Między 1931 a~1937 napisał razem z~Mengerem 21 artykułów z~geometrii i 10 artykułów z~ekonomii i~ekonometrii.
 \end{frame}
 
 
-\begin{frame}{Cel pracy}
+\begin{frame}{Dalsza kariera w USA}
+W~sierpniu 1938 roku Wald wyjechał do~Stanów Zjednoczonych na~zaproszenie Cowles Commission. Od~września 1938 został pracownikiem Carnegie Corporation i~równocześnie studiował statystykę na~Uniwersytecie Columbia w~Nowym Jorku pod nadzorem Harolda Hotellinga. Rok ten uważa się za~jeden z najpłodniejszych pod względem jego odkryć. Wtedy właśnie zdefiniował funkcję straty, funkcję ryzyka, rozkład a priori, reguły decyzyjne Bayesa oraz reguły minimaxu.\\ \pause
+Od 1939 roku został wykładowcą na~Uniwersytecie Columbia, a~od~1941 był członkiem ciała akademickiego, którym pozostał do~swojej śmierci. W~czasie wojny pracował przy projektach militarnych m.in. opracowując plan wzmocnienia samolotów.\\ \pause
+W~1941 roku żeni się z~Lucille Lang. Mają razem dwójkę dzieci: Betty i~Roberta (później znany fizyk).
+\end{frame}
 
+
+\begin{frame}{Indie}
+\begin{columns}
+  \begin{column}{0.49\textwidth}
+W~listopadzie 1950 roku Wald wyjeżdża do~Indii na~zaproszenie władz tego kraju, na objazd po~indyjskich uniwersytetach i~centrach badawczych. Miał uczyć swojej nowej teorii na~tamtejszych uczelniach. Niestety, 13 grudnia 1950 roku samolot linii Air India, z~powodu mgły, rozbił się na~górze Nilgris, zabijając wszystkich na~pokładzie, w~tym państwo Wald.
+  \end{column}
+  \begin{column}{0.49\textwidth}
+  \begin{figure}
+    \includegraphics[width=5cm]{wald1.jpg}
+  \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}{Czym się zajmował}
+W obszarze zainteresowań Walda były takie dziedziny jak:
+\begin{itemize}
+\item geometria
+\item ekonomia
+\item ekonometria
+\item statystyka
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Skąd go znamy?}
+\begin{itemize}
+\item statystyczna teoria decyzyjna
+\item analiza sekwencyjna
+\item test Walda $$H_0: \theta = \theta_0,\ H_1: \theta \neq \theta_0 $$ $$\Rightarrow \frac{(\widehat{\theta} - \theta_0)^2}{Var(\widehat{\theta})} \sim \chi^2 $$
+\item test serii 
+\item odwrócony rozkład Gamma (znany również jako rozkład Walda) $$ f(x,\mu,\lambda) = \frac{\lambda}{2\pi x^3}exp\frac{-\lambda(x-\mu)^2}{2\mu x} $$
+\item równanie Walda $$\E[X_1 + \ldots + X_N] = \E[N]\E[X_1]$$
+\end{itemize}
 \end{frame}
 
 
 \begin{frame}{Bibliografia}
 \nocite{Wolfowitz1951:wald}
-\nocite{Wild2002:sphkmeans}
-\nocite{Loo2014:stringdist}
+\nocite{Hist:wald}
+\nocite{Enc:wald}
 \bibliographystyle{plain}
 \bibliography{wald_bib}
 \end{frame}

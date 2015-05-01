@@ -33,15 +33,15 @@ tytuly <- html_text(kategorie)
 wszystkie_tytuly <- tytuly 
 wszystkie_linki <- linki
 
-n1 <- 586
+n1 <- 1
 n <- length(wszystkie_linki)
 while(n1 < n){
   n1 <- n
   for(i in 1:n){
-    nowe_linki <- znajdz_linki(wszystkie_linki[i])
-    if(!any(is.na(nowe_linki))) wszystkie_linki <- c(wszystkie_linki, nowe_linki)
-    nowe_tytuly <- znajdz_tytuly(wszystkie_linki[i])
-    if(!any(is.na(nowe_tytuly))) wszystkie_tytuly <- c(wszystkie_tytuly, nowe_tytuly)
+    #nowe_linki 
+    if(!any(is.na(nowe_linki <- znajdz_linki(wszystkie_linki[i])))) wszystkie_linki <- unique(c(wszystkie_linki, nowe_linki))
+    #nowe_tytuly
+    if(!any(is.na(nowe_tytuly <- znajdz_tytuly(wszystkie_linki[i])))) wszystkie_tytuly <- unique(c(wszystkie_tytuly, nowe_tytuly))
   }
   n <- length(wszystkie_linki)
 }

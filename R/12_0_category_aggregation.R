@@ -21,9 +21,9 @@ znajdz_linki <- function(link){
   linki
 }
 
-wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Matematyka")
+# wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Matematyka")
 # wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Historia_sztuki")
-# wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Wojny")
+wiki <- html("http://pl.wikipedia.org/wiki/Kategoria:Wojny")
 
 
 kategorie <- html_nodes(wiki, ".CategoryTreeLabelCategory")
@@ -38,17 +38,15 @@ n <- length(wszystkie_linki)
 while(n1 < n){
   n1 <- n
   for(i in 1:n){
-    #nowe_linki 
     if(!any(is.na(nowe_linki <- znajdz_linki(wszystkie_linki[i])))) wszystkie_linki <- unique(c(wszystkie_linki, nowe_linki))
-    #nowe_tytuly
     if(!any(is.na(nowe_tytuly <- znajdz_tytuly(wszystkie_linki[i])))) wszystkie_tytuly <- unique(c(wszystkie_tytuly, nowe_tytuly))
   }
   n <- length(wszystkie_linki)
 }
 wszystkie_tytuly
-saveRDS(wszystkie_tytuly, "./wszystkietyt.rds")
+# saveRDS(wszystkie_tytuly, "./wszystkietyt.rds")
 # saveRDS(wszystkie_tytuly, "./wszystkietyt2.rds")
-# saveRDS(wszystkie_tytuly, "./wszystkietyt3.rds")
+saveRDS(wszystkie_tytuly, "./wszystkietyt3.rds")
 
 
 

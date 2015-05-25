@@ -202,12 +202,19 @@ for(i in 1:it_no){
 })
 
 #32min 100x100
+
+# #100x1000
+# user    system   elapsed 
+# 20552.828     2.416 20539.318 
 outcome1 <- cbind(dict_art_kat, cluster = d)
 outcome1 <- outcome1[outcome1$cluster>0,]
 #percentage of well classified articles
-percentage <- c(percentage, sum(outcome1$kat_id2 == outcome1$cluster, na.rm = TRUE)/nrow(outcome1))
+percentage <- c(percentage, 
+                sum(outcome1$kat_id2 == outcome1$cluster, na.rm = TRUE)/nrow(outcome1)
 
-
+saveRDS(d, "/dragon/Text-clustering-basing-on-string-metrics//Data/RObjects/d_100x1000.rds")
+saveRDS(centr, "/dragon/Text-clustering-basing-on-string-metrics//Data/RObjects/centr_100x1000.rds")
+saveRDS(v, "/dragon/Text-clustering-basing-on-string-metrics//Data/RObjects/v_100x1000.rds")
 
 
 

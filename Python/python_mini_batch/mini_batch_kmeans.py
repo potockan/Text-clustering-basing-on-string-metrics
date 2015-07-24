@@ -40,18 +40,18 @@ logging.basicConfig(level=logging.INFO,
 
 # parse commandline arguments
 op = OptionParser()
-#op.add_option("--lsa",
-#              dest="n_components", type="int",
-#              help="Preprocess documents with latent semantic analysis.")
+op.add_option("--lsa",
+              dest="n_components", type="int",
+              help="Preprocess documents with latent semantic analysis.")
 op.add_option("--no-minibatch",
               action="store_false", dest="minibatch", default=True,
               help="Use ordinary k-means algorithm (in batch mode).")
-#op.add_option("--no-idf",
-#              action="store_false", dest="use_idf", default=True,
-#              help="Disable Inverse Document Frequency feature weighting.")
-#op.add_option("--use-hashing",
-#              action="store_true", default=False,
-#              help="Use a hashing feature vectorizer")
+op.add_option("--no-idf",
+              action="store_false", dest="use_idf", default=True,
+              help="Disable Inverse Document Frequency feature weighting.")
+op.add_option("--use-hashing",
+              action="store_true", default=False,
+              help="Use a hashing feature vectorizer")
 op.add_option("--n-features", type=int, default=10000,
               help="Maximum number of features (dimensions)"
                    " to extract from text.")

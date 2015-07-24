@@ -1,24 +1,27 @@
 ---
-title: "Wariacje na temat algorytmu k-średnich"
+title: "Algorytm batchowy k-średnich"
 author: "Natalia Potocka"
 date: "05/25/2015"
-output: beamer_presentation
+output: 
+  beamer_presentation:
+    keep_tex: true
 ---
 
-## Dwa słowa przypomnienia
+## Algorytmy k-średnich
 
- - wczytano $1\ 075 \ 568$ artykułów z polskiej Wikipedii 
- - razem to $2\ 806\ 765$ różnych słów... 
- - ... z czego poklastrowano $1\ 707\ 683$ słów w $186\ 942$ grup
- - pozostałe słowa wystąpiły raz we wszystkich tekstach i je pominięto
- 
-Następnym krokiem jest kategoryzacja tesktów, gdzie kryterium podziału to częstości występowania grup słów w artykułach.
+![Algortym k-średnich](snapshot11.png)
 
-## Algorytm k-średnich
 
-W metodzie $k$-średnich minimalizujemy
-$$
-\sum_{x\in X} ||f(C,x)-x||^2,
-$$
-gdzie $X$ to zbiór wektorów cech $x\in \mathbb{R}^m$, $C$ to zbiór środków klastrów $c \in \mathbb{R}^m$, gdzie $|C| = k$, a $f$ zwraca najbliższy wektorowi $x$ środek $c \in C$, używając odległości Euklidesowej.
+## Algorytm mini batch
 
+![Algortym mini batch](snapshot12.png)
+
+## Wyniki 
+
+![Wyniki](snapshot13.png)
+
+## Bibliografia
+
+*Stochastic Gradient Descent Tricks*, Leon Bottou, Microsoft Research, Redmond, WA, 2012
+
+*Web-Scale K-Means Clustering*, D. Sculley, Google, Inc. Pittsburgh. PA USA, 2010

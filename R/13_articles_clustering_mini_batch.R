@@ -1,3 +1,6 @@
+
+rm(list = ls())
+
 library(RSQLite)
 library(stringi)
 library(compiler)
@@ -152,6 +155,8 @@ art_word_mat <- left_join(left_join(art_word_mat, dict_art ), dict_word)
 #art_word_mat <- left_join(art_word_mat, kat[,c(1,3)]))
 
 mattr <- sparseMatrix(art_word_mat$nr_row, art_word_mat$nr_col, x = art_word_mat$freq)
+write.csv(select(art_word_mat, freq, nr_row, nr_col), "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv", row.names = FALSE, col.names = FALSE)
+write.csv(select(dict_art_kat, kat_id2), "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv", row.names = FALSE, col.names = FALSE)
 
 
 # 
@@ -179,7 +184,7 @@ czas <- system.time({
 set.seed(1234)
 k <- 3
 nb <- 100
-it_no <- 1000
+it_no <- 10
 centr <- mattr[sample(1:nrow(mattr), k), ]
 d <- numeric(nrow(mattr))
 
@@ -210,7 +215,7 @@ outcome1 <- cbind(dict_art_kat, cluster = d)
 outcome1 <- outcome1[outcome1$cluster>0,]
 #percentage of well classified articles
 percentage <- c(percentage, 
-                sum(outcome1$kat_id2 == outcome1$cluster, na.rm = TRUE)/nrow(outcome1)
+                sum(outcome1$kat_id2 == outcome1$cluster, na.rm = TRUE)/nrow(outcome1))
 
 saveRDS(d, "/dragon/Text-clustering-basing-on-string-metrics//Data/RObjects/d_100x1000.rds")
 saveRDS(centr, "/dragon/Text-clustering-basing-on-string-metrics//Data/RObjects/centr_100x1000.rds")

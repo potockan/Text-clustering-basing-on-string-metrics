@@ -1,4 +1,5 @@
 
+rm(list = ls())
 
 library("stringi")
 library("rvest")

@@ -1,3 +1,6 @@
+
+rm(list = ls())
+
 library(RSQLite)
 library(stringi)
 library(compiler)
@@ -180,13 +183,13 @@ percentage <- numeric(0)
 kl1 <- skmeans(mattr, 3)
 outcome1 <- cbind(dict_art_kat, cluster = kl1$cluster)
 #percentage of well classified articles
-percentage <- c(percentage, sum(outcome1$kat_id2 == outcome1$cluster)/nrow(outcome1))
+percentage <- c(percentage, sum(outcome1$kat_id2 == outcome1$cluster, na.rm = TRUE)/nrow(outcome1))
 
 #method: pclust
 kl2 <- skmeans(mattr, 3, method = 'pclust', control = list(nruns = 20))
 outcome2 <- cbind(dict_art_kat, cluster = kl2$cluster)
 # saveRDS(outcome2, "./Seminarium/art_clust_res2.rds")
-percentage <- c(percentage, sum(outcome2$kat_id2 == outcome2$cluster)/nrow(outcome2))
+percentage <- c(percentage, sum(outcome2$kat_id2 == outcome2$cluster, na.rm = TRUE)/nrow(outcome2))
 
 #saveRDS(percentage, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/atr_cl_percentage.rds")
 

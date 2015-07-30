@@ -52,15 +52,22 @@ con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-me
 # ")
 
 #reading categories: mathematics, art and wars
+set.seed(5678)
 kat_mat <- readRDS("./wszystkietyt.rds")
-kat_szt <- readRDS("./wszystkietyt2.rds")
-kat_woj <- readRDS("./wszystkietyt3.rds")
+kat_szt <- readRDS("./wszystkietyt2.rds") %>% sample(length(kat_mat))
+kat_woj <- readRDS("./wszystkietyt3.rds") %>% sample(length(kat_mat))
+
+
+
 
 #remebering which category belonged to which of the three: maths, art or wars
+# kategorie <- data.frame(name = stri_trans_tolower(c(kat_mat, kat_szt, kat_woj)), 
+#                         kat_id = c(rep("mat", length(kat_mat)), 
+#                                    rep("szt", length(kat_szt)), 
+#                                    rep("woj", length(kat_woj))))
+
 kategorie <- data.frame(name = stri_trans_tolower(c(kat_mat, kat_szt, kat_woj)), 
-                        kat_id = c(rep("mat", length(kat_mat)), 
-                                   rep("szt", length(kat_szt)), 
-                                   rep("woj", length(kat_woj))))
+                        kat_id = c(kat_mat, kat_szt, kat_woj))
 
 kat <- dbGetQuery(con, sprintf("select *
                                from wiki_category_name 
@@ -126,7 +133,9 @@ titles <- dbGetQuery(con,
 names(titles) <- c('id_title', 'title', 'id_category')
 titles <- titles[!duplicated(titles$id_title),]
 #taking out the table wiki_word_clust_freq
-art_word_mat <- dbGetQuery(con, "select * from wiki_word_clust_freq")
+# art_word_mat <- dbGetQuery(con, "select * from wiki_word_clust_freq")
+art_word_mat <- dbGetQuery(con, sprintf("select * from wiki_word_clust_freq where id_title in (%s)",
+                                             stri_flatten(titles$id_title, collapse = ", ")))
 
 # creating a article dictionary and word dictionary
 # to make a matrix constisitng of 
@@ -154,24 +163,24 @@ dict_word <- dict_word[!duplicated(dict_word), ]
 art_word_mat <- left_join(left_join(art_word_mat, dict_art ), dict_word)
 #art_word_mat <- left_join(art_word_mat, kat[,c(1,3)]))
 
-mattr <- sparseMatrix(art_word_mat$nr_row, art_word_mat$nr_col, x = art_word_mat$freq)
-write.csv(select(art_word_mat, freq, nr_row, nr_col), "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv", row.names = FALSE, col.names = FALSE)
-write.csv(select(dict_art_kat, kat_id2), "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv", row.names = FALSE, col.names = FALSE)
 
+#joining articles with their categories
+id_kat <- sort(unique(art_word_mat$id_category))
+dict_art_kat <- left_join(dict_art, kat[,c(1,3)])
+dict_art_kat <- dict_art_kat[!duplicated(dict_art_kat$id_title),]
+#kat_id2 <- 2*(dict_art_kat$kat_id=='mat') + (dict_art_kat$kat_id=='szt') + 3*(dict_art_kat$kat_id=='woj')
+kat_id2 <- data.frame(id_category = id_kat, kat_id2 = 1:length(id_kat))
+dict_art_kat <- left_join(dict_art_kat, kat_id2)
+
+mattr <- sparseMatrix(art_word_mat$nr_row, art_word_mat$nr_col, x = art_word_mat$freq)
+write.csv(select(art_word_mat, freq, nr_row, nr_col), "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv", row.names = FALSE)
+write.csv(select(dict_art_kat, kat_id2), "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv", row.names = FALSE)
 
 # 
 # non_zero_art <- numeric(0)
 # for(i in 1:ncol(mattr)){
 #   non_zero_art <- c(non_zero_art, sum(mattr[,i]>0))
 # }
-
-
-
-#joining articles with their categories
-dict_art_kat <- left_join(dict_art, kat[,c(1,3)])
-dict_art_kat <- dict_art_kat[!duplicated(dict_art_kat$id_title),]
-kat_id2 <- 2*(dict_art_kat$kat_id=='mat') + (dict_art_kat$kat_id=='szt') + 3*(dict_art_kat$kat_id=='woj')
-dict_art_kat <- cbind(dict_art_kat, kat_id2 = kat_id2)
 
 
 dbDisconnect(con)

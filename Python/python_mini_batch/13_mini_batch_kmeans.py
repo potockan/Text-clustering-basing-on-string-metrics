@@ -58,6 +58,8 @@ op.add_option("--n-features", type=int, default=10000,
 op.add_option("--verbose",
               action="store_true", dest="verbose", default=False,
               help="Print progress reports inside k-means algorithm.")
+op.add_option("--k-num", type=int, dest="true_k", default=0,
+              help="Number of clusters")
 
 print(__doc__)
 op.print_help()
@@ -81,7 +83,7 @@ categories = [
 # Uncomment the following to do the analysis on all the categories
 #categories = None
 
-print("Loading 20 newsgroups dataset for categories:")
+print("Loading 3 groups dataset for categories:")
 print(categories)
 #
 #dataset = fetch_20newsgroups(subset='all', categories=categories,
@@ -112,6 +114,21 @@ t0 = time()
 #    vectorizer = TfidfVectorizer(max_df=0.5, max_features=opts.n_features,
 #                                 min_df=2, stop_words='english',
 #                                 use_idf=opts.use_idf)
+
+###############################
+#import sqlite3
+#con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+#
+#c = con.cursor()
+#
+#c.execute('select id_title, id_category from wiki_unique_category')
+#labels = c.fetchall()
+#
+#c.execute('select * from wiki_stem_word_reorder')
+#my_data = c.fetchall()
+#con.close()
+###############################
+
 
 labels = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv', delimiter=',', dtype = 'int32'), 0, 0) - 1
 my_data = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv', delimiter=','), 0, 0)
@@ -150,7 +167,10 @@ print()
 ###############################################################################
 # Do the actual clustering
 
-true_k = 3
+if opts.true_k:
+    true_k = opts.true_k
+else:
+    true_k = np.size(np.unique(labels))
 
 
 #if opts.minibatch:
@@ -173,13 +193,13 @@ print("Adjusted Rand-Index: %.3f" % metrics.adjusted_rand_score(labels, km.label
 
 print()
 
-if not (opts.n_components or opts.use_hashing):
-    print("Top terms per cluster:")
-    order_centroids = km.cluster_centers_.argsort()[:, ::-1]
-#    terms = vectorizer.get_feature_names()
-    for i in range(true_k):
-        print("Cluster %d:" % i, end='')
-#        for ind in order_centroids[i, :10]:
-#            print(' %s' % terms[ind], end='')
-        print()
+#if not (opts.n_components or opts.use_hashing):
+#    print("Top terms per cluster:")
+#    order_centroids = km.cluster_centers_.argsort()[:, ::-1]
+##    terms = vectorizer.get_feature_names()
+#    for i in range(true_k):
+#        print("Cluster %d:" % i, end='')
+##        for ind in order_centroids[i, :10]:
+##            print(' %s' % terms[ind], end='')
+#        print()
 

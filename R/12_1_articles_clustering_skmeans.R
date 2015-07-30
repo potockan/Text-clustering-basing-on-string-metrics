@@ -180,7 +180,7 @@ library(skmeans)
 
 percentage <- numeric(0)
 #method: default
-kl1 <- skmeans(mattr, 3)
+kl1 <- skmeans(mattr, nrow(kat_id2))
 outcome1 <- cbind(dict_art_kat, cluster = kl1$cluster)
 #percentage of well classified articles
 percentage <- c(percentage, sum(outcome1$kat_id2 == outcome1$cluster, na.rm = TRUE)/nrow(outcome1))

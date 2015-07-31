@@ -20,8 +20,8 @@ from __future__ import print_function
 from sklearn import metrics
 
 from sklearn.cluster import MiniBatchKMeans
-from scipy.sparse import coo_matrix
-
+#from scipy.sparse import coo_matrix
+import scipy.sparse as sps
 
 import logging
 from optparse import OptionParser
@@ -116,30 +116,51 @@ t0 = time()
 #                                 use_idf=opts.use_idf)
 
 ###############################
-#import sqlite3
-#con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
-#
-#c = con.cursor()
-#
-#c.execute('select id_title, id_category from wiki_unique_category')
-#labels = c.fetchall()
-#
+import sqlite3
+con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+c = con.cursor()
+
+c.execute('select id_category from wiki_unique_category')
+print("Reading labels...")
+labels = c.fetchall()
+
 #c.execute('select * from wiki_stem_word_reorder')
-#my_data = c.fetchall()
-#con.close()
+print("Reading data...")
+c.execute('''select 
+a.id_title, b.id, a.freq 
+from wiki_word_clust_freq a 
+
+join 
+
+wiki_stem_word_reorder b 
+on 
+a.id_stem_word = b.id_stem_word 
+''')
+my_data = c.fetchall()
+con.close()
 ###############################
 
+print("Data transformations...")
+labels = np.asarray([val[0] for val in labels])
 
-labels = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv', delimiter=',', dtype = 'int32'), 0, 0) - 1
-my_data = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv', delimiter=','), 0, 0)
-my_sparse_data = coo_matrix((my_data[:,0], (my_data[:, 1]-1, my_data[:, 2]-1)))
+rows = [val[0] for val in my_data]
+columns = [val[1] - 1 for val in my_data]
+data = [val[2] for val in my_data]
+my_sparse_data = sps.csr_matrix((data, (rows, columns)))
+mask = np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))
+my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[mask]))
 
+#labels = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv', delimiter=',', dtype = 'int32'), 0, 0) - 1
+#my_data = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv', delimiter=','), 0, 0)
+#my_sparse_data = coo_matrix((my_data[:,0], (my_data[:, 1]-1, my_data[:, 2]-1)))
+#
 
 #X = vectorizer.fit_transform(dataset.data)
 
 print("done in %fs" % (time() - t0))
 print("n_samples: %d, n_features: %d" % my_sparse_data.shape)
 print()
+
 
 #if opts.n_components:
 #    print("Performing dimensionality reduction using LSA")
@@ -184,6 +205,8 @@ t0 = time()
 km.fit_predict(my_sparse_data)
 print("done in %0.3fs" % (time() - t0))
 print()
+
+np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_labels.txt", km.labels_, delimiter = ', ')
 
 print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels, km.labels_))
 print("Completeness: %0.3f" % metrics.completeness_score(labels, km.labels_))

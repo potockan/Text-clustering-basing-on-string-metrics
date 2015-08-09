@@ -62,96 +62,159 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 \title{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
 
 \begin{document}
-
-
-\begin{titlepage}
-\pagestyle{headings}
-
-\noindent
-\begin{Large}
-\begin{table}[t]
-\centering
-\begin{tabular}[t]{lcr}
- \includegraphics[width=70pt,height=70pt]{PW.png} & POLITECHNIKA WARSZAWSKA & \includegraphics[width=70pt,height=70pt]{MiNI.png}\\
-& WYDZIAŁ MATEMATYKI & \\
-& I NAUK INFORMACYJNYCH &
-\end{tabular}
-\end{table}
-
-% \vfill
-\begin{center}PRACA DYPLOMOWA MAGISTERSKA \end{center}
-\begin{center}MATEMATYKA\end{center}\end{Large}
-% \vfill
-\begin{center}
-\Huge
-\textbf{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
-\end{center}
-% \vfill\vfill
-\vfill
-\begin{center}
-\Large
-Autor: \\
-\LARGE
-Natalia Potocka
-\end{center}
-\vfill
-\begin{center}
-\Large
-Promotor: \\
-\Large
-dr Marek Gągolewski
-\end{center}
-\vfill
-\begin{center}
-\large
-Warszawa, Wrzesień 2015
-\end{center}
-\newpage
-\hfill
-\begin{table}[b]
-\centering
-\begin{tabular}[t]{ccc}
-............................................. & \hspace*{100pt} & .............................................\\
-podpis promotora & \hspace*{100pt} & podpis autora
-\end{tabular}
-\end{table}
-
-
-% \maketitle
-\end{titlepage}
-\thispagestyle{empty}
-\newpage
-\pagestyle{headings}
-\setcounter{page}{1}
-\hyphenation{Syl-ves-tra}
-\hyphenation{Syl-ves-ter-a}
-\cleardoublepage
-
-\tableofcontents
-
-\begin{abstract}
-
-\end{abstract}
+%
+%
+%\begin{titlepage}
+%\pagestyle{headings}
+%
+%\noindent
+%\begin{Large}
+%\begin{table}[t]
+%\centering
+%\begin{tabular}[t]{lcr}
+% \includegraphics[width=70pt,height=70pt]{PW.png} & POLITECHNIKA WARSZAWSKA & \includegraphics[width=70pt,height=70pt]{MiNI.png}\\
+%& WYDZIAŁ MATEMATYKI & \\
+%& I NAUK INFORMACYJNYCH &
+%\end{tabular}
+%\end{table}
+%
+%% \vfill
+%\begin{center}PRACA DYPLOMOWA MAGISTERSKA \end{center}
+%\begin{center}MATEMATYKA\end{center}\end{Large}
+%% \vfill
+%\begin{center}
+%\Huge
+%\textbf{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
+%\end{center}
+%% \vfill\vfill
+%\vfill
+%\begin{center}
+%\Large
+%Autor: \\
+%\LARGE
+%Natalia Potocka
+%\end{center}
+%\vfill
+%\begin{center}
+%\Large
+%Promotor: \\
+%\Large
+%dr Marek Gągolewski
+%\end{center}
+%\vfill
+%\begin{center}
+%\large
+%Warszawa, Wrzesień 2015
+%\end{center}
+%\newpage
+%\hfill
+%\begin{table}[b]
+%\centering
+%\begin{tabular}[t]{ccc}
+%............................................. & \hspace*{100pt} & .............................................\\
+%podpis promotora & \hspace*{100pt} & podpis autora
+%\end{tabular}
+%\end{table}
+%
+%
+%% \maketitle
+%\end{titlepage}
+%\thispagestyle{empty}
+%\newpage
+%\pagestyle{headings}
+%\setcounter{page}{1}
+%\hyphenation{Syl-ves-tra}
+%\hyphenation{Syl-ves-ter-a}
+%\cleardoublepage
+%
+%\tableofcontents
+%
+%\begin{abstract}
+%
+%\end{abstract}
 
 
 %-----------Początek części zasadniczej-----------
 
+%
+%\chapter*{Wstęp}
+%\addcontentsline{toc}{chapter}{Wstęp}
+%COŚ tu będzie.
 
-\chapter*{Wstęp}
-\addcontentsline{toc}{chapter}{Wstęp}
-COŚ tu będzie.
+\chapter{Metryki na przestrzeni ciągów
+znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
+
+\section{Podstawowe definicje}
+
+\begin{defi}
+\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze~skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze~znaków z $\Sigma$ oznaczamy przez $\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do~$\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$,~$t$~oraz $u$,~a~ich \emph{długość}, czyli liczbę znaków w napisie, przez $|s|$.
+\end{defi}
 
 
+\begin{prz}
+Niech $\Sigma$ będzie alfabetem złożonym z $26$ małych liter alfabetu łacińskiego oraz niech $s = 'ala'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Pojedyncze znaki oznaczamy przez indeks dolny, stąd mamy $s_1 = 'a'$, $s_2 = 'l'$, $s_3 = 'a'$. %Podnapis oznaczamy przez $m:n$ w indeksie dolnym, np. $s_{1:2} = 'al'$. Jeśli $n < m$, to $s_{m:n} = \varepsilon$, czyli napis pusty.
+\cite{Loo2014:stringdist}
+\end{prz}
+
+\begin{defi}
+Funkcję $d$ nazywamy \emph{metryką} na~$\Sigma^*$, jeśli ma~poniższe własności:
+\begin{itemize}
+\item $d(s,t) \geq 0$
+\item $d(s,t) = 0$ wtedy i tylko wtedy, gdy $s = t$
+\item $d(s,t) = d(t,s)$
+\item $d(s,u) \leq d(s,t) + d(t,u)$,
+\end{itemize}
+gdzie $s$,~$t$,~$u$~są~napisami.
+\end{defi}
+
+
+Metryki na napisach można podzielić na~trzy grupy:
+\begin{itemize}
+\item oparte na~operacjach edycyjnych (\emph{edit operations}),
+\item oparte na~$q$-gramach,
+\item miary heurystyczne.
+\end{itemize}
+
+
+\section{Odległości na napisach oparte na operacjach edycyjnych}
+
+Metryki oparte na~operacjach edycyjnych zliczają liczbę opercji potrzebnych do~przetworzenia jednego napisu w~drugi. Najczęściej wymieniamymi operacjami~są:
+\begin{itemize}
+\item zamiana znaku, np. $'ala' \rightarrow 'ela'$
+\item usunięcie znaku, np. $'ala' \rightarrow 'aa'$
+\item wstawienie znaku, np. $'ala' \rightarrow 'alka'$
+\item transpozycja dwóch przylegających znaków, np. $'ala' \rightarrow 'laa'$
+\end{itemize}
+
+Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Nie wszystkie z ww. odległości są metrykami.
+
+
+
+Metryka \textbf{najdłuższego wspólnego podnapisu}, ozn. $d_{lcs}$, zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{lsc}('leia', 'leela') = 3$, bo~$leela  \xrightarrow{us.\ e} lela  \xrightarrow{us.\ l} lea  \xrightarrow{wst.\ i} leia$.\\
+
+Uogólniona \textbf{odległość Levenshteina}, ozn. $d_{lv}$ zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. \\
+
+
+Gdy za~wagi przyjmuje się $1$ mamy do~czynienia ze~zwykłą odległością Levenshteina, np. \\
+$d_{lv}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
+
+Gdy za~wagi przyjmiemy np. $(0.1, 1, 1)$, \\
+$d_{lv}('leia', 'leela') = 1.1$, bo~$leela  \xrightarrow[0.1]{us.\ e} lela  \xrightarrow[1]{zm.\ l\ na\ i} leia$ 
 
 
 %-----------Koniec części zasadniczej-----------
 
-\begin{thebibliography}{11}
+%\begin{thebibliography}{11}
+%\nocite{Hornik2012:sphkmeans}
+%\nocite{Wild2002:sphkmeans}
+%\nocite{Loo2014:stringdist}
+\bibliographystyle{plain}
+\bibliography{bibliography}
 %\bibitem[1]{M} Arnold W. Miller, \emph{Special Subsets of the Real Line}, The University of Texas, Austin, U.S.A. 1984.
 %\bibitem[2]{H2} J.C. Oxtoby, \emph{Measure and Category}, Springer-Verlag, New York Heidelberg Berlin, 1971.
 %\bibitem[3]{WW} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. I: The Basics.} Graduate Studies in Mathematics vol. 8, American Mathematical Society, Providence, RI, 1996.
 %\bibitem[4]{WW2} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. II: Set-Theoretic Tools for Every Mathematician.}, Graduate Studies in Mathematics vol. 18, American Mathematical Society, Providence, RI, 1997.
-\end{thebibliography}
+%\end{thebibliography}
 \clearpage
 \pagestyle{empty}
 \noindent Warszawa, dnia ...............

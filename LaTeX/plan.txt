@@ -1,0 +1,35 @@
+Plan działania:
+
+Teoria
+- ogólne definicje
+
+- metryki oparte na op. edycyjnych:
+  - definicje
+  - dowody, że są / nie są metrykami
+  - opis słowny (intuicja)
+  - przykład działania
+
+- metryki oparte na q-gramach
+  - definicje
+  - dowody, że są / nie są metrykami
+  - opis słowny (intuicja)
+  - przykład działania
+
+- miary heurystyczne
+  - definicje
+  - dowody, że są / nie są metrykami (?)
+  - opis słowny (intuicja)
+  - przykład działania
+
+- Hunspell - działanie (tutaj ?)
+
+- Klasyfikacja bez nadzoru
+  - algorytm k-średnich
+  - algorytm SGD (?)
+  - algorytm mini-batch
+  - miary oceny poprawności klasyfikacji
+
+Obliczenia
+
+
+

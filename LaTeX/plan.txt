@@ -8,6 +8,8 @@ Teoria
   - dowody, że są / nie są metrykami
   - opis słowny (intuicja)
   - przykład działania
+Navarro: 36-37
+Boytsov: 8
 
 - metryki oparte na q-gramach
   - definicje

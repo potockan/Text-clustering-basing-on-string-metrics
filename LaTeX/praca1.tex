@@ -99,7 +99,7 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 %\Large
 %Promotor: \\
 %\Large
-%dr Marek Gągolewski
+%dr hab. Marek Gągolewski
 %\end{center}
 %\vfill
 %\begin{center}
@@ -147,20 +147,19 @@ znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
 \section{Podstawowe definicje}
 
 \begin{defi}
-\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze~skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze~znaków z $\Sigma$ oznaczamy przez~$\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do~$\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$,~$t$~oraz $u$,~a~ich \emph{długość}, czyli liczbę znaków w~napisie, przez $|s|$. Poprzez $s_i$ rozumiemy $i$-ty znak z napisu $s$, dla każdego $i \in \{1,\ldots,|s|\}$ \cite{Loo2014:stringdist}.
+\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze~skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze~znaków z $\Sigma$ oznaczamy przez~$\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do~$\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$,~$t$~oraz $u$,~a~ich \emph{długość}, czyli liczbę znaków w~napisie, przez $|s|$. Poprzez $s_i$ rozumiemy $i$-ty znak z napisu $s$, dla każdego $i \in \{1,\ldots,|s|\}$, natomiast podnapisy od znaku $i$-tego do znaku $j$-tego oznaczamy przez $s_{i:j}$. Zakładamy również, że jeśli $j<i$, to $s_{i:j} = \varepsilon$ \cite{Loo2014:stringdist}.
 \end{defi}
 
 
 \begin{prz}
-Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = 'ala'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Pojedyncze znaki oznaczamy przez indeks dolny, stąd mamy $s_1 = 'a'$, $s_2 = 'l'$, $s_3 = 'a'$. %Podnapis oznaczamy przez $m:n$ w indeksie dolnym, np. $s_{1:2} = 'al'$. Jeśli $n < m$, to $s_{m:n} = \varepsilon$, czyli napis pusty.
-\cite{Loo2014:stringdist}
+Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = 'ala'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Co więcej, mamy $s_1 = 'a'$, $s_2 = 'l'$, $s_3 = 'a'$. Podnapis $1:2$ napisu $s$ to $s_{1:2} = 'al'$.
 \end{prz}
 
 Odległość $d(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalny koszt ciągu operacji potrzebnego do~przetransformowania $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje). Koszt ciągu operacji jest sumą kosztów pojedynczych operacji. Przez operacje rozumiemy skończoną liczbę reguł w~formie $\delta(x, y) = a$, gdzie $x$~i~$y$ to różne podnapisy, a~$a$~to~nieujemna liczba rzeczywista. Kiedy już, przy pomocy operacji, podnapis $x$~zostanie przekształcony w~napis $y$,~żadne dalsze operacje nie mogą być wykonywane na~$y$~\cite{Navarro2001:guidedtour}.
 
-Zauważmy w~szczególności ostatnie ograniczenie, które nie pozwala wielokrotnie przekształcać tego samego podnapisu. Gdyby pominąć to~założenie, każdy system przekształcający napisy spełniałby definicję i~stąd odległość między dwoma napisami nie byłaby, w~ogólności, możliwa do~policzenia~\cite{Navarro2001:guidedtour}.
+Zauważmy w~szczególności ostatnie ograniczenie, które nie pozwala wielokrotnie przekształcać tego samego podnapisu. DO POPRAWKI!!!: Gdyby pominąć to~założenie, każdy system przekształcający napisy spełniałby definicję i~stąd odległość między dwoma napisami nie byłaby, w~ogólności, możliwa do~policzenia~\cite{Navarro2001:guidedtour}.
 
-Jeśli dla każdej operacji $\delta(x,y)$, istnieje odpowiednia operacja $\delta(y,x)$ o~takim samym koszcie, to~odległość jest symetryczna (tj. $d(s,t) = d(t,s)$). Zauważmy również, że:
+Jeśli dla każdej operacji $\delta(x,y)$, istnieje odpowiednia operacja $\delta(y,x)$ o~takim samym koszcie, to~odległość jest symetryczna (tj. $d(s,t) = d(t,s)$). Zauważmy również,~że:
 \begin{itemize}
 \item $d(s,t) \geq 0$ dla wszystkich napisów $s, t$,
 \item $d(s,s) = 0$,
@@ -199,12 +198,12 @@ Metryki oparte na~operacjach edycyjnych zliczają minimalną liczbę opercji pot
 \item zamiana znaku: $\delta(a, e)$, tj. zamiana litery $'a'$ na $'e'$, np. $'ala' \rightarrow 'ela'$
 \item transpozycja: $\delta(al, la)$, tj. przestawienie dwóch przylegających liter $'a'$ i $'l'$, np. $'ala' \rightarrow 'laa'$
 \end{itemize}
-Dla wszystkich odległości, które dopuszczają więcej niż jedną operację edycyjną, może być znaczące nadanie wag poszczególnym operacjom, na przykład dając transpozycji mniejszy koszt niż wstawienie znaku. Odległości, dla których takie wagi zostają nadane są zazwyczaj nazywane \emph{uogólnionymi} odległościami~\cite{Boytsov2011:indexingmethods}.
+Koszt wszystkich powyższych operacji zazwyczaj wynosi $1$. Dla wszystkich odległości, które dopuszczają więcej niż jedną operację edycyjną, może być znaczące nadanie wag poszczególnym operacjom, dając na przykład transpozycji mniejszy koszt niż operacji wstawienia znaku. Odległości, dla których takie wagi zostają nadane są zazwyczaj nazywane \emph{uogólnionymi} odległościami~\cite{Boytsov2011:indexingmethods}.
 
 Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Nie wszystkie z ww. odległości są metrykami.
 
 \begin{defi}
-\emph{Odległością Hamminga} na $\Sigma^*$ nazywamy:
+\emph{Odległością Hamminga}~\cite{Hamming1950:errordetecting} na $\Sigma^*$ nazywamy:
 $$
 d_{hamming}(s, t) = \left\{
 \begin{array}{l l}     
@@ -222,12 +221,58 @@ $$
 $$
 \end{defi}
 
-Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości.
+%Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości. 
+Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. Intuicyjnie rzecz biorąc odległość Hamminga zlicza liczbę indeksów, na których dwa napisy mają różny znak.
 
-Metryka \textbf{najdłuższego wspólnego podnapisu}, ozn. $d_{lcs}$, zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{lsc}('leia', 'leela') = 3$, bo~$leela  \xrightarrow{us.\ e} lela  \xrightarrow{us.\ l} lea  \xrightarrow{wst.\ i} leia$.\\
+[PIĘKNY RYSUNEK??]
 
-Uogólniona \textbf{odległość Levenshteina}, ozn. $d_{lv}$ zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. \\
+\begin{prz}
+Odległość Hamminga między słowami \emph{koza} i \emph{foka} wynosi $d_{hamming}(koza, foka) = 2$.
+\end{prz}
 
+\begin{defi}
+\emph{Odległością najdłuższego wspólnego podnapisu}~\cite{Needleman2008:generalmethod} na $\Sigma^*$ nazywamy:
+$$
+d_{lcs}(s, t) = \left\{
+\begin{array}{l l}     
+    0, & \text{gdy } s = t = \varepsilon,\\
+    d_{lcs}(s_{1:|s|-1}, t_{1:|t|-1}), & \text{gdy } s_{|s|} = t_{|t|}, \\
+    1+min\{d_{lcs}(s_{1:|s|-1}, t), d_{lcs}(s, t_{1:|t|-1})\}, & \text{w przeciwnym przypadku},
+\end{array}\right.
+$$
+\end{defi}
+
+Odległość najdłuższego wspólnego podnapisu również spełnia definicję metryki. Przyjmuje wartości z przedziału $[0, |s|+|t|]$, przy czym maksimum jest osiągane, gdy $s$ i $t$ nie mają ani jednego wspólnego znaku.
+Odległość ta zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{lsc}('koza', 'foka') = 4$, bo~$koza  \xrightarrow{us.\ k} oza \xrightarrow{us.\ z} oa  \xrightarrow{wst.\ f} foa \xrightarrow{wst.\ k} foka$.\\
+
+Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odlegość równą~$4$.
+
+Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z $s$ i $t$ nie zmieniając ich porządku. Wówczas odległość ta jest rozumiana jako liczba niesparowanych znaków z obu napisów. W powyższym przykładzie może to być zwizualizowane następująco:
+	
+[PIĘKNY RYSUNEK??]
+
+Jak widać na rysunku, litery $'k',\ 'z',\ 'f'$ i $'k'$ pozostają bez pary, dając odległość równą $4$.
+
+\begin{defi}
+Uogólniona \emph{odległością Levenshteina} na $\Sigma^*$ nazywamy:
+$$
+d_{lv}(s, t) = \left\{
+\begin{array}{l l}     
+    0, & \text{gdy } s = t = \varepsilon,\\
+    min\{
+    d_{lv}(s, t_{1:|t|-1}) + w_1,
+    d_{lv}(s_{1:|s|-1}, t) + w_2,
+    
+    \}
+    
+    d_{lcs}(s_{1:|s|-1}, t_{1:|t|-1}), & \text{gdy } s_{|s|} = t_{|t|}, \\
+    1+min\{d_{lcs}(s_{1:|s|-1}, t), d_{lcs}(s, t_{1:|t|-1})\}, & \text{w przeciwnym przypadku},
+\end{array}\right.
+$$
+
+\end{defi}
+
+Odległość ta zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi:
 
 Gdy za~wagi przyjmuje się $1$ mamy do~czynienia ze~zwykłą odległością Levenshteina, np. \\
 $d_{lv}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
@@ -261,7 +306,7 @@ Metryka ta~nie spełnia nierówności trójkąta: $2 = d_{osa}('ba', 'ab') + d_{
 \begin{center}
 \LARGE{Oświadczenie}
 \end{center}
-Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
+Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr hab. Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
 \vspace{2cm}
 \begin{flushright}
 ...........................................

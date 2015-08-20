@@ -5,6 +5,7 @@
 \usepackage{a4wide}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+%\usepackage{enumitem}
 \usepackage{enumerate}
 \usepackage{verbatim}
 \usepackage[MeX]{polski}
@@ -168,14 +169,17 @@ Jeśli dla każdej operacji $\delta(x,y)$, istnieje odpowiednia operacja $\delta
 Stąd, jeśli odległość jest symetryczna, przestrzeń napisów tworzy przestrzeń metryczną~\cite{Navarro2001:guidedtour}.
 
 \begin{defi}
+\label{def:001}
 Funkcję $d$ nazywamy \emph{metryką} na~$\Sigma^*$, jeśli ma~poniższe własności:
-\begin{itemize}
-\item $d(s,t) \geq 0$
-\item $d(s,t) = 0$ wtedy i tylko wtedy, gdy $s = t$
-\item $d(s,t) = d(t,s)$
-\item $d(s,u) \leq d(s,t) + d(t,u)$,
-\end{itemize}
+\begin{enumerate}
+\item \label{def:001a} $d(s,t) \geq 0$
+\item \label{def:001b} $d(s,t) = 0$ wtedy i tylko wtedy, gdy $s = t$
+\item \label{def:001c} $d(s,t) = d(t,s)$
+\item \label{def:001d} $d(s,u) \leq d(s,t) + d(t,u)$,
+\end{enumerate}
 gdzie $s$,~$t$,~$u$~są~napisami z~$\Sigma^*$.
+
+
 \end{defi}
 
 %Z~powyższej definicji wynika, że~dla dowolnych $s,\ t \in \Sigma^*,\ d(s, t) \geq 0$.
@@ -330,10 +334,17 @@ $$
 gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
 \end{defi}
 
-Metryka \textbf{optymalnego dopasowania napisów}, ozn. $d_{osa}$, zlicza liczbę usunięć, wstawień, zamian oraz transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{osa}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
-
-Metryka ta~nie spełnia nierówności trójkąta: $2 = d_{osa}('ba', 'ab') + d_{osa}('ab', 'acb') \leq d_{osa}('ba', 'acb') = 3$\\
-
+Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W przeciwieństwie do wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z definicji \ref{def:001} \cite{Loo2014:stringdist}: 
+$$2 = d_{osa}('ba', 'ab') + d_{osa}('ab', 'acb') \leq d_{osa}('ba', 'acb') = 3,$$ 
+gdyż
+$$
+ba  \xrightarrow[1]{transp.\ b\ i \ a} ab + ab \xrightarrow[1]{wst. c} acb,
+$$
+natomiast
+$$
+ba  \xrightarrow[1]{us.\ b} a \xrightarrow[1]{wst.\ c} ac \xrightarrow[1]{wst.\ b} acb.
+$$
+W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $'a'$ i $'b'$, a następnie wstwienie litery $'c'$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}.
 
 %-----------Koniec części zasadniczej-----------
 

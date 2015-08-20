@@ -10,6 +10,7 @@ Teoria
   - przykład działania
 Navarro: 36-37
 Boytsov: 8
+Hamming: 9
 
 - metryki oparte na q-gramach
   - definicje

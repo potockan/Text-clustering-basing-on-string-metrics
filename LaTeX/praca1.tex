@@ -254,7 +254,7 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma też in
 Jak widać na rysunku, litery $'k',\ 'z',\ 'f'$ i $'k'$ pozostają bez pary, dając odległość równą $4$.
 
 \begin{defi}
-Uogólniona \emph{odległością Levenshteina} \cite{Levenshtein1965:binarycodes}~na~$\Sigma^*$~nazywamy:
+Uogólnioną \emph{odległością Levenshteina} \cite{Levenshtein1965:binarycodes}~na~$\Sigma^*$~nazywamy:
 $$
 d_{lv}(s, t) = \left\{
 \begin{array}{l l}     
@@ -269,11 +269,66 @@ $$
 gdzie $w_1, w_2$~i~$w_3$~to~niezerowe liczby rzeczywiste, oznaczające kary za~usunięcie, wstawienie oraz zamianę znaku.
 \end{defi}
 
-Odległość ta zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmuje się $1$ mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~$d_{lv}('koza', 'foka') = 2$, bo $koza  \xrightarrow{zm.\ k\ na\ f} foza  \xrightarrow{zm.\ z\ na\ k} foka$. Powyższy przykład ilustruje, że dodatkowa elastyczność w odniesieniu do odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że potrzebujemy jedynie dwóch zamian znaków.
+Odległość ta zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmuje się $1$ mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~$d_{lv}('koza', 'foka') = 2$, bo $koza  \xrightarrow{zm.\ k\ na\ f} foza  \xrightarrow{zm.\ z\ na\ k} foka$. Powyższy przykład ilustruje, że dodatkowa elastyczność w odniesieniu do odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że potrzebujemy jedynie dwóch zamian znaków \cite{Loo2014:stringdist}.
 
-Gdy za~wagi przyjmiemy np. $(0.1, 1, 1)$, \\
-$d_{lv}('leia', 'leela') = 1.1$, bo~$leela  \xrightarrow[0.1]{us.\ e} lela  \xrightarrow[1]{zm.\ l\ na\ i} leia$ 
+Gdy za~wagi przyjmiemy np. $(0.1, 1, 0.3)$, to $d_{lv}('koza', 'foka') = 0.6$, bo~$koza  \xrightarrow[0.3]{zm.\ k\ na\ f} foza  \xrightarrow[0.3]{zm.\ z\ na\ k} foka$.
 
+Uogólniona odległość Levenshteina spełnia definicję metryki, gdy $w_1 = w_2$. W przeciwnym przypadku nie spełnia ona założenia o symetrii. Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$ i $t$ oraz $w_1$ i $w_2$, jako że liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$ jest równa liczbie wstawień znaków przy przetwarzaniu napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}. Dobrze obrazuje to następujący przykład.
+
+\begin{prz}
+Przyjmijmy za~$(w_1, w_2, w_3) = (0.1, 1, 0.3)$. Wówczas uogólniona odległość Levenshteina dla napisów $'koza'$ i~$'foczka'$ wynosi:
+\begin{equation}
+\label{eq:001}
+d_{lv}('koza', 'foczka') = 0.5,
+\end{equation}
+bo
+$$
+koza  \xrightarrow[0.3]{zm.\ k\ na\ f} foza  \xrightarrow[0.1]{wst. c} focza \xrightarrow[0.1]{wst. k} foczka,
+$$
+natomiast
+\begin{equation}\label{eq:002}
+d_{lv}('foczka', 'koza') = 2.3,
+\end{equation}
+bo
+$$
+foczka  \xrightarrow[0.3]{zm.\ f\ na\ k} koczka  \xrightarrow[1]{us. c} kozka \xrightarrow[1]{us. k} koza.
+$$
+Gdy za wagi $(w_1, w_2, w_3)$ przyjmiemy $(1, 0.1, 0.3)$, to uogólniona odległość Levenshteina wynosi:
+$$
+d_{lv}('koza', 'foczka') = 2.3,
+$$
+bo
+$$
+koza  \xrightarrow[0.3]{zm.\ k\ na\ f} foza  \xrightarrow[1]{wst. c} focza \xrightarrow[1]{wst. k} foczka,
+$$
+czyli analogicznie, jak w przypadku \ref{eq:002}. Natomiast
+$$
+d_{lv}('foczka', 'koza') = 0.5,
+$$
+bo
+$$
+foczka  \xrightarrow[0.3]{zm.\ f\ na\ k} koczka  \xrightarrow[0.1]{us. c} kozka \xrightarrow[0.1]{us. k} koza,
+$$
+czyli analogicznie, jak w przypadku \ref{eq:001}.
+\end{prz}
+
+
+\begin{defi}
+Odległością optymalnego dopasowania napisów na~$\Sigma^*$~nazywamy:
+$$
+d_{osa}(s, t) = \left\{
+\begin{array}{l l}     
+    0, & \text{gdy } s = t = \varepsilon,\\
+    min\{ & \\
+\qquad    d_{osa}(s, t_{1:|t|-1}) + w_1, & \\
+\qquad    d_{osa}(s_{1:|s|-1}, t) + w_2, & \\
+\qquad    d_{osa}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
+\qquad    d_{osa}(s_{1:|s|-2}, t_{1:|t|-2}) + w_4\text{, gdy } s_{|s|} = t_{|t|-1}, s_{|s|-1} = t_{|t|} & \\
+\qquad    \}, & \text{w przeciwnym przypadku},
+\end{array}\right.
+$$
+gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
+\end{defi}
 
 Metryka \textbf{optymalnego dopasowania napisów}, ozn. $d_{osa}$, zlicza liczbę usunięć, wstawień, zamian oraz transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{osa}('leia', 'leela') = 2$, bo $leela  \xrightarrow{us.\ e} lela  \xrightarrow{zm.\ l\ na\ i} leia$. \\
 

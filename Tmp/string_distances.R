@@ -16,5 +16,5 @@ stringdist('ba', 'acb', method = 'osa')
 stringdist('ba', 'ab', method = 'osa')
 stringdist('ab', 'acb', method = 'osa')
 
-stringdist('koza', 'foka', method = 'dl')
+stringdist('ba', 'acb', method = 'dl')
 

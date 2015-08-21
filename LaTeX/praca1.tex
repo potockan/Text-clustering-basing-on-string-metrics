@@ -226,12 +226,12 @@ $$
 \end{defi}
 
 %Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości. 
-Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. Intuicyjnie rzecz biorąc odległość Hamminga zlicza liczbę indeksów, na których dwa napisy mają różny znak.
+Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. Intuicyjnie rzecz biorąc odległość Hamminga zlicza liczbę indeksów, na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
 
 [PIĘKNY RYSUNEK??]
 
 \begin{prz}
-Odległość Hamminga między słowami \emph{koza} i \emph{foka} wynosi $d_{hamming}(koza, foka) = 2$.
+Odległość Hamminga między słowami \emph{koza} i \emph{foka} wynosi $d_{hamming}(koza, foka) = 2$, natomiast między słowami \emph{koza} i \emph{foczka} wynosi ona $d_{hamming}(koza, foczka) = \infty$.
 \end{prz}
 
 \begin{defi}
@@ -246,16 +246,20 @@ d_{lcs}(s, t) = \left\{
 $$
 \end{defi}
 
-Odległość najdłuższego wspólnego podnapisu również spełnia definicję metryki. Przyjmuje wartości z przedziału $[0, |s|+|t|]$, przy czym maksimum jest osiągane, gdy $s$ i $t$ nie mają ani jednego wspólnego znaku.
-Odległość ta zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. Np. $d_{lsc}('koza', 'foka') = 4$, bo~$koza  \xrightarrow{us.\ k} oza \xrightarrow{us.\ z} oa  \xrightarrow{wst.\ f} foa \xrightarrow{wst.\ k} foka$.\\
+Odległość najdłuższego wspólnego podnapisu również spełnia definicję metryki. Przyjmuje wartości ze zbioru $\{0, |s|+|t|\}$, przy czym maksimum jest osiągane, gdy $s$ i $t$ nie mają ani jednego wspólnego znaku.
+Odległość ta zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. 
+
+\begin{prz}
+Odległość najdłuższego wspólnego podnapisu między słowami \emph{koza} i \emph{foka} wynosi: $d_{lsc}('koza', 'foka') = 4$, bo~$koza  \xrightarrow[1]{us.\ k} oza \xrightarrow[1]{us.\ z} oa  \xrightarrow[1]{wst.\ f} foa \xrightarrow[1]{wst.\ k} foka$.
+\end{prz}
 
 Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odlegość równą~$4$.
 
-Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z $s$ i $t$ nie zmieniając ich porządku. Wówczas odległość ta jest rozumiana jako liczba niesparowanych znaków z obu napisów. W powyższym przykładzie może to być zwizualizowane następująco:
+Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z~$s$~i~$t$~nie zmieniając ich porządku. Wówczas odległość ta~jest rozumiana jako liczba niesparowanych znaków z~obu napisów. W~powyższym przykładzie może to~być zwizualizowane następująco:
 	
 [PIĘKNY RYSUNEK??]
 
-Jak widać na rysunku, litery $'k',\ 'z',\ 'f'$ i $'k'$ pozostają bez pary, dając odległość równą $4$.
+Jak widać na~rysunku, litery $'k',\ 'z',\ 'f'$ i $'k'$ pozostają bez pary, dając odległość równą~$4$.
 
 \begin{defi}
 Uogólnioną \emph{odległością Levenshteina} \cite{Levenshtein1965:binarycodes}~na~$\Sigma^*$~nazywamy:
@@ -273,14 +277,14 @@ $$
 gdzie $w_1, w_2$~i~$w_3$~to~niezerowe liczby rzeczywiste, oznaczające kary za~usunięcie, wstawienie oraz zamianę znaku.
 \end{defi}
 
-Odległość ta zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmuje się $1$ mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~$d_{lv}('koza', 'foka') = 2$, bo $koza  \xrightarrow{zm.\ k\ na\ f} foza  \xrightarrow{zm.\ z\ na\ k} foka$. Powyższy przykład ilustruje, że dodatkowa elastyczność w odniesieniu do odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że potrzebujemy jedynie dwóch zamian znaków \cite{Loo2014:stringdist}.
+Odległość ta~zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmie się $1$~mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~$d_{lv}('koza', 'foka') = 2$, bo $koza  \xrightarrow[1]{zm.\ k\ na\ f} foza  \xrightarrow[1]{zm.\ z\ na\ k} foka$. Powyższy przykład ilustruje, że dodatkowa elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że~potrzebujemy jedynie dwóch zamian znaków~\cite{Loo2014:stringdist}.
 
 Gdy za~wagi przyjmiemy np. $(0.1, 1, 0.3)$, to $d_{lv}('koza', 'foka') = 0.6$, bo~$koza  \xrightarrow[0.3]{zm.\ k\ na\ f} foza  \xrightarrow[0.3]{zm.\ z\ na\ k} foka$.
 
-Uogólniona odległość Levenshteina spełnia definicję metryki, gdy $w_1 = w_2$. W przeciwnym przypadku nie spełnia ona założenia o symetrii. Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$ i $t$ oraz $w_1$ i $w_2$, jako że liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$ jest równa liczbie wstawień znaków przy przetwarzaniu napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}. Dobrze obrazuje to następujący przykład.
+Uogólniona odległość Levenshteina spełnia definicję metryki, gdy $w_1 = w_2$. W przeciwnym przypadku nie spełnia ona założenia o~symetrii, tj.~podpunktu \ref{def:001c}~definicji \ref{def:001}.~Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz $w_1$~i~$w_2$,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy przetwarzaniu napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład.
 
 \begin{prz}
-Przyjmijmy za~$(w_1, w_2, w_3) = (0.1, 1, 0.3)$. Wówczas uogólniona odległość Levenshteina dla napisów $'koza'$ i~$'foczka'$ wynosi:
+Przyjmijmy za~$(w_1, w_2, w_3) = (0.1, 1, 0.3)$. Wówczas uogólniona odległość Levenshteina dla napisów \emph{koza} i~\emph{foczka} wynosi:
 \begin{equation}
 \label{eq:001}
 d_{lv}('koza', 'foczka') = 0.5,
@@ -297,7 +301,7 @@ bo
 $$
 foczka  \xrightarrow[0.3]{zm.\ f\ na\ k} koczka  \xrightarrow[1]{us. c} kozka \xrightarrow[1]{us. k} koza.
 $$
-Gdy za wagi $(w_1, w_2, w_3)$ przyjmiemy $(1, 0.1, 0.3)$, to uogólniona odległość Levenshteina wynosi:
+Gdy za~wagi $(w_1, w_2, w_3)$ przyjmiemy $(1, 0.1, 0.3)$, to~uogólniona odległość Levenshteina wynosi:
 $$
 d_{lv}('koza', 'foczka') = 2.3,
 $$
@@ -305,7 +309,7 @@ bo
 $$
 koza  \xrightarrow[0.3]{zm.\ k\ na\ f} foza  \xrightarrow[1]{wst. c} focza \xrightarrow[1]{wst. k} foczka,
 $$
-czyli analogicznie, jak w przypadku \ref{eq:002}. Natomiast
+czyli analogicznie, jak w~przypadku \ref{eq:002}. Natomiast
 $$
 d_{lv}('foczka', 'koza') = 0.5,
 $$
@@ -313,12 +317,12 @@ bo
 $$
 foczka  \xrightarrow[0.3]{zm.\ f\ na\ k} koczka  \xrightarrow[0.1]{us. c} kozka \xrightarrow[0.1]{us. k} koza,
 $$
-czyli analogicznie, jak w przypadku \ref{eq:001}.
+czyli analogicznie, jak w~przypadku \ref{eq:001}.
 \end{prz}
 
 
 \begin{defi}
-Odległością optymalnego dopasowania napisów na~$\Sigma^*$~nazywamy:
+\emph{Odległością optymalnego dopasowania napisów} na~$\Sigma^*$~nazywamy:
 $$
 d_{osa}(s, t) = \left\{
 \begin{array}{l l}     
@@ -334,7 +338,7 @@ $$
 gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
 \end{defi}
 
-Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W przeciwieństwie do wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z definicji \ref{def:001} \cite{Loo2014:stringdist}: 
+Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W~przeciwieństwie do~wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z~definicji \ref{def:001} \cite{Loo2014:stringdist}: 
 $$2 = d_{osa}('ba', 'ab') + d_{osa}('ab', 'acb') \leq d_{osa}('ba', 'acb') = 3,$$ 
 gdyż
 $$
@@ -344,7 +348,19 @@ natomiast
 $$
 ba  \xrightarrow[1]{us.\ b} a \xrightarrow[1]{wst.\ c} ac \xrightarrow[1]{wst.\ b} acb.
 $$
-W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $'a'$ i $'b'$, a następnie wstwienie litery $'c'$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}.
+W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $'a'$ i $'b'$, a następnie wstwienie litery $'c'$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
+
+[MIARA DAMERAU-LEVENSHTEINA??? WTEDY ZMIENIC DEFINICJE O NIEPRZERABIANIU 2 RAZY TEGO SAMEGO PODNAPISU]
+
+W~przypadku odległości Levenshteina i~odległości optymalnego dopasowania napisów, maksymalna odległość między napisami $s$~i~$t$~wynosi $max\{|s|, |t|\}$. Jednakowoż, gdy liczba dopuszczalnych operacji edycyjnych rośnie, to liczba dopuszczalnych ścieżek między napisami wzrasta, co pozwala ewentualnie zmiejszyć odległość między napisami. Dlatego relację między zaprezentowanymi powyżej odległościami można podsumować następująco~\cite{Loo2014:stringdist}:
+$$
+\left. \begin{array}{r}
+\infty \geq |s| \geq d_{hamming}(s,t) \\
+|s| + |t| \geq d_{lcs}(s,t) \\
+max\{|s|, |t|\} \\
+\end{array} \right \}
+\geq d_{lv}(s,t) \geq d_{osa}(s,t) \geq 0.
+$$
 
 %-----------Koniec części zasadniczej-----------
 
@@ -359,17 +375,17 @@ W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $'a'$ 
 %\bibitem[3]{WW} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. I: The Basics.} Graduate Studies in Mathematics vol. 8, American Mathematical Society, Providence, RI, 1996.
 %\bibitem[4]{WW2} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. II: Set-Theoretic Tools for Every Mathematician.}, Graduate Studies in Mathematics vol. 18, American Mathematical Society, Providence, RI, 1997.
 %\end{thebibliography}
-\clearpage
-\pagestyle{empty}
-\noindent Warszawa, dnia ...............
-\vspace{5cm}
-\begin{center}
-\LARGE{Oświadczenie}
-\end{center}
-Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr hab. Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
-\vspace{2cm}
-\begin{flushright}
-...........................................
-\end{flushright}
+%\clearpage
+%\pagestyle{empty}
+%\noindent Warszawa, dnia ...............
+%\vspace{5cm}
+%\begin{center}
+%\LARGE{Oświadczenie}
+%\end{center}
+%Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr hab. Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
+%\vspace{2cm}
+%\begin{flushright}
+%...........................................
+%\end{flushright}
 
 \end{document}

@@ -41,16 +41,16 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 %paginy koniec
 
 \theoremstyle{plain}
-\newtheorem{tw}{Twierdzenie}[section]
-\newtheorem{uw}{Uwaga}[section]
-\newtheorem{defi}{Definicja}[section]
+\newtheorem{tw}{Twierdzenie}[chapter]
+\newtheorem{uw}{Uwaga}[chapter]
+\newtheorem{defi}{Definicja}[chapter]
 \newtheorem{alg}{Algorytm}[chapter]
-\newtheorem{przyp}{Przypadek}[section]
-\newtheorem{prz}{Przykład}[section]
+\newtheorem{przyp}{Przypadek}[chapter]
+\newtheorem{prz}{Przykład}[chapter]
 \newtheorem{lem}[tw]{Lemat}
 \newtheorem{stw}[tw]{Stwierdzenie}
 \newtheorem{wn}[tw]{Wniosek}
-\newtheorem{cw}{Ćwiczenie}[section]
+\newtheorem{cw}{Ćwiczenie}[chapter]
 \linespread{1.5}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -156,7 +156,7 @@ znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
 Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = 'ala'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Co więcej, mamy $s_1 = 'a'$, $s_2 = 'l'$, $s_3 = 'a'$. Podnapis $1:2$ napisu $s$ to $s_{1:2} = 'al'$.
 \end{prz}
 
-Odległość $d(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalny koszt ciągu operacji potrzebnego do~przetransformowania $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje). Koszt ciągu operacji jest sumą kosztów pojedynczych operacji. Przez operacje rozumiemy skończoną liczbę reguł w~formie $\delta(x, y) = a$, gdzie $x$~i~$y$ to różne podnapisy, a~$a$~to~nieujemna liczba rzeczywista. Kiedy już, przy pomocy operacji, podnapis $x$~zostanie przekształcony w~napis $y$,~żadne dalsze operacje nie mogą być wykonywane na~$y$~\cite{Navarro2001:guidedtour}.
+[TU TRZEBA BARDZIEJ FORMALNIE! BOYTSOV STR. 4-7]Odległość $d(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalny koszt ciągu operacji potrzebnego do~przetransformowania $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje). Koszt ciągu operacji jest sumą kosztów pojedynczych operacji. Przez operacje rozumiemy skończoną liczbę reguł w~formie $\delta(x, y) = a$, gdzie $x$~i~$y$ to różne podnapisy, a~$a$~to~nieujemna liczba rzeczywista. Kiedy już, przy pomocy operacji, podnapis $x$~zostanie przekształcony w~napis $y$,~żadne dalsze operacje nie mogą być wykonywane na~$y$~\cite{Navarro2001:guidedtour}.
 
 Zauważmy w~szczególności ostatnie ograniczenie, które nie pozwala wielokrotnie przekształcać tego samego podnapisu. DO POPRAWKI!!!: Gdyby pominąć to~założenie, każdy system przekształcający napisy spełniałby definicję i~stąd odległość między dwoma napisami nie byłaby, w~ogólności, możliwa do~policzenia~\cite{Navarro2001:guidedtour}.
 

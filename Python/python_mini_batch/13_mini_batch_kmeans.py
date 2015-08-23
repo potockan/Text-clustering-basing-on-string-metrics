@@ -83,8 +83,8 @@ categories = [
 # Uncomment the following to do the analysis on all the categories
 #categories = None
 
-print("Loading 3 groups dataset for categories:")
-print(categories)
+#print("Loading 3 groups dataset for categories:")
+#print(categories)
 #
 #dataset = fetch_20newsgroups(subset='all', categories=categories,
 #                             shuffle=True, random_state=42)
@@ -143,12 +143,11 @@ con.close()
 print("Data transformations...")
 labels = np.asarray([val[0] for val in labels])
 
-rows = [val[0] for val in my_data]
-columns = [val[1] - 1 for val in my_data]
-data = [val[2] for val in my_data]
-my_sparse_data = sps.csr_matrix((data, (rows, columns)))
-mask = np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))
-my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[mask]))
+my_sparse_data = sps.csr_matrix(([val[2] for val in my_data], ([val[0] for val in my_data], [val[1] - 1 for val in my_data])))
+print("Data deletation...")
+del my_data
+print("Data transformations...")
+my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))]))
 
 #labels = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv', delimiter=',', dtype = 'int32'), 0, 0) - 1
 #my_data = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv', delimiter=','), 0, 0)
@@ -195,14 +194,14 @@ else:
 
 
 #if opts.minibatch:
-km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1,init_size=1000, batch_size=1000, verbose=opts.verbose)
+km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=1000, init_size = 2*true_k, verbose=opts.verbose)
 #else:
 #    km = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1,
 #                verbose=opts.verbose)
 
 print("Clustering sparse data with %s" % km)
 t0 = time()
-km.fit_predict(my_sparse_data)
+km.fit(my_sparse_data)
 print("done in %0.3fs" % (time() - t0))
 print()
 

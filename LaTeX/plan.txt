@@ -24,7 +24,7 @@ Hamming: 9
   - opis słowny (intuicja)
   - przykład działania
 
-- Hunspell - działanie (tutaj ?)
+- Hunspell - działanie (tutaj czy w części obliczeniowej ?)
 
 - Klasyfikacja bez nadzoru
   - algorytm k-średnich

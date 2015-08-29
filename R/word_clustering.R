@@ -17,12 +17,18 @@ slowa <- dbGetQuery(con, "select b.id, b.word, count(a.id_stem_word) as cnt
 
 
 dbDisconnect(con)
+slowa2$cnt %>% summary
+slowa2$cnt %>% boxplot()
+slowa2$cnt[slowa2$cnt < 20] %>% boxplot()
+slowa2$cnt[slowa2$cnt < 20] %>% length()
+#168793 / 186942 ~= 90%
 
+#####
 #slowa2 <- slowa
 slowa <- slowa2[1:100,]
 slowa <- cbind(slowa, nowy_stem_id = slowa[,1], orig_word = slowa[,2])
-method <- "jaccard"
-mx <- 0.3
+method <- "lv"
+mx <- 3
 q <- 3
 
 for(i in 1:nrow(slowa)){

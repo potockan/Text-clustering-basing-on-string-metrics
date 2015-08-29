@@ -14,8 +14,8 @@ prepare_string <- cmpfun(function(str) {
 hunspell_analysis <- function(file1, file2){
   message("DB connect")
   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
-  #dbExecQuery(con, "drop table wiki_hunspell_clust")
-  dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust (
+  #dbExecQuery(con, "drop table wiki_hunspell_clust2")
+  dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust2 (
               id_word INTEGER NOT NULL,
               id_stem_word INTEGER NOT NULL,
               FOREIGN KEY (id_word) REFERENCES wiki_word(id),
@@ -78,7 +78,7 @@ hunspell_analysis <- function(file1, file2){
   close(f)
   message("DB inserting")
   #inserting into db
-  dbExecQuery(con, "INSERT into wiki_hunspell_clust(id_word, id_stem_word)
+  dbExecQuery(con, "INSERT into wiki_hunspell_clust2(id_word, id_stem_word)
 select c.id_word as id_word, d.id as id_stem_word
 from
 (select a.word, a.stem_word, b.id as id_word
@@ -91,7 +91,7 @@ wiki_word d
 on c.stem_word = d.word
 ")
   dbExecQuery(con, "drop table tmp_hunspell")
-  print(dbGetQuery(con, "select count (id_word) from wiki_hunspell_clust"))
+  print(dbGetQuery(con, "select count (id_word) from wiki_hunspell_clust2"))
   message("DB disconnect")
   dbDisconnect(con)
 }

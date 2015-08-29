@@ -1,4 +1,4 @@
-Intrukcja obsługi virtualenv:
+;Intrukcja obsługi virtualenv:
 
 Install virtualenv via pip:
 $ pip install virtualenv

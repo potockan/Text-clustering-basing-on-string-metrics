@@ -1,68 +1,85 @@
-\documentclass[12pt, twoside, openany]{report}
-\usepackage[dvips]{graphicx,color,rotating}
+\documentclass{praca1}
 \usepackage[utf8]{inputenc}
-\usepackage{t1enc}
-\usepackage{a4wide}
-\usepackage{amsfonts}
-\usepackage{amsmath}
-%\usepackage{enumitem}
-\usepackage{enumerate}
-\usepackage{verbatim}
-\usepackage[MeX]{polski}
-\usepackage[T1]{fontenc}
-\usepackage{geometry}
-\geometry{left=25mm,right=25mm,%
-bindingoffset=10mm, top=25mm, bottom=25mm}
-\usepackage{amssymb, latexsym}
-\usepackage{amsthm}
-\usepackage{palatino}
-\usepackage{array}
-\usepackage{pstricks}
-\usepackage{textcomp}
-\usepackage{hyperref}
-%paginy
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-% zmiana liter w~.ywej paginie na ma.e
-\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
-\fancyhf{} % usu. bie..ce ustawienia pagin
-\fancyhead[LE,RO]{\small\bfseries\thepage}
-\fancyhead[LO]{\small\bfseries\rightmark}
-\fancyhead[RE]{\small\bfseries\leftmark}
-\renewcommand{\headrulewidth}{0.5pt}
-\renewcommand{\footrulewidth}{0pt}
-\addtolength{\headheight}{0.5pt} % pionowy odst.p na kresk.
-\fancypagestyle{plain}{%
-\fancyhead{} % usu. p. górne na stronach pozbawionych
-% numeracji (plain)
-\renewcommand{\headrulewidth}{0pt} % pozioma kreska
-}
+%%------------------------------------------------------------------------------%
+
+%------------------------------------------------------------------------------%
+
+%\documentclass[12pt, twoside, openany]{report}
+%\usepackage[dvips]{graphicx,color,rotating}
+%\usepackage[utf8]{inputenc}
+%\usepackage{t1enc}
+%\usepackage{a4wide}
+%\usepackage{amsfonts}
+%\usepackage{amsmath}
+%%\usepackage{enumitem}
+%\usepackage{enumerate}
+%\usepackage{verbatim}
+%\usepackage[MeX]{polski}
+%\usepackage[T1]{fontenc}
+%\usepackage{geometry}
+%\geometry{left=25mm,right=25mm,%
+%bindingoffset=10mm, top=25mm, bottom=25mm}
+%\usepackage{amssymb, latexsym}
+%\usepackage{amsthm}
+%\usepackage{palatino}
+%\usepackage{array}
+%\usepackage{pstricks}
+%\usepackage{textcomp}
+%\usepackage{hyperref}
+%%paginy
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%% zmiana liter w~.ywej paginie na ma.e
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+%\fancyhf{} % usu. bie..ce ustawienia pagin
+%\fancyhead[LE,RO]{\small\bfseries\thepage}
+%\fancyhead[LO]{\small\bfseries\rightmark}
+%\fancyhead[RE]{\small\bfseries\leftmark}
+%\renewcommand{\headrulewidth}{0.5pt}
+%\renewcommand{\footrulewidth}{0pt}
+%\addtolength{\headheight}{0.5pt} % pionowy odst.p na kresk.
+%\fancypagestyle{plain}{%
+%\fancyhead{} % usu. p. górne na stronach pozbawionych
+%% numeracji (plain)
+%\renewcommand{\headrulewidth}{0pt} % pozioma kreska
+%}
 %paginy koniec
 
-\theoremstyle{plain}
-\newtheorem{tw}{Twierdzenie}[chapter]
-\newtheorem{uw}{Uwaga}[chapter]
-\newtheorem{defi}{Definicja}[chapter]
-\newtheorem{alg}{Algorytm}[chapter]
-\newtheorem{przyp}{Przypadek}[chapter]
-\newtheorem{prz}{Przykład}[chapter]
-\newtheorem{lem}[tw]{Lemat}
-\newtheorem{stw}[tw]{Stwierdzenie}
-\newtheorem{wn}[tw]{Wniosek}
-\newtheorem{cw}{Ćwiczenie}[chapter]
-\linespread{1.5}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\al}{\alpha}
-\newcommand*{\norm}[1]{\left\Vert{#1}\right\Vert}
-\newcommand*{\abs}[1]{\left\vert{#1}\right\vert}
-\newcommand*{\om}{\omega}
+%\theoremstyle{plain}
+%\newtheorem{tw}{Twierdzenie}[chapter]
+%\newtheorem{uw}{Uwaga}[chapter]
+%\newtheorem{defi}{Definicja}[chapter]
+%\newtheorem{alg}{Algorytm}[chapter]
+%\newtheorem{przyp}{Przypadek}[chapter]
+%\newtheorem{prz}{Przykład}[chapter]
+%\newtheorem{lem}[tw]{Lemat}
+%\newtheorem{stw}[tw]{Stwierdzenie}
+%\newtheorem{wn}[tw]{Wniosek}
+%\newtheorem{cw}{Ćwiczenie}[chapter]
+%\linespread{1.5}
+%\newcommand{\R}{\mathbb{R}}
+%\newcommand{\N}{\mathbb{N}}
+%\newcommand{\al}{\alpha}
+%\newcommand*{\norm}[1]{\left\Vert{#1}\right\Vert}
+%\newcommand*{\abs}[1]{\left\vert{#1}\right\vert}
+%\newcommand*{\om}{\omega}
+
+
+
 
 \author{Natalia Potocka}
 \title{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
+\supervisor{dr Marek Gągolewski}
+\type{magisters}
+\discipline{matematyka}
+\monthyear{grudzień 2015}
+\date{\today}
+\album{237476}
 
 \begin{document}
+\maketitle
+\tableofcontents
 %
 %
 %\begin{titlepage}
@@ -142,14 +159,13 @@ bindingoffset=10mm, top=25mm, bottom=25mm}
 %\addcontentsline{toc}{chapter}{Wstęp}
 %COŚ tu będzie.
 
-\chapter{Metryki na przestrzeni ciągów
-znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
+\chapter{Metryki na przestrzeni ciągów znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
 
 \section{Podstawowe definicje}
 
 CZY TO JAKO CIĄGŁY TEKST CZY WSZYSTKO PISAĆ W DEFINICJI???
 
-\begin{defi}
+\begin{definition}
 Niech  $\Sigma = \{\Sigma_i\}$ będzie skończonym uporządkowanym alfabetem o~wielkości $|\Sigma|$.~\emph{Napisem} nazywamy skończony ciąg znaków z~$\Sigma$.~Zbiór wszystkich napisów o~długości $n$~nad $\Sigma$~jest oznaczony przez $\Sigma^n$,~podczas gdy przez $\Sigma^* = \bigcup_{n=1}^{\infty}\Sigma^n$ rozumiemy zbiór wszystkich napisów utworzonych ze~znaków z~$\Sigma$~\cite{Boytsov2011:indexingmethods}.\\
 
 O~ile nie podano inaczej, używamy zmiennych $s,\ t,\ u,\ v,\ w,\ x,\ y$ jako oznaczenie napisów oraz $a,\ b,\ c$ do oznaczenia napisów jednoznakowych albo po~prostu \emph{znaków}. Pusty napis jest oznaczany jako $\varepsilon$. Przez $|s|$, dla każdego napisu $s \in \Sigma^*$, rozumiemy jego długość, czyli liczbę znaków w~napisie. Ciąg zmiennych oznaczających napisy i/lub znaki oznaczają ich złączenie~\cite{Boytsov2011:indexingmethods}.\\
@@ -159,16 +175,17 @@ Poprzez $s_i$~rozumiemy $i$-ty znak z~napisu $s$,~dla każdego $i \in \{1,\ldots
 Załóżmy, że~napis $s$~jest resprezentacją złączenia trzech, być może pustych, podnapisów $w$, $x$ i $y$, tj. $s = wxy$. Wówczas podnapis $w$ nazywamy \emph{prefiksem}, natomiast podnapis $y$ -- sufiksem~\cite{Boytsov2011:indexingmethods}.\\
 
 Podnapis o ustalonej długości $q$ jest nazywany \emph{$q$-gramem}. $q$-gramy o $q$ równym jeden, dwa lub trzy mają specjalne nazwy: \emph{unigram, bigram} i \emph{trigram}. Jeśli $q > |s|$, to $q$-gramy napisu są naisami pustymi~\cite{Boytsov2011:indexingmethods}.
-\end{defi}
+\end{definition}
 
-%\begin{defi}
+%\begin{definition}
 %\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze~skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze~znaków z $\Sigma$ oznaczamy przez~$\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do~$\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$,~$t$~oraz $u$,~a~ich \emph{długość}, czyli liczbę znaków w~napisie, przez $|s|$. Poprzez $s_i$ rozumiemy $i$-ty znak z napisu $s$, dla każdego $i \in \{1,\ldots,|s|\}$, natomiast podnapisy od znaku $i$-tego do znaku $j$-tego oznaczamy przez $s_{i:j}$. Zakładamy również, że jeśli $j<i$, to $s_{i:j} = \varepsilon$ \cite{Loo2014:stringdist}.
-%\end{defi}
+%\end{definition}
 
 
-\begin{prz}
+\begin{example}
 Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = 'ela'$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Co więcej, mamy $s_1 = 'e'$, $s_2 = 'l'$, $s_3 = 'a'$. Podnapis $1:2$ napisu $s$ to $s_{1:2} = 'el'$. W napisie tym mamy do czynienia jedynie z $q$-gramami o $q$ równym jeden, dwa oraz trzy: $'e',\ 'l',\ 'a'$; $'el',\ 'la'$ oraz $'ela'$ odpowiednio.
-\end{prz}
+\end{example}
+
 
 [TU TRZEBA BARDZIEJ FORMALNIE! BOYTSOV STR. 4-7]Odległość $d(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalny koszt ciągu operacji potrzebnego do~przetransformowania $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje). Koszt ciągu operacji jest sumą kosztów pojedynczych operacji. Przez operacje rozumiemy skończoną liczbę reguł w~formie $\delta(x, y) = a$, gdzie $x$~i~$y$ to różne podnapisy, a~$a$~to~nieujemna liczba rzeczywista. Kiedy już, przy pomocy operacji, podnapis $x$~zostanie przekształcony w~napis $y$,~żadne dalsze operacje nie mogą być wykonywane na~$y$~\cite{Navarro2001:guidedtour}.
 
@@ -182,7 +199,7 @@ Jeśli dla każdej operacji $\delta(x,y)$, istnieje odpowiednia operacja $\delta
 \end{itemize}
 Stąd, jeśli odległość jest symetryczna, przestrzeń napisów tworzy przestrzeń metryczną~\cite{Navarro2001:guidedtour}.
 
-\begin{defi}
+\begin{definition}
 \label{def:001}
 Funkcję $d$ nazywamy \emph{metryką} na~$\Sigma^*$, jeśli ma~poniższe własności:
 \begin{enumerate}
@@ -194,7 +211,7 @@ Funkcję $d$ nazywamy \emph{metryką} na~$\Sigma^*$, jeśli ma~poniższe własno
 gdzie $s$,~$t$,~$u$~są~napisami z~$\Sigma^*$.
 
 
-\end{defi}
+\end{definition}
 
 %Z~powyższej definicji wynika, że~dla dowolnych $s,\ t \in \Sigma^*,\ d(s, t) \geq 0$.
 
@@ -209,18 +226,28 @@ Odległości na napisach można podzielić na~trzy grupy:
 
 \section{Odległości na napisach oparte na operacjach edycyjnych}
 
-Metryki oparte na~operacjach edycyjnych zliczają minimalną liczbę opercji potrzebnych do~przetworzenia jednego napisu w~drugi. Najczęściej wymieniamymi operacjami~są:
+HISTORIA ODLEGLOSCI EDYCYJNYCH?
+
+Odległość edycyjna $ED(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalna liczba operacji edycyjnych potrzebna do~przetworzenia $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje)~\cite{Navarro2001:guidedtour}. \emph{Ścisłą odległością edycyjną} nazywamy minimalną liczbę nie nakładających się operacji edycyjnych, które pozwalają przekształcić jeden napis w drugi, i które nie przekształcają dwa razy tego samego podnapisu~\cite{Boytsov2011:indexingmethods}.\\
+
+Napis może zostać przetworzony w drugi poprzez ciąg przekształcenia jego podnapisów. Ten ciąg nazywany jest \emph{śladem edycji}, podczas gdy przekształcenia są nazywane \emph{bazowymi} operacjami edycyjnymi. Bazowe operacje edycyjne, które polegają na mapowaniu napisu $s$ w napis $t$, są oznaczane przez $s \rightarrow t$. Zbiór wszystkich bazowych operacji edycyjnych oznaczamy przez $\mathbb{B}$~\cite{Boytsov2011:indexingmethods}.
+
+
+Bazowe operacje edycyjne są zazwyczaj ograniczone do:
 \begin{itemize}
-\item usunięcie znaku: $\delta(l, \varepsilon)$, tj. usunięcie litery $'l'$ , np. $'ala' \rightarrow 'aa'$
-\item wstawienie znaku: $\delta(\varepsilon, l)$, tj. wstawienie litery $'l'$, np. $'ala' \rightarrow 'alka'$
-\item zamiana znaku: $\delta(a, e)$, tj. zamiana litery $'a'$ na $'e'$, np. $'ala' \rightarrow 'ela'$
-\item transpozycja: $\delta(al, la)$, tj. przestawienie dwóch przylegających liter $'a'$ i $'l'$, np. $'ala' \rightarrow 'laa'$
+\item usunięcie znaku: $l \rightarrow \varepsilon$, tj. usunięcie litery $'l'$ , np. $'ela' \rightarrow 'ea'$
+\item wstawienie znaku: $\varepsilon \rightarrow l$, tj. wstawienie litery $'l'$, np. $'ela' \rightarrow 'elka'$
+\item zamiana znaku: $e \rightarrow a$, tj. zamiana litery $'e'$ na $'a'$, np. $'ala' \rightarrow 'ela'$
+\item transpozycja: $el \rightarrow le$, tj. przestawienie dwóch przylegających liter $'e'$ i $'l'$, np. $'ela' \rightarrow 'lea'$
 \end{itemize}
+
+
+
 Koszt wszystkich powyższych operacji zazwyczaj wynosi $1$. Dla wszystkich odległości, które dopuszczają więcej niż jedną operację edycyjną, może być znaczące nadanie wag poszczególnym operacjom, dając na przykład transpozycji mniejszy koszt niż operacji wstawienia znaku. Odległości, dla których takie wagi zostają nadane są zazwyczaj nazywane \emph{uogólnionymi} odległościami~\cite{Boytsov2011:indexingmethods}.
 
 Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Nie wszystkie z ww. odległości są metrykami.
 
-\begin{defi}
+\begin{definition}
 \emph{Odległością Hamminga}~\cite{Hamming1950:errordetecting} na $\Sigma^*$ nazywamy:
 $$
 d_{hamming}(s, t) = \left\{
@@ -237,18 +264,18 @@ $$
     0, & \text{w przeciwnym przypadku}.
 \end{array}\right.
 $$
-\end{defi}
+\end{definition}
 
 %Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości. 
 Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. Intuicyjnie rzecz biorąc odległość Hamminga zlicza liczbę indeksów, na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
 
 [PIĘKNY RYSUNEK??]
 
-\begin{prz}
+\begin{example}
 Odległość Hamminga między słowami \emph{koza} i \emph{foka} wynosi $d_{hamming}(koza, foka) = 2$, natomiast między słowami \emph{koza} i \emph{foczka} wynosi ona $d_{hamming}(koza, foczka) = \infty$.
-\end{prz}
+\end{example}
 
-\begin{defi}
+\begin{definition}
 \emph{Odległością najdłuższego wspólnego podnapisu}~\cite{Needleman2008:generalmethod} na $\Sigma^*$ nazywamy:
 $$
 d_{lcs}(s, t) = \left\{
@@ -258,14 +285,14 @@ d_{lcs}(s, t) = \left\{
     1+min\{d_{lcs}(s_{1:|s|-1}, t), d_{lcs}(s, t_{1:|t|-1})\}, & \text{w przeciwnym przypadku},
 \end{array}\right.
 $$
-\end{defi}
+\end{definition}
 
 Odległość najdłuższego wspólnego podnapisu również spełnia definicję metryki. Przyjmuje wartości ze zbioru $\{0, |s|+|t|\}$, przy czym maksimum jest osiągane, gdy $s$ i $t$ nie mają ani jednego wspólnego znaku.
 Odległość ta zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. 
 
-\begin{prz}
+\begin{example}
 Odległość najdłuższego wspólnego podnapisu między słowami \emph{koza} i \emph{foka} wynosi: $d_{lsc}('koza', 'foka') = 4$, bo~$koza  \xrightarrow[1]{us.\ k} oza \xrightarrow[1]{us.\ z} oa  \xrightarrow[1]{wst.\ f} foa \xrightarrow[1]{wst.\ k} foka$.
-\end{prz}
+\end{example}
 
 Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odlegość równą~$4$.
 
@@ -275,7 +302,7 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też in
 
 Jak widać na~rysunku, litery $'k',\ 'z',\ 'f'$ i $'k'$ pozostają bez pary, dając odległość równą~$4$.
 
-\begin{defi}
+\begin{definition}
 Uogólnioną \emph{odległością Levenshteina} \cite{Levenshtein1965:binarycodes}~na~$\Sigma^*$~nazywamy:
 $$
 d_{lv}(s, t) = \left\{
@@ -289,7 +316,7 @@ d_{lv}(s, t) = \left\{
 \end{array}\right.
 $$
 gdzie $w_1, w_2$~i~$w_3$~to~niezerowe liczby rzeczywiste, oznaczające kary za~usunięcie, wstawienie oraz zamianę znaku.
-\end{defi}
+\end{definition}
 
 Odległość ta~zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmie się $1$~mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~$d_{lv}('koza', 'foka') = 2$, bo $koza  \xrightarrow[1]{zm.\ k\ na\ f} foza  \xrightarrow[1]{zm.\ z\ na\ k} foka$. Powyższy przykład ilustruje, że dodatkowa elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że~potrzebujemy jedynie dwóch zamian znaków~\cite{Loo2014:stringdist}.
 
@@ -297,7 +324,7 @@ Gdy za~wagi przyjmiemy np. $(0.1, 1, 0.3)$, to $d_{lv}('koza', 'foka') = 0.6$, b
 
 Uogólniona odległość Levenshteina spełnia definicję metryki, gdy $w_1 = w_2$. W przeciwnym przypadku nie spełnia ona założenia o~symetrii, tj.~podpunktu \ref{def:001c}~definicji \ref{def:001}.~Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz $w_1$~i~$w_2$,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy przetwarzaniu napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład.
 
-\begin{prz}
+\begin{example}
 Przyjmijmy za~$(w_1, w_2, w_3) = (0.1, 1, 0.3)$. Wówczas uogólniona odległość Levenshteina dla napisów \emph{koza} i~\emph{foczka} wynosi:
 \begin{equation}
 \label{eq:001}
@@ -332,10 +359,10 @@ $$
 foczka  \xrightarrow[0.3]{zm.\ f\ na\ k} koczka  \xrightarrow[0.1]{us. c} kozka \xrightarrow[0.1]{us. k} koza,
 $$
 czyli analogicznie, jak w~przypadku \ref{eq:001}.
-\end{prz}
+\end{example}
 
 
-\begin{defi}
+\begin{definition}
 \emph{Odległością optymalnego dopasowania napisów} na~$\Sigma^*$~nazywamy:
 $$
 d_{osa}(s, t) = \left\{
@@ -350,7 +377,7 @@ d_{osa}(s, t) = \left\{
 \end{array}\right.
 $$
 gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
-\end{defi}
+\end{definition}
 
 Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W~przeciwieństwie do~wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z~definicji \ref{def:001} \cite{Loo2014:stringdist}: 
 $$2 = d_{osa}('ba', 'ab') + d_{osa}('ab', 'acb') \leq d_{osa}('ba', 'acb') = 3,$$ 
@@ -402,4 +429,5 @@ $$
 %...........................................
 %\end{flushright}
 
+\makestatement
 \end{document}

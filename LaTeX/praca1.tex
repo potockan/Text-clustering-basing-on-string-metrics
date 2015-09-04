@@ -4,7 +4,6 @@
 
 %------------------------------------------------------------------------------%
 
-%\documentclass[12pt, twoside, openany]{report}
 %\usepackage[dvips]{graphicx,color,rotating}
 %\usepackage[utf8]{inputenc}
 %\usepackage{t1enc}
@@ -28,42 +27,7 @@
 %\usepackage{hyperref}
 %%paginy
 %\usepackage{fancyhdr}
-%\pagestyle{fancy}
-%% zmiana liter w~.ywej paginie na ma.e
-%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-%\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
-%\fancyhf{} % usu. bie..ce ustawienia pagin
-%\fancyhead[LE,RO]{\small\bfseries\thepage}
-%\fancyhead[LO]{\small\bfseries\rightmark}
-%\fancyhead[RE]{\small\bfseries\leftmark}
-%\renewcommand{\headrulewidth}{0.5pt}
-%\renewcommand{\footrulewidth}{0pt}
-%\addtolength{\headheight}{0.5pt} % pionowy odst.p na kresk.
-%\fancypagestyle{plain}{%
-%\fancyhead{} % usu. p. górne na stronach pozbawionych
-%% numeracji (plain)
-%\renewcommand{\headrulewidth}{0pt} % pozioma kreska
-%}
-%paginy koniec
 
-%\theoremstyle{plain}
-%\newtheorem{tw}{Twierdzenie}[chapter]
-%\newtheorem{uw}{Uwaga}[chapter]
-%\newtheorem{defi}{Definicja}[chapter]
-%\newtheorem{alg}{Algorytm}[chapter]
-%\newtheorem{przyp}{Przypadek}[chapter]
-%\newtheorem{prz}{Przykład}[chapter]
-%\newtheorem{lem}[tw]{Lemat}
-%\newtheorem{stw}[tw]{Stwierdzenie}
-%\newtheorem{wn}[tw]{Wniosek}
-%\newtheorem{cw}{Ćwiczenie}[chapter]
-%\linespread{1.5}
-%\newcommand{\R}{\mathbb{R}}
-%\newcommand{\N}{\mathbb{N}}
-%\newcommand{\al}{\alpha}
-%\newcommand*{\norm}[1]{\left\Vert{#1}\right\Vert}
-%\newcommand*{\abs}[1]{\left\vert{#1}\right\vert}
-%\newcommand*{\om}{\omega}
 
 
 
@@ -78,79 +42,8 @@
 \album{237476}
 
 \begin{document}
-\maketitle
-\tableofcontents
-%
-%
-%\begin{titlepage}
-%\pagestyle{headings}
-%
-%\noindent
-%\begin{Large}
-%\begin{table}[t]
-%\centering
-%\begin{tabular}[t]{lcr}
-% \includegraphics[width=70pt,height=70pt]{PW.png} & POLITECHNIKA WARSZAWSKA & \includegraphics[width=70pt,height=70pt]{MiNI.png}\\
-%& WYDZIAŁ MATEMATYKI & \\
-%& I NAUK INFORMACYJNYCH &
-%\end{tabular}
-%\end{table}
-%
-%% \vfill
-%\begin{center}PRACA DYPLOMOWA MAGISTERSKA \end{center}
-%\begin{center}MATEMATYKA\end{center}\end{Large}
-%% \vfill
-%\begin{center}
-%\Huge
-%\textbf{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
-%\end{center}
-%% \vfill\vfill
-%\vfill
-%\begin{center}
-%\Large
-%Autor: \\
-%\LARGE
-%Natalia Potocka
-%\end{center}
-%\vfill
-%\begin{center}
-%\Large
-%Promotor: \\
-%\Large
-%dr hab. Marek Gągolewski
-%\end{center}
-%\vfill
-%\begin{center}
-%\large
-%Warszawa, Wrzesień 2015
-%\end{center}
-%\newpage
-%\hfill
-%\begin{table}[b]
-%\centering
-%\begin{tabular}[t]{ccc}
-%............................................. & \hspace*{100pt} & .............................................\\
-%podpis promotora & \hspace*{100pt} & podpis autora
-%\end{tabular}
-%\end{table}
-%
-%
-%% \maketitle
-%\end{titlepage}
-%\thispagestyle{empty}
-%\newpage
-%\pagestyle{headings}
-%\setcounter{page}{1}
-%\hyphenation{Syl-ves-tra}
-%\hyphenation{Syl-ves-ter-a}
-%\cleardoublepage
-%
+%\maketitle
 %\tableofcontents
-%
-%\begin{abstract}
-%
-%\end{abstract}
-
 
 %-----------Początek części zasadniczej-----------
 
@@ -242,10 +135,22 @@ Bazowe operacje edycyjne są zazwyczaj ograniczone do:
 \end{itemize}
 
 
-
 Koszt wszystkich powyższych operacji zazwyczaj wynosi $1$. Dla wszystkich odległości, które dopuszczają więcej niż jedną operację edycyjną, może być znaczące nadanie wag poszczególnym operacjom, dając na przykład transpozycji mniejszy koszt niż operacji wstawienia znaku. Odległości, dla których takie wagi zostają nadane są zazwyczaj nazywane \emph{uogólnionymi} odległościami~\cite{Boytsov2011:indexingmethods}.
 
-Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Nie wszystkie z ww. odległości są metrykami.
+\begin{property}
+Zakładamy, że $\mathbb{B}$ spełnia następujące własności~\cite{Boytsov2011:indexingmethods}:
+\begin{itemize}
+\item jeśli $s \rightarrow t \in \mathbb{B}$, to odwrotna operacja $t \rightarrow s$ również należy do $\mathbb{B}$;
+\item $a \rightarrow a \in \mathbb{B}$ (operacja identycznościowa dla jednego znaku należy do $\mathbb{B}$);
+\item zbiór $\mathbb{B}$ jest zupełny: dla dwóch dowolnych napisów $s$ i $t$, istnieje ślad edycji, który przekształca $s$ w $t$.
+\end{itemize}
+\end{property}
+
+Zauważmy, że zbiór $\mathbb{B}$ nie musi być skończony.
+
+Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. 
+
+
 
 \begin{definition}
 \emph{Odległością Hamminga}~\cite{Hamming1950:errordetecting} na $\Sigma^*$ nazywamy:
@@ -429,5 +334,5 @@ $$
 %...........................................
 %\end{flushright}
 
-\makestatement
+%\makestatement
 \end{document}

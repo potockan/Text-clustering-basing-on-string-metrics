@@ -127,6 +127,7 @@
 \def\@corollary{Wniosek}
 \def\@remark{Uwaga}
 \def\@example{Przyk{\l}ad}
+\def\@property{W{\l}asno\'s\'c}
 
 
 %------------------------------------------------------------------------------%
@@ -150,6 +151,7 @@
   \def\@corollary{Corollary}
   \def\@remark{Remark}
   \def\@example{Example}
+  \def\@property{Property}
 }{
   \def\bibname{Literatura}
 }
@@ -162,6 +164,7 @@
 \newtheorem{lemma}[theorem]{\@lemma}
 \newtheorem{proposition}[theorem]{\@proposition}
 \newtheorem{corollary}[theorem]{\@corollary}
+\newtheorem{property}[theorem]{\@property}
 \theoremstyle{rem}
 \newtheorem{remark}{\@remark}[chapter]
 \newtheorem{example}{\@example}[chapter]

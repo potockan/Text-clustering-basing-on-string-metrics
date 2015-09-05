@@ -137,7 +137,7 @@ Bazowe operacje edycyjne są zazwyczaj ograniczone do:
 
 Koszt wszystkich powyższych operacji zazwyczaj wynosi $1$. Dla wszystkich odległości, które dopuszczają więcej niż jedną operację edycyjną, może być znaczące nadanie wag poszczególnym operacjom, dając na przykład transpozycji mniejszy koszt niż operacji wstawienia znaku. Odległości, dla których takie wagi zostają nadane są zazwyczaj nazywane \emph{uogólnionymi} odległościami~\cite{Boytsov2011:indexingmethods}.
 
-\begin{property}
+\begin{property}\label{wl:001}
 Zakładamy, że $\mathbb{B}$ spełnia następujące własności~\cite{Boytsov2011:indexingmethods}:
 \begin{itemize}
 \item jeśli $s \rightarrow t \in \mathbb{B}$, to odwrotna operacja $t \rightarrow s$ również należy do $\mathbb{B}$;
@@ -148,7 +148,56 @@ Zakładamy, że $\mathbb{B}$ spełnia następujące własności~\cite{Boytsov201
 
 Zauważmy, że zbiór $\mathbb{B}$ nie musi być skończony.
 
-Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. 
+Podobieństwo dwóch napisów może być wyrażone jako długość scieżki edycyjnej, dzięki której jeden napis zostaje przekształcony w drugi:
+
+\begin{definition}
+Mając dany zbiór bazowych operacji edycyjnych, odległość edycyjna $ED(s,t)$ jest równa długości najkrótszej ścieżce edycyjnej, która przekształca napis $s$ w napis $t$. Najkrótsza ścieżka, która przekształca napis $s$ w napis $t$ jest nazywana \emph{optymalną} ścieżką edycyjną~\cite{Boytsov2011:indexingmethods}. 
+\end{definition}
+
+Przykładowe odległości edycyjne: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. 
+
+\begin{example}
+JAKIŚ PRZYKŁĄD SCIEZKI I OPTYMALNEJ SCIEZKI.
+\end{example}
+
+
+Odległość edycyjna może być również zostać uogólniona jako minimalny koszt dzięki któremu przekształcamy jeden napis w drugi. Można to zrobić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne moga mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{|E|} \rightarrow b_{|E|}$ poprzez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd poprzez odległość między napisem $s$ a napisem $t$ będzie rozumiany minimalny koszt ze wszystkich możliwych ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{uogólnionymi} odległościami edycyjnymi.\\
+Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o ważone zamiany (substytucje) (pod)napisów, zamiast operacji edycyjnych wykonywanych na pojedynczych znakach~\cite{Ukkonen1985:algorithmsforapprox}. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{rozszerzonymi} odległościami edycyjnymi. Przykładowo, $\mathbb{B}$ może zawierać operację $x \rightarrow ks$ o koszcie jednostkowym. Wówczas rozszerzona odległość pomiędzy napisami $'xero'$ i $'ksero'$ wynosi jeden, podczas gdy standardowa odległość wyniosłaby dwa (NIE WIEM CZY NIE TRZEBA TU COŚ WIECEJ POWIEDZIEC, NP, PODAC DEFINICJI ODLEGLOSCI JAK TO JEST W BOYTSOVIE)~\cite{Boytsov2011:indexingmethods}.
+
+\begin{definition}\label{def:002}
+Mając dany zbiór bazowych operacji edycyjnych $\mathbb{B}$ oraz funkcję $\delta$, która nadaje koszt wszystkim bazowym operacjom edycyjnym z $\mathbb{B}$, ogólna(?) odległość edycyjna pomiędzy napisami $s$ i $t$ jest zdefiniowana jako minimalny koszt ścieżki edycyjnej, która przekształca $s$ w $t$\cite{Boytsov2011:indexingmethods}.
+\end{definition}
+
+\begin{property}\label{wl:002}
+Zakładamy, że funkcja kosztu $\delta(s \rightarrow t)$ ma następujące własności~\cite{Boytsov2011:indexingmethods}:
+\begin{itemize}
+\item $\delta(s \rightarrow t) \in \mathbb{R}$ (koszt funkcji jest wartością rzeczywistą),
+\item $\delta(s \rightarrow t) = \delta(t \rightarrow s)$ (symetria),
+\item $\delta(s \rightarrow t) \geq 0,\ \delta(s \rightarrow s) = 0,\text{ i } \delta(s \rightarrow t) = 0 \Rightarrow s = t$ (pozytywna określoność ??),
+\item $\forall \gamma > 0$ zbiór bazowych operacji $\{s \rightarrow t \in \mathbb{B} | \delta(s \rightarrow t) < \gamma \}$ jest skończony (skończoność podzbioru bazowych operacji, których koszt jest ograniczony z góry).
+\end{itemize}
+\end{property}
+
+Zauważmy, że ostatnia własność jest automatycznie spełniona dla skończonego zbioru $\mathbb{B}$.
+
+\begin{theorem}
+Z własności \ref{wl:001} i \ref{wl:002} wynika, że:
+\begin{itemize}
+\item dla każdych dwóch napisów $s$ i $t$, istnieje ścieżka o minimalnym koszcie, tj. właściwie (prawdziwie, odpowiednio?) zdefiniowana odleglość edycyjna z $s$ do $t$~\cite{Boytsov2011:indexingmethods},
+\item ogólna odległość edycyjna z definicji \ref{def:002} jest metryką~\cite{Wagner1974:stringtostring}.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Żeby udowodnić, że $ED(s,t)$ jest metryką, musimy pokazać, że $ED(s,t)$ istnieje i jest dodatnio określona, symetryczna oraz subaddytywna (tj. spełnia nierówność trójkąta).\\
+Z własności~\ref{wl:002} wynika, że funkcja kosztu jest nieujemna i że tylko identyczność ma koszt równy zero. Stąd, bez utraty ogólności, możemy rozważyć jedynie takie ścieżki edycyjne, które nie zawierają operacji identycznościowych. Zatem, jeśli $s=t$, to jedyna optymalna ścieżka (która nie zawiera operacji identycznościowych) jest pusta i ma zerowy koszt. Jeśli $s\neq t$, z zupełności zbioru bazowych operacji edycyjnych wynika, że istnieje jedna lub więcej ścieżek edycyjnych, które przekształcają $s$ w $t$. Wszystkie te ścieżki składają się z operacji edycyjnych o ściśle dodatnim koszcie.
+
+Niech $\gamma$ będzie kosztem ścieżki przekształcającej $s$ w $t$. Rozważmy zbiór $A$ ścieżek edycyjnych, które przekształcają $s$ w $t$ i których koszt jest ograniczony z góry przez $\gamma$. Zbiór $A$ jest niepusty i składa się z operacji edycyjnych o dodatnim koszcie mniejszym niż $\gamma$. Zbiór operacji bazowych, których koszt jest ograniczony z góry przez $\gamma$ jest skończony, co dowodzi, że zbiór $A$ jest również skończony. Ponieważ $A$ jest niepusty i skończony, to ścieżki edycyjne o mininalnym (dodatnim) koszcie istnieją i należą do $A$. Stąd, $ED(s,t) > 0$ dla $s\neq t$, tj. odległość edycyjna jest dodatnio określona.
+
+Symetria odległości edycyjnej wynika z symetrii funkcji kosztu i symetrii zbioru operacji bazowych $\mathbb{B}$. Żeby udowodnić symetrię odległości edycyjnej, rozważmy optymalną ścieżkę $E$, która przekształca $s$ w $t$, oraz odpowiadającą jej odwrotną ścieżkę $E_r$, która przekształca $t$ w $s$. Można pokazać, że $\delta(E) = \delta(E_r)$ (POKAZYWAC?).
+
+Żeby pokazać subaddytywność, rozważmy optymalną ścieżkę $E_1$, która przekształca $s$ w $t$, optymalną ścieżkę $E_2$, która przekształca $t$ w $u$, oraz złożenie ścieżek $E_1E_2$, które przekształca $s$ w $u$. Z tego, że $\delta(E_1E_2) = \delta(E_1) + \delta(E_2) = ED(s,t)+ED(t,u)$ oraz $\delta(E_1E_2) \geq ED(s,u)$ wynika, że $ED(s,t)+ED(t,u) \geq ED(s,u)$.
+\end{proof}
 
 
 

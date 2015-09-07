@@ -108,15 +108,19 @@ Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łaci�
 %Z~powyższej definicji wynika, że~dla dowolnych $s,\ t \in \Sigma^*,\ d(s, t) \geq 0$.
 
 
-%Odległości na napisach można podzielić na~trzy grupy:
-%\begin{itemize}
-%\item oparte na~operacjach edycyjnych (\emph{edit operations}),
-%\item oparte na~$q$-gramach,
-%\item miary heurystyczne.
-%\end{itemize}
 
+\section{Odległości na przestrzeni ciągów znaków}
 
-\section{Odległości na napisach oparte na operacjach edycyjnych}
+W tym podrozdziale zajmiemy się odległościami na przestrzeni ciągów znaków. Można je podzielić na~trzy grupy:
+\begin{itemize}
+\item oparte na~operacjach edycyjnych (\emph{edit operations}),
+\item oparte na~$q$-gramach,
+\item miary heurystyczne.
+\end{itemize}
+
+Pierwszy rodzaj odległości jest najczęściej używany w algorytmach zajmujących się optymalnym dopasowaniem, dlatego też poświęcimy mu największą część niniejszego rozdziału. Odległości oparte na $q$-gramach ... (TUTAJ COŚ O NICH). Natomiast miary heurystyczne są rzadko stosowane, będąc zazwyczaj używane w konkretnych przypadkach. Miary te miały jednak swój wkład w historię optymalizacji napisów, zatem pokrótce opiszemy je pod koniec tego rozdziału.
+
+\subsection{Odległości oparte na operacjach edycyjnych}
 
 HISTORIA ODLEGLOSCI EDYCYJNYCH?
 
@@ -159,7 +163,7 @@ JAKIŚ PRZYKŁĄD SCIEZKI I OPTYMALNEJ SCIEZKI.
 \end{example}
 
 
-Odległość edycyjna może być również zostać uogólniona na minimalny koszt, dzięki któremu przekształcamy jeden napis w drugi. Można to zrobić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne mogą mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}, dając na przykład transpozycji mniejszy koszt niż operacji wstawienia znaku. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{E|} \rightarrow b_{|E|}$ poprzez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd poprzez odległość między napisem $s$ a napisem $t$ będzie rozumiany minimalny koszt ze wszystkich możliwych ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{uogólnionymi} odległościami edycyjnymi.\\
+Odległość edycyjna może być również zostać uogólniona na minimalny koszt, dzięki któremu przekształcamy jeden napis w drugi. Można to zrobić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne mogą mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}. Zazwyczaj koszt każdej operacji wynosi jeden, jednak można na przykład nadać transpozycji mniejszy koszt niż operacji wstawienia znaku. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{E|} \rightarrow b_{|E|}$ poprzez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd poprzez odległość między napisem $s$ a napisem $t$ będzie rozumiany minimalny koszt ze wszystkich możliwych ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{uogólnionymi} odległościami edycyjnymi.\\
 Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o ważone zamiany (substytucje) (pod)napisów, zamiast operacji edycyjnych wykonywanych na pojedynczych znakach~\cite{Ukkonen1985:algorithmsforapprox}. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{rozszerzonymi} odległościami edycyjnymi. Przykładowo, $\mathbb{B}$ może zawierać operację $x \rightarrow ks$ o koszcie jednostkowym. Wówczas rozszerzona odległość pomiędzy napisami $\verb|xero|$ i $\verb|ksero|$ wynosi jeden, podczas gdy standardowa odległość wyniosłaby dwa (NIE WIEM CZY NIE TRZEBA TU COŚ WIECEJ POWIEDZIEC, NP, PODAC DEFINICJI ODLEGLOSCI JAK TO JEST W BOYTSOVIE)~\cite{Boytsov2011:indexingmethods}.
 
 \begin{definition}\label{def:002}
@@ -206,6 +210,8 @@ Odległość edycyjna jest metryką, nawet gdy funkcja kosztu $\delta$ nie jest 
 \end{align*}
 
 Można zobaczyć, że $3 = \delta(\verb|a| \rightarrow \verb|b|) > \delta(\verb|a| \rightarrow \verb|c|) + \delta(\verb|c| \rightarrow \verb|b|) = 2$. Stąd optymalna ścieżka edycyjna $(\verb|a| \rightarrow \verb|c|), \verb|c| \rightarrow \verb|b|)$ przekształca $\verb|a|$ w $\verb|b|$ z kosztem równym $2$.
+
+Subaddytywność odległości edycyjnej pozwala używać metod właściwych przestrzeniom metrycznym, takich jak drzewo Burkharda-Kellera (NO IDEA WHAT THAT IS, NIE WIEM CZY O TYM WSPOMINAC). Niemniej jednak, problem minimalizacji zbioru nakładających się operacji edycyjnych, może być trudny. 
 
 
 \begin{definition}

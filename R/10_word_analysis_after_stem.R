@@ -1,8 +1,8 @@
-### stemmed: 733 828 / 2 805 858 == 26.15 %
-### 655 287 Polish words
-### 41 069 == 696356 - 655287 English words
-### 20 426 == 716782 - 696356 French words
-### 17 046 == 733828 - 716782 German words
+### stemmed: 746 957 / 2 805 858 == 26.62134 %
+### 664 315 Polish words
+### 41 087 == 705402 - 664315 English words
+### 20 438 == 725840 - 705402 French words
+### 21 117 == 746957 - 725840 German words
 
 
 library(RSQLite)
@@ -25,7 +25,7 @@ word_to_analize <- dbGetQuery(con, sprintf("
           from
           (select sum(freq) as freq, id_word
            from wiki_word_freq 
-              where id_word not in (select id_word from wiki_hunspell_clust) 
+              where id_word not in (select id_word from wiki_hunspell_clust2) 
                 and id_word not in (select id from wiki_word where word in (%s))
            group by id_word
            order by freq desc
@@ -37,7 +37,7 @@ word_to_analize <- dbGetQuery(con, sprintf("
 
 cat(word_to_analize$word, file = "/home/natalia/LanguageTool-2.8/words_to_analize.txt", sep = "\n")
 
-#words that apperead more than once
+#words that apperead more than once 
 cat(word_to_analize$word[word_to_analize$freq>1], file = "/home/natalia/LanguageTool-2.8/words_to_analize2.txt", sep = "\n")
 
 

@@ -3,7 +3,7 @@
 library(RSQLite)
 
 ##this script does a hunspell stemming in choosen languages
-source("./R/hunspell_analysis_function.R")
+source("./R/hunspell_analysis_function2.R")
 source("./R/words_diff_after_stem.R")
 
 
@@ -11,8 +11,8 @@ con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-me
 # # #dbExecQuery(con, "drop table wiki_hunspell_clust")
 dbDisconnect(con)
 
-#languages <- c("pl_PL", "en_GB", "fr_FR", "de_DE")
-languages <- c("pl", "en", "fr", "de")
+languages <- c("pl_PL", "en_GB", "fr_FR", "de_DE")
+#languages <- c("pl", "en", "fr", "de")
 file.copy("/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words.txt", 
           "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt", overwrite = TRUE)
 file.copy("/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words_no_stpw.rds", 

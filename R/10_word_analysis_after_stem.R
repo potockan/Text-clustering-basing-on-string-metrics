@@ -8,6 +8,7 @@
 library(RSQLite)
 library(stringi)
 library(compiler)
+library(dplyr)
 
 ## dbExecQuery function
 source("./R/db_exec.R")
@@ -37,9 +38,18 @@ word_to_analize <- dbGetQuery(con, sprintf("
 
 cat(word_to_analize$word, file = "/home/natalia/LanguageTool-2.8/words_to_analize.txt", sep = "\n")
 
-#words that apperead more than once 
-cat(word_to_analize$word[word_to_analize$freq>1], file = "/home/natalia/LanguageTool-2.8/words_to_analize2.txt", sep = "\n")
+# words that are wiki connected 
+stri_detect_fixed(word_to_analize$word, "wiki") -> bb
+word_to_analize[bb,]
+word_to_analize <- word_to_analize[!bb,]
 
+# most frequent words
+word_to_analize %>% filter(freq>1000) %>% arrange(desc(freq)) %>% select(word)
+
+#words that apperead more than x times
+######### chosen x is 5 #########
+x <- 5
+cat(word_to_analize$word[word_to_analize$freq>x], file = "/home/natalia/LanguageTool-2.8/words_to_analize2.txt", sep = "\n")
 
 #words that appeared only once in all the articles
 dbGetQuery(con, "

@@ -17,8 +17,8 @@ words <- dbGetQuery(con, "
           select a.word, a.id 
           from wiki_word a
           join
-          (select id_stem_word
-          from wiki_hunspell_clust) b
+          (select distinct id_stem_word
+          from wiki_hunspell_clust2) b
           on
           a.id = b.id_stem_word
             ")
@@ -31,24 +31,29 @@ words <- dbGetQuery(con, "
 
 # making an order on words such that the first has small distances to the second, the second to the third...
 # without repetition of words
-method <- 'lcs'
-N <- length(words_to_analize)
-
-used <- numeric(N)
-used <- 1
-#word closest to the first one
-used[1] <- which.min(stringdist(words, words_to_analize[1], method = method))
-
-for(i in 2:N){
-  #word closest to the i-th word
-  used[i] <- which.min(stringdist(words, words_to_analize[i], method = method))
-  if(i%%100==0)
-    print(i)
+word_order <- function(words_to_analize, words, method = 'lcs'){
+  # method <- 'lcs'
+  #N <- 100
+  N <- length(words_to_analize)
+  
+  used <- numeric(N)
+  used <- 1
+  #word closest to the first one
+  used[1] <- which.min(stringdist(words$word, words_to_analize[1], method = method))
+  
+  for(i in 2:N){
+    #word closest to the i-th word
+    used[i] <- which.min(stringdist(words$word, words_to_analize[i], method = method))
+    if(i%%100==0)
+      print(i)
+  }
+  return(used)
 }
 
-
-#saveRDS(used, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_left.rds")
-used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_left.rds")
+used_lcs <- word_order(words_to_analize, words, method = 'lcs')
+used_lcs <- used
+#saveRDS(used_lcs, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
+used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
 
 words[used[1:100], 1]
 words_to_analize[1:100]

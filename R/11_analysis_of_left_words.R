@@ -50,10 +50,15 @@ word_order <- function(words_to_analize, words, method = 'lcs'){
   return(used)
 }
 
-used_lcs <- word_order(words_to_analize, words, method = 'lcs')
-used_lcs <- used
-#saveRDS(used_lcs, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
-used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
+# used_lcs <- word_order(words_to_analize, words, method = 'lcs')
+# saveRDS(used_lcs, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
+# used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
+
+
+used_dl <- word_order(words_to_analize, words, method = 'dl')
+saveRDS(used_dl, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_dl.rds")
+used <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_dl.rds")
+
 
 words[used[1:100], 1]
 words_to_analize[1:100]
@@ -76,15 +81,25 @@ lapply(to_insert, function(to_insert) {
 })
 
 
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust2_lcs (
+              id_word INTEGER NOT NULL,
+              id_stem_word INTEGER NOT NULL,
+              FOREIGN KEY (id_word) REFERENCES wiki_word(id),
+              FOREIGN KEY (id_stem_word) REFERENCES wiki_word(id)
+  );")
 
-
-dbExecQuery(con, "INSERT into wiki_hunspell_clust(id_word, id_stem_word)
+dbExecQuery(con, "INSERT into wiki_hunspell_clust2_lcs(id_word, id_stem_word)
 
 select b.id as id_word, a.id_stem_word as id_stem_word
 from tmp_hunspell a
 join
 wiki_word b
 on a.word = b.word
+
+union all
+
+select id_word, id_stem_word 
+from wiki_hunspell_clust2
 ")
 
 

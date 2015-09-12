@@ -11,6 +11,7 @@
 %\usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{examplep}
+\usepackage{xcolor}
 %%\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{verbatim}
@@ -54,6 +55,7 @@
 %COŚ tu będzie.
 
 \chapter{Odległości na przestrzeni ciągów znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
+%\color{red}
 
 \section{Podstawowe definicje}
 
@@ -118,15 +120,16 @@ W tym podrozdziale zajmiemy się odległościami na przestrzeni ciągów znaków
 \item miary heurystyczne.
 \end{itemize}
 
+BLA BLA JAKIEŚ LANIE WODY O METRYKACH
 Pierwszy rodzaj odległości jest najczęściej używany w algorytmach zajmujących się optymalnym dopasowaniem, dlatego też poświęcimy mu największą część niniejszego rozdziału. Odległości oparte na $q$-gramach ... (TUTAJ COŚ O NICH). Natomiast miary heurystyczne są rzadko stosowane, będąc zazwyczaj używane w konkretnych przypadkach. Miary te miały jednak swój wkład w historię optymalizacji napisów, zatem pokrótce opiszemy je pod koniec tego rozdziału.
 
 \subsection{Odległości oparte na operacjach edycyjnych}
 
 HISTORIA ODLEGLOSCI EDYCYJNYCH?
 
-Odległość edycyjna $ED(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalna liczba operacji edycyjnych potrzebna do~przetworzenia $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje)~\cite{Navarro2001:guidedtour}. \emph{Ścisłą odległością edycyjną} nazywamy minimalną liczbę nie nakładających się operacji edycyjnych, które pozwalają przekształcić jeden napis w drugi, i które nie przekształcają dwa razy tego samego podnapisu~\cite{Boytsov2011:indexingmethods}.\\
+\textbf{Ścieżka edycyjna i bazowe operacje edycyjne.} \emph{Odległość edycyjna} $ED(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalna liczba operacji edycyjnych potrzebna do~przetworzenia $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje)~\cite{Navarro2001:guidedtour}. \emph{Ścisłą odległością edycyjną} nazywamy minimalną liczbę nie nakładających się operacji edycyjnych, które pozwalają przekształcić jeden napis w drugi, i które nie przekształcają dwa razy tego samego podnapisu~\cite{Boytsov2011:indexingmethods}.
 
-Napis może zostać przetworzony w drugi poprzez ciąg przekształceń jego podnapisów. Ten ciąg nazywany jest \emph{ścieżką edycyjną (śladem edycji?)}, podczas gdy przekształcenia są nazywane \emph{bazowymi operacjami edycyjnymi}. Bazowe operacje edycyjne, które polegają na mapowaniu napisu $s$ w napis $t$, są oznaczane przez $s \rightarrow t$. Zbiór wszystkich bazowych operacji edycyjnych oznaczamy przez~$\mathbb{B}$~\cite{Boytsov2011:indexingmethods}.
+Napis może zostać przetworzony w drugi poprzez wykonanie na nim ciągu przekształceń jego podnapisów. Ten ciąg nazywany jest \emph{ścieżką edycyjną (śladem edycji?)}, podczas gdy przekształcenia są nazywane \emph{bazowymi operacjami edycyjnymi}. Bazowe operacje edycyjne, które polegają na mapowaniu napisu $s$ w napis $t$, są oznaczane przez $s \rightarrow t$. Zbiór wszystkich bazowych operacji edycyjnych oznaczamy przez~$\mathbb{B}$~\cite{Boytsov2011:indexingmethods}.
 
 
 Bazowe operacje edycyjne są zazwyczaj ograniczone do:
@@ -150,21 +153,21 @@ Zakładamy, że $\mathbb{B}$ spełnia następujące własności~\cite{Boytsov201
 
 Zauważmy, że zbiór $\mathbb{B}$ nie musi być skończony.
 
-Podobieństwo dwóch napisów może być wyrażone jako długość scieżki edycyjnej, dzięki której jeden napis zostaje przekształcony w drugi:
+\textbf{Odległość edycyjna.} Podobieństwo dwóch napisów może być wyrażone jako długość ścieżki edycyjnej, dzięki której jeden napis zostaje przekształcony w drugi:
 
 \begin{definition}
 Mając dany zbiór bazowych operacji edycyjnych, \emph{odległość edycyjna} $ED(s,t)$ jest równa długości najkrótszej ścieżki edycyjnej, która przekształca napis $s$ w napis $t$. Najkrótsza ścieżka, która przekształca napis $s$ w napis $t$ jest nazywana \emph{optymalną} ścieżką edycyjną~\cite{Boytsov2011:indexingmethods}. 
 \end{definition}
 
-Przykładowe odległości edycyjne: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. 
+Przykładowe odległości edycyjne: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Odległości te różnią się zbiorem bazowych operacji edycyjnych. Jeśli w zbiorze tym znajduje się tylko zamiana znaków, to mamy do czynienia z odległością Hamminga. Gdy zbiór bazowych operacji edycyjnych zawiera wstawienia i usunięcia znaków, to jest to odległość najdłuższego wspólnego podnapisu. Gdyby $\mathbb{B}$ powiększyć o zamianę znaków, to otrzymamy odległość Levenshteina. Dwie ostatnie odległości, tj. optymalnego dopasowania napisów oraz Damareu-Levenshteina, mają w zbiorze bazowych operacji edycyjnych usunięcie, wstawienie, zamianę oraz transpozycję znaków.
 
 \begin{example}
 JAKIŚ PRZYKŁĄD SCIEZKI I OPTYMALNEJ SCIEZKI.
 \end{example}
 
 
-Odległość edycyjna może być również zostać uogólniona na minimalny koszt, dzięki któremu przekształcamy jeden napis w drugi. Można to zrobić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne mogą mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}. Zazwyczaj koszt każdej operacji wynosi jeden, jednak można na przykład nadać transpozycji mniejszy koszt niż operacji wstawienia znaku. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{E|} \rightarrow b_{|E|}$ poprzez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd poprzez odległość między napisem $s$ a napisem $t$ będzie rozumiany minimalny koszt ze wszystkich możliwych ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{uogólnionymi} odległościami edycyjnymi.\\
-Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o ważone zamiany (substytucje) (pod)napisów, zamiast operacji edycyjnych wykonywanych na pojedynczych znakach~\cite{Ukkonen1985:algorithmsforapprox}. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{rozszerzonymi} odległościami edycyjnymi. Przykładowo, $\mathbb{B}$ może zawierać operację $x \rightarrow ks$ o koszcie jednostkowym. Wówczas rozszerzona odległość pomiędzy napisami $\verb|xero|$ i $\verb|ksero|$ wynosi jeden, podczas gdy standardowa odległość wyniosłaby dwa (NIE WIEM CZY NIE TRZEBA TU COŚ WIECEJ POWIEDZIEC, NP, PODAC DEFINICJI ODLEGLOSCI JAK TO JEST W BOYTSOVIE)~\cite{Boytsov2011:indexingmethods}.
+Definicja odległości edycyjnej może być również interpretowana jako minimalny koszt, dzięki któremu przekształcamy jeden napis w drugi. Definicję można uogólnić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne mogą mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}. Zazwyczaj koszt każdej operacji wynosi jeden, jednak można, na przykład, nadać transpozycji mniejszy koszt niż operacji wstawienia znaku. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{E|} \rightarrow b_{|E|}$ poprzez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd poprzez odległość między napisem $s$ a napisem $t$ będziemy rozumieć minimalny ze wszystkich możliwych kosztów ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{uogólnionymi} odległościami edycyjnymi.\\
+Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o ważone zamiany (substytucje) (pod)napisów, zamiast operacji edycyjnych wykonywanych na pojedynczych znakach~\cite{Ukkonen1985:algorithmsforapprox}. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{rozszerzonymi} odległościami edycyjnymi. Przykładowo, $\mathbb{B}$ może zawierać operację $\verb|x| \rightarrow \verb|ks|$ o koszcie jednostkowym. Wówczas rozszerzona odległość pomiędzy napisami $\verb|xero|$ i $\verb|ksero|$ wynosi jeden, podczas gdy standardowa (zwykła, nierozszerzona) odległość wyniosłaby dwa~\cite{Boytsov2011:indexingmethods}.
 
 \begin{definition}\label{def:002}
 Mając dany zbiór bazowych operacji edycyjnych $\mathbb{B}$ oraz funkcję $\delta$,~która nadaje koszt wszystkim bazowym operacjom edycyjnym z~$\mathbb{B}$,~ogólna(?) odległość edycyjna pomiędzy napisami $s$~i~$t$~jest zdefiniowana jako minimalny koszt ścieżki edycyjnej, która przekształca $s$~w~$t$~\cite{Boytsov2011:indexingmethods}.
@@ -175,12 +178,12 @@ Zakładamy, że funkcja kosztu $\delta(s \rightarrow t)$ ma następujące własn
 \begin{itemize}
 \item $\delta(s \rightarrow t) \in \mathbb{R}$ (koszt operacji jest liczbą rzeczywistą),
 \item $\delta(s \rightarrow t) = \delta(t \rightarrow s)$ (symetria),
-\item $\delta(s \rightarrow t) \geq 0,\ \delta(s \rightarrow s) = 0\text{ i } \delta(s \rightarrow t) = 0 \Rightarrow s = t$ (pozytywna określoność ??),
+\item $\delta(s \rightarrow t) \geq 0,\ \delta(s \rightarrow s) = 0\text{ i } \delta(s \rightarrow t) = 0 \Rightarrow s = t$ (dodatnia określoność ??),
 \item $\forall \gamma > 0$ zbiór bazowych operacji $\{s \rightarrow t \in \mathbb{B} | \delta(s \rightarrow t) < \gamma \}$ jest skończony (skończoność podzbioru bazowych operacji, których koszt jest ograniczony z góry).
 \end{itemize}
 \end{property}
 
-Zauważmy, że ostatnia własność jest automatycznie spełniona dla skończonego zbioru $\mathbb{B}$.
+Zauważmy, że ostatnia własność jest zawsze spełniona dla skończonego zbioru $\mathbb{B}$.
 
 \begin{theorem}
 Z własności \ref{wl:001} i \ref{wl:002} wynika, że:
@@ -191,15 +194,15 @@ Z własności \ref{wl:001} i \ref{wl:002} wynika, że:
 \end{theorem}
 
 \begin{proof}
-Żeby udowodnić, że $ED(s,t)$ jest metryką, musimy pokazać, że $ED(s,t)$ istnieje i jest dodatnio określona, symetryczna oraz subaddytywna (tj. spełnia nierówność trójkąta).
+Żeby udowodnić, że $ED(s,t)$ jest metryką, musimy pokazać, że $ED(s,t)$ istnieje, 	jest dodatnio określona, symetryczna oraz subaddytywna (tj. spełnia nierówność trójkąta).
 
-Z własności~\ref{wl:002} wynika, że funkcja kosztu jest nieujemna (JA TEGO NIW WIDZE) i że tylko identyczność ma koszt równy zero. Stąd, bez utraty ogólności, możemy rozważyć jedynie takie ścieżki edycyjne, które nie zawierają operacji identycznościowych. Zatem, jeśli $s=t$, to jedyna optymalna ścieżka (która nie zawiera operacji identycznościowych) jest pusta i ma zerowy koszt. Jeśli $s\neq t$, z zupełności zbioru bazowych operacji edycyjnych wynika, że istnieje jedna lub więcej ścieżek edycyjnych, które przekształcają $s$ w $t$. Wszystkie te ścieżki składają się z operacji edycyjnych o ściśle dodatnim koszcie.
+Z własności~\ref{wl:002} wynika, że funkcja kosztu jest nieujemna (JA TEGO NIW WIDZE) i że tylko identyczność ma koszt równy zero. Stąd, bez utraty ogólności, możemy rozważyć jedynie takie ścieżki edycyjne, które nie zawierają operacji identycznościowych. Zatem, jeśli $s=t$, to jedyna optymalna ścieżka (która nie zawiera operacji identycznościowych) jest pusta i ma zerowy koszt. Jeśli $s\neq t$, to z zupełności zbioru bazowych operacji edycyjnych wynika, że istnieje jedna lub więcej ścieżek edycyjnych, które przekształcają $s$ w $t$. Wszystkie te ścieżki składają się z operacji edycyjnych o ściśle dodatnim koszcie.
 
 Niech $\gamma$ będzie kosztem ścieżki przekształcającej $s$ w $t$. Rozważmy zbiór $A$ ścieżek edycyjnych, które przekształcają $s$ w $t$ i których koszt jest ograniczony z góry przez $\gamma$. Zbiór $A$ jest niepusty i składa się z operacji edycyjnych o dodatnim koszcie mniejszym niż $\gamma$. Zbiór operacji bazowych, których koszt jest ograniczony z góry przez $\gamma$ jest skończony, co dowodzi, że zbiór $A$ jest również skończony. Ponieważ $A$ jest niepusty i skończony, to ścieżki edycyjne o mininalnym (dodatnim) koszcie istnieją i należą do $A$. Stąd, $ED(s,t) > 0$ dla $s\neq t$, tj. odległość edycyjna jest dodatnio określona.
 
-Żeby udowodnić symetrię odległości edycyjnej, rozważmy optymalną ścieżkę $E$, która przekształca $s$ w $t$, oraz odpowiadającą jej odwrotną ścieżkę $E_r$, która przekształca $t$ w $s$. Równość ich kosztów $\delta(E) = \delta(E_r)$ wynika z symetrii funkcji kosztu i symetrii zbioru operacji bazowych $\mathbb{B}$. 
+Aby udowodnić symetrię odległości edycyjnej, rozważmy optymalną ścieżkę $E$, która przekształca $s$ w $t$, oraz odpowiadającą jej odwrotną ścieżkę $E_r$, która przekształca $t$ w $s$. Równość ich kosztów $\delta(E) = \delta(E_r)$ wynika z symetrii funkcji kosztu i symetrii zbioru operacji bazowych~$\mathbb{B}$. 
 
-Żeby pokazać subaddytywność, rozważmy optymalną ścieżkę $E_1$, która przekształca $s$ w $t$, optymalną ścieżkę $E_2$, która przekształca $t$ w $u$, oraz złożenie ścieżek $E_1E_2$, które przekształca $s$ w $u$. Z tego, że $\delta(E_1E_2) = \delta(E_1) + \delta(E_2) = ED(s,t)+ED(t,u)$ oraz $\delta(E_1E_2) \geq ED(s,u)$ wynika, że $ED(s,t)+ED(t,u) \geq ED(s,u)$.
+Aby pokazać subaddytywność, rozważmy optymalną ścieżkę $E_1$, która przekształca $s$ w $t$, optymalną ścieżkę $E_2$, która przekształca $t$ w $u$, oraz złożenie ścieżek $E_1E_2$, które przekształca $s$ w $u$. Z tego, że $\delta(E_1E_2) = \delta(E_1) + \delta(E_2) = ED(s,t)+ED(t,u)$ oraz $\delta(E_1E_2) \geq ED(s,u)$ wynika, że $ED(s,t)+ED(t,u) \geq ED(s,u)$.
 \end{proof}
 
 Odległość edycyjna jest metryką, nawet gdy funkcja kosztu $\delta$ nie jest subaddytywna. Co więcej, ponieważ ciąg nakładających się operacji, które przekształcają $s$ w $t$, mogą mieć mniejszy koszt niż $\delta(s \rightarrow t)$, $\delta(s \rightarrow t)$ może być większe niż $ED(s,t)$. Rozważmy, na przykład, następujący alfbet: $\{\verb|a, b, c|\}$, gdzie symetria i brak subaddytywności funkcji $\delta$ jest zdefiniowana następująco:
@@ -209,9 +212,51 @@ Odległość edycyjna jest metryką, nawet gdy funkcja kosztu $\delta$ nie jest 
 \delta(\PVerb{a} \rightarrow \PVerb{b}) = 3
 \end{align*}
 
-Można zobaczyć, że $3 = \delta(\verb|a| \rightarrow \verb|b|) > \delta(\verb|a| \rightarrow \verb|c|) + \delta(\verb|c| \rightarrow \verb|b|) = 2$. Stąd optymalna ścieżka edycyjna $(\verb|a| \rightarrow \verb|c|), \verb|c| \rightarrow \verb|b|)$ przekształca $\verb|a|$ w $\verb|b|$ z kosztem równym $2$.
+Można zobaczyć, że $3 = \delta(\verb|a| \rightarrow \verb|b|) > \delta(\verb|a| \rightarrow \verb|c|) + \delta(\verb|c| \rightarrow \verb|b|) = 2$. Stąd optymalna ścieżka edycyjna $(\verb|a| \rightarrow \verb|c|, \verb|c| \rightarrow \verb|b|)$ przekształca $\verb|a|$ w $\verb|b|$ z kosztem równym $2$.
 
-Subaddytywność odległości edycyjnej pozwala używać metod właściwych przestrzeniom metrycznym, takich jak drzewo Burkharda-Kellera (NO IDEA WHAT THAT IS, NIE WIEM CZY O TYM WSPOMINAC). Niemniej jednak, problem minimalizacji zbioru nakładających się operacji edycyjnych, może być trudny. 
+\textbf{Ścisła odległość edycyjna.} Subaddytywność odległości edycyjnej pozwala używać metod właściwych przestrzeniom metrycznym. Niemniej jednak, problem minimalizacji zbioru nakładających się operacji edycyjnych, może być trudny. Aby zrównoważyć złożoność obliczeniową, zazwyczaj używana jest funkcja podobieństwa, zdefiniowana jako minimum kosztu \emph{ścisłej ścieżki edycyjnej}. Ta ostatnia nie zawiera nakładających się na siebie operacji edycyjnych i nie modyfikuje tego samego podnapisu więcej niż raz. Odpowiająca jej odległość edycyjna nazywana jest \emph{ścisłą odległością edycyjną}~\cite{Boytsov2011:indexingmethods}.
+
+\begin{lemma}
+Dowolna nieścisła odległość edycyjna ogranicza z dołu odpowiadającą jej ścisłą odległość edycyjną.
+\end{lemma}
+
+\begin{lemma}
+Ścisła odległość Levenshteina o jednostkowym koszcie operacji jest równa nieścisłej odległości Levenshteina o jednostkowym koszcie operacji.
+\end{lemma}
+
+Powyższe wynika natychmiast z obserwacji, że optymalna ścieżka edycyjna zawiera jednoznakowe usunięcia, wstawienia oraz zamiany, które nigdy nie modyfikują znaku więcej niż raz.
+
+\begin{lemma}
+Nieścisła odległość Damerau-Levenshteina oraz ścisła odległość Damerau-Levenshteina są różnymi funkcjami. Co więcej ścisła odległość Damerau-Levenshteina nie jest metryką, gdyż nie jest subaddytywna~\cite{Boytsov2011:indexingmethods}.
+\end{lemma}
+
+\begin{proof}
+Ścisła odległość Damerau-Levenshteina traktuje transpozycję (tj. zamianę dwóch przylegających do siebie znaków) jako bazową operację edycyjną. Aby udowodnić lemat podamy przykłąd, w którym zakaz modyfikacji znaków już stransponowanych odróżnia odległość Damerau-Levenshteina od ścisłej odległości Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}.
+\end{proof}
+
+Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierw, zamienia znaki \verb|a| i \verb|b|, a następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że wstawienie przekształca już transformowany napis. Jednakowoż, jeśli kolejne przekształcenia tego samego podnapisu są wykluczone, to najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, składa się z trzech operacji edycyjnych, np. $(\verb|ba| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|b|)$. Stąd, nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
+
+Ścisła odległość Damerau-Levenshteina nie spełnia nierówności trójkąta, gdyż
+$$
+\verb|ba|  \xrightarrow[1]{transp.\ b\ i \ a} \verb|ab| + \verb|ab| \xrightarrow[1]{wst. c} \verb|acb|,
+$$
+natomiast
+$$
+\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|
+$$
+zatem
+$$
+2 = ED(\verb|ba|, \verb|ab|) + ED(\verb|ab|, \verb|acb|) \leq ED(\verb|ba|, \verb|acb|) = 3.
+$$
+
+Ponieważ ścisła i nieścisła odległość Damerau-Levenshteina są różnymi funkcjami, tę pierwszą nazywa się często \emph{odległością optymalnego dopasowania napisów}. Od tego momentu w niniejszej pracy ścisłą odległość Damerau-Levenshteina nazywamy odległością optymalnego dopasowania napisów, natomiast nieścisłą odległość Damerau-Levenshteina nazywamy odległością Damerau-Levenshteina~\cite{Loo2014:stringdist}.
+
+\textbf{Optymalne dopasowanie.} Problem optymalnego obliczenia odległości Damerau-Levenshteina został rozwiązany przez Lowrance'a i Wagnera~\cite{Wagner1975:extensionstring}. W dalszej części podajemy formalne definicje oraz przegląd klasycznych dynamicznych algorytmów wyliczających odległość Levenshteina.
+
+Niech napisy $s$ i $t$ zostaną podzielone na tę samą liczbę, być może pustych, znaków: $s = s_1 s_2 \ldots s_l$ i $t = t_1 t_2 \ldots t_l$, takich, że $s_i \rightarrow t_i \in \mathbb{B}$. Co więcej, zakładamy, że $s_i$ i $t_j$ nie mogą być znakami pustymi dla $i = j$.
+
+
+
 
 
 \begin{definition}
@@ -358,7 +403,8 @@ $$
 $$
 W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $|a|$ i $|b|$, a następnie wstwienie litery $|c|$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
 
-[MIARA DAMERAU-LEVENSHTEINA??? WTEDY ZMIENIC DEFINICJE O NIEPRZERABIANIU 2 RAZY TEGO SAMEGO PODNAPISU]
+
+[MIARA DAMERAU-LEVENSHTEINA]
 
 W~przypadku odległości Levenshteina i~odległości optymalnego dopasowania napisów, maksymalna odległość między napisami $s$~i~$t$~wynosi $max\{|s|, |t|\}$. Jednakowoż, gdy liczba dopuszczalnych operacji edycyjnych rośnie, to liczba dopuszczalnych ścieżek między napisami wzrasta, co pozwala ewentualnie zmiejszyć odległość między napisami. Dlatego relację między zaprezentowanymi powyżej odległościami można podsumować następująco~\cite{Loo2014:stringdist}:
 $$

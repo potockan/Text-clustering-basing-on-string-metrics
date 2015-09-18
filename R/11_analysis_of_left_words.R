@@ -82,18 +82,37 @@ word_order <- function(words_to_analize, words, method = 'lcs', q = 3){
 
 
 used_jaccard <- word_order(words_to_analize, words, method = 'jaccard', q = 4)
-saveRDS(used_jaccard, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jaccard.rds")
+#saveRDS(used_jaccard, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jaccard.rds")
+used_jaccard <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jaccard.rds")
 
 used_qgram <- word_order(words_to_analize, words, method = 'qgram', q = 4)
-saveRDS(used_qgram, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_qgram.rds")
+#saveRDS(used_qgram, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_qgram.rds")
+used_qgram <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_qgram.rds")
 
 used_cosine <- word_order(words_to_analize, words, method = 'cosine', q = 4)
-saveRDS(used_cosine, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_cosine.rds")
-
+#saveRDS(used_cosine, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_cosine.rds")
+used_cosine <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_cosine.rds")
 
 words[used_jaccard[1:100], 1]
 words_to_analize[1:100]
 
+
+#####################
+sum(used_cosine == used_jaccard, na.rm = TRUE) / 323793
+# [1] 0.9090592
+sum(used_qgram == used_jaccard, na.rm = TRUE) / 323793
+# [1] 0.6516663
+sum(used_qgram == used_cosine, na.rm = TRUE) / 323793
+# [1] 0.7301177
+
+# we're getting rid of used_cosine, as it is very similar to used_jaccard, 
+# and more similar to used_qgram than used_qgram to used_jaccard
+#####################
+
+
+# used <- used_jaccard
+# used <- used_qgram
+used <- used_cosine
 
 dbExecQuery(con, "create table if not exists tmp_hunspell (
             word VARCHAR(256) NOT NULL,
@@ -101,7 +120,7 @@ dbExecQuery(con, "create table if not exists tmp_hunspell (
             FOREIGN KEY (id_stem_word) REFERENCES wiki_word(id)
 )")
 
-to_insert <- sprintf("(%s, %d)", prepare_string(words_to_analize), words$id[used])
+to_insert <- sprintf("(%s, %d)", prepare_string(words_to_analize[!is.na(used)]), words$id[used[!is.na(used)]])
 #print(5)
 to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500),
                                   length.out=length(to_insert)))
@@ -112,14 +131,14 @@ lapply(to_insert, function(to_insert) {
 })
 
 
-dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust2_dl (
+dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust2_cosine (
               id_word INTEGER NOT NULL,
               id_stem_word INTEGER NOT NULL,
               FOREIGN KEY (id_word) REFERENCES wiki_word(id),
               FOREIGN KEY (id_stem_word) REFERENCES wiki_word(id)
   );")
 
-dbExecQuery(con, "INSERT into wiki_hunspell_clust2_dl(id_word, id_stem_word)
+dbExecQuery(con, "INSERT into wiki_hunspell_clust2_cosine(id_word, id_stem_word)
 
 select b.id as id_word, a.id_stem_word as id_stem_word
 from tmp_hunspell a

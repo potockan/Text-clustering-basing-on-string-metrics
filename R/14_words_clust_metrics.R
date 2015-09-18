@@ -12,7 +12,7 @@ slowa <- dbGetQuery(con, "select a.id_stem_word, a.freq, b.word
                     from
                     
                     (select id_stem_word, count(id_word) as freq
-                    from wiki_hunspell_clust2
+                    from wiki_hunspell_clust2_cosine
                     group by id_stem_word) a
                     
                     join
@@ -35,6 +35,31 @@ repr <- dbGetQuery(con, "select a.id_stem_word, a.id_word, b.word
 
                     on a.id_word = b.id
                     ")
+
+
+# wiki_hunspell_clust2
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 1.000   1.000   2.000   3.995   5.000  89.000 
+
+# wiki_hunspell_clust2_lcs
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 1.000   2.000   4.000   5.778   8.000 217.000 
+
+# wiki_hunspell_clust2_dl
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 1.000   2.000   4.000   5.778   8.000 217.000 
+
+# wiki_hunspell_clust2_jaccard
+# Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+# 1.000     2.000     4.000     5.727     8.000 18484.000
+
+# wiki_hunspell_clust2_qgram
+# Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+# 1.00     1.00     3.00     5.73     7.00 40701.00 
+
+# wiki_hunspell_clust2_cosine
+# Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+# 1.000     2.000     4.000     5.727     8.000 18500.000 
 
 #slowa2 <- slowa
 slowa <- slowa2[1:100,]

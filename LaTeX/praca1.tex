@@ -251,20 +251,60 @@ $$
 
 Ponieważ ścisła i nieścisła odległość Damerau-Levenshteina są różnymi funkcjami, tę pierwszą nazywa się często \emph{odległością optymalnego dopasowania napisów}. Od tego momentu w niniejszej pracy ścisłą odległość Damerau-Levenshteina nazywamy odległością optymalnego dopasowania napisów, natomiast nieścisłą odległość Damerau-Levenshteina nazywamy odległością Damerau-Levenshteina~\cite{Loo2014:stringdist}.
 
-\textbf{Optymalne dopasowanie.} Problem optymalnego obliczenia odległości Damerau-Levenshteina został rozwiązany przez Lowrance'a i Wagnera~\cite{Wagner1975:extensionstring}. W dalszej części podajemy formalne definicje oraz przegląd klasycznych dynamicznych algorytmów wyliczających odległość Levenshteina.
+\textbf{Optymalne dopasowanie.} % Problem optymalnego obliczenia odległości Damerau-Levenshteina został rozwiązany przez Lowrance'a i Wagnera~\cite{Wagner1975:extensionstring}. W dalszej części podajemy formalne definicje oraz przegląd klasycznych dynamicznych algorytmów wyliczających odległość Levenshteina.
 
-Niech napisy $s$ i $t$ zostaną podzielone na tę samą liczbę, być może pustych, znaków: $s = s_1 s_2 \ldots s_l$ i $t = t_1 t_2 \ldots t_l$, takich, że $s_i \rightarrow t_i \in \mathbb{B}$. Co więcej, zakładamy, że $s_i$ i $t_j$ nie mogą być znakami pustymi dla $i = j$.
+Niech napisy $s$ i $t$ zostaną podzielone na tę samą liczbę, być może pustych, znaków: $s = s_1 s_2 \ldots s_l$ i $t = t_1 t_2 \ldots t_l$, takich, że $s_i \rightarrow t_i \in \mathbb{B}$. Co więcej, zakładamy, że $s_i$ i $t_j$ nie mogą być znakami pustymi dla $i = j$. Mówimy, że ten podział definiuje \emph{dopasowanie} $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ pomiędzy napisami $s$ i $t$, w którym znak $s_i$ jest dopasowane do znaku $t_i$~\cite{Boytsov2011:indexingmethods}.
+
+Dopasowanie reprezentuje ścisła ścieżkę edycyjną $E = s_1 \rightarrow t_1, s_2 \rightarrow t_2, \ldots, s_l \rightarrow t_l$. Definiujemy \emph{koszt dopasowania} $A$ jako koszt odpowiadacej mu ścieżki edycyjne i oznaczamy przez $\delta(A)$:
+
+\begin{equation}
+\label{eq:003}
+\delta(A) = \sum\limits_{i = 1}^{l} \delta(s_i \rightarrow t_i)
+\end{equation}
+
+\emph{Optymalne dopasowanie} to dopasowanie o najmniejszym koszcie.
+
+PIEKNY RYSUNEK
+
+\begin{example}
+Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak| prezentuje rys. TUTAJNUMER. Odpowiadająca mu ścieżka edycyjna składa się z zamiany $\verb|f| \rightarrow \verb|k|$, usunięcia $\verb|c| \rightarrow \varepsilon$ oraz transpozycji $\verb|ka| \rightarrow \verb|ak|$.
+\end{example}
+
+Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie pomiędzy zbiorem ścisłych ścieżek edycyjnych i zbiorem dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej poprzez problem znalezienia optymalnego dopasowania.
+
+\textbf{Obliczanie odległości edycyjnej.} Główną zasadą dynamicznego algorytmu, liczącego koszt optymalnego dopasowania, jest wyrażenie kosztu dopasowania pomiędzy napisami $s$ i $t$, używając kosztu dopasowaniu ich prefiksów. Rozważmy prefiks $s_{1:i}$ o długości $i$ i prefiks $t_{1:j}$ o długości $j$ napisów $s$ i $t$ odpowiednio. Niech $l = max\{i,j\}$ i załóżmy, że $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ jest optmalnym dopasowaniem pomiędzy $s_{1:i}$ i $t_{1:j}$, którego koszt oznaczamy przez $C_{i,j}$~\cite{Boytsov2011:indexingmethods}.
+
+Używając równania \ref{eq:003} oraz definicji optymalnego dopasowania, łatwo pokazać, że $C_{i,j}$ może zostać policzone używając następującej rekurencji~\cite{Ukkonen1985:algorithmsforapprox}:
+
+
+\begin{align}
+\label{eq:004}
+C_{0,0} = 0 \\
+C_{i,j} = min\{\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) + C_{i^\prime-1, j^\prime-1} | s_{i^\prime:i}\rightarrow t_{j^\prime:j} \in \mathbb{B}\} 
+\end{align}
+
+Rekurencja \ref{eq:004} jest przykładem dynamicznego programowania. Zbiór liczb $\{C_{i,j}\}$ o liczności $(|s|+1)\cdot (|t|+1)$ jest zazwyczaj nazywany \emph{macierzą dynamicznego programowania} (lub w skrócie macierzą DP). Co więcej, można zauważyć, że:
+\begin{itemize}
+\item koszt dopasowania napisów $s$ i $t$ jest równy $C_{|s|, |t|}$;
+\item wszystkie optymalne dopasowania mogą zostać wyznaczone poprzez odwracanie rekurencji \ref{eq:004} (przechodzenie od tyłu).
+\end{itemize}
 
 
 
 
+Rozważmy teraz odległość Hamminga, gdzie $s_{i^\prime:i}\rightarrow t_{j^\prime:j}$ to zamiany znaków o koszcie równym jeden. Stąd,
+$$
+\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) = [s_{i^\prime:i}\neq t_{j^\prime:j}]
+$$
+
+gdzie $[X]$ jest równe jeden, gdy warunek $X$ jest spełniony, zero w przeciwnym przypadku.
 
 \begin{definition}
 \emph{Odległością Hamminga}~\cite{Hamming1950:errordetecting} na $\Sigma^*$ nazywamy:
 $$
 d_{hamming}(s, t) = \left\{
 \begin{array}{l l}     
-    \sum_{i=1}^{|s|}[1 - \delta(s_i, t_i)], & \text{gdy } |s| = |t|,\\
+    \sum\limits_{i=1}^{|s|}[1 - \delta(s_i, t_i)], & \text{gdy } |s| = |t|,\\
     \infty, & \text{w przeciwnym przypadku},
 \end{array}\right.
 $$

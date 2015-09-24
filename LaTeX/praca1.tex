@@ -326,7 +326,7 @@ $$
 
 %Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości. 
 %Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. 
-Intuicyjnie rzecz biorąc odległość Hamminga zlicza liczbę indeksów, na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
+Odległość Hamminga zlicza liczbę indeksów, na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
 
 [PIĘKNY RYSUNEK??]
 
@@ -343,7 +343,7 @@ Rozważmy teraz odległość najdłuższego wspólnego podnapisu, gdzie $s_{i^\p
 \item $i^\prime = i$ oraz $j^\prime = j - 1$.
 \end{itemize}
 
-Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu:
+Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu [NIE WIEM CZY TO JEST DOBRZE!!!!]:
 
 \begin{equation}
 C_{i,j} = min\left\{
@@ -383,7 +383,7 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też in
 Jak widać na~rysunku, znaki \verb|k|, \verb|z|, \verb|f| i \verb|k| pozostają bez pary, dając odległość równą~$4$.
 
 
-Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usunięć i wstawień, zamiany znaków, zatem istnieją trzy kombinacje $i^\prime$ oraz $j^\prime$ z równania \ref{eq:005}:
+Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z równania \ref{eq:005}:
 \begin{itemize}
 \item $i^\prime = i - 1$ oraz $j^\prime = j$,
 \item $i^\prime = i$ oraz $j^\prime = j - 1$,
@@ -393,6 +393,7 @@ Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usun
 Stąd ogólna postać rekurencji \ref{eq:004} dla odległości Levenshteina może zostać przepisana następująco:
 
 \begin{equation}
+\label{eq:006}
 C_{i,j} = min\left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0\\
@@ -470,40 +471,52 @@ $$
 czyli analogicznie, jak w~przypadku \ref{eq:001}.
 \end{example}
 
-Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równa ścisłej odległości Levenshteina. Z drugiej strony, ścisła odległość edycyjna jest równa kosztowi optymalnego dopasowania. Stąd rekurencja \ref{eq:004} liczy nieścisłą odległość Levenshteina. 
+Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równa ścisłej odległości Levenshteina. Z drugiej strony, ścisła odległość edycyjna jest równa kosztowi optymalnego dopasowania. Stąd rekurencja \ref{eq:004} liczy nieścisłą odległość Levenshteina. Częstym błędem jest, że następujące bezpośrednie uogólnienie rekurencji \ref{eq:006} liczy (nieścisłą) odległość Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}:
 
-
-
-
-
-\begin{definition}
-\emph{Odległością optymalnego dopasowania napisów} na~$\Sigma^*$~nazywamy:
-$$
-d_{osa}(s, t) = \left\{
+\begin{equation}
+\label{eq:007}
+C_{i,j} = min\left\{
 \begin{array}{l l}     
-    0, & \text{gdy } s = t = \varepsilon,\\
-    min\{ & \\
-\qquad    d_{osa}(s, t_{1:|t|-1}) + w_1, & \\
-\qquad    d_{osa}(s_{1:|s|-1}, t) + w_2, & \\
-\qquad    d_{osa}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
-\qquad    d_{osa}(s_{1:|s|-2}, t_{1:|t|-2}) + w_4\text{, gdy } s_{|s|} = t_{|t|-1}, s_{|s|-1} = t_{|t|} & \\
-\qquad    \}, & \text{w przeciwnym przypadku},
+    0, & \text{gdy } i = j = 0\\
+    C_{i-1, j} + 1, & \text{gdy } i > 0 \\
+    C_{i, j-1} + 1, & \text{gdy } j > 0 \\
+    C_{i-1, j-1} + [s_{i}\neq t_{j}], & \text{gdy } i, j > 0 \\
+    C_{i-2, j-2} + 1, & \text{gdy } s_i = t_{j-1}, s_{i-i} = t_j \text{ oraz } i,j > 1
 \end{array}\right.
-$$
-gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
-\end{definition}
+\end{equation}
 
-Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W~przeciwieństwie do~wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z~definicji \ref{def:001} \cite{Loo2014:stringdist}: 
-$$2 = d_{osa}(\verb|ba|, \verb|ab|) + d_{osa}(\verb|ab|, \verb|acb|) \leq d_{osa}(\verb|ba|, \verb|acb|) = 3,$$ 
-gdyż
-$$
-\verb|ba|  \xrightarrow[1]{transp.\ b\ i \ a} \verb|ab| + \verb|ab| \xrightarrow[1]{wst. c} \verb|acb|,
-$$
-natomiast
-$$
-\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|.
-$$
-W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $|a|$ i $|b|$, a następnie wstwienie litery $|c|$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
+Jednak, rekurencja \ref{eq:007} liczy odległość optymalnego dopasowania napisów, czyli ścisłą odległość Damerau-Levenshteina, która nie zawsze jest równa odległości Damerau-Levenshteina. Dla przykładu, odległość między napisami \verb|ba| i \verb|acb| wyliczona przy pomocy rekurencji \ref{eq:007} jest równa trzy, natomiast odległość Damerau-Levenshteina między tymi napisami wynosi dwa.
+
+
+%
+%\begin{definition}
+%\emph{Odległością optymalnego dopasowania napisów} na~$\Sigma^*$~nazywamy:
+%$$
+%d_{osa}(s, t) = \left\{
+%\begin{array}{l l}     
+%    0, & \text{gdy } s = t = \varepsilon,\\
+%    min\{ & \\
+%\qquad    d_{osa}(s, t_{1:|t|-1}) + w_1, & \\
+%\qquad    d_{osa}(s_{1:|s|-1}, t) + w_2, & \\
+%\qquad    d_{osa}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
+%\qquad    d_{osa}(s_{1:|s|-2}, t_{1:|t|-2}) + w_4\text{, gdy } s_{|s|} = t_{|t|-1}, s_{|s|-1} = t_{|t|} & \\
+%\qquad    \}, & \text{w przeciwnym przypadku},
+%\end{array}\right.
+%$$
+%gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
+%\end{definition}
+
+%Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W~przeciwieństwie do~wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z~definicji \ref{def:001} \cite{Loo2014:stringdist}: 
+%$$2 = d_{osa}(\verb|ba|, \verb|ab|) + d_{osa}(\verb|ab|, \verb|acb|) \leq d_{osa}(\verb|ba|, \verb|acb|) = 3,$$ 
+%gdyż
+%$$
+%\verb|ba|  \xrightarrow[1]{transp.\ b\ i \ a} \verb|ab| + \verb|ab| \xrightarrow[1]{wst. c} \verb|acb|,
+%$$
+%natomiast
+%$$
+%\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|.
+%$$
+%W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $|a|$ i $|b|$, a następnie wstwienie litery $|c|$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
 
 
 [MIARA DAMERAU-LEVENSHTEINA]

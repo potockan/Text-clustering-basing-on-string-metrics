@@ -121,6 +121,10 @@ registerDoSNOW(cl)
 message("Loading packages on threads...")
 #kazdemu watkowi wczytujemy pakiety
 
+clusterEvalQ(cl,library('RSQLite'))
+clusterEvalQ(cl,library('compiler'))
+clusterEvalQ(cl,library('stringi'))
+
 
 #wywolujemy model dla wszystkich plikow
 foreach(i=1:length(tabele)) %dopar% {

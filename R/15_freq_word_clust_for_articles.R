@@ -84,21 +84,54 @@ wiki_word_clust2_freq <- function(typ){
   
 }
 
-wiki_word_clust2_freq('')
 
-wiki_word_clust2_freq('_lcs')
-wiki_word_clust2_freq('_dl')
-wiki_word_clust2_freq('_jaccard')
-wiki_word_clust2_freq('_qgram')
 
-wiki_word_clust2_freq('_red_lcs')
-wiki_word_clust2_freq('_red_dl')
-wiki_word_clust2_freq('_red_jaccard')
-wiki_word_clust2_freq('_red_qgram')
+# wiki_word_clust2_freq('')
+# 
+# wiki_word_clust2_freq('_lcs')
+# wiki_word_clust2_freq('_dl')
+# wiki_word_clust2_freq('_jaccard')
+# wiki_word_clust2_freq('_qgram')
+# 
+# wiki_word_clust2_freq('_red_lcs')
+# wiki_word_clust2_freq('_red_dl')
+# wiki_word_clust2_freq('_red_jaccard')
+# wiki_word_clust2_freq('_red_qgram')
+# 
+# wiki_word_clust2_freq('_red_lcs_lcs')
+# wiki_word_clust2_freq('_red_dl_dl')
+# wiki_word_clust2_freq('_red_jaccard_jaccard')
+# wiki_word_clust2_freq('_red_qgram_qgram')
 
-wiki_word_clust2_freq('_red_lcs_lcs')
-wiki_word_clust2_freq('_red_dl_dl')
-wiki_word_clust2_freq('_red_jaccard_jaccard')
-wiki_word_clust2_freq('_red_qgram_qgram')
+
+tabele <- c('', '_lcs', '_dl', '_jaccard', '_qgram', 
+            '_red_lcs', '_red_dl', '_red_jaccard', '_red_qgram', 
+            '_red_lcs_lcs', '_red_dl_dl', '_red_jaccard_jaccard', '_red_qgram_qgram')
+
+library('doSNOW')
+library('parallel')
+
+#liczba watkow
+threads <- 6
+
+#rejestrujemy liczbe watkow
+cl <- makeCluster(threads, outfile="")
+registerDoSNOW(cl)
+
+message("Loading packages on threads...")
+#kazdemu watkowi wczytujemy pakiety
+
+
+#wywolujemy model dla wszystkich plikow
+foreach(i=1:length(tabele)) %dopar% {
+  print(i)
+  wiki_word_clust2_freq(tabele[i])
+}
+
+
+
+#zatrzymujemy watki
+stopCluster(cl)
+
 
 dbDisconnect(con)

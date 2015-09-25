@@ -75,11 +75,11 @@ if len(args) > 0:
 
 ###############################################################################
 # Load some categories from the training set
-categories = [
-    'sztuka',
-    'matma',
-    'wojna',
-]
+#categories = [
+#    'sztuka',
+#    'matma',
+#    'wojna',
+#]
 # Uncomment the following to do the analysis on all the categories
 #categories = None
 
@@ -117,36 +117,41 @@ t0 = time()
 
 ###############################
 import sqlite3
+
+
 con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 c = con.cursor()
 
-c.execute('select id_category from wiki_unique_category')
+c.execute('select id_category from wiki_unique_category order by id_title limit 100')
 print("Reading labels...")
 labels = c.fetchall()
 
+def reading_data(typ):
 #c.execute('select * from wiki_stem_word_reorder')
-print("Reading data...")
-c.execute('''select 
-a.id_title, b.id, a.freq 
-from wiki_word_clust_freq a 
+    print("Reading data...")
+    c.execute('''select 
+    id_title, id_stem_word, freq 
+    from wiki_word_clust2%s_freq
+    order by id_title
+    limit 100
+    ''' % (typ))
+    return(c.fetchall())
+    
 
-join 
-
-wiki_stem_word_reorder b 
-on 
-a.id_stem_word = b.id_stem_word 
-''')
-my_data = c.fetchall()
-con.close()
 ###############################
 
 print("Data transformations...")
 labels = np.asarray([val[0] for val in labels])
 
+my_data = reading_data('_red_lcs')
+
+con.close()
+
 my_sparse_data = sps.csr_matrix(([val[2] for val in my_data], ([val[0] for val in my_data], [val[1] - 1 for val in my_data])))
 print("Data deletation...")
 del my_data
 print("Data transformations...")
+# get rid of the all-zero rows
 my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))]))
 
 #labels = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv', delimiter=',', dtype = 'int32'), 0, 0) - 1

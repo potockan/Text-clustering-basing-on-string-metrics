@@ -204,7 +204,7 @@ data_all = [my_sparse_data[:10241,], my_sparse_data[10241:,]]
 #my_sparse_data1 = my_sparse_data[:10241,]
 #my_sparse_data2 = my_sparse_data[10241:,]
 
-new_centers = zeros((true_k, data_all[0].shape[1]))
+new_centers = np.zeros((true_k, data_all[0].shape[1]))
 
 
 # for i in range(5):

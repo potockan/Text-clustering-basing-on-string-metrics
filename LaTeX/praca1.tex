@@ -566,31 +566,33 @@ d(s,t,0) &= \infty, \text{ gdy } |s| + |t| \\
 d(\varepsilon,\varepsilon,0) &= 0
 \end{align*}
 
+Najprostszą metrykę liczącą odległość między napisami otrzymuje się poprzez wypisanie unikalnych $q$-gramów w obu napisach i porównanie które są wspólne. Jeśli przez $\mathcal{Q}(s,q)$ oznaczymy zbiór unikalnych $q$-gramów występujących w napisie $s$, to możemy zdefiniować odległość Jaccarda~\cite{Loo2014:stringdist}:
+
+\begin{definition}
+Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{jaccard}$, między napisami $s$ i $t$ definiuje się jako
+\begin{equation}
+d_{jaccard}(s,t,q) = 1 - \frac{|\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q)|}{|\mathcal{Q}(s,q) \cup \mathcal{Q}(t,q)|},
+\end{equation}
+gdzie $|\cdot|$ oznacza liczność zbioru.
+\end{definition} 
+
+Odległość Jaccarda przyjmuje wartości z przedziału $[0,1]$, gdzie $0$ odpowiada pełne pokrycie zbiorów, tj. $\mathcal{Q}(s,q) = \mathcal{Q}(t,q)$, natomiast $1$ oznacza puste przecięcie, tj. $\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q) = \emptyset$.
+
+\begin{example}
+Odległość Jaccarda między napisami \verb|palce| i \verb|pałace| dla $q = 2$ wynosi: $d_{jaccard}(\verb|palce|, \verb|pałace|, 2) \approx 0.714$, bo $\mathcal{Q}(\verb|palce|, 2) = \{\verb|pa|, \verb|al|, \verb|lc|, \verb|ce|\}$, a $\mathcal{Q}(\verb|pałace|, 2) = \{\verb|pa|, \verb|ał|, \verb|ła|, \verb|ac|, \verb|ce|\}$, więc odległość wynosi $1 - \frac{2}{7} \approx 0.714$.
+\end{example}.
+
+Inną odległością opartą na $q$-gramach jest odległość $q$-gramowa [????]. Otrzymuje się ją poprzez wylistowanie $q$-gramów występujących w obu napisach i policzenie $q$-gramów, które nie są wspólne [dla obu napisów]~\cite{Loo2014:stringdist}. Formalnie można to zapisać następująco:
+
+\begin{definition}
+Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $v(s,x)$ oznacza liczbę wystąpień $x$ w $s$.
+\end{definition} 
+
 %-----------Koniec części zasadniczej-----------
 
-%\begin{thebibliography}{11}
-%\nocite{Hornik2012:sphkmeans}
-%\nocite{Wild2002:sphkmeans}
-%\nocite{Loo2014:stringdist}
+
 \bibliographystyle{plain}
 \bibliography{bibliography}
-%\bibitem[1]{M} Arnold W. Miller, \emph{Special Subsets of the Real Line}, The University of Texas, Austin, U.S.A. 1984.
-%\bibitem[2]{H2} J.C. Oxtoby, \emph{Measure and Category}, Springer-Verlag, New York Heidelberg Berlin, 1971.
-%\bibitem[3]{WW} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. I: The Basics.} Graduate Studies in Mathematics vol. 8, American Mathematical Society, Providence, RI, 1996.
-%\bibitem[4]{WW2} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. II: Set-Theoretic Tools for Every Mathematician.}, Graduate Studies in Mathematics vol. 18, American Mathematical Society, Providence, RI, 1997.
-%\end{thebibliography}
-%\clearpage
-%\pagestyle{empty}
-%\noindent Warszawa, dnia ...............
-%\vspace{5cm}
-%\begin{center}
-%\LARGE{Oświadczenie}
-%\end{center}
-%Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr hab. Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
-%\vspace{2cm}
-%\begin{flushright}
-%...........................................
-%\end{flushright}
 
 %\makestatement
 \end{document}

@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{examplep}
 \usepackage{xcolor}
+\usepackage{mathtools}
 %%\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{verbatim}
@@ -29,7 +30,7 @@
 %\usepackage{hyperref}
 %%paginy
 %\usepackage{fancyhdr}
-
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
 
 
@@ -562,11 +563,11 @@ Przypomnijmy, że $q$-gramem nazywamy napis składający się z $q$ kolejnych (p
 
 \begin{align*}
 d(s,t,q) &= \infty, \text{ gdy } q > min\{|s|, |t|\}\\
-d(s,t,0) &= \infty, \text{ gdy } |s| + |t| \\
+d(s,t,0) &= \infty, \text{ gdy } |s| + |t| >0 \\
 d(\varepsilon,\varepsilon,0) &= 0
 \end{align*}
 
-Najprostszą metrykę liczącą odległość między napisami otrzymuje się poprzez wypisanie unikalnych $q$-gramów w obu napisach i porównanie które są wspólne. Jeśli przez $\mathcal{Q}(s,q)$ oznaczymy zbiór unikalnych $q$-gramów występujących w napisie $s$, to możemy zdefiniować odległość Jaccarda~\cite{Loo2014:stringdist}:
+Najprostszą odległością między napisami, opartą na $q$-gramach, otrzymuje się poprzez wypisanie unikalnych $q$-gramów w obu napisach i porównanie które są wspólne. Jeśli przez $\mathcal{Q}(s,q)$ oznaczymy zbiór unikalnych $q$-gramów występujących w napisie $s$, to możemy zdefiniować odległość Jaccarda~\cite{Loo2014:stringdist}:
 
 \begin{definition}
 Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{jaccard}$, między napisami $s$ i $t$ definiuje się jako
@@ -580,13 +581,34 @@ Odległość Jaccarda przyjmuje wartości z przedziału $[0,1]$, gdzie $0$ odpow
 
 \begin{example}
 Odległość Jaccarda między napisami \verb|palce| i \verb|pałace| dla $q = 2$ wynosi: $d_{jaccard}(\verb|palce|, \verb|pałace|, 2) \approx 0.714$, bo $\mathcal{Q}(\verb|palce|, 2) = \{\verb|pa|, \verb|al|, \verb|lc|, \verb|ce|\}$, a $\mathcal{Q}(\verb|pałace|, 2) = \{\verb|pa|, \verb|ał|, \verb|ła|, \verb|ac|, \verb|ce|\}$, więc odległość wynosi $1 - \frac{2}{7} \approx 0.714$.
-\end{example}.
+\end{example}
+
+Odległość Jaccarda nie spełnia definicji metryki, bowiem $d_{jaccard}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
 
 Inną odległością opartą na $q$-gramach jest odległość $q$-gramowa [????]. Otrzymuje się ją poprzez wylistowanie $q$-gramów występujących w obu napisach i policzenie $q$-gramów, które nie są wspólne [dla obu napisów]~\cite{Loo2014:stringdist}. Formalnie można to zapisać następująco:
 
 \begin{definition}
-Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $v(s,x)$ oznacza liczbę wystąpień $x$ w $s$.
+Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $\mathbf{v}(s,q)$ będzie wektorem o długości $|\Sigma|^q$, którego zmienne oznaczają liczbę wszystkich możliwych wystąpień $q$-gramów w $s$. Niech $s, t \in \Sigma^*$ oraz $q>0$ będzie liczbą naturalną. \emph{Odległość $q$-gramową} między napisami $s$ i $t$ definiuje się następująco~\cite{Ukkonen1992:approxqgrams}:
+\begin{equation}
+\label{eq:009}
+d_{\mathtt{q}gram}(s,t,q) = \norm{\mathbf{v}(s,q) - \mathbf{v}(t,q)}_1 = \sum\limits_{i = 1}^{|\Sigma|^q} |v_i(s,q) - v_i(t,q)|
+\end{equation}
 \end{definition} 
+
+Wzór \ref{eq:009} definiuje odległość $q$-gramową między napisami $s$ i $t$ jako odległość $L_1$ pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$. Zauważmy, że wystarczy policzyć jedynie liczbę faktycznie występujących $q$-gramów w obu napisach, by obliczyć odległość $q$-gramową~\cite{Loo2014:stringdist}.
+
+\begin{example}
+Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość $q$-gramowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) = 2$. Wszystkie możliwe digramy występujące w napisach  \verb|papaja| i \verb|japa| to \verb|aj|, \verb|ap|, \verb|ja| i \verb|pa|. Zatem $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$. Stąd $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) =  \norm{(1,1,1,2) - (0,1,1,1)}_1 = 2$.
+\end{example}
+
+Odległość $q$-gramowa również nie spełnia definicji metryki, bowiem $d_{\mathtt{q}gram}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
+
+Maksymalna liczba wystąpień różnych $q$-gramów w napisie $s$ wynosi $|s| - q - 1$. Stąd maksymalna odległość $q$-gramowa między napisami $s$ i $t$ wynosi $|s| + |t| - 2q - 2$, osiągana, gdy $s$ i $t$ nie mają wspólnych $q$-gramów~\cite{Loo2014:stringdist}.
+
+Skoro zdefiniowana została odległość $q$-gramowa w języku wektorów, każda funkcja odległościowa (distance functions) w (całkowitej) przestrzeni wektorowej może zostać zastosowana. Przykładowo można zdefiniować \emph{odległość cosinusową} między napisami $s$ i $t$:
+\begin{equation}
+d_{cos}(s,t,q) = 1 - \frac{ \mathbf{v}(s,q) \cdot \mathbf{v}(t,q) }{ \norm{\mathbf{v}(s,q)}_2  \norm{\mathbf{v}ts,q)}_2 }
+\end{equation}
 
 %-----------Koniec części zasadniczej-----------
 

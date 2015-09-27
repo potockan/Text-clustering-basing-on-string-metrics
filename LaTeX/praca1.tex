@@ -580,15 +580,15 @@ gdzie $|\cdot|$ oznacza liczność zbioru.
 Odległość Jaccarda przyjmuje wartości z przedziału $[0,1]$, gdzie $0$ odpowiada pełne pokrycie zbiorów, tj. $\mathcal{Q}(s,q) = \mathcal{Q}(t,q)$, natomiast $1$ oznacza puste przecięcie, tj. $\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q) = \emptyset$.
 
 \begin{example}
-Odległość Jaccarda między napisami \verb|palce| i \verb|pałace| dla $q = 2$ wynosi: $d_{jaccard}(\verb|palce|, \verb|pałace|, 2) \approx 0.714$, bo $\mathcal{Q}(\verb|palce|, 2) = \{\verb|pa|, \verb|al|, \verb|lc|, \verb|ce|\}$, a $\mathcal{Q}(\verb|pałace|, 2) = \{\verb|pa|, \verb|ał|, \verb|ła|, \verb|ac|, \verb|ce|\}$, więc odległość wynosi $1 - \frac{2}{7} \approx 0.714$.
+Odległość Jaccarda między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{jaccard}(\verb|papaja|, \verb|japa|, 2)  = 0.25$, bo $\mathcal{Q}(\verb|papaja|, 2) = \{\verb|pa|, \verb|ap|, \verb|aj|, \verb|ja|\}$, a $\mathcal{Q}(\verb|japa|, 2) = \{\verb|ja|, \verb|ap|, \verb|pa|\}$, więc odległość wynosi $1 - \frac{3}{4} = 0.25$.
 \end{example}
 
-Odległość Jaccarda nie spełnia definicji metryki, bowiem $d_{jaccard}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
+%Odległość Jaccarda nie spełnia definicji metryki, bowiem $d_{jaccard}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
 
 Inną odległością opartą na $q$-gramach jest odległość $q$-gramowa [????]. Otrzymuje się ją poprzez wylistowanie $q$-gramów występujących w obu napisach i policzenie $q$-gramów, które nie są wspólne [dla obu napisów]~\cite{Loo2014:stringdist}. Formalnie można to zapisać następująco:
 
 \begin{definition}
-Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $\mathbf{v}(s,q)$ będzie wektorem o długości $|\Sigma|^q$, którego zmienne oznaczają liczbę wszystkich możliwych wystąpień $q$-gramów w $s$. Niech $s, t \in \Sigma^*$ oraz $q>0$ będzie liczbą naturalną. \emph{Odległość $q$-gramową} między napisami $s$ i $t$ definiuje się następująco~\cite{Ukkonen1992:approxqgrams}:
+Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $\mathbf{v}(s,q)$ będzie wektorem o długości $|\Sigma|^q$, którego zmienne oznaczają liczbę wystąpień wszystkich możliwych $q$-gramów z $\Sigma^q$ w $s$. Niech $s, t \in \Sigma^*$ oraz $q>0$ będzie liczbą naturalną. \emph{Odległość $q$-gramową} między napisami $s$ i $t$ definiuje się następująco~\cite{Ukkonen1992:approxqgrams}:
 \begin{equation}
 \label{eq:009}
 d_{\mathtt{q}gram}(s,t,q) = \norm{\mathbf{v}(s,q) - \mathbf{v}(t,q)}_1 = \sum\limits_{i = 1}^{|\Sigma|^q} |v_i(s,q) - v_i(t,q)|
@@ -598,17 +598,32 @@ d_{\mathtt{q}gram}(s,t,q) = \norm{\mathbf{v}(s,q) - \mathbf{v}(t,q)}_1 = \sum\li
 Wzór \ref{eq:009} definiuje odległość $q$-gramową między napisami $s$ i $t$ jako odległość $L_1$ pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$. Zauważmy, że wystarczy policzyć jedynie liczbę faktycznie występujących $q$-gramów w obu napisach, by obliczyć odległość $q$-gramową~\cite{Loo2014:stringdist}.
 
 \begin{example}
+\label{ex:001}
 Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość $q$-gramowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) = 2$. Wszystkie możliwe digramy występujące w napisach  \verb|papaja| i \verb|japa| to \verb|aj|, \verb|ap|, \verb|ja| i \verb|pa|. Zatem $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$. Stąd $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) =  \norm{(1,1,1,2) - (0,1,1,1)}_1 = 2$.
 \end{example}
 
-Odległość $q$-gramowa również nie spełnia definicji metryki, bowiem $d_{\mathtt{q}gram}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
+%Odległość $q$-gramowa również nie spełnia definicji metryki, bowiem $d_{\mathtt{q}gram}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
 
 Maksymalna liczba wystąpień różnych $q$-gramów w napisie $s$ wynosi $|s| - q - 1$. Stąd maksymalna odległość $q$-gramowa między napisami $s$ i $t$ wynosi $|s| + |t| - 2q - 2$, osiągana, gdy $s$ i $t$ nie mają wspólnych $q$-gramów~\cite{Loo2014:stringdist}.
 
 Skoro zdefiniowana została odległość $q$-gramowa w języku wektorów, każda funkcja odległościowa (distance functions) w (całkowitej) przestrzeni wektorowej może zostać zastosowana. Przykładowo można zdefiniować \emph{odległość cosinusową} między napisami $s$ i $t$:
 \begin{equation}
-d_{cos}(s,t,q) = 1 - \frac{ \mathbf{v}(s,q) \cdot \mathbf{v}(t,q) }{ \norm{\mathbf{v}(s,q)}_2  \norm{\mathbf{v}ts,q)}_2 }
+\label{eq:010}
+d_{cos}(s,t,q) = 1 - \frac{ \mathbf{v}(s,q) \cdot \mathbf{v}(t,q) }{ \norm{\mathbf{v}(s,q)}_2  \norm{\mathbf{v}ts,q)}_2 },
 \end{equation}
+gdzie $\norm{\cdot}_2$ oznacza zwykłą normę Euklidesową. Odległość cosinusowa wynosi zero, gdy $s=t$ oraz jeden, gdy $s$ i $t$ nie mają wspólnych $q$-gramów. Odległość ta powinna być interpretowana jako kąt pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$, jako że drugie wyrażenie równania \ref{eq:010} przedstawia cosinus kąta między dwoma wektorami.
+
+\begin{example}
+Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość cosinusowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{cos}(\verb|papaja|, \verb|japa|, 2) \approx 0.127$, bo $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$ (p. przykład \ref{ex:001}), więc $d_{cos}(\verb|papaja|, \verb|japa|, 2) = 1 - \frac{4}{\sqrt{3}\cdot\sqrt{7}} \approx 0.127$.
+\end{example}
+
+Wszystkie trzy odległości oparte na $q$-gramach są nieujemne i symetryczne. Odległości Jaccarda i $q$-gramowa spełniają również nierówność trójkąta [DOWODY???], w odróżnieniu od odległości cosinusowej. Żadna z powyższych miar nie spełnia warunku identyczności, ponieważ zarówno $\mathcal{Q}(s,q)$, jak i $\mathbf{v}(s,q)$ jest funkcją wiele-do-jednego. Jako przykład, zauważmy, że $\mathcal{Q}(\verb|abaca|,2) = \mathcal{Q}(\verb|acaba|,2)$ oraz $\mathbf{v}(\verb|abaca|,2) = \mathbf{v}(\verb|acaba|,2)$, więc $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = d_{cos}(\verb|abaca|, \verb|acaba|, 2) = 0$. Innymi słowy, odległość oparta na $q$-gramach równa zero, nie gwarantuje, że $s = t$. [Inne własności $\mathbf{v}(s,q)$ można znaleźć w~\cite{Ukkonen1992:approxqgrams}.]
+
+
+\subsection{Miary heurystyczne}
+
+
+
 
 %-----------Koniec części zasadniczej-----------
 

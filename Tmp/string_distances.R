@@ -41,6 +41,8 @@ stringdist('palec', 'palace', method = 'osa')
 stringdist('palec', 'palce', method = 'osa')
 stringdist('palce', 'palace', method = 'osa')
 
+
+
 stringdist('ba', 'acb', method = 'osa')
 stringdist('ba', 'ab', method = 'osa')
 stringdist('ab', 'acb', method = 'osa')
@@ -49,6 +51,27 @@ stringdist('ba', 'acb', method = 'dl')
 stringdist('krolik', 'kolor', method = 'dl')
 
 
+stringdist('kozak', 'foczka', method = 'jaccard', q = 2)
+stringdist('kozak', 'foczka', method = 'qgram', q = 2)
+stringdist('kozak', 'foczka', method = 'cosine', q = 2)
+
+stringdist('kozak', 'foczka', method = 'jaccard', q = 3)
+stringdist('kozak', 'foczka', method = 'qgram', q = 3)
+stringdist('kozak', 'foczka', method = 'cosine', q = 3)
+
+stringdist('abaca', 'acaba', method = 'jaccard', q = 2)
+
+stringdist('papaja', 'japa', method = 'jaccard', q = 2)
+stringdist('palce', 'pałace', method = 'jaccard', q = 2)
+stringdist('abcd', 'abdc', method = 'jaccard', q = 2)
+stringdist('abdc', 'cdab', method = 'jaccard', q = 2)
+
+stringdist('papaja', 'japa', method = 'qgram', q = 2)
+stringdist('palce', 'pałace', method = 'qgram', q = 2)
+stringdist('abaca', 'acaba', method = 'qgram', q = 2)
+
+stringdist('papaja', 'japa', method = 'cosine', q = 2)
+stringdist('palce', 'pałace', method = 'cosine', q = 2)
 
 
 

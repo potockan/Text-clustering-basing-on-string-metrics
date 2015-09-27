@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{examplep}
 \usepackage{xcolor}
+\usepackage{mathtools}
 %%\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{verbatim}
@@ -29,7 +30,7 @@
 %\usepackage{hyperref}
 %%paginy
 %\usepackage{fancyhdr}
-
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
 
 
@@ -209,9 +210,9 @@ Aby pokazać subaddytywność, rozważmy optymalną ścieżkę $E_1$, która prz
 
 Odległość edycyjna jest metryką, nawet gdy funkcja kosztu $\delta$ nie jest subaddytywna. Co więcej, ponieważ ciąg nakładających się operacji, które przekształcają $s$ w $t$, mogą mieć mniejszy koszt niż $\delta(s \rightarrow t)$, $\delta(s \rightarrow t)$ może być większe niż $ED(s,t)$. Rozważmy, na przykład, następujący alfbet: $\{\verb|a, b, c|\}$, gdzie symetria i brak subaddytywności funkcji $\delta$ jest zdefiniowana następująco:
 \begin{align*}
-\delta(\PVerb{a} \rightarrow \PVerb{c}) = \delta(\PVerb{b} \rightarrow \PVerb{c}) = 1 \\
-\delta(\PVerb{a} \rightarrow \varepsilon) = \delta(\PVerb{b} \rightarrow \varepsilon) = \delta(\PVerb{c} \rightarrow \varepsilon) = 2 \\
-\delta(\PVerb{a} \rightarrow \PVerb{b}) = 3
+\delta(\PVerb{a} \rightarrow \PVerb{c}) &= \delta(\PVerb{b} \rightarrow \PVerb{c}) = 1 \\
+\delta(\PVerb{a} \rightarrow \varepsilon) &= \delta(\PVerb{b} \rightarrow \varepsilon) = \delta(\PVerb{c} \rightarrow \varepsilon) = 2 \\
+\delta(\PVerb{a} \rightarrow \PVerb{b}) &= 3
 \end{align*}
 
 Można zobaczyć, że $3 = \delta(\verb|a| \rightarrow \verb|b|) > \delta(\verb|a| \rightarrow \verb|c|) + \delta(\verb|c| \rightarrow \verb|b|) = 2$. Stąd optymalna ścieżka edycyjna $(\verb|a| \rightarrow \verb|c|, \verb|c| \rightarrow \verb|b|)$ przekształca $\verb|a|$ w $\verb|b|$ z kosztem równym $2$.
@@ -282,8 +283,8 @@ Używając równania \ref{eq:003} oraz definicji optymalnego dopasowania, łatwo
 
 \begin{align}
 \label{eq:004}
-C_{0,0} = 0 \\
-C_{i,j} = min\{\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) + C_{i^\prime-1, j^\prime-1} | s_{i^\prime:i}\rightarrow t_{j^\prime:j} \in \mathbb{B}\} 
+C_{0,0} &= 0 \\
+C_{i,j} &= min\{\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) + C_{i^\prime-1, j^\prime-1} | s_{i^\prime:i}\rightarrow t_{j^\prime:j} \in \mathbb{B}\} 
 \end{align}
 
 %Rekurencja \ref{eq:004} jest przykładem dynamicznego programowania. Zbiór liczb $\{C_{i,j}\}$ o liczności $(|s|+1)\cdot (|t|+1)$ jest zazwyczaj nazywany \emph{macierzą dynamicznego programowania} (lub w skrócie macierzą DP). Co więcej, 
@@ -326,12 +327,12 @@ $$
 
 %Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości. 
 %Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. 
-Intuicyjnie rzecz biorąc odległość Hamminga zlicza liczbę indeksów, na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
+Odległość Hamminga zlicza liczbę indeksów, na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
 
 [PIĘKNY RYSUNEK??]
 
 \begin{example}
-Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{hamming}(\verb|koza|, \verb|foka|) = 2$, natomiast między słowami \verb|koza| i \verb|foczka| wynosi ona $d_{hamming}(\verb|koza|, \verb|foczka|) = \infty$.
+Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{hamming}(\verb|koza|, \verb|foka|) = 2$, natomiast między słowami \verb|kozak| i \verb|foczka| wynosi ona $d_{hamming}(\verb|kozak|, \verb|foczka|) = \infty$.
 \end{example}
 
 
@@ -343,7 +344,7 @@ Rozważmy teraz odległość najdłuższego wspólnego podnapisu, gdzie $s_{i^\p
 \item $i^\prime = i$ oraz $j^\prime = j - 1$.
 \end{itemize}
 
-Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu:
+Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu [NIE WIEM CZY TO JEST DOBRZE!!!!]:
 
 \begin{equation}
 C_{i,j} = min\left\{
@@ -371,19 +372,19 @@ Odległość najdłuższego wspólnego przyjmuje wartości ze zbioru $\{0, |s|+|
 %Odległość ta zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. 
 
 \begin{example}
-Odległość najdłuższego wspólnego podnapisu między napisami \verb|koza| i \verb|foka| wynosi: $d_{lsc}(\verb|koza|, \verb|foka|) = 4$, bo~$\verb|koza|\xrightarrow[1]{us.\ k} \verb|oza| \xrightarrow[1]{us.\ z} \verb|oa|  \xrightarrow[1]{wst.\ f} \verb|foa| \xrightarrow[1]{wst.\ k} \verb|foka|$.
+Odległość najdłuższego wspólnego podnapisu między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{lsc}(\verb|kozak|, \verb|foczka|) = 5$, bo~$\verb|kozak|\xrightarrow[1]{us.\ k} \verb|ozak| \xrightarrow[1]{us.\ a} \verb|ozk| \xrightarrow[1]{wst.\ f} \verb|fozk| \xrightarrow[1]{wst.\ c} \verb|foczk| \xrightarrow[1]{wst.\ a} \verb|foczka|$.
 \end{example}
 
-Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odlegość równą~$4$.
+Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odległość równą~$5$. Można również usunąć z napisu znak \verb|k| zamiast \verb|a|, otrzymując taką samą odległość między napisami.
 
 Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z~$s$~i~$t$~nie zmieniając ich porządku. Wówczas odległość ta~jest rozumiana jako liczba niesparowanych znaków z~obu napisów. W~powyższym przykładzie może to~być zwizualizowane następująco:
 	
 [PIĘKNY RYSUNEK]
 
-Jak widać na~rysunku, znaki \verb|k|, \verb|z|, \verb|f| i \verb|k| pozostają bez pary, dając odległość równą~$4$.
+Jak widać na~rysunku, znaki \verb|k|, \verb|a|, \verb|f|, \verb|c| i \verb|a| w pierwszym przypadku oraz \verb|k|, \verb|k|, \verb|f|, \verb|c| i \verb|k| w drugim, pozostają bez pary, dając odległość równą~$5$.
 
 
-Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usunięć i wstawień, zamiany znaków, zatem istnieją trzy kombinacje $i^\prime$ oraz $j^\prime$ z równania \ref{eq:005}:
+Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z równania \ref{eq:005}:
 \begin{itemize}
 \item $i^\prime = i - 1$ oraz $j^\prime = j$,
 \item $i^\prime = i$ oraz $j^\prime = j - 1$,
@@ -393,6 +394,7 @@ Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usun
 Stąd ogólna postać rekurencji \ref{eq:004} dla odległości Levenshteina może zostać przepisana następująco:
 
 \begin{equation}
+\label{eq:006}
 C_{i,j} = min\left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0\\
@@ -423,10 +425,10 @@ Odległość Levenshteina oznaczamy przez $d_{lv}$.
 %Odległość ta~zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmie się $1$~mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~
 
 \begin{example}
-Odległość Levenshteina między napisami \verb|koza| i \verb|foka| wynosi: $d_{lv}(\verb|koza|, \verb|foka|) = 2$, bo $\verb|koza| \xrightarrow[1]{zm.\ k\ na\ f} \verb|foza| \xrightarrow[1]{zm.\ z\ na\ k} \verb|foka|$.
+Odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{lv}(\verb|kozak|, \verb|foczka|) = 4$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[1]{zm.\ k\ na\ a} \verb|foczka|$.
 \end{example}
 
-Powyższy przykład ilustruje, że dodatkowa elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że~potrzebujemy jedynie dwóch zamian znaków~\cite{Loo2014:stringdist}.
+Powyższy przykład ilustruje, że dodatkowa elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, daje mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany znaku, zamiast wstawienia i~usunięcia znaków~\cite{Loo2014:stringdist}. Co więcej, ścieżka edycyjna między tymi słowami może być inna i zawierać usunięcie i wstawienie zamiast dwóch ostatnich zamian znaków.
 
 Przypomnijmy, że mówimy o uogólnionej odległości, gdy zmienimy koszty poszczególnych operacji na różne od jeden.
 Gdy za~koszt przyjmiemy np. $(0.1, 1, 0.3)$ dla usunięć, wstawień i zamian znaków odpowiednio, to uogólniona odległość Levenshteina między napisami \verb|koza| i \verb|foka| wynosi: $d_{lv}(\verb|koza|, \verb|foka|) = 0.6$, bo~$\verb|koza|  \xrightarrow[0.3]{zm.\ k\ na\ f} \verb|foza|  \xrightarrow[0.3]{zm.\ z\ na\ k} \verb|foka|$.
@@ -470,79 +472,164 @@ $$
 czyli analogicznie, jak w~przypadku \ref{eq:001}.
 \end{example}
 
-Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równa ścisłej odległości Levenshteina. Z drugiej strony, ścisła odległość edycyjna jest równa kosztowi optymalnego dopasowania. Stąd rekurencja \ref{eq:004} liczy nieścisłą odległość Levenshteina. 
+Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równa ścisłej odległości Levenshteina. Z drugiej strony, ścisła odległość edycyjna jest równa kosztowi optymalnego dopasowania. Stąd rekurencja \ref{eq:004} liczy nieścisłą odległość Levenshteina. Częstym błędem jest, że następujące bezpośrednie uogólnienie, dodające transpozycję do zbioru bazowych operacji edycyjnych, rekurencji \ref{eq:006} liczy (nieścisłą) odległość Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}:
 
-
-
-
-
-\begin{definition}
-\emph{Odległością optymalnego dopasowania napisów} na~$\Sigma^*$~nazywamy:
-$$
-d_{osa}(s, t) = \left\{
+\begin{equation}
+\label{eq:007}
+C_{i,j} = min\left\{
 \begin{array}{l l}     
-    0, & \text{gdy } s = t = \varepsilon,\\
-    min\{ & \\
-\qquad    d_{osa}(s, t_{1:|t|-1}) + w_1, & \\
-\qquad    d_{osa}(s_{1:|s|-1}, t) + w_2, & \\
-\qquad    d_{osa}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
-\qquad    d_{osa}(s_{1:|s|-2}, t_{1:|t|-2}) + w_4\text{, gdy } s_{|s|} = t_{|t|-1}, s_{|s|-1} = t_{|t|} & \\
-\qquad    \}, & \text{w przeciwnym przypadku},
+    0, & \text{gdy } i = j = 0\\
+    C_{i-1, j} + 1, & \text{gdy } i > 0 \\
+    C_{i, j-1} + 1, & \text{gdy } j > 0 \\
+    C_{i-1, j-1} + [s_{i}\neq t_{j}], & \text{gdy } i, j > 0 \\
+    C_{i-2, j-2} + 1, & \text{gdy } s_i = t_{j-1}, s_{i-i} = t_j \text{ oraz } i,j > 1
 \end{array}\right.
-$$
-gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
-\end{definition}
-
-Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W~przeciwieństwie do~wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z~definicji \ref{def:001} \cite{Loo2014:stringdist}: 
-$$2 = d_{osa}(\verb|ba|, \verb|ab|) + d_{osa}(\verb|ab|, \verb|acb|) \leq d_{osa}(\verb|ba|, \verb|acb|) = 3,$$ 
-gdyż
-$$
-\verb|ba|  \xrightarrow[1]{transp.\ b\ i \ a} \verb|ab| + \verb|ab| \xrightarrow[1]{wst. c} \verb|acb|,
-$$
-natomiast
-$$
-\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|.
-$$
-W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $|a|$ i $|b|$, a następnie wstwienie litery $|c|$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
+\end{equation}
 
 
-[MIARA DAMERAU-LEVENSHTEINA]
+%
+%\begin{definition}
+%\emph{Odległością optymalnego dopasowania napisów} na~$\Sigma^*$~nazywamy:
+%$$
+%d_{osa}(s, t) = \left\{
+%\begin{array}{l l}     
+%    0, & \text{gdy } s = t = \varepsilon,\\
+%    min\{ & \\
+%\qquad    d_{osa}(s, t_{1:|t|-1}) + w_1, & \\
+%\qquad    d_{osa}(s_{1:|s|-1}, t) + w_2, & \\
+%\qquad    d_{osa}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
+%\qquad    d_{osa}(s_{1:|s|-2}, t_{1:|t|-2}) + w_4\text{, gdy } s_{|s|} = t_{|t|-1}, s_{|s|-1} = t_{|t|} & \\
+%\qquad    \}, & \text{w przeciwnym przypadku},
+%\end{array}\right.
+%$$
+%gdzie $w_1, w_2$, $w_3$~i$w_4$~to~niezerowe liczby rzeczywiste, oznaczające kary za~odpowiednio usunięcie, wstawienie, zamianę oraz transpozycję znaków.
+%\end{definition}
 
-W~przypadku odległości Levenshteina i~odległości optymalnego dopasowania napisów, maksymalna odległość między napisami $s$~i~$t$~wynosi $max\{|s|, |t|\}$. Jednakowoż, gdy liczba dopuszczalnych operacji edycyjnych rośnie, to liczba dopuszczalnych ścieżek między napisami wzrasta, co pozwala ewentualnie zmiejszyć odległość między napisami. Dlatego relację między zaprezentowanymi powyżej odległościami można podsumować następująco~\cite{Loo2014:stringdist}:
+%Odległość optymalnego dopasowania napisów jest bezpośrednim rozszerzeniem odległości Levenshteina, która zlicza również liczbę transpozycji przylegających znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. W~przeciwieństwie do~wcześniej zaprezentowanych odległości, nie spełnia ona nierówności trójkąta, tj. podpunktu \ref{def:001d} z~definicji \ref{def:001} \cite{Loo2014:stringdist}: 
+%$$2 = d_{osa}(\verb|ba|, \verb|ab|) + d_{osa}(\verb|ab|, \verb|acb|) \leq d_{osa}(\verb|ba|, \verb|acb|) = 3,$$ 
+%gdyż
+%$$
+%\verb|ba|  \xrightarrow[1]{transp.\ b\ i \ a} \verb|ab| + \verb|ab| \xrightarrow[1]{wst. c} \verb|acb|,
+%$$
+%natomiast
+%$$
+%\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|.
+%$$
+%W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $|a|$ i $|b|$, a następnie wstwienie litery $|c|$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
+
+Jednak, rekurencja \ref{eq:007} liczy odległość optymalnego dopasowania napisów, czyli ścisłą odległość Damerau-Levenshteina, która nie zawsze jest równa odległości Damerau-Levenshteina. Dla przykładu, odległość między napisami \verb|ba| i \verb|acb| wyliczona przy pomocy rekurencji \ref{eq:007} jest równa trzy, natomiast odległość Damerau-Levenshteina między tymi napisami wynosi dwa.
+
+Rekurencyjna definicja odległości Damerau-Levenshteina została po raz pierwszy podana przez Lowrance'a i Wagnera~\cite{Wagner1975:extensionstring}. W ich definicji zamiana zostaje zastąpiona poprzez minimalizację po możliwych transpozycjach między danym znakiem a wszystkimi nie przetransformowanymi znakami, przy czym koszt transpozycji wzrasta wraz z odległością między transponowanymi znakami. Innymi słowy, do $\mathbb{B}$ należą wstawienia, usunięcia, zamiany oraz operacje $axb \rightarrow bya$ o koszcie równym $|x| + |y| + 1$. Mając tak zdefiniowane $\mathbb{B}$ ogólna rekurencja~\ref{eq:004} dla odległości Damerau-Levenshteina przedstawia się następująco: 
+
+\begin{equation}
+\label{eq:008}
+C_{i,j} = min\left\{
+\begin{array}{l l}     
+    0, & \text{gdy } i = j = 0\\
+    C_{i-1, j} + 1, & \text{gdy } i > 0 \\
+    C_{i, j-1} + 1, & \text{gdy } j > 0 \\
+    C_{i-1, j-1} + [s_{i}\neq t_{j}], & \text{gdy } i, j > 0 \\
+    \min\limits_{\substack{0 < i^{\prime} < i,\ 0 < j^{\prime} < j  \\ s_i = t_{j^{\prime}},\ s_{i^{\prime}} = t_j}} C_{i^{\prime}-1, j^{\prime}-1} + (i-i^{\prime}) + (j-j^{\prime}) - 1
+\end{array}\right.
+\end{equation}
+
+Co więcej, Lowrance i Wagner wykazali, że wewnętrzne minimum w rekurencji~\ref{eq:008} jest osiągane dla największych $i^{\prime} < i$ oraz $j^{\prime} < j$, które spełniają $s_i = t_{j^{\prime}}$ oraz $\ s_{i^{\prime}} = t_j$. Odległość Damerau-Levenshteina oznaczamy przez $d_{dl}$.
+
+\begin{example}
+Odległość optymalnego dopasowania napisów oraz Damerau-Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi $3$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{transp.\ a\ i\ k} \verb|foczka|$.
+\end{example}
+
+W~przypadku odległości Levenshteina, optymalnego dopasowania napisów oraz Damerau-Levenshteina, maksymalna odległość między napisami $s$~i~$t$~wynosi $max\{|s|, |t|\}$. Jednak warto zauważyć, że gdy liczba dopuszczalnych operacji edycyjnych rośnie, to liczba dopuszczalnych ścieżek między napisami wzrasta, co pozwala czasem zmniejszyć odległość między napisami. Dlatego relację między zaprezentowanymi powyżej odległościami można podsumować następująco~\cite{Loo2014:stringdist}:
 $$
 \left. \begin{array}{r}
 \infty \geq |s| \geq d_{hamming}(s,t) \\
 |s| + |t| \geq d_{lcs}(s,t) \\
 max\{|s|, |t|\} \\
 \end{array} \right \}
-\geq d_{lv}(s,t) \geq d_{osa}(s,t) \geq 0.
+\geq d_{lv}(s,t) \geq d_{osa}(s,t) \geq d_{dl}(s,t) \geq 0
 $$
+
+Jako że odległości Hamminga i najdłuższego wspólnego podnapisu nie mają wspólnych bazowych operacji edycyjnych, to nie ma pomiędzy nimi porządku relacyjnego. Górne ograniczenie $|s|$ odległości Hamminga jest zachowane jedynie gdy $|s| = |t|$.
+
+
+
+
+
+
+
+\subsection{Odległości oparte $q$-gramach}
+
+Przypomnijmy, że $q$-gramem nazywamy napis składający się z $q$ kolejnych (przylegających) znaków. $q$-gramy związane z napisem $s$ są otrzymywane poprzez przesuwanie przez napis $s$ ,,okna'' o szerokości $q$ znaków i zapisaniu występujących $q$-gramów. Przykładowo digramy napisu \verb|ela| to \verb|el| i \verb|la|. Oczywiście taka procedura nie ma sensu, gdy $q > |s|$ lub gdy $q = 0$. Z tego powodu definiujemy następujące przypadki brzegowe dla wszystkich odległości $d(s,t,q)$ opartych na $q$-gramach:
+
+\begin{align*}
+d(s,t,q) &= \infty, \text{ gdy } q > min\{|s|, |t|\}\\
+d(s,t,0) &= \infty, \text{ gdy } |s| + |t| >0 \\
+d(\varepsilon,\varepsilon,0) &= 0
+\end{align*}
+
+Najprostszą odległością między napisami, opartą na $q$-gramach, otrzymuje się poprzez wypisanie unikalnych $q$-gramów w obu napisach i porównanie które są wspólne. Jeśli przez $\mathcal{Q}(s,q)$ oznaczymy zbiór unikalnych $q$-gramów występujących w napisie $s$, to możemy zdefiniować odległość Jaccarda~\cite{Loo2014:stringdist}:
+
+\begin{definition}
+Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{jaccard}$, między napisami $s$ i $t$ definiuje się jako
+\begin{equation}
+d_{jaccard}(s,t,q) = 1 - \frac{|\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q)|}{|\mathcal{Q}(s,q) \cup \mathcal{Q}(t,q)|},
+\end{equation}
+gdzie $|\cdot|$ oznacza liczność zbioru.
+\end{definition} 
+
+Odległość Jaccarda przyjmuje wartości z przedziału $[0,1]$, gdzie $0$ odpowiada pełne pokrycie zbiorów, tj. $\mathcal{Q}(s,q) = \mathcal{Q}(t,q)$, natomiast $1$ oznacza puste przecięcie, tj. $\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q) = \emptyset$.
+
+\begin{example}
+Odległość Jaccarda między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{jaccard}(\verb|papaja|, \verb|japa|, 2)  = 0.25$, bo $\mathcal{Q}(\verb|papaja|, 2) = \{\verb|pa|, \verb|ap|, \verb|aj|, \verb|ja|\}$, a $\mathcal{Q}(\verb|japa|, 2) = \{\verb|ja|, \verb|ap|, \verb|pa|\}$, więc odległość wynosi $1 - \frac{3}{4} = 0.25$.
+\end{example}
+
+%Odległość Jaccarda nie spełnia definicji metryki, bowiem $d_{jaccard}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
+
+Inną odległością opartą na $q$-gramach jest odległość $q$-gramowa [????]. Otrzymuje się ją poprzez wylistowanie $q$-gramów występujących w obu napisach i policzenie $q$-gramów, które nie są wspólne [dla obu napisów]~\cite{Loo2014:stringdist}. Formalnie można to zapisać następująco:
+
+\begin{definition}
+Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $\mathbf{v}(s,q)$ będzie wektorem o długości $|\Sigma|^q$, którego zmienne oznaczają liczbę wystąpień wszystkich możliwych $q$-gramów z $\Sigma^q$ w $s$. Niech $s, t \in \Sigma^*$ oraz $q>0$ będzie liczbą naturalną. \emph{Odległość $q$-gramową} między napisami $s$ i $t$ definiuje się następująco~\cite{Ukkonen1992:approxqgrams}:
+\begin{equation}
+\label{eq:009}
+d_{\mathtt{q}gram}(s,t,q) = \norm{\mathbf{v}(s,q) - \mathbf{v}(t,q)}_1 = \sum\limits_{i = 1}^{|\Sigma|^q} |v_i(s,q) - v_i(t,q)|
+\end{equation}
+\end{definition} 
+
+Wzór \ref{eq:009} definiuje odległość $q$-gramową między napisami $s$ i $t$ jako odległość $L_1$ pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$. Zauważmy, że wystarczy policzyć jedynie liczbę faktycznie występujących $q$-gramów w obu napisach, by obliczyć odległość $q$-gramową~\cite{Loo2014:stringdist}.
+
+\begin{example}
+\label{ex:001}
+Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość $q$-gramowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) = 2$. Wszystkie możliwe digramy występujące w napisach  \verb|papaja| i \verb|japa| to \verb|aj|, \verb|ap|, \verb|ja| i \verb|pa|. Zatem $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$. Stąd $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) =  \norm{(1,1,1,2) - (0,1,1,1)}_1 = 2$.
+\end{example}
+
+%Odległość $q$-gramowa również nie spełnia definicji metryki, bowiem $d_{\mathtt{q}gram}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
+
+Maksymalna liczba wystąpień różnych $q$-gramów w napisie $s$ wynosi $|s| - q - 1$. Stąd maksymalna odległość $q$-gramowa między napisami $s$ i $t$ wynosi $|s| + |t| - 2q - 2$, osiągana, gdy $s$ i $t$ nie mają wspólnych $q$-gramów~\cite{Loo2014:stringdist}.
+
+Skoro zdefiniowana została odległość $q$-gramowa w języku wektorów, każda funkcja odległościowa (distance functions) w (całkowitej) przestrzeni wektorowej może zostać zastosowana. Przykładowo można zdefiniować \emph{odległość cosinusową} między napisami $s$ i $t$:
+\begin{equation}
+\label{eq:010}
+d_{cos}(s,t,q) = 1 - \frac{ \mathbf{v}(s,q) \cdot \mathbf{v}(t,q) }{ \norm{\mathbf{v}(s,q)}_2  \norm{\mathbf{v}ts,q)}_2 },
+\end{equation}
+gdzie $\norm{\cdot}_2$ oznacza zwykłą normę Euklidesową. Odległość cosinusowa wynosi zero, gdy $s=t$ oraz jeden, gdy $s$ i $t$ nie mają wspólnych $q$-gramów. Odległość ta powinna być interpretowana jako kąt pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$, jako że drugie wyrażenie równania \ref{eq:010} przedstawia cosinus kąta między dwoma wektorami.
+
+\begin{example}
+Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość cosinusowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{cos}(\verb|papaja|, \verb|japa|, 2) \approx 0.127$, bo $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$ (p. przykład \ref{ex:001}), więc $d_{cos}(\verb|papaja|, \verb|japa|, 2) = 1 - \frac{4}{\sqrt{3}\cdot\sqrt{7}} \approx 0.127$.
+\end{example}
+
+Wszystkie trzy odległości oparte na $q$-gramach są nieujemne i symetryczne. Odległości Jaccarda i $q$-gramowa spełniają również nierówność trójkąta [DOWODY???], w odróżnieniu od odległości cosinusowej. Żadna z powyższych miar nie spełnia warunku identyczności, ponieważ zarówno $\mathcal{Q}(s,q)$, jak i $\mathbf{v}(s,q)$ jest funkcją wiele-do-jednego. Jako przykład, zauważmy, że $\mathcal{Q}(\verb|abaca|,2) = \mathcal{Q}(\verb|acaba|,2)$ oraz $\mathbf{v}(\verb|abaca|,2) = \mathbf{v}(\verb|acaba|,2)$, więc $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = d_{cos}(\verb|abaca|, \verb|acaba|, 2) = 0$. Innymi słowy, odległość oparta na $q$-gramach równa zero, nie gwarantuje, że $s = t$. [Inne własności $\mathbf{v}(s,q)$ można znaleźć w~\cite{Ukkonen1992:approxqgrams}.]
+
+
+\subsection{Miary heurystyczne}
+
+
+
 
 %-----------Koniec części zasadniczej-----------
 
-%\begin{thebibliography}{11}
-%\nocite{Hornik2012:sphkmeans}
-%\nocite{Wild2002:sphkmeans}
-%\nocite{Loo2014:stringdist}
+
 \bibliographystyle{plain}
 \bibliography{bibliography}
-%\bibitem[1]{M} Arnold W. Miller, \emph{Special Subsets of the Real Line}, The University of Texas, Austin, U.S.A. 1984.
-%\bibitem[2]{H2} J.C. Oxtoby, \emph{Measure and Category}, Springer-Verlag, New York Heidelberg Berlin, 1971.
-%\bibitem[3]{WW} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. I: The Basics.} Graduate Studies in Mathematics vol. 8, American Mathematical Society, Providence, RI, 1996.
-%\bibitem[4]{WW2} Winfried Just and Martin Weese, \emph{Discovering Modern Set Theory. II: Set-Theoretic Tools for Every Mathematician.}, Graduate Studies in Mathematics vol. 18, American Mathematical Society, Providence, RI, 1997.
-%\end{thebibliography}
-%\clearpage
-%\pagestyle{empty}
-%\noindent Warszawa, dnia ...............
-%\vspace{5cm}
-%\begin{center}
-%\LARGE{Oświadczenie}
-%\end{center}
-%Oświadczam, że pracę licencjacką pod tytułem: ,,Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków'', której promotorem jest dr hab. Marek Gągolewski, wykonałem/am samodzielnie, co poświadczam własnoręcznym podpisem.
-%\vspace{2cm}
-%\begin{flushright}
-%...........................................
-%\end{flushright}
 
 %\makestatement
 \end{document}

@@ -622,7 +622,64 @@ Wszystkie trzy odległości oparte na $q$-gramach są nieujemne i symetryczne. O
 
 \subsection{Miary heurystyczne}
 
+Odległość Jaro została stworzona w amerykańskim Bureau of the Census (rządowa agencja, która jest odpowiedzialna za spis ludność Stanów Zjednoczonych) w celu połączenia rekordów, które były wpisane w niewłaściwe pola formularza. Pierwszy publiczny opis tej odległości pojawił się w instrukcji obsługi~cite{Jaro1978:usermanual}, co może wyjaśniać dlaczego nie jest rozpowszechniona w literaturze informatycznej. Jednak odległość ta została skutecznie zastosowana w statystycznych problemach dopasowania w przypadku dość krótkich napisów, głównie imion, nazwisk oraz danych adresowych~\cite{Loo2014:stringdist}.
 
+Rozumowanie stojące za odległością Jaro jest następujące: błędny znak oraz transpozycje znaków są spowodowane błędem przy wpisywaniu, ale mało prawdopodobne jest znalezienie błędnego znaku w miejscu odległym od zamierzonego, żeby mogło to być spowodowane błędem przy wpisywaniu. Stąd odległość Jaro mierzy liczbę wspólnych znaków w dwóch napisach, które nie są zbyt odległe od siebie i dodaje karę za dopasowanie znaków, które są stransponowane. Formalna definicja wygląda następująco~\cite{Loo2014:stringdist}:
+
+\begin{definition}
+Niech $s$ i $t$ będą napisami z $\Sigma^*$. Niech $m$ oznacza liczbę wspólnych znaków z $s$ i $t$, przy czym zakładając,że $s_i = t_j$, to znak ten jest wspólny dla obu napisów, jeśli:
+\begin{equation}
+|i -j| < \Bigg\lfloor\frac{max\{|s|, |t|\}}{2}\Bigg\rfloor
+\end{equation}
+i każdy znak z $s$ może być wspólny ze znakiem z $t$ tylko raz. W końcu, jeśli $s^\prime$ i $t^\prime$ są podnapisami utworzonymi z $s$ i $t$ poprzez usunięcie znaków, które nie są wspólne dla obu napisów, to $T$ jest liczbą transpozycji potrzebnych to otrzymania $t^\prime$ z $s^\prime$. Transpozycje znaków nieprzylegających są dozwolone.
+
+Wówczas \emph{odległość Jaro} definiuje się jako:
+\begin{equation}
+\label{eq:011}
+d_{jaro}(s,t) = \left\{
+\begin{array}{l l}     
+    0, & \text{gdy } s = t = \varepsilon \\
+    1, & \text{gdy } m = 0 \text{ i } |s| + |t| > 0 \\
+    1 - \frac{1}{3} (\frac{m}{|s|} + \frac{m}{|t|} + \frac{m - T}{m}) & \text{w przeciwnym przypadku}
+\end{array}\right.
+\end{equation}
+\end{definition}
+
+Odległość Jaro przyjmuje wartości z przedziału $[0,1]$, gdzie zero oznacza, że $s = t$, natomiast jeden wskazuje na kompletną odmienność napisów z $m = T = 0$.
+
+\begin{example}
+Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{jaro}(\verb|kozak|, \verb|foczka|)  \approx 0.261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (p. rys. NUMERRYS), co daje odległość równą $d_{jaro}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0.261$.
+\end{example}
+
+Winkler rozszerzył odległość Jaro poprzez włączenie dodatkowej kary za błędny znak wśród pierwszych czterech znaków napisu. Formalnie odległość Jaro-Winklera definiuje się następująco~\cite{Loo2014:stringdist}:
+
+\begin{definition}
+Niech $s$ i $t$ będą napisami z $\Sigma^*$, $\ell(s,t)$ oznacza długość najdłuższego wspólnego prefiksu, mającego maksymalnie cztery znaki i niech $p$ będzie liczbą z przedziału $[0, \frac{1}{4}]$. Wówczas odległość Jaro-Winklera dana jest wzorem~\cite{Winkler1990:stringcomparator}:
+
+\begin{equation}
+\label{eq:012}
+d_{jw}(s,t) = d_{jaro}(s,t)[1 - p\ell(s,t)]
+\end{equation}
+\end{definition}
+
+Czynnik $p$ określa jak bardzo różnice w czterech pierwszych znakach w obu napisach wpływają na odległość między nimi. Zmienna $p$ jest liczbą z przedziału $[0, \frac{1}{4}]$, by mieć pewność, że odległość Jaro-Winklera miała wartości w przedziale $[0,1]$ ($0 \leq d_{jw}(s,t) \leq 1$). Jeśli $p=0$, to odległość ta redukuje się do odległości Jaro i wszystkie znaki wnoszą taki sam wkład do funkcji odległości. Jeśli $p = \frac{1}{4}$, to odległość Jaro-Winklera jest równa zero nawet wówczas gdy tylko cztery pierwsze znaki w obu napisach pokrywają się. Powód jest taki, że podobno (pisac podobno?) ludzie są mniej skłonni do popełniania błędów w czterech pierwszych znakach lub też są one lepiej zauważalne, więc różnice w pierwszych czterech znakach wskazują na większe prawdopodobieństwo, że dwa napisy są rzeczywiście różne~\cite{Loo2014:stringdist}. Wikler~\cite{Winkler1990:stringcomparator} używał w swoich badaniach $p = 0.1$ i zauważył lepsze rezultaty niż dla $p = 0$.
+
+\begin{example}
+Odległość Jaro-Winklera między napisami \verb|faktura| i \verb|faktyczny| dla $p = 0$, $p = 0.1$ oraz $p = 0.25$ wynosi odpowiednio: 
+\begin{equation*}
+  \left.\begin{array}{l@{}l}
+    d_{jw}(\verb|faktura|, \verb|faktyczny|, p = 0.00) & \approx 0.328 \\
+    d_{jw}(\verb|faktura|, \verb|faktyczny|, p = 0.10) & \approx 0.197  \\
+    d_{jw}(\verb|faktura|, \verb|faktyczny|, p = 0.25) & =  0 = d_{jaro}(\verb|faktura|, \verb|faktyczny|)
+  \end{array}\right.
+\end{equation*}
+\end{example}
+
+Łatwo zauważyć z równań \ref{eq:011} i \ref{eq:012}, że odległości Jaro i Jaro-Winklera, dla $p \neq \frac{a}{4}$, są nieujemne,  symetryczne i spełniają warunek identycznościowy. Nierówność trójkatą w obu przypadkach nie jest jednak spełniona. Rozważmy następujący przykład: $s = \verb|ab|, t = \verb|cb|, u = \verb|cd|$. Jako że napisy $s$ i $u$ nie mają wspólnych znaków, to odległość Jaro między nimi wynosi $d_{jaro}(s, u) = 0$, podczas gdy $d_{jaro}(s, t) = d_{jaro}(t, u) = \frac{1}{3}$, więc w tym przypadku $d_{jaro}(s, u)$ jest większe od $d_{jaro}(s, t) + d_{jaro}(t, u)$. Z tego łatwo zauważyć, że odległość Jaro-Winklera nie spełnia nierówności trójkąta  dla tego samego przykładu dla $p \in [0, \frac{1}{4}]$~\cite{Loo2014:stringdist}.
+
+\subsection{Podsumowanie}
+
+W niniejszym rozdziale przedstawiono odległości określone na napisach (czy też przestrzeni ciągów znaków). Mając do wyboru wachlarz różnych funkcji nasuwa się pytanie której użyć. Ostateczna decyzja zależy od konkretnego przypadku, jednak są pewne ogólne reguły. Wybór pomiędzy odległościami opartymi na operacjach edycyjnych i $q$-gramach z jednej strony, a miarami heurystycznymi z drugiej zależy w dużej mierze od długości napisów -- te ostatnie są dedykowane krótszym napisom takim jak dane osobowe. W odróżnieniu od odległości opartych na operacjach edycyjnych i miarach heurystycznych, odległości oparte na $q$-gramach można łatwo policzyć dla bardzo długich tekstów, jako że liczba $q$-gramów znalezionych w języku naturalnym (dla niezbyt małego $q$, tj. $q \geq 3$) jest z reguły o wiele mniejsza niż liczba $q$-gramów, którą można otrzymać z całego alfabetu. Wybór pośród odległości opartych na operacjach edycyjnych zależy przede wszystkim od dokładności jaką chce się otrzymać. Przykładowo do wyszukiwania haseł w słowniku, gdzie różnice między dobranymi napisami są niewielkie, odległości pozwalające na więcej operacji edycyjnych (tak jak np. odległość Damerau-Levenshteina) mogą dać lepsze rezultaty. Odległości Jaro i Jaro-Winklera zostały skonstruowane do krótkich, napisanych przez człowieka, napisów, więc ich zakres zastosowania powinien być jasny.
 
 
 %-----------Koniec części zasadniczej-----------

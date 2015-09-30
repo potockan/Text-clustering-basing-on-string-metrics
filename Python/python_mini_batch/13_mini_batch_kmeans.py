@@ -122,7 +122,7 @@ import sqlite3
 con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 c = con.cursor()
 
-c.execute('select id_category from wiki_unique_category order by id_title limit 100')
+c.execute('select id_category from wiki_unique_category order by id_title')
 print("Reading labels...")
 labels = c.fetchall()
 
@@ -133,7 +133,6 @@ def reading_data(typ):
     id_title, id_stem_word, freq 
     from wiki_word_clust2%s_freq
     order by id_title
-    limit 100
     ''' % (typ))
     return(c.fetchall())
     
@@ -143,7 +142,9 @@ def reading_data(typ):
 print("Data transformations...")
 labels = np.asarray([val[0] for val in labels])
 
-my_data = reading_data('_red_lcs')
+typ1 = '_red_lcs'
+print(typ1)
+my_data = reading_data(typ1)
 
 con.close()
 
@@ -211,6 +212,9 @@ print("done in %0.3fs" % (time() - t0))
 print()
 
 np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_labels.txt", km.labels_, delimiter = ', ')
+np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_centers.txt", km.cluster_centers_, delimiter = ', ')
+
+
 
 print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels, km.labels_))
 print("Completeness: %0.3f" % metrics.completeness_score(labels, km.labels_))

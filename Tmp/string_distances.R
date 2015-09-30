@@ -73,5 +73,29 @@ stringdist('abaca', 'acaba', method = 'qgram', q = 2)
 stringdist('papaja', 'japa', method = 'cosine', q = 2)
 stringdist('palce', 'pałace', method = 'cosine', q = 2)
 
+stringdist('kozak', 'foczka', method = 'jw')
+stringdist('papaja', 'japa', method = 'jw')
+
+stringdist('papaja', 'papablee', method = 'jw', p = 0.25)
+
+
+
+stringdist('faktura', 'faktyczny', method = 'jw', p = 0)
+stringdist('faktura', 'faktyczny', method = 'jw', p = 0.1)
+stringdist('faktura', 'faktyczny', method = 'jw', p = 0.25)
+
+stringdist('ab', 'cb', method = 'jw', p = 0)
+stringdist('ab', 'dc', method = 'jw', p = 0)
+stringdist('cb', 'dc', method = 'jw', p = 0)
+
+
+stringdist('ab', 'cb', method = 'jw', p = 0.1)
+stringdist('ab', 'dc', method = 'jw', p = 0.1)
+stringdist('cb', 'dc', method = 'jw', p = 0.1)
+
+
+stringdist('ab', 'cb', method = 'jw', p = 0.25)
+stringdist('ab', 'dc', method = 'jw', p = 0.25)
+stringdist('cb', 'dc', method = 'jw', p = 0.25)
 
 

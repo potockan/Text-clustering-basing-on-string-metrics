@@ -84,18 +84,19 @@ stringdist('faktura', 'faktyczny', method = 'jw', p = 0)
 stringdist('faktura', 'faktyczny', method = 'jw', p = 0.1)
 stringdist('faktura', 'faktyczny', method = 'jw', p = 0.25)
 
+
 stringdist('ab', 'cb', method = 'jw', p = 0)
-stringdist('ab', 'dc', method = 'jw', p = 0)
-stringdist('cb', 'dc', method = 'jw', p = 0)
+stringdist('ab', 'cd', method = 'jw', p = 0)
+stringdist('cb', 'cd', method = 'jw', p = 0)
 
 
 stringdist('ab', 'cb', method = 'jw', p = 0.1)
-stringdist('ab', 'dc', method = 'jw', p = 0.1)
-stringdist('cb', 'dc', method = 'jw', p = 0.1)
+stringdist('ab', 'cd', method = 'jw', p = 0.1)
+stringdist('cb', 'cd', method = 'jw', p = 0.1)
 
 
 stringdist('ab', 'cb', method = 'jw', p = 0.25)
-stringdist('ab', 'dc', method = 'jw', p = 0.25)
-stringdist('cb', 'dc', method = 'jw', p = 0.25)
+stringdist('ab', 'cd', method = 'jw', p = 0.25)
+stringdist('cb', 'cd', method = 'jw', p = 0.25)
 
 

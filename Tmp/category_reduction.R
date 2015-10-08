@@ -72,8 +72,8 @@ expand_tree <- function(link, level) {
 level1 <- 
   'http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii' %>%
   expand_tree("level1") %>%
-  slice(-c(1:10, 14, 69, 96, 101, 155, 176, 188, 220, 234)) %>%
-  slice(220:225)
+  slice(-c(1:10, 14, 69, 96, 101, 155, 176, 188, 220, 234))# %>%
+  #slice(220:225)
 
 save(list = 'level1', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level1.rda")
 
@@ -115,7 +115,8 @@ rm(level3)
 #   print(sprintf("rm(level%d)", i-1))
 # }
 
-
+########################
+########################
 print(5)
 level5 <- level4 %>% group_by(level4.link) %>% do(expand_tree(first(.$level4.link), 'level5')) %>% ungroup
 save(list = 'level5', file = '/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level5.rda')
@@ -500,6 +501,25 @@ print(100)
 level100 <- level99 %>% group_by(level99.link) %>% do(expand_tree(first(.$level99.link), 'level100')) %>% ungroup
 save(list = 'level100', file = '/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level100.rda')
 rm(level99)
+########################
 
+for(i in 1:100)
+  eval(parse(text = sprintf("load('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level%d.rda')", i)))
 
+library(dplyr)
 
+kateg <- level1
+
+for(i in 1:100){
+  kateg <- kateg %>% 
+    full_join(eval(parse(text = paste0('level', i+1)))) %>% 
+    select_(paste0('-level', i, '.link'))
+}
+
+kateg <- kateg %>% select(-level16.link)
+
+save(list = 'kateg', file = '/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/categ.rda')
+
+# 
+# for(i in 1:16)
+#   print(nrow(unique(kateg[,i])))

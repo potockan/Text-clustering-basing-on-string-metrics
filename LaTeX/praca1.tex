@@ -15,6 +15,7 @@
 \usepackage{examplep}
 \usepackage{xcolor}
 \usepackage{mathtools}
+\usepackage{cprotect}
 %%\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{verbatim}
@@ -294,7 +295,7 @@ Dopasowanie reprezentuje ścisłą ścieżkę edycyjną $E = s_1 \rightarrow t_1
     \draw[decorate,decoration={brace,amplitude=5pt,mirror},transform canvas={yshift=0.3em},thick] (m-1-5.south west) -- node[yshift=-1.4em] { transp. } (m-1-6.south east);
      \draw[decorate,decoration={brace,amplitude=5pt},transform canvas={yshift=-0.3em},thick] (m-2-5.north west) -- node[yshift=-1.4em] { } (m-2-6.north east);
 \end{tikzpicture}
-\caption{Przykład optymalnego dopasowania między napisami |foczka| i |kozak|.}\label{rys:001}
+\cprotect\caption{Przykład optymalnego dopasowania między napisami \verb|foczka| i \verb|kozak|.}\label{rys:001}
 \end{figure}
 
 \begin{example}
@@ -377,7 +378,7 @@ Odległość Hamminga zlicza liczbę indeksów (p. rys.~\ref{rys:002}), na~któr
     ;
     
 \end{tikzpicture}
-\caption{Przykład dopasowania przy pomocy odległości Hamming między napisami |koza| i |foka|.}\label{rys:002}
+\cprotect\caption{Przykład dopasowania przy pomocy odległości Hamming między napisami \verb|koza| i \verb|foka|.}\label{rys:002}
 \end{figure}
 
 \begin{example}
@@ -457,7 +458,7 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też in
     
 
 \end{tikzpicture}
-\caption{Przykład odległości najdłuższego wspólnego podnapisu między napisami |foczka| i |kozak|.}\label{rys:003}
+\cprotect\caption{Przykład odległości najdłuższego wspólnego podnapisu między napisami \verb|kozak| i \verb|foczka|.}\label{rys:003}
 \end{figure}
 
 [PIĘKNY RYSUNEK]
@@ -730,10 +731,34 @@ d_{jaro}(s,t) = \left\{
 
 Odległość Jaro przyjmuje wartości z przedziału $[0,1]$, gdzie zero oznacza, że $s = t$, natomiast jeden wskazuje na kompletną odmienność napisów z $m = T = 0$.
 
-[PIEKNY RYSUNEK]
+
+\begin{figure}[width=80pt]
+\centering
+\begin{tikzpicture}
+  \matrix (m) [matrix of math nodes,row sep=2em,column sep=1em,minimum width=2em]
+  {
+  	  & \verb|k| & \verb|o| & \verb|z| & \verb|a| & \verb|k|  \\
+  	 \verb|f| & \verb|o| & \verb|c| & \verb|z| & \verb|k| & \verb|a| \\
+     };
+  \path[-stealth]
+    (m-1-3) edge node [left] {} (m-2-2)
+           
+    (m-1-4) edge node [left] {} (m-2-4)
+    
+    (m-1-5) edge node [left] {} (m-2-6)
+    
+    (m-1-6) edge node [left] {} (m-2-5)
+    
+    ;
+      \draw[decorate,decoration={brace,amplitude=5pt},transform canvas={},thick] (m-1-5.north west) -- node[yshift=1em] { transp. } (m-1-6.north east);
+      ;
+
+\end{tikzpicture}
+\cprotect\caption{Przykład odległości Jaro między napisami \verb|kozak| i \verb|foczka|.}\label{rys:005}
+\end{figure}
 
 \begin{example}
-Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{jaro}(\verb|kozak|, \verb|foczka|)  \approx 0.261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (p. rys. NUMERRYS), co daje odległość równą $d_{jaro}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0.261$.
+Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{jaro}(\verb|kozak|, \verb|foczka|)  \approx 0.261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (p. rys.~\ref{rys:005}), co daje odległość równą $d_{jaro}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0.261$.
 \end{example}
 
 Winkler rozszerzył odległość Jaro poprzez włączenie dodatkowej kary za błędny znak wśród pierwszych czterech znaków napisu~\cite{Loo2014:stringdist}:
@@ -767,7 +792,7 @@ Odległość Jaro-Winklera między napisami \verb|faktura| i \verb|faktyczny| dl
 W niniejszym rozdziale przedstawiono odległości określone na napisach [czy też przestrzeni ciągów znaków]. Mając do wyboru wachlarz różnych funkcji nasuwa się pytanie której użyć. Ostateczna decyzja zależy od konkretnego przypadku, jednak istnieją pewne ogólne reguły. Wybór pomiędzy odległościami opartymi na operacjach edycyjnych i $q$-gramach z jednej strony, a miarami heurystycznymi z drugiej zależy w dużej mierze od długości napisów -- te ostatnie są dedykowane krótszym napisom takim jak np. dane osobowe. W odróżnieniu od odległości opartych na operacjach edycyjnych i miarach heurystycznych, odległości oparte na $q$-gramach można łatwo policzyć dla bardzo długich tekstów, jako że liczba $q$-gramów możliwych do utworzenia z języka naturalnego (dla niezbyt małego $q$, tj. $q \geq 3$) jest z reguły o wiele mniejsza niż liczba $q$-gramów, którą można otrzymać z całego alfabetu. Wybór pośród odległości opartych na operacjach edycyjnych zależy przede wszystkim od dokładności jaką chce się otrzymać. Przykładowo do wyszukiwania haseł w słowniku, gdzie różnice między dobranymi napisami są niewielkie, odległości pozwalające na więcej operacji edycyjnych (tak jak np. odległość Damerau-Levenshteina) mogą dać lepsze rezultaty. Odległości Jaro i Jaro-Winklera zostały skonstruowane do krótkich, napisanych przez człowieka, napisów, więc ich zakres zastosowania powinien być jasny.
 
 
-
+\chapter{Analiza skupień metodą $k$-średnich}
 
 
 

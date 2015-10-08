@@ -426,8 +426,40 @@ Odległość najdłuższego wspólnego podnapisu między napisami \verb|kozak| i
 
 Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odległość równą~$5$. Można również usunąć z napisu znak \verb|k| zamiast \verb|a|, otrzymując taką samą odległość między napisami.
 
-Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z~$s$~i~$t$~nie zmieniając ich porządku. Wówczas odległość ta~jest rozumiana jako liczba niesparowanych znaków z~obu napisów. W~powyższym przykładzie może to~być zwizualizowane następująco:
+Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z~$s$~i~$t$~nie zmieniając ich porządku. Wówczas odległość ta~jest rozumiana jako liczba niesparowanych znaków z~obu napisów. W~powyższym przykładzie może to~być zwizualizowane następująco (rys.~\ref{rys:003}):
 	
+	
+
+\begin{figure}[width=80pt]
+\centering
+\begin{tikzpicture}
+  \matrix (m) [matrix of math nodes,row sep=2em,column sep=1em,minimum width=2em]
+  {
+  	 \verb|k| & \verb|o| & \verb|z| & \verb|a| & \verb|k|  \\
+  	 \verb|f| & \verb|o| & \verb|c| & \verb|z| & \verb|k| & \verb|a| \\[2em]
+  	 \verb|k| & \verb|o| & \verb|z| & \verb|a| & \verb|k|  \\
+  	 \verb|f| & \verb|o| & \verb|c| & \verb|z| & \verb|k| & \verb|a| \\
+     };
+  \path[-stealth]
+    (m-1-2) edge node [left] {} (m-2-2)
+           
+    (m-1-3) edge node [left] {} (m-2-4)
+    
+    (m-1-5) edge node [left] {} (m-2-5)
+    
+    
+    (m-3-2) edge node [left] {} (m-4-2)
+             
+    (m-3-3) edge node [left] {} (m-4-4)
+        
+    (m-3-4) edge node [left] {} (m-4-6)
+    ;
+    
+
+\end{tikzpicture}
+\caption{Przykład odległości najdłuższego wspólnego podnapisu między napisami |foczka| i |kozak|.}\label{rys:003}
+\end{figure}
+
 [PIĘKNY RYSUNEK]
 
 Jak widać na~rysunku, znaki \verb|k|, \verb|a|, \verb|f|, \verb|c| i \verb|a| w pierwszym przypadku oraz \verb|k|, \verb|k|, \verb|f|, \verb|c| i \verb|k| w drugim, pozostają bez pary, dając odległość równą~$5$.

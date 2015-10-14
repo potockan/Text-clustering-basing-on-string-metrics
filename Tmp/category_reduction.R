@@ -124,6 +124,7 @@ expand_tree <- function(link, level) {
 # rm(level4)
 load("/home/npotocka/mgr/Data/RObjects/level5.rda")
 print(6)
+<<<<<<< HEAD
 level51 <- level5[1:27831,]
 level52 <- level5[27832:55663,]
 level53 <- level5[55664:83494,]
@@ -138,6 +139,9 @@ level64 <- level54 %>% group_by(level5.link) %>% do(expand_tree(first(.$level5.l
 save(list = 'level61', file = '/home/npotocka/mgr/Data/RObjects/level61.rda')
 level6 <- bind_rows(level61, level62)
 
+=======
+level6 <- level5 %>% group_by(level5.link) %>% do(expand_tree(first(.$level5.link), 'level6')) %>% ungroup
+>>>>>>> f7522d6cbf9bb58daaf110aa66985770dd698ac5
 save(list = 'level6', file = '/home/npotocka/mgr/Data/RObjects/level6.rda')
 rm(level5)
 print(7)

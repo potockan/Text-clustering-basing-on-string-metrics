@@ -65,17 +65,21 @@
 
 CZY TO JAKO CIĄGŁY TEKST CZY WSZYSTKO PISAĆ W DEFINICJI???
 
-%\begin{definition}
-Niech  $\Sigma = \{\Sigma_i\}$ będzie skończonym uporządkowanym zbiorem o~liczności $|\Sigma|$, zwanym \emph{alfabetem}.~\emph{Napisem} nazywamy skończony ciąg znaków z~$\Sigma$.~Zbiór wszystkich napisów o~długości $n$~nad $\Sigma$~jest oznaczony przez $\Sigma^n$,~podczas gdy przez $\Sigma^* = \bigcup_{n=1}^{\infty}\Sigma^n$ rozumiemy zbiór wszystkich napisów utworzonych ze~znaków z~$\Sigma$~\cite{Boytsov2011:indexingmethods}.
+\begin{definition}
+Niech  $\Sigma = \{\sigma_1, \ldots, \sigma_k\}$ będzie skończonym uporządkowanym zbiorem o~liczności $|\Sigma|$, zwanym \emph{alfabetem}.~\emph{Napisem} nazywamy skończony ciąg znaków z~$\Sigma$.~Zbiór wszystkich napisów o~długości $n$~nad $\Sigma$~jest oznaczony przez $\Sigma^n$,~podczas gdy przez $\Sigma^* = \bigcup_{n=1}^{\infty}\Sigma^n$ rozumiemy zbiór wszystkich napisów utworzonych ze~znaków z~$\Sigma$~\cite{Boytsov2011:indexingmethods}.
+\end{definition}
 
-O~ile nie podano inaczej, używamy zmiennych $s,\ t,\ u,\ v,\ w,\ x,\ y$ jako oznaczenie napisów oraz $a,\ b,\ c$ do oznaczenia napisów jednoznakowych albo po~prostu \emph{znaków}. Pusty napis jest oznaczany przez $\varepsilon$. Przez $|s|$, dla każdego napisu $s \in \Sigma^*$, rozumiemy jego długość, czyli liczbę znaków w~napisie. Ciąg zmiennych oznaczających napisy i/lub znaki oznaczają ich złączenie, np. $stu$ to napis powstały ze złączenia napisów $s, t$ oraz $u$, natomiast $abc$, to napis powstały ze złączenia znaków $a, b$ oraz $c$~\cite{Boytsov2011:indexingmethods}. Dla rozróżnienia napisów od~zmiennych reprezentujących napis, te~pierwsze oznaczamy pismem maszynowym, np.~\verb|napis|.
+O~ile nie podano inaczej, używamy zmiennych $s,\ t,\ u,\ v,\ w,\ x,\ y$ jako oznaczenie napisów oraz $a,\ b,\ c$ do oznaczenia napisów jednoznakowych albo po~prostu \emph{znaków}. Pusty napis jest oznaczany przez $\varepsilon$. Przez $|s|$, dla każdego napisu $s \in \Sigma^*$, rozumiemy jego długość, czyli liczbę znaków w~napisie. Ciąg napisów i/lub znaków oznacza ich złączenie, np. $stu$ to napis powstały ze złączenia napisów $s, t$ oraz $u$, natomiast $abc$, to napis powstały ze złączenia znaków $a, b$ oraz $c$~\cite{Boytsov2011:indexingmethods}. Dla rozróżnienia napisów od~zmiennych reprezentujących napis, te~pierwsze oznaczamy pismem maszynowym, np.~\verb|napis|.
 
-Poprzez $s_i$~rozumiemy $i$-ty znak z~napisu $s$,~dla każdego $i \in \{1,\ldots,|s|\}$. Podciąg kolejnych przylegających do~siebie znaków z~napisu nazywamy \emph{podnapisem}. Podnapisem napisu $s$,~który zaczyna się od~$i$-tego znaku, a~kończy na~$j$-tym znaku, oznaczamy przez $s_{i:j}$, tj. $s_{i:j} = s_is_{i+1}\ldots s_j$ dla $i<j$. Zakładamy również, że~jeśli $j<i$, to $s_{i:j} = \varepsilon$~\cite{Boytsov2011:indexingmethods,Loo2014:stringdist}.
+Poprzez $s_i$~rozumiemy $i$-ty znak z~napisu $s$,~dla każdego $i \in \{1,\ldots,|s|\}$. Podciąg kolejnych przylegających do~siebie znaków z~napisu nazywamy \emph{podnapisem}. Podnapisem napisu $s$,~który zaczyna się od~$i$-tego znaku, a~kończy na~$j$-tym znaku, oznaczamy przez $s_{i:j}$, tj. $s_{i:j} = s_is_{i+1}\ldots s_j$ dla $i \leq j$. Zakładamy również, że~jeśli $j < i$, to $s_{i:j} = \varepsilon$~\cite{Boytsov2011:indexingmethods,Loo2014:stringdist}.
 
-Załóżmy, że~napis $s$~jest reprezentacją złączenia trzech, być może pustych, podnapisów $w$, $x$ i $y$, tj. $s = wxy$. Wówczas podnapis $w$ nazywamy \emph{prefiksem}, natomiast podnapis $y$ -- sufiksem~\cite{Boytsov2011:indexingmethods}.
+\begin{definition}
+Załóżmy, że~napis $s$~jest reprezentacją złączenia trzech, być może pustych, podnapisów $w$, $x$ i $y$, tj. $s = wxy$. Wówczas podnapis $w$ nazywamy \emph{przedrostkiem}, natomiast podnapis $y$ -- przyrostek~\cite{Boytsov2011:indexingmethods}.
+\end{definition}
 
+\begin{definition}
 Podnapis złożony z kolejnych, przylegających do siebie, znaków napisu, o ustalonej długości $q$ jest nazywany \emph{$q$-gramem}. $q$-gramy o $q$ równym jeden, dwa lub trzy mają specjalne nazwy: \emph{unigram, bigram} i \emph{trigram}. Jeśli $q > |s|$, to $q$-gramy napisu $s$ są napisami pustymi~\cite{Boytsov2011:indexingmethods}.
-%\end{definition}
+\end{definition}
 
 %\begin{definition}
 %\emph{Napisem} nazywamy skończone złączenie symboli (znaków) ze~skończonego \emph{alfabetu}, oznaczonego przez $\Sigma$. Produkt kartezjański rzędu $q$, $\Sigma\times\ldots\times\Sigma$ oznaczamy przez $\Sigma^q$, natomiast zbiór wszystkich skończonych napisów, które można utworzyć ze~znaków z $\Sigma$ oznaczamy przez~$\Sigma^*$. \emph{Pusty napis}, oznaczany $\varepsilon$, również należy do~$\Sigma^*$. Napisy zwyczajowo będziemy oznaczać przez $s$,~$t$~oraz $u$,~a~ich \emph{długość}, czyli liczbę znaków w~napisie, przez $|s|$. Poprzez $s_i$ rozumiemy $i$-ty znak z napisu $s$, dla każdego $i \in \{1,\ldots,|s|\}$, natomiast podnapisy od znaku $i$-tego do znaku $j$-tego oznaczamy przez $s_{i:j}$. Zakładamy również, że jeśli $j<i$, to $s_{i:j} = \varepsilon$ \cite{Loo2014:stringdist}.
@@ -83,11 +87,11 @@ Podnapis złożony z kolejnych, przylegających do siebie, znaków napisu, o ust
 
 
 \begin{example}
-Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = \verb|ela|$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma$. Co więcej, mamy $s_1 = \verb|e|$, $s_2 = \verb|l|$, $s_3 = \verb|a|$. Podnapis $1:2$ napisu $s$ to $s_{1:2} = \verb|el|$. W napisie tym mamy do czynienia jedynie z $q$-gramami o $q$ równym jeden, dwa oraz trzy: $\verb|e|,\ \verb|l|,\ \verb|a|$; $\verb|el|,\ \verb|la|$ oraz $\verb|ela|$ odpowiednio.
+Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = \verb|ela|$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma^*$. Co więcej, mamy $s_1 = \verb|e|$, $s_2 = \verb|l|$, $s_3 = \verb|a|$. Podnapis $1:2$ napisu $s$ to $s_{1:2} = \verb|el|$. W napisie tym mamy do czynienia jedynie z $q$-gramami o $q$ równym jeden, dwa oraz trzy, odpowiednio: $\verb|e|,\ \verb|l|,\ \verb|a|$; $\verb|el|,\ \verb|la|$ oraz $\verb|ela|$.
 \end{example}
 
 
-We wszystkich przykładach niniejszego rozdziału, zakładamy, jeśli nie podano inaczej, że alfabet składa się z $32$ liter polskiego alfabetu oraz liter \verb|q|, \verb|v| i \verb|x|.
+We wszystkich przykładach niniejszego rozdziału zakładamy, jeśli nie podano inaczej, że alfabet składa się z $32$ liter polskiego alfabetu oraz liter \verb|q|, \verb|v| i \verb|x|.
 
 %[TU TRZEBA BARDZIEJ FORMALNIE! BOYTSOV STR. 4-7]Odległość $d(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalny koszt ciągu operacji potrzebnego do~przetransformowania $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje). Koszt ciągu operacji jest sumą kosztów pojedynczych operacji. Przez operacje rozumiemy skończoną liczbę reguł w~formie $\delta(x, y) = a$, gdzie $x$~i~$y$ to różne podnapisy, a~$a$~to~nieujemna liczba rzeczywista. Kiedy już, przy pomocy operacji, podnapis $x$~zostanie przekształcony w~napis $y$,~żadne dalsze operacje nie mogą być wykonywane na~$y$~\cite{Navarro2001:guidedtour}.
 
@@ -119,7 +123,7 @@ We wszystkich przykładach niniejszego rozdziału, zakładamy, jeśli nie podano
 
 \section{Odległości na przestrzeni ciągów znaków}
 
-W niniejszym podrozdziale zajmiemy się odległościami na przestrzeni ciągów znaków. W literaturze można znaleźć wiele różnych funkcji tego typu, które różnią się genezą powstania, podejściem do problemu [??] oraz zastosowaniami. W pracy zajmiemy się jednak odległościami, która można podzielić na~trzy grupy:
+W niniejszym podrozdziale zajmiemy się odległościami na przestrzeni ciągów znaków, tj. funkcjami $d: \Sigma^* \times \Sigma^* \rightarrow [0, \infty)$. W literaturze można znaleźć wiele różnych funkcji tego typu, które różnią się genezą powstania, podejściem do problemu oraz zastosowaniami. W pracy zajmiemy się jednak odległościami, która można podzielić na~trzy garupy:
 \begin{itemize}
 \item oparte na~operacjach edycyjnych (\emph{edit operations}),
 \item oparte na~$q$-gramach,
@@ -127,13 +131,13 @@ W niniejszym podrozdziale zajmiemy się odległościami na przestrzeni ciągów 
 \end{itemize}
 
 BLA BLA JAKIEŚ LANIE WODY O METRYKACH
-Pierwszy rodzaj odległości jest najczęściej używany w algorytmach zajmujących się optymalnym dopasowaniem, dlatego też poświęcimy mu największą część niniejszego rozdziału. Odległości oparte na $q$-gramach ... (TUTAJ COŚ O NICH). Natomiast miary heurystyczne są rzadko stosowane, będąc zazwyczaj używane w konkretnych przypadkach. Miary te miały jednak swój wkład w historię optymalizacji napisów, zatem pokrótce opiszemy je pod koniec tego rozdziału.
+Pierwszy rodzaj odległości jest najczęściej używany w algorytmach zajmujących się optymalnym dopasowaniem, dlatego też poświęcimy mu największą część niniejszego rozdziału. Odległości oparte na $q$-gramach ... (TUTAJ COŚ O NICH). Natomiast miary heurystyczne są rzadko stosowane, będąc zazwyczaj używane w konkretnych przypadkach. Miary te miały jednak swój wkład w historię optymalizacji [NIE!] napisów, zatem pokrótce opiszemy je pod koniec tego rozdziału.
 
 \subsection{Odległości oparte na operacjach edycyjnych}
 
 HISTORIA ODLEGLOSCI EDYCYJNYCH?
 
-\textbf{Ścieżka edycyjna i bazowe operacje edycyjne.} \emph{Odległość edycyjna} $ED(s,t)$ pomiędzy dwoma napisami $s$~i~$t$~to~minimalna liczba operacji edycyjnych potrzebna do~przetworzenia $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje)~\cite{Navarro2001:guidedtour}. \emph{Ścisłą odległością edycyjną} nazywamy minimalną liczbę nie nakładających się operacji edycyjnych, które pozwalają przekształcić jeden napis w drugi, i które nie przekształcają dwa razy tego samego podnapisu~\cite{Boytsov2011:indexingmethods}.
+\textbf{Ścieżka edycyjna i bazowe operacje edycyjne.} \emph{Odległość edycyjna} $ED(s,t)$ między dwoma napisami $s$~i~$t$~to~minimalna liczba operacji edycyjnych potrzebna do~przetworzenia $s$~w~$t$ (i~$\infty$, gdy taki ciąg nie istnieje)~\cite{Navarro2001:guidedtour}. \emph{Ścisłą odległością edycyjną} nazywamy minimalną liczbę nienakładających się operacji edycyjnych, które pozwalają przekształcić jeden napis w drugi, i które nie przekształcają dwa razy tego samego podnapisu~\cite{Boytsov2011:indexingmethods}.
 
 Napis może zostać przetworzony w drugi poprzez wykonanie na nim ciągu przekształceń jego podnapisów. Ten ciąg nazywany jest \emph{ścieżką edycyjną (śladem edycji?)}, podczas gdy przekształcenia są nazywane \emph{bazowymi operacjami edycyjnymi}. Bazowe operacje edycyjne, które polegają na przekształceniu napisu $s$ w napis $t$, są oznaczane przez $s \rightarrow t$. Zbiór wszystkich bazowych operacji edycyjnych oznaczamy przez~$\mathbb{B}$~\cite{Boytsov2011:indexingmethods}.
 
@@ -146,7 +150,7 @@ Bazowe operacje edycyjne są zazwyczaj ograniczone do:
 \item transpozycja: $\verb|el| \rightarrow \verb|le|$, tj. przestawienie dwóch przylegających liter $\verb|e|$ i $\verb|l|$, np. $\verb|ela| \rightarrow \verb|lea|$.
 \end{itemize}
 
-Często transpozycja znaków nie należy do zbioru operacji bazowych, jako że można ją zastąpić usunięciem i wstawieniem znaku. W niniejszej pracy, jednak, operacja ta należy do zbioru operacji bazowych.
+Często transpozycja znaków nie należy do zbioru operacji bazowych, jako że można ją zastąpić usunięciem i wstawieniem znaku. W niniejszej pracy jednak, operacja ta należy do zbioru operacji bazowych.
 
 %Koszt wszystkich powyższych operacji zazwyczaj wynosi $1$. Dla wszystkich odległości, które dopuszczają więcej niż jedną operację edycyjną, może być znaczące nadanie wag poszczególnym operacjom, dając na przykład transpozycji mniejszy koszt niż operacji wstawienia znaku. Odległości, dla których takie wagi zostają nadane są zazwyczaj nazywane \emph{uogólnionymi} odległościami~\cite{Boytsov2011:indexingmethods}.
 
@@ -171,16 +175,16 @@ Mając dany zbiór bazowych operacji edycyjnych, \emph{odległość edycyjna} $E
 JAKIŚ PRZYKŁĄD SCIEZKI I OPTYMALNEJ SCIEZKI.
 \end{example}
 
-Przykładowe odległości edycyjne: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Odległości te różnią się zbiorem bazowych operacji edycyjnych. Jeśli w zbiorze tym znajduje się tylko zamiana znaków, to mamy do czynienia z odległością Hamminga. Gdy zbiór bazowych operacji edycyjnych zawiera wstawienia i usunięcia znaków, to jest to odległość najdłuższego wspólnego podnapisu. Gdyby $\mathbb{B}$ powiększyć o zamianę znaków, to otrzymamy odległość Levenshteina. Dwie ostatnie odległości, tj. optymalnego dopasowania napisów oraz Damareu-Levenshteina, mają w zbiorze bazowych operacji edycyjnych usunięcie, wstawienie, zamianę oraz transpozycję znaków.
+Przykładowe odległości edycyjne: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damareu-Levenshteina. Odległości te różnią się zbiorem bazowych operacji edycyjnych. Jeśli w zbiorze tym znajduje się tylko zamiana znaków, to mamy do czynienia z odległością Hamminga. Gdy zbiór bazowych operacji edycyjnych zawiera wstawienia i usunięcia znaków, to jest to odległość najdłuższego wspólnego podnapisu. Gdyby $\mathbb{B}$ powiększyć o zamianę znaków, to otrzymamy odległość Levenshteina. Dwie ostatnie odległości, tj. optymalnego dopasowania napisów oraz Damareu-Levenshteina, mają w zbiorze bazowych operacji edycyjnych usunięcie, wstawienie, zamianę oraz transpozycję znaków. Formalne definicje powyższych funkcji znajdują się w dalszej części niniejszego rozdziału.
 
 
 
 
-Definicja odległości edycyjnej może być również interpretowana jako minimalny koszt, dzięki któremu przekształcamy jeden napis w drugi. Definicję można uogólnić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne mogą mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}. Zazwyczaj koszt każdej operacji wynosi jeden, jednak można, na przykład, nadać transpozycji mniejszy koszt niż operacji wstawienia znaku. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{|E|} \rightarrow b_{|E|}$ poprzez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd poprzez odległość między napisem $s$ a napisem $t$ będziemy rozumieć minimalny ze wszystkich możliwych kosztów ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazywane \emph{uogólnionymi} odległościami edycyjnymi.\\
+Definicja odległości edycyjnej może być również interpretowana jako minimalny koszt, dzięki któremu przekształcamy jeden napis w drugi. Definicję można uogólnić na dwa sposoby. Po pierwsze, bazowe operacje edycyjne mogą mieć przydzielone koszty (wagi) $\delta(a \rightarrow b)$~\cite{Wagner1974:stringtostring}. Zazwyczaj koszt każdej operacji wynosi jeden, jednak można, na przykład, nadać transpozycji mniejszy koszt niż operacji wstawienia znaku. Dalej, można rozszerzyć funkcję kosztu $\delta$ na ścieżkę edycyjną $E = a_1 \rightarrow b_1, a_2 \rightarrow b_2, \ldots, a_{|E|} \rightarrow b_{|E|}$ przez $\delta(E) = \sum\limits_{i=1}^{|E|}\delta(a_i \rightarrow b_i)$~\cite{Boytsov2011:indexingmethods}. Odtąd przez odległość między napisem $s$ a napisem $t$ będziemy rozumieć minimalny ze wszystkich możliwych kosztów ścieżek przekształcających $s$ w $t$. Odległości zdefiniowane w ten sposób zazwyczaj są nazywane \emph{uogólnionymi} odległościami edycyjnymi.\\
 Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o ważone zamiany (substytucje) (pod)napisów, zamiast operacji edycyjnych wykonywanych na pojedynczych znakach~\cite{Ukkonen1985:algorithmsforapprox}. Odległości zdefiniowane w ten sposób zazwyczaj są nazwyane \emph{rozszerzonymi} odległościami edycyjnymi. Przykładowo, $\mathbb{B}$ może zawierać operację $\verb|x| \rightarrow \verb|ks|$ o koszcie jednostkowym. Wówczas rozszerzona odległość pomiędzy napisami $\verb|xero|$ i $\verb|ksero|$ wynosi jeden, podczas gdy standardowa (zwykła, nierozszerzona) odległość wyniosłaby dwa~\cite{Boytsov2011:indexingmethods}.
 
 \begin{definition}\label{def:002}
-Mając dany zbiór bazowych operacji edycyjnych $\mathbb{B}$ oraz funkcję $\delta$,~która nadaje koszt wszystkim bazowym operacjom edycyjnym z~$\mathbb{B}$,~ogólna(?) odległość edycyjna pomiędzy napisami $s$~i~$t$~jest zdefiniowana jako minimalny spośród kosztów wszystkich możliwych ścieżek edycyjnych, które przekształcają $s$~w~$t$~\cite{Boytsov2011:indexingmethods}.
+Mając dany zbiór bazowych operacji edycyjnych $\mathbb{B}$ oraz funkcję $\delta$,~która nadaje koszt wszystkim bazowym operacjom edycyjnym z~$\mathbb{B}$,~uogólniona odległość edycyjna między napisami $s$~i~$t$~jest zdefiniowana jako minimalny spośród kosztów wszystkich możliwych ścieżek edycyjnych, które przekształcają $s$~w~$t$~\cite{Boytsov2011:indexingmethods}.
 \end{definition}
 
 [KONFLIKT Z OSTATNIM ZDANIEM POPRZEDNIEGO AKAPITU - UOGOLNIONYMI ODL. ED.] Zazwyczaj koszt pojedynczej operacji z $\mathbb{B}$ jest równy jeden. Czasem jednak nadaje się poszczególnym operacjom różne koszty, dając np. transpozycji mniejszą wagę niż wstawieniu znaku. Gdy koszt wszystkich operacji jest równy jeden, to mówimy po prostu o odległości edycyjnej, natomiast gdy różne operacje mają różne wagi, to mówimy o \emph{uogólnionej} odległości edycyjnej.
@@ -200,7 +204,7 @@ Zauważmy, że ostatnia własność jest zawsze spełniona dla skończonego zbio
 \begin{theorem}
 Z własności \ref{wl:001} i \ref{wl:002} wynika, że:
 \begin{itemize}
-\item dla każdych dwóch napisów $s$ i $t$, istnieje ścieżka o minimalnym koszcie, tj. właściwie (prawdziwie, odpowiednio?) zdefiniowana odległość edycyjna z $s$ do $t$~\cite{Boytsov2011:indexingmethods},
+\item dla każdych dwóch napisów $s$ i $t$, istnieje ścieżka o minimalnym koszcie, tj. dobrze zdefiniowana odległość edycyjna z $s$ do $t$~\cite{Boytsov2011:indexingmethods},
 \item ogólna odległość edycyjna z definicji \ref{def:002} jest metryką~\cite{Wagner1974:stringtostring}.
 \end{itemize}
 \end{theorem}
@@ -247,7 +251,7 @@ Nieścisła odległość Damerau-Levenshteina oraz ścisła odległość Damerau
 Ścisła odległość Damerau-Levenshteina traktuje transpozycję (tj. zamianę dwóch przylegających do siebie znaków) jako bazową operację edycyjną. Aby udowodnić lemat podamy przykłąd, w którym zakaz modyfikacji znaków już stransponowanych odróżnia odległość Damerau-Levenshteina od ścisłej odległości Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}.
 \end{proof}
 
-Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierw, zamienia znaki \verb|a| i \verb|b|, a następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że wstawienie przekształca już transformowany napis. Jednakowoż, jeśli kolejne przekształcenia tego samego podnapisu są wykluczone, to najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, składa się z trzech operacji edycyjnych, np. $(\verb|ba| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|c|, \varepsilon \rightarrow \verb|b|)$. Stąd, nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
+Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierws zamienia znaki \verb|a| i \verb|b|, a następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że wstawienie przekształca już transformowany napis. Jednakowoż, jeśli kolejne przekształcenia tego samego podnapisu są wykluczone, to najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, składa się z trzech operacji edycyjnych, np. $(\verb|ba| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|c|, \varepsilon \rightarrow \verb|b|)$. Stąd, nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
 
 Ścisła odległość Damerau-Levenshteina nie spełnia nierówności trójkąta, gdyż
 $$
@@ -255,7 +259,7 @@ $$
 $$
 natomiast
 $$
-\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|
+\verb|ba|  \xrightarrow[1]{us.\ b} \verb|a| \xrightarrow[1]{wst.\ c} \verb|ac| \xrightarrow[1]{wst.\ b} \verb|acb|,
 $$
 zatem
 $$
@@ -278,6 +282,10 @@ Dopasowanie reprezentuje ścisłą ścieżkę edycyjną $E = s_1 \rightarrow t_1
 \emph{Optymalne dopasowanie} to dopasowanie o najmniejszym koszcie~\cite{Boytsov2011:indexingmethods}.
 
 
+\begin{example}
+Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak| prezentuje rys.~\ref{rys:001}. Odpowiadająca mu ścieżka edycyjna składa się z zamiany $\verb|f| \rightarrow \verb|k|$, usunięcia $\verb|c| \rightarrow \varepsilon$ oraz transpozycji $\verb|ka| \rightarrow \verb|ak|$.
+\end{example}
+
 \begin{figure}[width=80pt]
 \centering
 \begin{tikzpicture}
@@ -298,13 +306,9 @@ Dopasowanie reprezentuje ścisłą ścieżkę edycyjną $E = s_1 \rightarrow t_1
 \cprotect\caption{Przykład optymalnego dopasowania między napisami \verb|foczka| i \verb|kozak|.}\label{rys:001}
 \end{figure}
 
-\begin{example}
-Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak| prezentuje rys.~\ref{rys:001}. Odpowiadająca mu ścieżka edycyjna składa się z zamiany $\verb|f| \rightarrow \verb|k|$, usunięcia $\verb|c| \rightarrow \varepsilon$ oraz transpozycji $\verb|ka| \rightarrow \verb|ak|$.
-\end{example}
+Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie między zbiorem ścisłych ścieżek edycyjnych i zbiorem [optymalnych?] dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej poprzez problem znalezienia optymalnego dopasowania, co też zastosujemy dalej~\cite{Boytsov2011:indexingmethods}.
 
-Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie pomiędzy zbiorem ścisłych ścieżek edycyjnych i zbiorem [optymalnych?] dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej poprzez problem znalezienia optymalnego dopasowania, co też zastosujemy dalej~\cite{Boytsov2011:indexingmethods}.
-
-\textbf{Obliczanie odległości edycyjnej.} Główną zasadą dynamicznego algorytmu, liczącego koszt optymalnego dopasowania, jest wyrażenie kosztu dopasowania pomiędzy napisami $s$ i $t$, używając kosztu dopasowaniu ich prefiksów. Rozważmy prefiks $s_{1:i}$ o długości $i$ i prefiks $t_{1:j}$ o długości $j$, napisów $s$ i $t$ odpowiednio. Załóżmy, że $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ jest optymalnym dopasowaniem pomiędzy $s_{1:i}$ i $t_{1:j}$, którego koszt oznaczamy przez $C_{i,j}$~\cite{Boytsov2011:indexingmethods}.
+\textbf{Obliczanie odległości edycyjnej.} Główną zasadą dynamicznego algorytmu, liczącego koszt optymalnego dopasowania, jest wyrażenie kosztu dopasowania pomiędzy napisami $s$ i $t$, używając kosztu dopasowania ich przedrostków. Rozważmy prefiks $s_{1:i}$ o długości $i$ i przedrostek $t_{1:j}$ o długości $j$, odpowiednio napisów $s$ i $t$. Załóżmy, że $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ jest optymalnym dopasowaniem między $s_{1:i}$ i $t_{1:j}$, którego koszt oznaczamy przez $C_{i,j}$~\cite{Boytsov2011:indexingmethods}.
 
 Używając równania \ref{eq:003} oraz definicji optymalnego dopasowania, łatwo pokazać, że $C_{i,j}$ może zostać policzone przy użyciu następującej ogólnej rekurencji~\cite{Ukkonen1985:algorithmsforapprox}:
 
@@ -313,7 +317,7 @@ Używając równania \ref{eq:003} oraz definicji optymalnego dopasowania, łatwo
 \begin{split}
 \label{eq:004}
 C_{0,0} &= 0 \\
-C_{i,j} &= min\{\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) + C_{i^\prime-1, j^\prime-1} | s_{i^\prime:i}\rightarrow t_{j^\prime:j} \in \mathbb{B}\} 
+C_{i,j} &= \min\{\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) + C_{i^\prime-1, j^\prime-1} | s_{i^\prime:i}\rightarrow t_{j^\prime:j} \in \mathbb{B}\}.
 \end{split}
 \end{align}
 
@@ -321,7 +325,7 @@ C_{i,j} &= min\{\delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) + C_{i^\prime-1
 Można zauważyć, że:
 \begin{itemize}
 \item koszt dopasowania napisów $s$ i $t$ jest równy $C_{|s|, |t|}$;
-\item wszystkie optymalne dopasowania mogą zostać wyznaczone poprzez odwracanie rekurencji \ref{eq:004} (przechodzenie od tyłu), tj. obliczanie najpierw $C_{0,0}$, następnie $C_{1,1}$ itd.
+\item wszystkie optymalne dopasowania mogą zostać wyznaczone przez odwracanie rekurencji \ref{eq:004} (przechodzenie od tyłu), tj. obliczanie najpierw $C_{0,0}$, następnie $C_{1,1}$ itd.
 \end{itemize}
 
 
@@ -333,13 +337,13 @@ Rozważmy teraz odległość Hamminga, gdzie $s_{i^\prime:i}\rightarrow t_{j^\pr
 \delta(s_{i^\prime:i}\rightarrow t_{j^\prime:j}) = [s_{i^\prime:i}\neq t_{j^\prime:j}]
 \end{equation}
 
-gdzie $[X]$ jest równe jeden, gdy warunek $X$ jest spełniony, zero w przeciwnym przypadku. Co więcej, w tym przypadku możliwa jest tylko jedna kombinacja $i^\prime$ oraz $j^\prime$, mianowicie $i^\prime = i$ oraz $j^\prime = j$. Dalej, odległość ta jest zdefiniowana jedynie dla $|s| = |t|$, zatem $C_{i,j}$ może być policzone jedynie dla $i = j$. Wówczas definicja odległości Hamminga nie jest rekursywna (rekursyjna?) i można ją zapisać następująco:
+gdzie $[X]$ jest równe jeden, gdy warunek $X$ jest spełniony, zero w przeciwnym przypadku. Co więcej, w tym przypadku możliwa jest tylko jedna kombinacja $i^\prime$ oraz $j^\prime$, mianowicie $i^\prime = i$ oraz $j^\prime = j$. Dalej, odległość ta jest zdefiniowana jedynie dla $|s| = |t|$, zatem $C_{i,j}$ może być policzone jedynie dla $i = j$. Wówczas definicja odległości Hamminga nie jest rekurencyjna i można ją zapisać następująco:
 
 
 \begin{definition}
 \emph{Odległością Hamminga} nazywamy~\cite{Hamming1950:errordetecting}:
 $$
-d_{hamming}(s, t) = \left\{
+d_{\mathrm{hamming}}(s, t) = \left\{
 \begin{array}{l l}     
     \sum\limits_{i=1}^{|s|}\delta(s_i \rightarrow t_i) = \sum\limits_{i=1}^{|s|}[s_i\neq t_i], & \text{gdy } |s| = |t|,\\
     \infty, & \text{w przeciwnym przypadku},
@@ -382,7 +386,7 @@ Odległość Hamminga zlicza liczbę indeksów (p. rys.~\ref{rys:002}), na~któr
 \end{figure}
 
 \begin{example}
-Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{hamming}(\verb|koza|, \verb|foka|) = 2$, natomiast między słowami \verb|kozak| i \verb|foczka| wynosi ona $d_{hamming}(\verb|kozak|, \verb|foczka|) = \infty$, gdyż $|\verb|kozak| | \neq | \verb|foczka| |$.
+Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{\mathrm{hamming}}(\verb|koza|, \verb|foka|) = 2$, natomiast między słowami \verb|kozak| i \verb|foczka| wynosi ona $d_{\mathrm{hamming}}(\verb|kozak|, \verb|foczka|) = \infty$, gdyż $|\verb|kozak| | \neq | \verb|foczka| |$.
 \end{example}
 
 
@@ -397,7 +401,7 @@ Rozważmy teraz odległość najdłuższego wspólnego podnapisu, gdzie $s_{i^\p
 Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu [NIE WIEM CZY TO JEST DOBRZE!!!!]:
 
 \begin{equation*}
-C_{i,j} = min\left\{
+C_{i,j} = \min\left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0 \\
     C_{i-1, j} + 1, & \text{gdy } i > 0 \\
@@ -409,16 +413,16 @@ C_{i,j} = min\left\{
 %\begin{definition}
 %\emph{Odległością najdłuższego wspólnego podnapisu}~\cite{Needleman2008:generalmethod} na $\Sigma^*$ nazywamy:
 %$$
-%d_{lcs}(s, t) = \left\{
+%d_{\mathrm{lcs}}(s, t) = \left\{
 %\begin{array}{l l}     
 %    0, & \text{gdy } s = t = \varepsilon,\\
-%    d_{lcs}(s_{1:|s|-1}, t_{1:|t|-1}), & \text{gdy } s_{|s|} = t_{|t|}, \\
-%    1+min\{d_{lcs}(s_{1:|s|-1}, t), d_{lcs}(s, t_{1:|t|-1})\}, & \text{w przeciwnym przypadku},
+%    d_{\mathrm{lcs}}(s_{1:|s|-1}, t_{1:|t|-1}), & \text{gdy } s_{|s|} = t_{|t|}, \\
+%    1+min\{d_{\mathrm{lcs}}(s_{1:|s|-1}, t), d_{\mathrm{lcs}}(s, t_{1:|t|-1})\}, & \text{w przeciwnym przypadku},
 %\end{array}\right.
 %$$
 %\end{definition}
 
-Odległość najdłuższego wspólnego przyjmuje wartości ze zbioru $\{0, |s|+|t|\}$, przy czym maksimum jest osiągane, gdy $s$ i $t$ nie mają ani jednego wspólnego znaku. Odległość tę oznaczamy przez $d_{lcs}$.
+Odległość najdłuższego wspólnego podnapisu przyjmuje wartości ze zbioru $\{0, |s|+|t|\}$, przy czym maksimum jest osiągane, gdy $s$ i $t$ nie mają ani jednego wspólnego znaku. Odległość tę oznaczamy przez $d_{\mathrm{lcs}}$.
 %Odległość ta zlicza liczbę usunięć i~wstawień, potrzebnych do~przetworzenia jednego napisu w~drugi. 
 
 \begin{example}
@@ -466,7 +470,7 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też in
 Jak widać na~rysunku, znaki \verb|k|, \verb|a|, \verb|f|, \verb|c| i \verb|a| w pierwszym przypadku oraz \verb|k|, \verb|k|, \verb|f|, \verb|c| i \verb|k| w drugim, pozostają bez pary, dając odległość równą~$5$.
 
 
-Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:005}:
+Przejdźmy do odległości Levenshteina, $d_{\mathrm{lv}}$. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:005}:
 \begin{itemize}
 \item $i^\prime = i - 1$ oraz $j^\prime = j$,
 \item $i^\prime = i$ oraz $j^\prime = j - 1$,
@@ -486,7 +490,7 @@ C_{i,j} = min\left\{
 \end{array}\right.
 \end{equation}
 
-Odległość Levenshteina oznaczamy przez $d_{lv}$.
+Odległość Levenshteina oznaczamy przez $d_{\mathrm{lv}}$.
 
 %\begin{definition}
 %Uogólnioną \emph{odległością Levenshteina} \cite{Levenshtein1965:binarycodes}~na~$\Sigma^*$~nazywamy:
@@ -497,7 +501,7 @@ Odległość Levenshteina oznaczamy przez $d_{lv}$.
 %    min\{ & \\
 %\qquad    d_{lv}(s, t_{1:|t|-1}) + w_1, & \\
 %\qquad    d_{lv}(s_{1:|s|-1}, t) + w_2, & \\
-%\qquad    d_{lv}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
+%\qquad    d_{\mathrm{lv}}(s_{1:|s|-1}, t_{1:|t|-1}) + [1-\delta(s_{|s|}, t_{|t|})]w_3 & \\
 %\qquad    \}, & \text{w przeciwnym przypadku},
 %\end{array}\right.
 %$$
@@ -507,15 +511,15 @@ Odległość Levenshteina oznaczamy przez $d_{lv}$.
 %Odległość ta~zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmie się $1$~mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~
 
 \begin{example}
-Odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{lv}(\verb|kozak|, \verb|foczka|) = 4$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[1]{zm.\ k\ na\ a} \verb|foczka|$.
+Odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 4$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[1]{zm.\ k\ na\ a} \verb|foczka|$.
 \end{example}
 
-Powyższy przykład ilustruje, dodatkową elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, bowiem daje ona mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany znaku, zamiast wstawienia i~usunięcia znaku~\cite{Loo2014:stringdist}. Co więcej, ścieżka edycyjna między tymi słowami może być inna i zawierać usunięcie, i wstawienie zamiast dwóch ostatnich zamian znaków.
+Powyższy przykład ilustruje dodatkową elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, bowiem daje ona mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany, zamiast wstawienia i~usunięcia~\cite{Loo2014:stringdist}. Co więcej, ścieżka edycyjna między tymi słowami może być inna i zawierać usunięcie, i wstawienie zamiast dwóch ostatnich zamian znaków.
 
 
 [ZMIENIC NA KOZAKA I FOCZKE!!] 
 Przypomnijmy, że mówimy o uogólnionej odległości, gdy zmienimy koszty poszczególnych operacji na różne od jeden.
-Gdy za~koszt przyjmiemy np. $(0.1, 1, 0.3)$ dla usunięć, wstawień i zamian znaków odpowiednio, to uogólniona odległość Levenshteina między napisami \verb|koza| i \verb|foka| wynosi: $d_{lv}(\verb|koza|, \verb|foka|) = 0.6$, bo~$\verb|koza|  \xrightarrow[0.3]{zm.\ k\ na\ f} \verb|foza|  \xrightarrow[0.3]{zm.\ z\ na\ k} \verb|foka|$.
+Gdy za~koszt przyjmiemy np. $(0.1, 1, 0.3)$ dla usunięć, wstawień i zamian znaków odpowiednio, to uogólniona odległość Levenshteina między napisami \verb|koza| i \verb|foka| wynosi: $d_{\mathrm{lv}}(\verb|koza|, \verb|foka|) = 0.6$, bo~$\verb|koza|  \xrightarrow[0.3]{zm.\ k\ na\ f} \verb|foza|  \xrightarrow[0.3]{zm.\ z\ na\ k} \verb|foka|$.
 
 Uogólniona odległość Levenshteina spełnia definicję metryki, gdy koszt usunięcia jest równy kosztowi wstawienia znaku. W przeciwnym przypadku nie spełnia ona założenia o~symetrii. Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz kosztów usunięcia i wstawienia znaku,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy transformacji napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład:
 
@@ -523,7 +527,7 @@ Uogólniona odległość Levenshteina spełnia definicję metryki, gdy koszt usu
 Przyjmijmy za~koszt usunięcia, wstawienia i zamiany znaku $(1, 0.1, 0.3)$ odpowiednio. Wówczas uogólniona odległość Levenshteina dla napisów \verb|koza| i~\verb|foczka| wynosi:
 \begin{equation}
 \label{eq:001}
-d_{lv}(\verb|koza|, \verb|foczka|) = 0.5,
+d_{\mathrm{lv}}(\verb|koza|, \verb|foczka|) = 0.5,
 \end{equation}
 bo
 $$
@@ -531,7 +535,7 @@ $$
 $$
 natomiast
 \begin{equation}\label{eq:002}
-d_{lv}(\verb|foczka|, \verb|koza|) = 2.3,
+d_{\mathrm{lv}}(\verb|foczka|, \verb|koza|) = 2.3,
 \end{equation}
 bo
 $$
@@ -539,7 +543,7 @@ $$
 $$
 Gdy za~koszty przyjmiemy $(1, 0.1, 0.3)$, to~uogólniona odległość Levenshteina wynosi:
 $$
-d_{lv}(\verb|koza|, \verb|foczka|) = 2.3,
+d_{\mathrm{lv}}(\verb|koza|, \verb|foczka|) = 2.3,
 $$
 bo
 $$
@@ -547,7 +551,7 @@ $$
 $$
 czyli analogicznie, jak w~przypadku \ref{eq:002}. Natomiast
 $$
-d_{lv}(\verb|foczka|, \verb|koza|) = 0.5,
+d_{\mathrm{lv}}(\verb|foczka|, \verb|koza|) = 0.5,
 $$
 bo
 $$
@@ -626,11 +630,11 @@ Odległość optymalnego dopasowania napisów oraz Damerau-Levenshteina między 
 W~przypadku odległości Levenshteina, optymalnego dopasowania napisów oraz Damerau-Levenshteina, maksymalna odległość między napisami $s$~i~$t$~wynosi $max\{|s|, |t|\}$. Jednak warto zauważyć, że gdy liczba dopuszczalnych operacji edycyjnych rośnie, to liczba dopuszczalnych ścieżek między napisami wzrasta, co pozwala czasem zmniejszyć odległość między napisami. Dlatego relację między zaprezentowanymi powyżej odległościami można podsumować następująco~\cite{Loo2014:stringdist}:
 $$
 \left. \begin{array}{r}
-\infty \geq |s| \geq d_{hamming}(s,t) \\
-|s| + |t| \geq d_{lcs}(s,t) \\
+\infty \geq |s| \geq d_{\mathrm{hamming}}(s,t) \\
+|s| + |t| \geq d_{\mathrm{lcs}}(s,t) \\
 max\{|s|, |t|\} \\
 \end{array} \right \}
-\geq d_{lv}(s,t) \geq d_{osa}(s,t) \geq d_{dl}(s,t) \geq 0
+\geq d_{\mathrm{lv}}(s,t) \geq d_{osa}(s,t) \geq d_{dl}(s,t) \geq 0
 $$
 
 Jako że odległości Hamminga i najdłuższego wspólnego podnapisu nie mają wspólnych bazowych operacji edycyjnych, to nie ma pomiędzy nimi porządku relacyjnego. Górne ograniczenie $|s|$ odległości Hamminga jest zachowane jedynie gdy $|s| = |t|$.
@@ -793,6 +797,8 @@ W niniejszym rozdziale przedstawiono odległości określone na napisach [czy te
 
 
 \chapter{Analiza skupień metodą $k$-średnich}
+
+
 
 
 

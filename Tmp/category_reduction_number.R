@@ -26,7 +26,7 @@ print(7)
 
 
 ciag <- c(seq(1, nrow(level6), by = 5000), nrow(level6))
-for(i in 1:length(ciag)){
+for(i in c(1,8:49)){
   tryCatch({
   level60 <- level6[ciag[i]:(ciag[i+1]-1),]
   level70 <- level60 %>% group_by(level6.link) %>% do(expand_tree(first(.$level6.link), 'level7')) %>% ungroup

@@ -192,31 +192,33 @@ print()
 #else:
 true_k = np.size(np.unique(labels))
 
+np.random.seed(123)
 
-#if opts.minibatch:
-km_all = [MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=1000, init_size = 2*true_k, verbose=opts.verbose), MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=1000, init_size = 2*true_k, verbose=opts.verbose)]
+for i in range(1000, 20000, 1000):
+    print(i, "\n")
+    km_all = [MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=i, init_size = 2*true_k, verbose=opts.verbose), MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=i, init_size = 2*true_k, verbose=opts.verbose)]
 
 #else:
 #km = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1, verbose=opts.verbose)
 
-data_all = [my_sparse_data[:10241,], my_sparse_data[10241:,]]
+    data_all = [my_sparse_data[:10241,], my_sparse_data[10241:,]]
 
 #my_sparse_data1 = my_sparse_data[:10241,]
 #my_sparse_data2 = my_sparse_data[10241:,]
 
-new_centers = np.zeros((true_k, data_all[0].shape[1]))
+    new_centers = np.zeros((true_k, data_all[0].shape[1]))
 
 
 # for i in range(5):
-t0 = time()
-for i, km in enumerate(km_all):
-    print("Clustering sparse data with %s" % km)
-    km.fit(data_all[i])
-    new_centers += km.cluster_centers_ * data_all[i].shape[0]
- 
-new_centers /= my_sparse_data.shape[0]
-print("done in %0.3fs" % (time() - t0))
-print()
+    t0 = time()
+    for i, km in enumerate(km_all):
+        #print("Clustering sparse data with %s" % km)
+        km.fit(data_all[i])
+        new_centers += km.cluster_centers_ * data_all[i].shape[0]
+     
+    new_centers /= my_sparse_data.shape[0]
+    #print("done in %0.3fs" % (time() - t0))
+    #print()
    
 
 #km.fit(my_sparse_data1)
@@ -238,17 +240,17 @@ print()
 #    
 #    new_centers = (km.cluster_centers_ * my_sparse_data1.shape[0] +  km1.cluster_centers_ * my_sparse_data2.shape[0]) /  my_sparse_data.shape[0]
 
-labels_out = np.concatenate([km.labels_ for km in km_all])
+    labels_out = np.concatenate([km.labels_ for km in km_all])
 
-np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_labels2.txt", labels_out, delimiter = ', ')
+    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_labels%d.txt" % i, labels_out, delimiter = ', ')
 
-print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels, labels_out))
-print("Completeness: %0.3f" % metrics.completeness_score(labels, labels_out))
-print("V-measure: %0.3f" % metrics.v_measure_score(labels, labels_out))
-print("Adjusted Rand-Index: %.3f" % metrics.adjusted_rand_score(labels, labels_out))
+    print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels, labels_out))
+    print("Completeness: %0.3f" % metrics.completeness_score(labels, labels_out))
+    print("V-measure: %0.3f" % metrics.v_measure_score(labels, labels_out))
+    print("Adjusted Rand-Index: %.3f" % metrics.adjusted_rand_score(labels, labels_out))
 #print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(my_sparse_data[0:100,], km.labels_, sample_size=1000))
 
-print()
+    print()
 
 #if not (opts.n_components or opts.use_hashing):
 #    print("Top terms per cluster:")

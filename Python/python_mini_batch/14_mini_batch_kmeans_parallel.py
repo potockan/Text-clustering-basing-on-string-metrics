@@ -194,7 +194,7 @@ true_k = np.size(np.unique(labels))
 
 np.random.seed(123)
 
-for i in range(1000, 20000, 1000):
+for i in range(100, 1000, 100):
     print(i, "\n")
     km_all = [MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=i, init_size = 2*true_k, verbose=opts.verbose), MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=i, init_size = 2*true_k, verbose=opts.verbose)]
 

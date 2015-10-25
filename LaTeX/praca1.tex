@@ -1,7 +1,8 @@
 \documentclass{praca1}
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
-\usetikzlibrary{matrix, decorations.pathreplacing}
+\usetikzlibrary{matrix, decorations.pathreplacing, calc}
+
 %%------------------------------------------------------------------------------%
 
 %------------------------------------------------------------------------------%
@@ -16,6 +17,9 @@
 \usepackage{xcolor}
 \usepackage{mathtools}
 \usepackage{cprotect}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 %%\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{verbatim}
@@ -34,7 +38,6 @@
 %%paginy
 %\usepackage{fancyhdr}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-
 
 
 
@@ -797,18 +800,19 @@ W niniejszym rozdziale przedstawiono odległości określone na napisach [czy te
 
 \chapter{Analiza skupień metodą $k$-średnich}
 
-Analiza skupień polega na wyróżnieniu w zbiorze ustalonej liczby rozłącznych skupień obserwacji w jakimś sensie do siebie podobnych, równocześnie zachowując maksymalne zróżnicowanie obserwacji pomiędzy poszczególnymi podzbiorami~\cite{Koronacki2005:statystyczne}. W niniejszym rozdziale przedstawimy analizę skupień metodą $k$-średnich (zwaną też metodą \emph{wsadową}) oraz dwie jej modyfikacje -- $k$-średnich przy użyciu stochastycznego spadku gradientu oraz $k$-średnich mini-wsadową.
+Analiza skupień polega na wyróżnieniu w zbiorze ustalonej liczby rozłącznych skupień obserwacji w jakimś sensie do siebie podobnych, równocześnie zachowując maksymalne zróżnicowanie obserwacji pomiędzy poszczególnymi podzbiorami~\cite{Koronacki2005:statystyczne}. W niniejszym rozdziale przedstawimy analizę skupień metodą $k$-średnich w trzech odsłonach: przedstawimy metodę wsadową, przy użyciu stochastycznego spadku gradientu oraz metodę pośrednią, tzw. mini-wsadową.
 
 \section{Metoda $k$-średnich}
 
-Rozważmy przestrzeń euklidesową $\mathbb{R}^p$ i niech będzie dana liczba skupień $k$. Wówczas zadanie znalezienia skupień o wyżej wymienionych własnościach można sprowadzić do dobrze określonego zadania optymalizacji. Weźmy próbę $n$-elementową obserwacji $\mathbf{x}_i,\ i = 1,\ldots,n$ o wartościach w $\mathbb{R}^p$. Niech $d_{ij} = d(\mathbf{x}_i, \mathbf{x}_j)$ oznacza kwadrat odległości między obserwacjami $\mathbf{x}_i$ i $\mathbf{x}_j$. Wówczas suma kwadratów odległości między obserwacjami próby wynosi~\cite{Koronacki2005:statystyczne}
+Rozważmy przestrzeń euklidesową $\mathbb{R}^p$ i niech będzie dana liczba skupień $k$. Wówczas zadanie znalezienia skupień o wyżej wymienionych własnościach można sprowadzić do dobrze określonego zadania optymalizacji. Weźmy próbę $n$-elementową obserwacji $\mathbf{x}_i,\ i = 1,\ldots,n$ o wartościach w $\mathbb{R}^p$. %Niech $d_{ij} = d(\mathbf{x}_i, \mathbf{x}_j)$ oznacza kwadrat odległości między obserwacjami $\mathbf{x}_i$ i $\mathbf{x}_j$. Wówczas 
+Suma kwadratów odległości między obserwacjami próby wynosi~\cite{Koronacki2005:statystyczne}
 \begin{equation}
-T = \frac{1}{2}\sum\limits_{i}^{n}\sum\limits_{j}^{n} d_{ij}
+T = \frac{1}{2}\sum\limits_{i}^{n}\sum\limits_{j}^{n} \norm{\mathbf{x}_i - \mathbf{x}_j}^2
 \end{equation}
 
-Niech funkcja $C:{1,\ldots,n} \rightarrow {1,\ldots, k}$ oznacza przydzielenie danej obserwacji danemu skupieniu, tzn. jeśli $C(i) = l$, to oznacza, że $\mathbf{x}_i$ należy do $l$-tego skupienia. Zakładając, że dokonano podziału próby na $k$ podzbiorów, można całkowitą sumę kwadratów rozłożyć na sumę kwadratów odległości między obserwacjami z tego samego skupienia oraz na sumę kwadratów odległości między obserwacjami z różnych skupień~\cite{Koronacki2005:statystyczne}:
+Niech funkcja $C:\{1,\ldots,n\} \rightarrow \{1,\ldots, k\}$ oznacza przydzielenie danej obserwacji danemu skupieniu, tzn. jeśli $C(i) = l$, to oznacza, że $\mathbf{x}_i$ należy do $l$-tego skupienia. Zakładając, że dokonano podziału próby na $k$ podzbiorów, można całkowitą sumę kwadratów rozłożyć na sumę kwadratów odległości między obserwacjami z tego samego skupienia oraz na sumę kwadratów odległości między obserwacjami z różnych skupień~\cite{Koronacki2005:statystyczne}:
 \begin{equation}
-T = W + B = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) = k} d_{ij} + \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) \neq k} d_{ij}
+T = W + B = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) = k} \norm{\mathbf{x}_i - \mathbf{x}_j}^2 + \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) \neq k} \norm{\mathbf{x}_i - \mathbf{x}_j}^2 
 \end{equation}
 
 Mając tak sformułowany rozkłąd sumy $T$ widzimy, że zmieniając podział punktów na skupienia zmienia się zarówno suma $W$, jak i $B$. Można więc sformułować problem analizy skupień jako zadanie minimalizacji sumy $W$ lub, równoważnie, maksymalizacji sumy $B$. Maksymalizacja $B$ to po prostu maksymalizacja rozproszenia punktów z różnych podzbiorów, co jest równoznaczne z minimalizacją rozproszenia punktów z tego samego skupienia. Stąd, rozwiązaniem problemu analizy skupień jest dokonanie takiego podziału próby, aby zminimalizować sumę $W$. Ze względu na złożoność obliczeniową, niemożliwe jest bezpośrednie rozwiązanie tego problemu~\cite{Koronacki2005:statystyczne}.
@@ -816,18 +820,111 @@ Mając tak sformułowany rozkłąd sumy $T$ widzimy, że zmieniając podział pu
 Przez $n_l$ oznaczmy liczność $l$-tego skupienia i niech $\mathbf{m}_l = \frac{1}{n_l} \sum\limits_{C(i) = k} \mathbf{x}_i$ oznacza wektorową średnią obserwacji z $l$-tego skupienia. Łatwo zauważyć, że~\cite{Koronacki2005:statystyczne}
 \begin{equation}
 \label{eq:013}
-W = \sum\limits_{l=1}^{k}\sum\limits_{C(i) = k} d(\mathbf{x}_i, \mathbf{m}_l)n_l
+W = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} n_l \norm{\mathbf{x}_i - \mathbf{m}_l}^2
 \end{equation}
 
 Średnie $\mathbf{m}_l$, $l = 1,\ldots, k$ nazywamy \emph{środkami skupień}. Równanie~\ref{eq:013} można uprościć do następującej postaci, która w praktyce jest łatwa w optymalizacji:
 \begin{equation}
 \label{eq:014}
-\widetilde{W} = \sum\limits_{l=1}^{k}\sum\limits_{C(i) = k} d(\mathbf{x}_i, \mathbf{m}_l) = \sum\limits_{l=1}^{k}d(\mathbf{x}_i, \mathbf{m}_{C(i)})
+\widetilde{W} = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} \norm{\mathbf{x}_i - \mathbf{m}_l}^2 = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}^2 
 \end{equation}
 
 Algorytmy, które rozwiązują problem minimalizacji sumy~\ref{eq:014}, znane są pod nazwą \emph{metody $k$-średnich}.
 
-\section{Algorytm wsadowy}
+\section{Algorytmy}
+
+[NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
+
+%Algorytm  Dalej następuje przydzielenie punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia.
+
+Algorytm \emph{wsadowy} zostaje zainicjalizowany przez losowe wyznaczenie $k$ punktów jako początkowe środki skupień. Dalej następuje przydzielenie wszystkich punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura ta jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia~\cite{Wu2007:topten}. Algorytm ten znany jest też pod nazwą \emph{wsadowego spadku gradientu} [CHYBA].
+
+\begin{algorithm}[!h]
+\begin{algorithmic}[1]
+		\State given: $k$, data set $X$
+        \State initialize randomly $m_l, \ \forall l=1, ..., k$
+        \Repeat
+            \For {$i = 1, \ldots, n$}
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }^2 $
+            \EndFor
+            \For {$l = 1, \ldots, k$}
+                \State $\mathbf{m}_l = \frac{1}{n_l}\sum\limits_{C(i) = l} \mathbf{x}_i$
+            \EndFor
+
+        \Until{convergence}
+\end{algorithmic}
+\caption{Algorytm wsadowy $k$-średnich}\label{alg:001}
+\end{algorithm}
+
+Algorytm oparty na \emph{stochastycznym spadku gradientu}, ozn. SGD, (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest $t$ razy~\cite{Bottou1995:convergenceproperties}.
+
+\begin{algorithm}[h!]
+\begin{algorithmic}[1]
+		\State given: $k$, data set $X$, iterations $t$
+        \State initialize randomly $m_l, \ \forall l=1, ..., k$
+        \State initialize $n_l = 0, \ \forall l=1, ..., k$
+        \For {$a = 1, \ldots, t $}
+        	\State shuffle data set $X$
+            \For {$i = 1, \ldots, n$}
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }^2 $
+                \State $n_{C(i)} = n_{C(i)} + 1$
+                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}$
+            \EndFor
+       \EndFor
+\end{algorithmic}
+\caption{Algorytm SGD $k$-średnich}\label{alg:002}
+\end{algorithm}
+
+Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeniem dwóch poprzednich algorytmów, tj. w każdej iteracji przydzielanych do najbliższego skupienia jest $b$ losowo wybranych obserwacji, po czym następuje przeliczenie środków skupień~\cite{Sculley2010:webkmeans}.
+
+\begin{algorithm}[h!]
+\begin{algorithmic}[1]
+		\State given: $k$, data set $X$, iterations $t$, mini-batch size $b$
+        \State initialize randomly $m_l, \ \forall l=1, ..., k$
+        \State initialize $n_l = 0, \ \forall l=1, ..., k$
+        \For {$a = 1, \ldots, t $}
+        	%\State shuffle data set $X$
+        	\State $B = b$ observations randomly picked from $X$
+            \For {$i : \mathbf{x}_i \in B$}
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }^2 $
+            \EndFor
+            \For {$i : \mathbf{x}_i \in B$}
+                \State $n_{C(i)} = n_{C(i)} + 1$
+                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}$
+            \EndFor
+       \EndFor
+\end{algorithmic}
+\caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
+\end{algorithm}
+
+
+Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytmem. Szukając minimum z sumy \ref{eq:014}, algorytm ten 
+dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwyczaj bardzo dobre wyniki podziału zbioru na skupienia. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne [OBLICZENIOWO? PAMIĘCIOWO?]. Stąd, algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu może, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego ,,pobliże''.
+
+\begin{figure}[!h]
+\centering
+\begin{tikzpicture}
+    \draw (0,0) ellipse (5cm and 3cm);
+    \draw (0,0) ellipse (4.5cm and 2.5cm);
+    \draw (0,0) ellipse (4cm and 2cm);
+    \draw (0,0) ellipse (3.5cm and 1.5cm);
+    \draw (0,0) ellipse (3cm and 1cm);
+    \draw (0,0) ellipse (2.5cm and 0.5cm);
+    
+    
+    \draw (0,6.5) ellipse (5cm and 3cm);
+    \draw (0,6.5) ellipse (4.5cm and 2.5cm);
+    \draw (0,6.5) ellipse (4cm and 2cm);
+    \draw (0,6.5) ellipse (3.5cm and 1.5cm);
+    \draw (0,6.5) ellipse (3cm and 1cm);
+    \draw (0,6.5) ellipse (2.5cm and 0.5cm);
+    
+    \draw (2,0) ellipse (2 and 1);
+    \node at ($(2,0)+(75:2 and 1)$) {a node};
+    %\draw (0,0) ellipse (5cm and 3cm);
+\end{tikzpicture}
+\end{figure}
+
 
 %-----------Koniec części zasadniczej-----------
 

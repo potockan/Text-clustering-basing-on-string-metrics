@@ -1,7 +1,7 @@
 \documentclass{praca1}
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
-\usetikzlibrary{matrix, decorations.pathreplacing, calc}
+\usetikzlibrary{matrix, decorations.pathreplacing, calc, arrows}
 
 %%------------------------------------------------------------------------------%
 
@@ -899,18 +899,11 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
 
 
 Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytmem. Szukając minimum z sumy \ref{eq:014}, algorytm ten 
-dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwyczaj bardzo dobre wyniki podziału zbioru na skupienia. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne [OBLICZENIOWO? PAMIĘCIOWO?]. Stąd, algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu może, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego ,,pobliże''.
+dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwyczaj bardzo dobre wyniki podziału zbioru na skupienia. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne obliczeniowo [OBLICZENIOWO? PAMIĘCIOWO?]. Stąd, algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego ,,pobliże'' (p. rys.~\ref{rys:006}). Algorytm ten nie wymaga dużych zasobów pamięci, przez co jest dużo szybszy, kosztem dokładności rozwiązania~\cite{}. 
 
 \begin{figure}[!h]
 \centering
-\begin{tikzpicture}
-    \draw (0,0) ellipse (5cm and 3cm);
-    \draw (0,0) ellipse (4.5cm and 2.5cm);
-    \draw (0,0) ellipse (4cm and 2cm);
-    \draw (0,0) ellipse (3.5cm and 1.5cm);
-    \draw (0,0) ellipse (3cm and 1cm);
-    \draw (0,0) ellipse (2.5cm and 0.5cm);
-    
+\begin{tikzpicture}[>=triangle 45,font=\sffamily]
     
     \draw (0,6.5) ellipse (5cm and 3cm);
     \draw (0,6.5) ellipse (4.5cm and 2.5cm);
@@ -918,11 +911,46 @@ dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwycz
     \draw (0,6.5) ellipse (3.5cm and 1.5cm);
     \draw (0,6.5) ellipse (3cm and 1cm);
     \draw (0,6.5) ellipse (2.5cm and 0.5cm);
+    \node (B) at (4.2, 8.25) {};
+    \node (C) at (3.75, 7.5) {};
+    \node (D) at (3, 7) {};
+    \node (E) at (2.25, 6.75) {};
+    \node (F) at (1.5, 6.75) {};
+    \node (G) at (0.75, 6.5) {};
+    \node (H) at (0, 6.5) {.};
+    \draw [->, red]  (B) edge (C) (C) edge (D) 
+    (D) edge (E) (E) edge (F) (F) edge (G) (G) edge (H);
     
-    \draw (2,0) ellipse (2 and 1);
-    \node at ($(2,0)+(75:2 and 1)$) {a node};
-    %\draw (0,0) ellipse (5cm and 3cm);
+    
+    \draw (0,0) ellipse (5cm and 3cm);
+    \draw (0,0) ellipse (4.5cm and 2.5cm);
+    \draw (0,0) ellipse (4cm and 2cm);
+    \draw (0,0) ellipse (3.5cm and 1.5cm);
+    \draw (0,0) ellipse (3cm and 1cm);
+    \draw (0,0) ellipse (2.5cm and 0.5cm);
+    
+	\node (a) at (0, 0) {.};
+    \node (b) at (4.2, 1.75) {};
+    \node (c) at (3.617, 1.371) {};
+    \node (d) at (2.152, 1.486) {};
+    \node (e) at (3.255, 0.998) {};
+    \node (f) at (2.840, -0.350) {};
+    \node (g) at (1.764, -0.766) {};
+    \node (h) at (1.863, 0.526) {};
+    \node (i) at (1.535, 1.269) {};
+    \node (j) at (0.576, 0.074) {};
+    \node (k) at (-0.576, 0.118) {};
+    \node (l) at (-1.476, -0.318) {};
+    \node (m) at (0.276, -0.718) {};
+    
+    \draw [->, blue]  (b) edge (c) (c) edge (d) 
+    (d) edge (e) (e) edge (f) (f) edge (g) (g) edge (h) (h) edge (i) (i) edge (j) (j) edge (k) (k) edge (l) (l) edge (m);
+    
+	\node [font=\fontsize{52}{58}] (1) at (-6, 6.5) {\Large(a)};
+    \node [font=\fontsize{52}{58}] (2) at (-6, 0) {\Large(b)};
+        
 \end{tikzpicture}
+\caption{Przykładowa droga spadku gradientu (rys. a) i stochastycznego spadku gradientu (rys. b).}\label{rys:006}
 \end{figure}
 
 

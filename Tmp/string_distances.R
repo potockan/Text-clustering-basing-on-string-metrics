@@ -31,7 +31,13 @@ stringdist('krolik', 'kolor', method = 'lv')
 stringdist('koza', 'foka', method = 'lv', weight = c(0.1, 1, 0.3))
 stringdist('kozak', 'foczka', method = 'lv', weight = c(1, 0.2, 0.3))
 stringdist('foczka', 'kozak', method = 'lv', weight = c(0.2, 1, 0.3))
-stringdist('a', 'k', method = 'lv', weight = c(0.1, 1, 0.3)) #??????????
+stringdist('a', 'b', method = 'lv', weight = c(0.1, 1, 0.3)) #??????????
+stringdist('a', 'b', method = 'lv', weight = c(1, 0.1, 0.3)) 
+
+stringdist('leia', 'leela', method = 'lv', weight = c(1, 0.1, 1)) 
+stringdist('leia', 'leela', method = 'lv', weight = c(1, 0.1, 1)) 
+stringdist('leia', 'leela', method = 'lv', weight = c(0.1, 1, 1)) 
+
 
 stringdist('krolik', 'krol', method = 'osa')
 stringdist('krol', 'kolor', method = 'osa')

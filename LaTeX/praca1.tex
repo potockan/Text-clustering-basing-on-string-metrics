@@ -483,7 +483,7 @@ Stąd ogólna postać rekurencji \ref{eq:004} dla odległości Levenshteina moż
 
 \begin{equation}
 \label{eq:006}
-C_{i,j} = min\left\{
+C_{i,j} = \min\left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0\\
     C_{i-1, j} + 1, & \text{gdy } i > 0 \\
@@ -566,7 +566,7 @@ Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równ
 
 \begin{equation}
 \label{eq:007}
-C_{i,j} = min\left\{
+C_{i,j} = \min\left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0\\
     C_{i-1, j} + 1, & \text{gdy } i > 0 \\
@@ -613,7 +613,7 @@ Rekurencyjna definicja odległości Damerau-Levenshteina została po raz pierwsz
 
 \begin{equation}
 \label{eq:008}
-C_{i,j} = min\left\{
+C_{i,j} = \min\left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0\\
     C_{i-1, j} + 1, & \text{gdy } i > 0 \\
@@ -807,26 +807,26 @@ Analiza skupień polega na wyróżnieniu w zbiorze ustalonej liczby rozłącznyc
 Rozważmy przestrzeń euklidesową $\mathbb{R}^p$ i niech będzie dana liczba skupień $k$. Wówczas zadanie znalezienia skupień o wyżej wymienionych własnościach można sprowadzić do dobrze określonego zadania optymalizacji. Weźmy próbę $n$-elementową obserwacji $\mathbf{x}_i,\ i = 1,\ldots,n$ o wartościach w $\mathbb{R}^p$. %Niech $d_{ij} = d(\mathbf{x}_i, \mathbf{x}_j)$ oznacza kwadrat odległości między obserwacjami $\mathbf{x}_i$ i $\mathbf{x}_j$. Wówczas 
 Suma kwadratów odległości między obserwacjami próby wynosi~\cite{Koronacki2005:statystyczne}
 \begin{equation}
-T = \frac{1}{2}\sum\limits_{i}^{n}\sum\limits_{j}^{n} \norm{\mathbf{x}_i - \mathbf{x}_j}^2
+T = \frac{1}{2}\sum\limits_{i}^{n}\sum\limits_{j}^{n} \norm{\mathbf{x}_i - \mathbf{x}_j}_2^2,
 \end{equation}
-
+gdzie $\norm{\cdot}_2$ oznacza normę euklidesową.
 Niech funkcja $C:\{1,\ldots,n\} \rightarrow \{1,\ldots, k\}$ oznacza przydzielenie danej obserwacji danemu skupieniu, tzn. jeśli $C(i) = l$, to oznacza, że $\mathbf{x}_i$ należy do $l$-tego skupienia. Zakładając, że dokonano podziału próby na $k$ podzbiorów, można całkowitą sumę kwadratów rozłożyć na sumę kwadratów odległości między obserwacjami z tego samego skupienia oraz na sumę kwadratów odległości między obserwacjami z różnych skupień~\cite{Koronacki2005:statystyczne}:
 \begin{equation}
-T = W + B = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) = k} \norm{\mathbf{x}_i - \mathbf{x}_j}^2 + \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) \neq k} \norm{\mathbf{x}_i - \mathbf{x}_j}^2 
+T = W + B = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) = k} \norm{\mathbf{x}_i - \mathbf{x}_j}_2^2 + \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) \neq k} \norm{\mathbf{x}_i - \mathbf{x}_j}_2^2 
 \end{equation}
 
-Mając tak sformułowany rozkłąd sumy $T$ widzimy, że zmieniając podział punktów na skupienia zmienia się zarówno suma $W$, jak i $B$. Można więc sformułować problem analizy skupień jako zadanie minimalizacji sumy $W$ lub, równoważnie, maksymalizacji sumy $B$. Maksymalizacja $B$ to po prostu maksymalizacja rozproszenia punktów z różnych podzbiorów, co jest równoznaczne z minimalizacją rozproszenia punktów z tego samego skupienia. Stąd, rozwiązaniem problemu analizy skupień jest dokonanie takiego podziału próby, aby zminimalizować sumę $W$. Ze względu na złożoność obliczeniową, niemożliwe jest bezpośrednie rozwiązanie tego problemu~\cite{Koronacki2005:statystyczne}.
+Mając tak sformułowany rozkład sumy $T$ widzimy, że zmieniając podział punktów na skupienia zmienia się zarówno suma $W$, jak i $B$. Można więc sformułować problem analizy skupień jako zadanie minimalizacji sumy $W$ lub, równoważnie, maksymalizacji sumy $B$. Maksymalizacja $B$ to po prostu maksymalizacja rozproszenia punktów z różnych podzbiorów, co jest równoznaczne z minimalizacją rozproszenia punktów z tego samego skupienia. Stąd, rozwiązaniem problemu analizy skupień jest dokonanie takiego podziału próby, aby zminimalizować sumę $W$. Ze względu na złożoność obliczeniową, niemożliwe jest bezpośrednie rozwiązanie tego problemu~\cite{Koronacki2005:statystyczne}.
 
 Przez $n_l$ oznaczmy liczność $l$-tego skupienia i niech $\mathbf{m}_l = \frac{1}{n_l} \sum\limits_{C(i) = k} \mathbf{x}_i$ oznacza wektorową średnią obserwacji z $l$-tego skupienia. Łatwo zauważyć, że~\cite{Koronacki2005:statystyczne}
 \begin{equation}
 \label{eq:013}
-W = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} n_l \norm{\mathbf{x}_i - \mathbf{m}_l}^2
+W = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} n_l \norm{\mathbf{x}_i - \mathbf{m}_l}_2^2
 \end{equation}
 
 Średnie $\mathbf{m}_l$, $l = 1,\ldots, k$ nazywamy \emph{środkami skupień}. Równanie~\ref{eq:013} można uprościć do następującej postaci, która w praktyce jest łatwa w optymalizacji:
 \begin{equation}
 \label{eq:014}
-\widetilde{W} = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} \norm{\mathbf{x}_i - \mathbf{m}_l}^2 = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}^2 
+\widetilde{W} = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} \norm{\mathbf{x}_i - \mathbf{m}_l}_2^2 = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2^2 
 \end{equation}
 
 Algorytmy, które rozwiązują problem minimalizacji sumy~\ref{eq:014}, znane są pod nazwą \emph{metody $k$-średnich}.
@@ -845,7 +845,7 @@ Algorytm \emph{wsadowy} zostaje zainicjalizowany przez losowe wyznaczenie $k$ pu
         \State initialize randomly $m_l, \ \forall l=1, ..., k$
         \Repeat
             \For {$i = 1, \ldots, n$}
-                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }^2 $
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
             \EndFor
             \For {$l = 1, \ldots, k$}
                 \State $\mathbf{m}_l = \frac{1}{n_l}\sum\limits_{C(i) = l} \mathbf{x}_i$
@@ -866,9 +866,9 @@ Algorytm oparty na \emph{stochastycznym spadku gradientu}, ozn. SGD, (znany rów
         \For {$a = 1, \ldots, t $}
         	\State shuffle data set $X$
             \For {$i = 1, \ldots, n$}
-                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }^2 $
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
                 \State $n_{C(i)} = n_{C(i)} + 1$
-                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}$
+                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
             \EndFor
        \EndFor
 \end{algorithmic}
@@ -886,11 +886,11 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
         	%\State shuffle data set $X$
         	\State $B = b$ observations randomly picked from $X$
             \For {$i : \mathbf{x}_i \in B$}
-                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }^2 $
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
             \EndFor
             \For {$i : \mathbf{x}_i \in B$}
                 \State $n_{C(i)} = n_{C(i)} + 1$
-                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}$
+                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
             \EndFor
        \EndFor
 \end{algorithmic}

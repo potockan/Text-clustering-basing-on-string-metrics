@@ -21,7 +21,7 @@ expand_tree <- function(link, level) {
 }
 
 
-load("/home/npotocka/mgr/Data/RObjects/level6.rda")
+load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level6.rda")
 print(7)
 
 
@@ -42,7 +42,7 @@ level7 <- level70
 
 for(i in 2:length(ciag)){
   load(paste0("/home/npotocka/mgr/Data/RObjects/level7", i, ".rda"))
-  level6 <- bind_rows(level7, level70)
+  level7 <- bind_rows(level7, level70)
 }
 
 save(list = 'level7', file = "/home/npotocka/mgr/Data/RObjects/level7.rda")

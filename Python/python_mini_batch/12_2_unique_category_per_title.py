@@ -37,7 +37,7 @@ c.execute('''insert into wiki_unique_category(id_title, id_category, cnt)
               id_category 
               from wiki_category_text 
               group by 
-              id_title
+              id_category
               ) b
             on 
             a.id_category = b.id_category

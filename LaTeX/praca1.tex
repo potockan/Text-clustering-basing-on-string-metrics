@@ -809,8 +809,7 @@ Suma kwadratów odległości między obserwacjami próby wynosi~\cite{Koronacki2
 \begin{equation}
 T = \frac{1}{2}\sum\limits_{i}^{n}\sum\limits_{j}^{n} \norm{\mathbf{x}_i - \mathbf{x}_j}_2^2,
 \end{equation}
-gdzie $\norm{\cdot}_2$ oznacza normę euklidesową.
-Niech funkcja $C:\{1,\ldots,n\} \rightarrow \{1,\ldots, k\}$ oznacza przydzielenie danej obserwacji danemu skupieniu, tzn. jeśli $C(i) = l$, to oznacza, że $\mathbf{x}_i$ należy do $l$-tego skupienia. Zakładając, że dokonano podziału próby na $k$ podzbiorów, można całkowitą sumę kwadratów rozłożyć na sumę kwadratów odległości między obserwacjami z tego samego skupienia oraz na sumę kwadratów odległości między obserwacjami z różnych skupień~\cite{Koronacki2005:statystyczne}:
+gdzie $\norm{\cdot}_2$ oznacza normę euklidesową. Niech funkcja $C:\{1,\ldots,n\} \rightarrow \{1,\ldots, k\}$ oznacza przydzielenie danej obserwacji danemu skupieniu, tzn. jeśli $C(i) = l$, to oznacza, że $\mathbf{x}_i$ należy do $l$-tego skupienia. Zakładając, że dokonano podziału próby na $k$ podzbiorów, można całkowitą sumę kwadratów rozłożyć na sumę kwadratów odległości między obserwacjami z tego samego skupienia oraz na sumę kwadratów odległości między obserwacjami z różnych skupień~\cite{Koronacki2005:statystyczne}:
 \begin{equation}
 T = W + B = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) = k} \norm{\mathbf{x}_i - \mathbf{x}_j}_2^2 + \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C(j) \neq k} \norm{\mathbf{x}_i - \mathbf{x}_j}_2^2 
 \end{equation}
@@ -834,6 +833,20 @@ Algorytmy, które rozwiązują problem minimalizacji sumy~\ref{eq:014}, znane s�
 \section{Algorytmy}
 
 [NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
+
+Mając daną sumę $\widetilde{W} = \widetilde{W}(\mathbf{m}) = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2^2 $, możemy policzyć gradient z $\mathbf{m}$: %szukamy minimum, licząc pochodną po $\mathbf{m}$ i przyrównując ją do zera:
+\begin{equation}
+\Delta \mathbf{m} = \frac{\partial \widetilde{W}(\mathbf{m})}{\partial \mathbf{m}} = 0 \Rightarrow
+\Delta \mathbf{m} = \sum\limits_{i=1}^{n}\left\{
+\begin{array}{l l}     
+    \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}_l), & \text{gdy } l = C(i) \\
+    0, & \text{wpp.}
+\end{array}\right.
+\end{equation}
+
+Stąd dostajemy, że ... [TO DO!!!]
+
+
 
 %Algorytm  Dalej następuje przydzielenie punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia.
 

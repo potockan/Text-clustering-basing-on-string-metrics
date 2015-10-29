@@ -53,7 +53,6 @@ brak_sciagnietych <- kategorie_baza[!(kategorie_baza$name %in% kategorie),]
 
 
 sciagniete <- kategorie_baza[(kategorie_baza$name %in% kategorie),]
-sc2 <- sciagniete[sciagniete$cnt <= 15,]
 
 kateg <- level1
 
@@ -95,7 +94,7 @@ save(list = 'sciagniete', file = "/dragon/Text-clustering-basing-on-string-metri
 
 statystyki <- sciagniete %>% group_by(nowa_kat) %>% summarise(cnt2 = sum(cnt))
 
-stat3 <- statystyki %>% filter(cnt2 <= 10, cnt2 > 5) 
+stat2 <- statystyki %>% filter(cnt2 <= 5) 
 
 
 stat2 <- cbind(stat2, character(nrow(stat2)))
@@ -118,6 +117,8 @@ for(i in 325:nrow(stat2)){
 
 stat_all <- left_join(sciagniete, stat2[,-2])
 stat_all$nowa_kat2 <- ifelse(is.na(stat_all$nowa_kat2), stat_all$nowa_kat, stat_all$nowa_kat2)
+stat_all$nowa_kat2 <- ifelse(stat_all$nowa_kat2 == 'urodzeni w xx wieku', stat_all$name, stat_all$nowa_kat2)
+
 
 statystyki <- stat_all %>% group_by(nowa_kat2) %>% summarise(cnt2 = sum(cnt))
 

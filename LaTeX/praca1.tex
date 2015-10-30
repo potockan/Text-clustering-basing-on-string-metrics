@@ -53,9 +53,9 @@
 \begin{document}
 %\maketitle
 %\tableofcontents
-
+%
 %-----------Początek części zasadniczej-----------
-
+%
 %
 %\chapter*{Wstęp}
 %\addcontentsline{toc}{chapter}{Wstęp}
@@ -832,11 +832,13 @@ Algorytmy, które rozwiązują problem minimalizacji sumy~\ref{eq:014}, znane s�
 
 \section{Algorytmy}
 
-[NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
+[NAPISAC O REAL WSADOWYM]
 
-Mając daną funkcję kosztu $\widetilde{W} = \widetilde{W}(\mathbf{m}) = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2^2 $, możemy znaleźć minimum używając tzw. \emph{spadku gradientu}. W każdej iteracji algorytmu uaktualniamy wektor $\mathbf{m}$ na podstawie gradientu $\widetilde{W}(\mathbf{m})$:
+%[NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
+
+Mając daną funkcję kosztu $\widetilde{W} = \widetilde{W}(\mathbf{m}, \mathbf{x}_i) = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2^2 $, możemy znaleźć minimum używając tzw. \emph{spadku gradientu}. W każdej iteracji algorytmu uaktualniamy wektor $\mathbf{m}$ na podstawie gradientu $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$:
 \begin{equation}
-\mathbf{m}^{(t+1)}_l = \mathbf{m}_l^{(t)} - \gamma \sum\limits_{i=1}^{n} \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
+\mathbf{m}^{(t+1)}_l = \mathbf{m}_l^{(t)} + \gamma \sum\limits_{i=1}^{n} \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
 \end{equation}
 gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}[, a $t$ oznacza iterację algorytmu - PISAC TO??]~\cite{bottou2012:sgdtricks}. Parametrem uczenia, które daje najlepsze rezultaty dla algorytmu $k$-średnich jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm \emph{wsadowy}, lub też \emph{wsadowego spadku gradientu}, w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
 
@@ -845,31 +847,34 @@ gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}[, a $t$ oznac
 
 %licząc pochodną po zmiennej $\mathbf{m}$ [/ gradient z $\mathbf{m}$]: %szukamy minimum, licząc pochodną po $\mathbf{m}$ i przyrównując ją do zera:
 \begin{equation}
-\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} - \sum\limits_{i=1}^{n}\left\{
-\begin{array}{l l}     
-    \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(i) \\
-    0, & \text{wpp.}
-\end{array}\right.
+\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \sum\limits_{C(i) = l}   \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l) % \sum\limits_{i=1}^{n}\left\{
+%\begin{array}{l l}     
+ %   \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(i) \\
+  %  0, & \text{wpp.}
+%\end{array}\right.
 \end{equation}
 
 Algorytm \emph{stochastycznego spadku gradientu} jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m})$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{bottou2012:sgdtricks}:
 \begin{equation}
-\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} - \gamma \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
+\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \gamma \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
 \end{equation}
 gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}. Tak samo jak w przypadku algorytmu wsadowego, parametrem uczenia, które daje najlepsze rezultaty jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm stochastycznego spadku gradientu w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
 
 \begin{align}
-n^(t+1)_l& = \left\{
+n^{(t+1)}_l& = n^{(t)}_l + \left\{
 \begin{array}{l l}     
     1, & \text{gdy } l = C(j) \\
     0, & \text{wpp.}
 \end{array}\right. \\
-\mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} - \left\{
+\mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} + \left\{
 \begin{array}{l l}     
     \frac{1}{n_l}(\mathbf{x}_j - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(j) \\
     0, & \text{wpp.}
 \end{array}\right.
 \end{align}
+
+
+
 
 %Algorytm  Dalej następuje przydzielenie punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia.
 
@@ -956,7 +961,8 @@ dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwycz
     \node (H) at (0, 6.5) {.};
     \draw [->, red]  (B) edge (C) (C) edge (D) 
     (D) edge (E) (E) edge (F) (F) edge (G) (G) edge (H);
-    
+    \node (c1) at (0, 9.75) {$\widetilde{W} = c_1$};
+    \node (c2) at (0, 9.24) {$\widetilde{W} = c_2$};
     
     \draw (0,0) ellipse (5cm and 3cm);
     \draw (0,0) ellipse (4.5cm and 2.5cm);
@@ -978,6 +984,8 @@ dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwycz
     \node (k) at (-0.576, 0.118) {};
     \node (l) at (-1.476, -0.318) {};
     \node (m) at (0.276, -0.718) {};
+    \node (c3) at (0, 3.25) {$\widetilde{W} = c_1$};
+    \node (c4) at (0, 2.73) {$\widetilde{W} = c_2$};
     
     \draw [->, blue]  (b) edge (c) (c) edge (d) 
     (d) edge (e) (e) edge (f) (f) edge (g) (g) edge (h) (h) edge (i) (i) edge (j) (j) edge (k) (k) edge (l) (l) edge (m);

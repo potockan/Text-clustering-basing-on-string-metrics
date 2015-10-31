@@ -54,7 +54,7 @@
 %\maketitle
 %\tableofcontents
 %
-%-----------Początek części zasadniczej-----------
+% %-----------Początek części zasadniczej-----------
 %
 %
 %\chapter*{Wstęp}
@@ -854,7 +854,7 @@ Algorytm \emph{wsadowy} (ang. \emph{batch algorithm}) zostaje zainicjalizowany p
 \caption{Algorytm wsadowy $k$-średnich}\label{alg:001}
 \end{algorithm}
 
-Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytmem, gdyż jest dość szybki i zazwyczaj daje dobre rezultaty. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne obliczeniowo, zbiegając w czasie $O(knp)$, gdzie $p$ to liczba zmiennych. Stąd Bottou i Bengio~\cite{Bottou1995:convergenceproperties} zaproponowali algorytm oparty na stochastycznym spadku gradientu.
+Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytmem, gdyż jest szybki i zazwyczaj daje dobre rezultaty. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne obliczeniowo, zbiegając w czasie $O(knp)$, gdzie $p$ to liczba zmiennych. Stąd Bottou i Bengio~\cite{Bottou1995:convergenceproperties} zaproponowali algorytm oparty na stochastycznym spadku gradientu.
 
 \subsection{Algorytmy oparte na spadku gradientu}
 
@@ -880,7 +880,7 @@ gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}[, a $t$ oznac
 %\end{array}\right.
 \end{equation}
 
-Algorytm \emph{stochastycznego spadku gradientu} jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{Bottou2012:sgdtricks}:
+Algorytm \emph{stochastycznego spadku gradientu}, ozn. SGD, jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{Bottou2012:sgdtricks}:
 \begin{equation}
 \mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \gamma \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
 \end{equation}
@@ -894,7 +894,7 @@ n^{(t+1)}_l& = n^{(t)}_l + \left\{
 \end{array}\right. \\
 \mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} + \left\{
 \begin{array}{l l}     
-    \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(j) \\
+    \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(i) \\
     0, & \text{wpp.}
 \end{array}\right.
 \end{align}
@@ -962,7 +962,7 @@ Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obse
 
 
 
-Algorytm oparty na \emph{stochastycznym spadku gradientu}, ozn. SGD, (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest $t$ razy~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
+Algorytm oparty na stochastycznym spadku gradientu (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest $t$ razy~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
@@ -981,7 +981,7 @@ Algorytm oparty na \emph{stochastycznym spadku gradientu}, ozn. SGD, (znany rów
 \caption{Algorytm SGD $k$-średnich}\label{alg:002}
 \end{algorithm}
 
-Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeniem dwóch poprzednich algorytmów, tj. w każdej iteracji przydzielanych do najbliższego skupienia jest $b$ losowo wybranych obserwacji, po czym następuje przeliczenie środków skupień~\cite{Sculley2010:webkmeans}. Algorytm ten jest szybki porównywalnie szybki do algorytmu SGD, osiągając przy tym lepsze rezultaty z powodu mniejszego stochastycznego szumu.
+Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeniem dwóch poprzednich algorytmów, tj. w każdej iteracji przydzielanych do najbliższego skupienia jest $b$ losowo wybranych obserwacji, po czym następuje przeliczenie środków skupień~\cite{Sculley2010:webkmeans}. Algorytm ten jest porównywalnie szybki do algorytmu SGD, osiągając przy tym lepsze rezultaty z powodu mniejszego stochastycznego szumu.
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
@@ -1003,6 +1003,7 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
 \caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
 \end{algorithm}
 
+[CZY PODAWAC TUTAJ PRZYKLAD + RYSUNKI Z \cite{Sculley2010:webkmeans} O TYM ZE MINI-BATCH JEST TAKI SUPER W POR. Z INNYMI??]
 
 
 %-----------Koniec części zasadniczej-----------

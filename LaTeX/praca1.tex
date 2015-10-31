@@ -832,53 +832,10 @@ Algorytmy, które rozwiązują problem minimalizacji sumy~\ref{eq:014}, znane s�
 
 \section{Algorytmy}
 
-[NAPISAC O REAL WSADOWYM]
-
-%[NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
-
-Mając daną funkcję kosztu $\widetilde{W} = \widetilde{W}(\mathbf{m}, \mathbf{x}_i) = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2^2 $, możemy znaleźć minimum używając tzw. \emph{spadku gradientu}. W każdej iteracji algorytmu uaktualniamy wektor $\mathbf{m}$ na podstawie gradientu $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$:
-\begin{equation}
-\mathbf{m}^{(t+1)}_l = \mathbf{m}_l^{(t)} + \gamma \sum\limits_{i=1}^{n} \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
-\end{equation}
-gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}[, a $t$ oznacza iterację algorytmu - PISAC TO??]~\cite{bottou2012:sgdtricks}. Parametrem uczenia, które daje najlepsze rezultaty dla algorytmu $k$-średnich jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm \emph{wsadowy}, lub też \emph{wsadowego spadku gradientu}, w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
-
-%Jeśli początkowa wartość zmiennej $\mathbf{m}^(0)$ jest dostatecznie blisko optimum i parametr $\gamma$ jest dobrze dobrany, to algorytm osiąga złożoność liniową.
+\subsection{Algorytm wsadowy}
 
 
-%licząc pochodną po zmiennej $\mathbf{m}$ [/ gradient z $\mathbf{m}$]: %szukamy minimum, licząc pochodną po $\mathbf{m}$ i przyrównując ją do zera:
-\begin{equation}
-\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \sum\limits_{C(i) = l}   \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l) % \sum\limits_{i=1}^{n}\left\{
-%\begin{array}{l l}     
- %   \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(i) \\
-  %  0, & \text{wpp.}
-%\end{array}\right.
-\end{equation}
-
-Algorytm \emph{stochastycznego spadku gradientu} jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m})$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{bottou2012:sgdtricks}:
-\begin{equation}
-\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \gamma \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
-\end{equation}
-gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}. Tak samo jak w przypadku algorytmu wsadowego, parametrem uczenia, które daje najlepsze rezultaty jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm stochastycznego spadku gradientu w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
-
-\begin{align}
-n^{(t+1)}_l& = n^{(t)}_l + \left\{
-\begin{array}{l l}     
-    1, & \text{gdy } l = C(j) \\
-    0, & \text{wpp.}
-\end{array}\right. \\
-\mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} + \left\{
-\begin{array}{l l}     
-    \frac{1}{n_l}(\mathbf{x}_j - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(j) \\
-    0, & \text{wpp.}
-\end{array}\right.
-\end{align}
-
-
-
-
-%Algorytm  Dalej następuje przydzielenie punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia.
-
-Algorytm \emph{wsadowy} zostaje zainicjalizowany przez losowe wyznaczenie $k$ punktów jako początkowe środki skupień. Dalej następuje przydzielenie wszystkich punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura ta jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia~\cite{Wu2007:topten}. Algorytm ten znany jest też pod nazwą \emph{wsadowego spadku gradientu} [CHYBA].
+Algorytm \emph{wsadowy} (ang. \emph{batch algorithm}) zostaje zainicjalizowany przez losowe wyznaczenie $k$ punktów jako początkowe środki skupień. Dalej następuje przydzielenie wszystkich punktów próby do najbliższego skupienia, a następnie przeliczenie środków jako średniej ze wszystkich obserwacji w danym skupieniu. Procedura ta jest powtarzana aż do ustabilizowania się algorytmu, tj. do momentu aż żaden punkt próby nie zmieni skupienia~\cite{Wu2007:topten}.
 
 \begin{algorithm}[!h]
 \begin{algorithmic}[1]
@@ -897,53 +854,58 @@ Algorytm \emph{wsadowy} zostaje zainicjalizowany przez losowe wyznaczenie $k$ pu
 \caption{Algorytm wsadowy $k$-średnich}\label{alg:001}
 \end{algorithm}
 
-Algorytm oparty na \emph{stochastycznym spadku gradientu}, ozn. SGD, (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest $t$ razy~\cite{Bottou1995:convergenceproperties}.
+Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytmem, gdyż jest dość szybki i zazwyczaj daje dobre rezultaty. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne obliczeniowo, zbiegając w czasie $O(knp)$, gdzie $p$ to liczba zmiennych. Stąd Bottou i Bengio~\cite{Bottou1995:convergenceproperties} zaproponowali algorytm oparty na stochastycznym spadku gradientu.
 
-\begin{algorithm}[h!]
-\begin{algorithmic}[1]
-		\State given: $k$, data set $X$, iterations $t$
-        \State initialize randomly $m_l, \ \forall l=1, ..., k$
-        \State initialize $n_l = 0, \ \forall l=1, ..., k$
-        \For {$a = 1, \ldots, t $}
-        	\State shuffle data set $X$
-            \For {$i = 1, \ldots, n$}
-                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
-                \State $n_{C(i)} = n_{C(i)} + 1$
-                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
-            \EndFor
-       \EndFor
-\end{algorithmic}
-\caption{Algorytm SGD $k$-średnich}\label{alg:002}
-\end{algorithm}
+\subsection{Algorytmy oparte na spadku gradientu}
 
-Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeniem dwóch poprzednich algorytmów, tj. w każdej iteracji przydzielanych do najbliższego skupienia jest $b$ losowo wybranych obserwacji, po czym następuje przeliczenie środków skupień~\cite{Sculley2010:webkmeans}.
+Algorytmy oparte na spadku gradientu są często stosowane np. w regresji liniowej~\cite{Bottou2012:sgdtricks}. Idea polega na szukaniu minimum z danej funkcji kosztu, w kolejnych krokach algorytmu aktualizując zmienną, w kierunku, w którym spadek gradientu był największy. Każda aktualizacja zależy od parametru, zwanego \emph{parametrem uczenia}, który musi być odpowiednio dobrany. W niniejszej sekcji [podrozdziale?] opiszemy trzy algorytmy oparte na spadku gradientu.
 
-\begin{algorithm}[h!]
-\begin{algorithmic}[1]
-		\State given: $k$, data set $X$, iterations $t$, mini-batch size $b$
-        \State initialize randomly $m_l, \ \forall l=1, ..., k$
-        \State initialize $n_l = 0, \ \forall l=1, ..., k$
-        \For {$a = 1, \ldots, t $}
-        	%\State shuffle data set $X$
-        	\State $B = b$ observations randomly picked from $X$
-            \For {$i : \mathbf{x}_i \in B$}
-                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
-            \EndFor
-            \For {$i : \mathbf{x}_i \in B$}
-                \State $n_{C(i)} = n_{C(i)} + 1$
-                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
-            \EndFor
-       \EndFor
-\end{algorithmic}
-\caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
-\end{algorithm}
+%[NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
+
+Mając daną funkcję kosztu $\widetilde{W} = \widetilde{W}(\mathbf{m}, \mathbf{x}_i) = \frac{1}{2}\sum\limits_{i=1}^{n} \norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2^2 $, możemy znaleźć minimum używając tzw. \emph{spadku gradientu}. W każdej iteracji algorytmu uaktualniamy wektor $\mathbf{m}$ na podstawie gradientu $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$:
+\begin{equation}
+\mathbf{m}^{(t+1)}_l = \mathbf{m}_l^{(t)} + \gamma \sum\limits_{i=1}^{n} \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
+\end{equation}
+gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}[, a $t$ oznacza iterację algorytmu - PISAC TO??]~\cite{Bottou2012:sgdtricks}. Parametrem uczenia, które daje najlepsze rezultaty dla algorytmu $k$-średnich jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm \emph{wsadowego spadku gradientu}, w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
+
+%Jeśli początkowa wartość zmiennej $\mathbf{m}^(0)$ jest dostatecznie blisko optimum i parametr $\gamma$ jest dobrze dobrany, to algorytm osiąga złożoność liniową.
 
 
-Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytmem. Szukając minimum z sumy \ref{eq:014}, algorytm ten 
-dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwyczaj bardzo dobre wyniki podziału zbioru na skupienia. Jednakowoż jeśli liczba obserwacji w zbiorze jest bardzo duża, to obliczanie średnich z obserwacji we wszystkich skupieniach jest bardzo kosztowne obliczeniowo [OBLICZENIOWO? PAMIĘCIOWO?]. Stąd, algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego ,,pobliże'' (p. rys.~\ref{rys:006}). Algorytm ten nie wymaga dużych zasobów pamięci, przez co jest dużo szybszy, kosztem dokładności rozwiązania~\cite{}. 
+%licząc pochodną po zmiennej $\mathbf{m}$ [/ gradient z $\mathbf{m}$]: %szukamy minimum, licząc pochodną po $\mathbf{m}$ i przyrównując ją do zera:
+\begin{equation}
+\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \sum\limits_{C(i) = l}   \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l) % \sum\limits_{i=1}^{n}\left\{
+%\begin{array}{l l}     
+ %   \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(i) \\
+  %  0, & \text{wpp.}
+%\end{array}\right.
+\end{equation}
+
+Algorytm \emph{stochastycznego spadku gradientu} jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{Bottou2012:sgdtricks}:
+\begin{equation}
+\mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \gamma \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
+\end{equation}
+gdzie $\gamma$ jest odpowiednio dobranym parametrem uczenia. Tak samo jak w przypadku algorytmu wsadowego, parametrem uczenia, które daje najlepsze rezultaty jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm stochastycznego spadku gradientu w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
+
+\begin{align}
+n^{(t+1)}_l& = n^{(t)}_l + \left\{
+\begin{array}{l l}     
+    1, & \text{gdy } l = C(j) \\
+    0, & \text{wpp.}
+\end{array}\right. \\
+\mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} + \left\{
+\begin{array}{l l}     
+    \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l = C(j) \\
+    0, & \text{wpp.}
+\end{array}\right.
+\end{align}
+
+
+Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego ,,pobliże''. Na rys.~\ref{rys:006} przedstawiono przykładową drogę aktualizacji parametrów. Kolejne elipsy oznaczają stałą wartość funkcji kosztu $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ w zależności od wartości zmiennej $\mathbf{m}$, a centrum (środek?) oznacza (lokalne) minimum tej funkcji. Jeśli algorytm rozpoczyna działanie w punkcie oznaczonym przez $X$, to w przypadku algorytmu wsadowego spadku gradientu, w kolejnych iteracjach zmienna $\mathbf{m}$ zmienia swoją wartość, przybliżając się do (lokalnego) minimum funkcji $\widetilde{W}$. Natomiast algorytm stochastycznego spadku gradientu w każdej iteracji przybliża się w stronę minimum w sposób losowy, tzn. może nigdy nie osiągnąć właściwego minimum, a jedynie ,,krążyć'' wokół niego.
+ 
 
 \begin{figure}[!h]
 \centering
+\resizebox{8cm}{8cm}{
 \begin{tikzpicture}[>=triangle 45,font=\sffamily]
     
     \draw (0,6.5) ellipse (5cm and 3cm);
@@ -952,7 +914,7 @@ dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwycz
     \draw (0,6.5) ellipse (3.5cm and 1.5cm);
     \draw (0,6.5) ellipse (3cm and 1cm);
     \draw (0,6.5) ellipse (2.5cm and 0.5cm);
-    \node (B) at (4.2, 8.25) {};
+    \node (B) at (4.2, 8.25) {X};
     \node (C) at (3.75, 7.5) {};
     \node (D) at (3, 7) {};
     \node (E) at (2.25, 6.75) {};
@@ -972,7 +934,7 @@ dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwycz
     \draw (0,0) ellipse (2.5cm and 0.5cm);
     
 	\node (a) at (0, 0) {.};
-    \node (b) at (4.2, 1.75) {};
+    \node (b) at (4.2, 1.75) {X};
     \node (c) at (3.617, 1.371) {};
     \node (d) at (2.152, 1.486) {};
     \node (e) at (3.255, 0.998) {};
@@ -994,8 +956,53 @@ dąży prosto do lokalnego minimum, używając spadku gradientu i dając zazwycz
     \node [font=\fontsize{52}{58}] (2) at (-6, 0) {\Large(b)};
         
 \end{tikzpicture}
-\caption{Przykładowa droga spadku gradientu (rys. a) i stochastycznego spadku gradientu (rys. b).}\label{rys:006}
+}
+\caption{Przykładowa droga wsadowego spadku gradientu (rys. a) i stochastycznego spadku gradientu (rys. b).}\label{rys:006}
 \end{figure}
+
+
+
+Algorytm oparty na \emph{stochastycznym spadku gradientu}, ozn. SGD, (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest $t$ razy~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
+
+\begin{algorithm}[h!]
+\begin{algorithmic}[1]
+		\State given: $k$, data set $X$, iterations $t$
+        \State initialize randomly $m_l, \ \forall l=1, ..., k$
+        \State initialize $n_l = 0, \ \forall l=1, ..., k$
+        \For {$a = 1, \ldots, t $}
+        	\State randomly pick one observation $\mathbf{x}_i$ from $X$
+            %\For {$i = 1, \ldots, n$}
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
+                \State $n_{C(i)} = n_{C(i)} + 1$
+                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
+            %\EndFor
+       \EndFor
+\end{algorithmic}
+\caption{Algorytm SGD $k$-średnich}\label{alg:002}
+\end{algorithm}
+
+Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeniem dwóch poprzednich algorytmów, tj. w każdej iteracji przydzielanych do najbliższego skupienia jest $b$ losowo wybranych obserwacji, po czym następuje przeliczenie środków skupień~\cite{Sculley2010:webkmeans}. Algorytm ten jest szybki porównywalnie szybki do algorytmu SGD, osiągając przy tym lepsze rezultaty z powodu mniejszego stochastycznego szumu.
+
+\begin{algorithm}[h!]
+\begin{algorithmic}[1]
+		\State given: $k$, data set $X$, iterations $t$, mini-batch size $b$
+        \State initialize randomly $m_l, \ \forall l=1, ..., k$
+        \State initialize $n_l = 0, \ \forall l=1, ..., k$
+        \For {$a = 1, \ldots, t $}
+        	%\State shuffle data set $X$
+        	\State $B = b$ observations randomly picked from $X$
+            \For {$i : \mathbf{x}_i \in B$}
+                \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
+            \EndFor
+            \For {$i : \mathbf{x}_i \in B$}
+                \State $n_{C(i)} = n_{C(i)} + 1$
+                \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
+            \EndFor
+       \EndFor
+\end{algorithmic}
+\caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
+\end{algorithm}
+
 
 
 %-----------Koniec części zasadniczej-----------

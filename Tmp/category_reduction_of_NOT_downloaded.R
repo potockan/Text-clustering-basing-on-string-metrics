@@ -37,9 +37,9 @@ ciag2 <- c(seq(1, nrow(level6), by = 1000), nrow(level6))
 
 for(i in 1:length(ciag2)){
   tryCatch({
-  level60 <- level61[ciag[i]:(ciag[i+1]-1),]
-  level70 <- level60 %>% group_by(level6.link) %>% do(expand_tree(first(.$level6.link), 'level7')) %>% ungroup
-  save(list = 'level70', file = paste0('/home/npotocka/mgr/Data/RObjects/level7/level7', i, '.rda'))
+    level60 <- level61[ciag[i]:(ciag[i+1]-1),]
+    level70 <- level60 %>% group_by(level6.link) %>% do(expand_tree(first(.$level6.link), 'level7')) %>% ungroup
+    save(list = 'level70', file = paste0('/home/npotocka/mgr/Data/RObjects/level7/level7', i, '.rda'))
   }, error = function(e) print(paste("error", i)))
 }
 

@@ -120,6 +120,10 @@ stat_all$nowa_kat2 <- ifelse(is.na(stat_all$nowa_kat2), stat_all$nowa_kat, stat_
 stat_all$nowa_kat2 <- ifelse(stat_all$nowa_kat2 == 'urodzeni w xx wieku', stat_all$name, stat_all$nowa_kat2)
 
 
+save(list = 'stat_all', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/stat_all.rda")
+
+
+
 statystyki <- stat_all %>% group_by(nowa_kat2) %>% summarise(cnt2 = sum(cnt))
 
 stat_all2 <- bind_rows()

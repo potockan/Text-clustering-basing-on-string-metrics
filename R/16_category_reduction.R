@@ -1,52 +1,7 @@
 #!/usr/bin/Rscript --vanilla
 
 #############################
-# library("stringi")
-# library("rvest")
-# 
-# find_links <- function(link){
-#   strona <- read_html(link)
-#   kategorie <- html_nodes(strona, ".CategoryTreeLabel")
-#   if(length(kategorie)==0) return(NA)
-#   as.list(stri_paste("http://pl.wikipedia.org", html_attr(kategorie, "href")))
-# }
-# 
-# find_titles <- function(link){
-#   strona <- read_html(link)
-#   kategorie <- html_nodes(strona, ".CategoryTreeLabel")
-#   if(length(kategorie)==0) return(NA)
-#   as.list(html_text(kategorie))
-# }
-# 
-# link <- 'http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii'
-# strona <- read_html(link)
-# kategorie <- html_nodes(strona, ".CategoryTreeLabel")[-c(1:10, 14, 69, 96, 101, 155, 176, 188, 220, 234)]
-# kategorie <- kategorie[220:225]
-# if(length(kategorie)==0) return(NA)
-# linki <- as.list(stri_paste("http://pl.wikipedia.org", html_attr(kategorie, "href")))
-# tytuly <- as.list(html_text(kategorie))
-# tytuly <- list(tytuly, linki)
-# 
-# 
-# zapetlenie <- function(linki){
-#   
-#     znalezione <- znajdz_tytuly(linki)
-#    
-#       #tytuly[[i]] <- c(tytuly[[i]], list(znalezione[[1]]))
-#      return(list(znalezione[[2]]))
-#       
-# }
-# 
-# 
-# aa <- rapply(linki, find_links,  how = 'replace')
-# aa1 <- rapply(linki, find_titles, how = 'replace')
-# bb <- rapply(aa, find_links,  how = 'replace')
-# bb1 <- rapply(aa, find_titles,  how = 'replace')
-# ...
-# 
-# 
-# 
-#############################
+
 
 library(rvest)
 library(dplyr)
@@ -139,9 +94,7 @@ level64 <- level54 %>% group_by(level5.link) %>% do(expand_tree(first(.$level5.l
 save(list = 'level61', file = '/home/npotocka/mgr/Data/RObjects/level61.rda')
 level6 <- bind_rows(level61, level62)
 
-=======
 level6 <- level5 %>% group_by(level5.link) %>% do(expand_tree(first(.$level5.link), 'level6')) %>% ungroup
->>>>>>> f7522d6cbf9bb58daaf110aa66985770dd698ac5
 save(list = 'level6', file = '/home/npotocka/mgr/Data/RObjects/level6.rda')
 rm(level5)
 print(7)

@@ -155,6 +155,29 @@ print("Data transformations...")
 # get rid of the all-zero rows
 my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))]))
 
+
+
+################### cython #######################
+# import numpy as np
+# cimport numpy as np
+# ...
+# cdef np.ndarray[np.intc_t] rows, cols
+# cdef np.ndarray[double] values
+# rows = np.zeros(nnz, dtype=np.intc)
+# cols = np.zeros(nnz, dtype=np.intc)
+# values = np.zeros(nnz, dtype=np.double)
+# cdef int idx = 0
+# for idx in range(0, nnz):
+#      # Compute next non-zero matrix element
+#      ...
+#      rows[idx] = row; cols[idx] = col
+#      values[idx] = value
+# # Finally, we construct a regular
+# # SciPy sparse matrix:
+# return scipy.sparse.coo_matrix((values, (rows, cols)), shape=(N,N))
+##########################################
+
+
 #labels = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/labels.csv', delimiter=',', dtype = 'int32'), 0, 0) - 1
 #my_data = np.delete(np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/sparse_matrix.csv', delimiter=','), 0, 0)
 #my_sparse_data = coo_matrix((my_data[:,0], (my_data[:, 1]-1, my_data[:, 2]-1)))

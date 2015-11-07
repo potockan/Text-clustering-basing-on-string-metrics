@@ -131,7 +131,7 @@ def reading_data(typ):
     print("Reading data...")
     c.execute('''select 
     id_title, id_stem_word, freq 
-    from wiki_word_clust2%s_freq
+    from wiki_word_clust3%s_freq
     order by id_title
     ''' % (typ))
     return(c.fetchall())
@@ -148,7 +148,7 @@ my_data = reading_data(typ1)
 
 con.close()
 
-my_sparse_data = sps.csr_matrix(([val[2] for val in my_data], ([val[0] for val in my_data], [val[1] - 1 for val in my_data])))
+my_sparse_data = sps.csr_matrix(([val[2] for val in my_data], ([val[0] -1 for val in my_data], [val[1] - 1 for val in my_data])))
 print("Data deletation...")
 del my_data
 print("Data transformations...")

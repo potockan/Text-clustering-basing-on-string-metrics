@@ -175,7 +175,7 @@ dane = transforming_data(dane)
 print("done in %fs" % (time() - t0))
 print("n_samples: %d, n_features: %d" % dane.shape)
 t0 = time()
-centers = clustering1(dane, 2000)
+centers = clustering1(dane, 3000)
 print("done in %fs" % (time() - t0))
 
 

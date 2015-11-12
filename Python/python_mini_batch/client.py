@@ -143,7 +143,7 @@ t0 = time()
 print("done in %fs" % (time() - t0))
 
 
-HOST = "192.168.143.109"
+HOST = "10.0.0.105"
 PORT = 50007
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
@@ -153,7 +153,7 @@ length = struct.pack('>I', len(packet))
 packet = length + packet
 s.sendall(packet)
 s.close()
-print ('Received', data_new)
+#print ('Received', data_new)
 
 print("done in %fs" % (time() - t0))
 
@@ -179,7 +179,13 @@ while 1:
         
     length = struct.unpack('>I', buf)[0]
     print(length)
-    data = conn.recv(length)
+    data = b''
+    l = length
+    while l > 0:
+        d = s.recv(l)
+        l -= len(d)
+        data += d
+        print('y')
     if not data: break
         
     new_centers = np.loads(data)

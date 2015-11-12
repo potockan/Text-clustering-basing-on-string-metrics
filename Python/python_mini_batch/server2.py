@@ -25,10 +25,21 @@ while 1:
 
     length = struct.unpack('>I', buf)[0]
     print(length)
-    data = conn.recv(length)
+    data = b''
+    l = length
+    print('1')
+    while l > 0:
+        print('2')
+        d = s.recv(l)
+        print('3')
+        l -= len(d)
+        print('4')
+        data += d
+        print('y')
     if not data: break
     M = np.loads(data) # HERE IS AN ERROR
     L += M
     data_out = pickle.dumps(L)
     conn.sendall(data_out)
-    conn.close()
+    conn.close() 
+s.close()

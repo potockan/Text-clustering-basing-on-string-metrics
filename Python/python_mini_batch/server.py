@@ -65,7 +65,13 @@ while i < 2:
         
     length = struct.unpack('>I', buf)[0]
     print(length)
-    data = conn.recv(length)
+    data = b''
+    l = length
+    while l > 0:
+        d = s.recv(l)
+        l -= len(d)
+        data += d
+        print('y')
     if not data: break
         
     try:

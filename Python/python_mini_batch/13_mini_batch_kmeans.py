@@ -29,6 +29,7 @@ import sys
 from time import time
 
 import numpy as np
+import sqlite3
 
 
 
@@ -40,27 +41,16 @@ logging.basicConfig(level=logging.INFO,
 
 # parse commandline arguments
 op = OptionParser()
-op.add_option("--lsa",
-              dest="n_components", type="int",
-              help="Preprocess documents with latent semantic analysis.")
-op.add_option("--no-minibatch",
-              action="store_false", dest="minibatch", default=True,
-              help="Use ordinary k-means algorithm (in batch mode).")
-op.add_option("--no-idf",
-              action="store_false", dest="use_idf", default=True,
-              help="Disable Inverse Document Frequency feature weighting.")
-op.add_option("--use-hashing",
-              action="store_true", default=False,
-              help="Use a hashing feature vectorizer")
-op.add_option("--n-features", type=int, default=10000,
-              help="Maximum number of features (dimensions)"
-                   " to extract from text.")
-op.add_option("--verbose",
-              action="store_true", dest="verbose", default=False,
-              help="Print progress reports inside k-means algorithm.")
+op.add_option("--res",
+              dest="results", type="ndarray",
+              help="A sparse matrix with cluster centers")
 op.add_option("--k-num", type=int, dest="true_k", default=0,
               help="Number of clusters")
-
+op.add_option("--i", dest="i", type=int,
+              help="A number specyfying the partition")
+op.add_option("typ", type=str, dest="typ", default=0,
+              help="Type of the data")
+              
 print(__doc__)
 op.print_help()
 
@@ -97,7 +87,6 @@ if len(args) > 0:
 #true_k = np.unique(labels).shape[0]
 
 #print("Extracting features from the training dataset using a sparse vectorizer")
-t0 = time()
 #if opts.use_hashing:
 #    if opts.use_idf:
 #        # Perform an IDF normalization on the output of HashingVectorizer
@@ -116,45 +105,91 @@ t0 = time()
 #                                 use_idf=opts.use_idf)
 
 ###############################
-import sqlite3
 
 
-con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
-c = con.cursor()
 
-c.execute('select id_category from wiki_unique_category order by id_title')
-print("Reading labels...")
-labels = c.fetchall()
 
-def reading_data(typ):
+def reading_data(i, typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
+     
+    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
+    c = con.cursor()
+    
     c.execute('''select 
     id_title, id_stem_word, freq 
-    from wiki_word_clust3%s_freq
+    from art_word_freq%s
     order by id_title
     ''' % (typ))
-    return(c.fetchall())
+    
+    data = c.fetchall()
+    
+    con.close()
+        
+    
+#    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
+#    c = con.cursor()    
+#    
+#    c.execute('select id_category from wiki_unique_category order by id_title')
+#    print("Reading labels...")
+#    labels = c.fetchall()    
+#    con.close()
+    
+    return(data)
     
 
-###############################
+def transforming_data(my_data):
+    #labels = np.asarray([val[0] for val in labels])    
+    my_sparse_data = sps.csr_matrix(([val[2] for val in my_data], ([val[0] -1 for val in my_data], [val[1] - 1 for val in my_data])))
+    my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))]))
+    return(my_sparse_data)
 
-print("Data transformations...")
-labels = np.asarray([val[0] for val in labels])
 
-typ1 = '_red_lcs'
-print(typ1)
-my_data = reading_data(typ1)
+def clustering1(my_sparse_data, true_k):
+    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=1000, init_size = 2*true_k)
+    km.fit(my_sparse_data)
+    return(km.cluster_centers_ * my_sparse_data.shape[0])
+    
+    
+def clustering2(my_sparse_data, true_k, results):
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
+   km.fit(my_sparse_data)
+   return(km.cluster_centers_ * my_sparse_data.shape[0])
+   
+def clustering3(my_sparse_data, true_k, results):
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
+   km.predict(my_sparse_data)
+   np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_labels2.txt", km.labels_, delimiter = ', ')
 
-con.close()
+#import os
+#os.chdir("/home/natalia/Text-clustering-basing-on-string-metrics/Python/python_mini_batch/")
+#from kmeans_functions import *
 
-my_sparse_data = sps.csr_matrix(([val[2] for val in my_data], ([val[0] -1 for val in my_data], [val[1] - 1 for val in my_data])))
-print("Data deletation...")
-del my_data
-print("Data transformations...")
-# get rid of the all-zero rows
-my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my_sparse_data.indptr[np.concatenate(([True], my_sparse_data.indptr[1:] != my_sparse_data.indptr[:-1]))]))
+i = 1
+typ = "_red_qgram"
+t0 = time()
+dane = reading_data(i ,typ)
+print("done in %fs" % (time() - t0))
+t0 = time()
+dane = transforming_data(dane)
+print("done in %fs" % (time() - t0))
+print("n_samples: %d, n_features: %d" % dane.shape)
+t0 = time()
+centers = clustering1(dane, 2000)
+print("done in %fs" % (time() - t0))
 
+
+#
+#
+#print("Data deletation...")
+#del my_data
+#print("Data transformations...")
+## get rid of the all-zero rows
+#typ1 = '_red_lcs'
+#print(typ1)
+#print("Data transformations...")
+#
+#my_data = reading_data(typ1)
 
 
 ################### cython #######################
@@ -184,10 +219,10 @@ my_sparse_data = sps.csr_matrix((my_sparse_data.data, my_sparse_data.indices, my
 #
 
 #X = vectorizer.fit_transform(dataset.data)
-
-print("done in %fs" % (time() - t0))
-print("n_samples: %d, n_features: %d" % my_sparse_data.shape)
-print()
+#
+#print("done in %fs" % (time() - t0))
+#print("n_samples: %d, n_features: %d" % my_sparse_data.shape)
+#print()
 
 
 #if opts.n_components:

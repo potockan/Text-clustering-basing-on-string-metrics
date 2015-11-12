@@ -1,3 +1,5 @@
+#! /usr/bin/Rscript
+
 library(RSQLite)
 library(dplyr)
 library(stringi)
@@ -112,17 +114,17 @@ dbDisconnect(con)
 
 title_shuffle <- sample(title_num$id, nrow(title_num))
 
-category_partitions(title_shuffle)
+#category_partitions(title_shuffle)
 
 #partitions('', title_shuffle)
 
-partitions('_lcs', title_shuffle)
-partitions('_dl', title_shuffle)
-partitions('_jaccard', title_shuffle)
-partitions('_qgram', title_shuffle)
+#partitions('_lcs', title_shuffle)
+#partitions('_dl', title_shuffle)
+#partitions('_jaccard', title_shuffle)
+#partitions('_qgram', title_shuffle)
 
-partitions('_red_lcs', title_shuffle)
-spartitions('_red_dl', title_shuffle)
+#partitions('_red_lcs', title_shuffle)
+partitions('_red_dl', title_shuffle)
 partitions('_red_jaccard', title_shuffle)
 partitions('_red_qgram', title_shuffle)
 

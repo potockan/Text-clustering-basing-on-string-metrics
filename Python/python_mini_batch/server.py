@@ -7,54 +7,36 @@ Created on Thu Nov 12 15:41:21 2015
 import socket, pickle, numpy as np
 import struct
 import time
+import math
+import threading
 
-while 1:
-    
-    HOST = ''
-    PORT = 50007
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((HOST, PORT))
-    s.listen(2)
-    print('0')
-    
-    adresses = []
-    
-    i = 0
-    while i < 2:
-        i += 1    
-        #print('01')
-        #wait to accept a connection - blocking call
-        print('2')
-        conn, addr = s.accept()
-        print ('Connected with ', addr)
-        adresses.append(addr[0])
+
+
+def clientthread(conn, L):
+    #Sending message to connected client
+    #conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
+     
+    #infinite loop so that function do not terminate and thread do not end.
+    while True:
+         
+        #Receiving from client
         buf = b''
-        #print('02')
         while len(buf) < 4:
             buf += conn.recv(4 - len(buf))
-        #print('03')
         length = struct.unpack('>I', buf)[0]
-        #print(length)
         data = b''
         l = length
-        #print('1')
         
-        #t0 = time.time()
         while l > 0:
-            #print('2')
+
             d = conn.recv(l)
-            #print('3')
             l -= len(d)
-            #print('4')
             data += d
-            #print('y')
-        #print("done in %fs" % (time.time() - t0))
+
         if not data: break
-        #print("loading")
-        #t0 = time.time()
+       
         M = np.loads(data) # HERE IS AN ERROR
-        #print("loaded")
-        #print("done in %fs" % (time.time() - t0))
+        
         if i == 1:
             L = M
         else:
@@ -64,25 +46,86 @@ while 1:
     #    print("done in %fs" % (time.time() - t0))
     #    conn.sendall(data_out)
         conn.close() 
+    return(L)
+
+
+nazwy = ['_', '_lcs', '_dl','_jaccard','_qgram',
+           '_red_lcs','_red_dl','_red_jaccard','_red_qgram',
+           '_red_lcs_lcs','_red_dl_dl','_red_jaccard_jaccard','_red_qgram_qgram']
+           
+typ = nazwy[0]
+
+j = 0
+while 1:
+    HOST = ''
+    PORT = 50007
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+    s.listen(2)
+    #print('0')
+    
+    adresses = []
+    ports = []
+    
+    i = 0
+    while i < 13:
+        i += 1    
+        #wait to accept a connection - blocking call
+        conn, addr = s.accept()
+        print ('Connected with ', addr)
+        adresses.append(addr[0])
+        #L = threading.Thread(target = clientthread, args = (conn, i))
+        buf = b''
+        while len(buf) < 4:
+            buf += conn.recv(4 - len(buf))
+        length = struct.unpack('>I', buf)[0]
+        data = b''
+        l = length
+        
+        while l > 0:
+
+            d = conn.recv(l)
+            l -= len(d)
+            data += d
+
+        if not data: break
+       
+        M = np.loads(data) # HERE IS AN ERROR
+        
+        if i == 1:
+            L = M[0]
+        else:
+            L += M[0]
+        ports.append(M[1])
+    #    t0 = time.time()
+    #    data_out = pickle.dumps(L)
+    #    print("done in %fs" % (time.time() - t0))
+    #    conn.sendall(data_out)
+        conn.close() 
+        print(i)
     s.close()
     
     
     L /= i
     
-    time.sleep(5)
+    packet = pickle.dumps(L)
+    length = struct.pack('>I', len(packet))
+    packet = length + packet
     
-    for addr in adresses:
+    for kl, addr in enumerate(adresses):
         HOST = addr
-        PORT = 50007
+        PORT = 50007 + ports[kl]
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((HOST, PORT))
-        #centers = np.zeros((100, 43919))
-        packet = pickle.dumps(L)
-        length = struct.pack('>I', len(packet))
-        packet = length + packet
         t0 = time.time()
         s.sendall(packet)
         print("done in %fs" % (time.time() - t0))
         s.close()
     
+    if j%30 == 0:
+        typ = nazwy[math.floor(j/30)]
+    print(j)
+    print(typ)
+    j += 1
+    np.savetxt("/home/samba/potockan/mgr/all/wyniki_%s.txt" % (typ), L, delimiter = '; ')
     

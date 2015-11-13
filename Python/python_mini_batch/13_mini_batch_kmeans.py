@@ -52,9 +52,6 @@ if len(args) > 0:
     sys.exit(1)
 
 
-# <codecell>
-
-
 
 
 def reading_data(i, typ):

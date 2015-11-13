@@ -80,3 +80,38 @@ for addr in adresses:
     s.sendall(packet)
     print("done in %fs" % (time.time() - t0))
     s.close()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+def clientthread(conn, L):
++    #Sending message to connected client
++    #conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
++     
++    #infinite loop so that function do not terminate and thread do not end.
++    while True:
++         
++        #Receiving from client
++        buf = b''
++        while len(buf) < 4:
++            buf += conn.recv(4 - len(buf))
++        
++        length = struct.unpack('!I', buf)[0]
++        print(length)
++        data = conn.recv(length)
++        if not data: break
++        
++        M = pickle.loads(data)
++        L += M
++        data_out = pickle.dumps(L)
++        conn.sendall(data_out)
++     
++    #came out of loop
++    conn.close()
++    return(L)

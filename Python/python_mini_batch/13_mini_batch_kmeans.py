@@ -9,14 +9,6 @@
 # License: BSD 3 clause
 
 from __future__ import print_function
-
-#from sklearn.datasets import fetch_20newsgroups
-#from sklearn.decomposition import TruncatedSVD
-#from sklearn.feature_extraction.text import TfidfVectorizer
-#from sklearn.feature_extraction.text import HashingVectorizer
-#from sklearn.feature_extraction.text import TfidfTransformer
-#from sklearn.pipeline import make_pipeline
-#from sklearn.preprocessing import Normalizer
 from sklearn import metrics
 
 from sklearn.cluster import MiniBatchKMeans
@@ -61,50 +53,6 @@ if len(args) > 0:
 
 
 # <codecell>
-
-
-###############################################################################
-# Load some categories from the training set
-#categories = [
-#    'sztuka',
-#    'matma',
-#    'wojna',
-#]
-# Uncomment the following to do the analysis on all the categories
-#categories = None
-
-#print("Loading 3 groups dataset for categories:")
-#print(categories)
-#
-#dataset = fetch_20newsgroups(subset='all', categories=categories,
-#                             shuffle=True, random_state=42)
-#
-#print("%d documents" % len(dataset.data))
-#print("%d categories" % len(dataset.target_names))
-#print()
-#
-#labels = dataset.target
-#true_k = np.unique(labels).shape[0]
-
-#print("Extracting features from the training dataset using a sparse vectorizer")
-#if opts.use_hashing:
-#    if opts.use_idf:
-#        # Perform an IDF normalization on the output of HashingVectorizer
-#        hasher = HashingVectorizer(n_features=opts.n_features,
-#                                   stop_words='english', non_negative=True,
-#                                   norm=None, binary=False)
-#        vectorizer = make_pipeline(hasher, TfidfTransformer())
-#    else:
-#        vectorizer = HashingVectorizer(n_features=opts.n_features,
-#                                       stop_words='english',
-#                                       non_negative=False, norm='l2',
-#                                       binary=False)
-#else:
-#    vectorizer = TfidfVectorizer(max_df=0.5, max_features=opts.n_features,
-#                                 min_df=2, stop_words='english',
-#                                 use_idf=opts.use_idf)
-
-###############################
 
 
 

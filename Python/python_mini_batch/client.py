@@ -168,10 +168,11 @@ except (socket.error, msg):
     sys.exit()
 s.listen(2)
 
-
-while 1:
+i = 0
+while i < 1:
     #wait to accept a connection - blocking call
     conn, addr = s.accept()
+    i += 1
     print ('Connected with ', addr)
     buf = b''
     while len(buf) < 4:
@@ -182,7 +183,7 @@ while 1:
     data = b''
     l = length
     while l > 0:
-        d = s.recv(l)
+        d = conn.recv(l)
         l -= len(d)
         data += d
         print('y')

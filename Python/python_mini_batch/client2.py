@@ -8,6 +8,7 @@ Created on Thu Nov 12 15:39:00 2015
 import numpy as np
 import socket, pickle
 import struct
+from time import time
 
 HOST = "10.0.0.105"
 PORT = 50007
@@ -17,7 +18,11 @@ centers = np.zeros((100, 43919))
 packet = pickle.dumps(centers)
 length = struct.pack('>I', len(packet))
 packet = length + packet
+t0 = time()
 s.sendall(packet)
+print("done in %fs" % (time() - t0))
+
+
 
 buf = b''
 while len(buf) < 4:
@@ -27,12 +32,13 @@ length = struct.unpack('>I', buf)[0]
 print(length)
 data = b''
 l = length
+t0 = time()
 while l > 0:
     d = s.recv(l)
     l -= len(d)
     data += d
     print('y')
-        
+print("done in %fs" % (time() - t0))      
 new_centers = np.loads(data)
 s.close()
 print ('Received', new_centers)

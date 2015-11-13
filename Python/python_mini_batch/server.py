@@ -24,9 +24,10 @@ while 1:
         i += 1    
         #print('01')
         #wait to accept a connection - blocking call
+        print('2')
         conn, addr = s.accept()
-        print ('Connected with ', addr[0])
-        adresses.append(addr)
+        print ('Connected with ', addr)
+        adresses.append(addr[0])
         buf = b''
         #print('02')
         while len(buf) < 4:
@@ -64,6 +65,7 @@ while 1:
     #    conn.sendall(data_out)
         conn.close() 
     s.close()
+    
     
     L /= i
     

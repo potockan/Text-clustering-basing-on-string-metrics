@@ -25,7 +25,7 @@ while 1:
         #print('01')
         #wait to accept a connection - blocking call
         conn, addr = s.accept()
-        print ('Connected with ', addr)
+        print ('Connected with ', addr[0])
         adresses.append(addr)
         buf = b''
         #print('02')

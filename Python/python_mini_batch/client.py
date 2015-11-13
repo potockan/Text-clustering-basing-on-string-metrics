@@ -54,8 +54,8 @@ def reading_data(i, typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
      
-    #con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
-    con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
+    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
+    #con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
     c = con.cursor()
     
     c.execute('''select 
@@ -92,7 +92,7 @@ def clustering1(my_sparse_data, true_k):
     km.fit(my_sparse_data)
     return(km.cluster_centers_ * my_sparse_data.shape[0])
     
-    
+
 def clustering2(my_sparse_data, true_k, results):
    km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
    km.fit(my_sparse_data)
@@ -101,19 +101,20 @@ def clustering2(my_sparse_data, true_k, results):
 def clustering3(my_sparse_data, true_k, results, i, typ):
    km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
    km.fit(my_sparse_data)
-   np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
-   #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
+   #np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
+   np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
 
 
 
 
 def connection(centers):
     
-    HOST = "10.0.0.105"
+    #HOST = "10.0.0.105"
+    HOST = "10.0.0.107"
     PORT = 50007
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
-    packet = pickle.dumps(centers)
+    packet = pickle.dumps(centers).decode('ascii') ## ???
     length = struct.pack('>I', len(packet))
     packet = length + packet
     s.sendall(packet)
@@ -187,7 +188,7 @@ print("done in %fs" % (time() - t0))
 
 centers = connection(centers)
 
-for k in range(30):
+for k in range(3):
     print(k)
     centers = clustering2(dane, true_k, centers)
     centers = connection(centers)

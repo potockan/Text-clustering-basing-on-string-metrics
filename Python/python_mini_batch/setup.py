@@ -10,5 +10,5 @@ from Cython.Build import cythonize
 
 setup(
   name = 'Kmeans functions',
-  ext_modules = cythonize("kmeans_functions.py"),
+  ext_modules = cythonize("kmeans_functions.pyx"),
 )

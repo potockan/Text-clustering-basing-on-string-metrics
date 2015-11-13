@@ -34,7 +34,7 @@ ctypedef np.int32_t cINT32
 ctypedef np.double_t cDOUBLE
 
 
-def reading_data(unsigned int i, unsigned char* typ):
+def reading_data(unsigned int i, unsigned char[:] typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
      

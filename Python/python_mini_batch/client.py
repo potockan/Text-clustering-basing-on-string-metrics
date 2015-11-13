@@ -21,24 +21,6 @@ import sqlite3
 import socket, pickle
 import struct
 
-#HOST = "192.168.0.11"
-
-
-
-
-#from __future__ import print_function
-
-#from sklearn.datasets import fetch_20newsgroups
-#from sklearn.decomposition import TruncatedSVD
-#from sklearn.feature_extraction.text import TfidfVectorizer
-#from sklearn.feature_extraction.text import HashingVectorizer
-#from sklearn.feature_extraction.text import TfidfTransformer
-#from sklearn.pipeline import make_pipeline
-#from sklearn.preprocessing import Normalizer
-#from sklearn import metrics
-
-
-
 
 
 # <codecell>
@@ -52,7 +34,7 @@ op = OptionParser()
 #op.add_option("--res",
 #              dest="results", type=np.ndarray,
 #              help="A sparse matrix with cluster centers")
-op.add_option("--k-num", type=int, dest="true_k", default=0,
+op.add_option("--truek", type=int, dest="true_k", default=0,
               help="Number of clusters")
 op.add_option("--i", dest="i", type=int,
               help="A number specyfying the partition")
@@ -72,6 +54,7 @@ def reading_data(i, typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
      
+    #con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
     con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
     c = con.cursor()
     
@@ -115,10 +98,65 @@ def clustering2(my_sparse_data, true_k, results):
    km.fit(my_sparse_data)
    return(km.cluster_centers_ * my_sparse_data.shape[0])
    
-def clustering3(my_sparse_data, true_k, results):
+def clustering3(my_sparse_data, true_k, results, i, typ):
    km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
-   km.predict(my_sparse_data)
-   np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/pyObjects/km_labels2.txt", km.labels_, delimiter = ', ')
+   km.fit(my_sparse_data)
+   np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
+   #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
+
+
+
+
+def connection(centers):
+    
+    HOST = "10.0.0.105"
+    PORT = 50007
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
+    packet = pickle.dumps(centers)
+    length = struct.pack('>I', len(packet))
+    packet = length + packet
+    s.sendall(packet)
+    s.close()
+    #print ('Received', data_new)
+    
+    print("done in %fs" % (time() - t0))
+    
+    
+    HOST = ''
+    PORT = 50007
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+
+    s.listen(2)
+    
+    i = 0
+    while i < 1:
+        #wait to accept a connection - blocking call
+        conn, addr = s.accept()
+        i += 1
+        print ('Connected with ', addr)
+        buf = b''
+        while len(buf) < 4:
+            buf += conn.recv(4 - len(buf))
+            
+        length = struct.unpack('>I', buf)[0]
+        print(length)
+        data = b''
+        l = length
+        while l > 0:
+            d = conn.recv(l)
+            l -= len(d)
+            data += d
+            print('y')
+        if not data: break
+            
+        new_centers = np.loads(data)
+        conn.close()
+     
+    s.close()
+    return new_centers
+
 
 
 
@@ -131,70 +169,28 @@ if opts.typ:
     typ = opts.typ
 else:
     typ = "_red_qgram"
+    
+if opts.true_k:
+    true_k = opts.true_k
+else:
+    true_k = 5265
 t0 = time()
-#dane = reading_data(i ,typ)
+dane = reading_data(i ,typ)
 print("done in %fs" % (time() - t0))
 t0 = time()
-#dane = transforming_data(dane)
+dane = transforming_data(dane)
 print("done in %fs" % (time() - t0))
-#print("n_samples: %d, n_features: %d" % dane.shape)
+print("n_samples: %d, n_features: %d" % dane.shape)
 t0 = time()
-#centers = clustering1(dane, 100)
+centers = clustering1(dane, true_k)
 print("done in %fs" % (time() - t0))
 
+centers = connection(centers)
 
-HOST = "10.0.0.105"
-PORT = 50007
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
-centers = np.zeros((100, 43919))
-packet = pickle.dumps(centers)
-length = struct.pack('>I', len(packet))
-packet = length + packet
-s.sendall(packet)
-s.close()
-#print ('Received', data_new)
+for k in range(30):
+    print(k)
+    centers = clustering2(dane, true_k, centers)
+    centers = connection(centers)
 
-print("done in %fs" % (time() - t0))
-
-
-HOST = ''
-PORT = 50007
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-try:
-    s.bind((HOST, PORT))
-except (socket.error, msg):
-    print ('Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
-    sys.exit()
-s.listen(2)
-
-i = 0
-while i < 1:
-    #wait to accept a connection - blocking call
-    conn, addr = s.accept()
-    i += 1
-    print ('Connected with ', addr)
-    buf = b''
-    while len(buf) < 4:
-        buf += conn.recv(4 - len(buf))
-        
-    length = struct.unpack('>I', buf)[0]
-    print(length)
-    data = b''
-    l = length
-    while l > 0:
-        d = conn.recv(l)
-        l -= len(d)
-        data += d
-        print('y')
-    if not data: break
-        
-    new_centers = np.loads(data)
-    conn.close()
- 
-s.close()
-
-
-
-
+clustering3(dane, true_k, centers, i, typ)
 

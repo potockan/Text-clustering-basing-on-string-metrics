@@ -53,42 +53,46 @@ s.listen(2)
 i = 0
 while i < 2:
     L = np.zeros((100, 43919))
+    i += 1
+    print('01')
     #wait to accept a connection - blocking call
     conn, addr = s.accept()
     print ('Connected with ', addr)
-    i += 1 
-    #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-    #L = th.Thread(target = clientthread , args = (conn, L, )).start()
     buf = b''
+    print('02')
     while len(buf) < 4:
         buf += conn.recv(4 - len(buf))
-        
+    print('03')
     length = struct.unpack('>I', buf)[0]
     print(length)
     data = b''
     l = length
+    print('1')
+    
+    t0 = time()
     while l > 0:
-        d = s.recv(l)
+        #print('2')
+        d = conn.recv(l)
+        #print('3')
         l -= len(d)
+        #print('4')
         data += d
-        print('y')
+        #print('y')
+    print("done in %fs" % (time() - t0))
     if not data: break
-        
-    try:
-        M = np.loads(data)
-        print("udalo sie")
-    except EOFError:
-        print("nie udalo sie")
-        M = np.zeros((100, 43919))
-    print("lecimy dalej")
+    print("loading")
+    t0 = time()
+    M = np.loads(data) # HERE IS AN ERROR
+    print("loaded")
+    print("done in %fs" % (time() - t0))
     L += M
-    print("jeden")
-    packet = pickle.dumps(L)
-    length = struct.pack('>I', len(packet))
-    packet = length + packet
-    conn.sendall(packet)    
-    conn.close()
- 
+    t0 = time()
+    data_out = pickle.dumps(L)
+    print("done in %fs" % (time() - t0))
+    conn.sendall(data_out)
+    conn.close() 
 s.close()
-
-
+ 
+ 
+ 
+ 

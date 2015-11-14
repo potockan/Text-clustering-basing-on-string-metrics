@@ -49,7 +49,7 @@ def clientthread(conn, L):
     return(L)
 
 
-nazwy = ['_', '_lcs', '_dl','_jaccard','_qgram',
+nazwy = ['_dl','_jaccard','_qgram',
            '_red_lcs','_red_dl','_red_jaccard','_red_qgram',
            '_red_lcs_lcs','_red_dl_dl','_red_jaccard_jaccard','_red_qgram_qgram']
            
@@ -122,8 +122,8 @@ while 1:
         print("done in %fs" % (time.time() - t0))
         s.close()
     
-    if j%30 == 0:
-        typ = nazwy[math.floor(j/30)]
+    if j%45 == 0:
+        typ = nazwy[math.floor(j/45)]
     print(j)
     print(typ)
     j += 1

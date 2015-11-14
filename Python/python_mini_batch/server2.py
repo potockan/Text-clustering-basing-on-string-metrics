@@ -7,111 +7,124 @@ Created on Thu Nov 12 15:41:21 2015
 import socket, pickle, numpy as np
 import struct
 import time
+import math
+import threading
 
 
 
-HOST = ''
-PORT = 50007
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
-s.listen(2)
-print('0')
+def clientthread(conn, L):
+    #Sending message to connected client
+    #conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
+     
+    #infinite loop so that function do not terminate and thread do not end.
+    while True:
+         
+        #Receiving from client
+        buf = b''
+        while len(buf) < 4:
+            buf += conn.recv(4 - len(buf))
+        length = struct.unpack('>I', buf)[0]
+        data = b''
+        l = length
+        
+        while l > 0:
 
-adresses = []
+            d = conn.recv(l)
+            l -= len(d)
+            data += d
 
-i = 0
-while i < 1:
-    i += 1    
-    L = np.zeros((100, 43919))
-    print('01')
-    #wait to accept a connection - blocking call
-    conn, addr = s.accept()
-    print ('Connected with ', addr)
-    adresses.append(addr)
-    buf = b''
-    print('02')
-    while len(buf) < 4:
-        buf += conn.recv(4 - len(buf))
-    print('03')
-    length = struct.unpack('>I', buf)[0]
-    print(length)
-    data = b''
-    l = length
-    print('1')
-    
-    t0 = time.time()
-    while l > 0:
-        #print('2')
-        d = conn.recv(l)
-        #print('3')
-        l -= len(d)
-        #print('4')
-        data += d
-        #print('y')
-    print("done in %fs" % (time.time() - t0))
-    if not data: break
-    print("loading")
-    t0 = time.time()
-    M = np.loads(data) # HERE IS AN ERROR
-    print("loaded")
-    print("done in %fs" % (time.time() - t0))
-#    L += M
-#    t0 = time.time()
-#    data_out = pickle.dumps(L)
-#    print("done in %fs" % (time.time() - t0))
-#    conn.sendall(data_out)
-    conn.close() 
-s.close()
+        if not data: break
+       
+        M = np.loads(data) # HERE IS AN ERROR
+        
+        if i == 1:
+            L = M
+        else:
+            L += M
+    #    t0 = time.time()
+    #    data_out = pickle.dumps(L)
+    #    print("done in %fs" % (time.time() - t0))
+    #    conn.sendall(data_out)
+        conn.close() 
+    return(L)
 
-L += M + 0.33
 
-time.sleep(5)
+nazwy = ['_', '_lcs']
+           
+typ = nazwy[0]
 
-for addr in adresses:
-    HOST = "10.0.0.105"
+j = 0
+while 1:
+    HOST = ''
     PORT = 50007
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((HOST, PORT))
-    centers = np.zeros((100, 43919))
-    packet = pickle.dumps(centers)
-    length = struct.pack('>I', len(packet))
-    packet = length + packet
-    t0 = time.time()
-    s.sendall(packet)
-    print("done in %fs" % (time.time() - t0))
+    s.bind((HOST, PORT))
+    s.listen(2)
+    #print('0')
+    
+    adresses = []
+    ports = []
+    
+    i = 0
+    while i < 13:
+        i += 1    
+        #wait to accept a connection - blocking call
+        conn, addr = s.accept()
+        print ('Connected with ', addr)
+        adresses.append(addr[0])
+        #L = threading.Thread(target = clientthread, args = (conn, i))
+        buf = b''
+        while len(buf) < 4:
+            buf += conn.recv(4 - len(buf))
+        length = struct.unpack('>I', buf)[0]
+        data = b''
+        l = length
+        
+        while l > 0:
+
+            d = conn.recv(l)
+            l -= len(d)
+            data += d
+
+        if not data: break
+       
+        M = np.loads(data) # HERE IS AN ERROR
+        
+        if i == 1:
+            L = M[0]
+        else:
+            L += M[0]
+        ports.append(M[1])
+    #    t0 = time.time()
+    #    data_out = pickle.dumps(L)
+    #    print("done in %fs" % (time.time() - t0))
+    #    conn.sendall(data_out)
+        conn.close() 
+        print(i)
     s.close()
     
     
+    L /= 993131
     
+    packet = pickle.dumps(L)
+    length = struct.pack('>I', len(packet))
+    packet = length + packet
     
+    for kl, addr in enumerate(adresses):
+        HOST = addr
+        PORT = 50007 + ports[kl]
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((HOST, PORT))
+        t0 = time.time()
+        s.sendall(packet)
+        print("done in %fs" % (time.time() - t0))
+        s.close()
     
+    if j%15 == 0:
+        typ = nazwy[math.floor(j/15)]
+    print(j)
+    print(typ)
+    j += 1
+    np.savetxt("/home/samba/potockan/mgr/all/wyniki_%s.txt" % (typ), L, delimiter = '; ')
+    if j == 30: break
     
-    
-    
-    
-    
-def clientthread(conn, L):
-+    #Sending message to connected client
-+    #conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
-+     
-+    #infinite loop so that function do not terminate and thread do not end.
-+    while True:
-+         
-+        #Receiving from client
-+        buf = b''
-+        while len(buf) < 4:
-+            buf += conn.recv(4 - len(buf))
-+        
-+        length = struct.unpack('!I', buf)[0]
-+        print(length)
-+        data = conn.recv(length)
-+        if not data: break
-+        
-+        M = pickle.loads(data)
-+        L += M
-+        data_out = pickle.dumps(L)
-+        conn.sendall(data_out)
-+     
-+    #came out of loop
-+    conn.close()
-+    return(L)

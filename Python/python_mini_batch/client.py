@@ -192,10 +192,10 @@ print("done in %fs" % (time.time() - t0))
 
 centers = connection(centers, i)
 
-for k in range(29):
+for k in range(44):
     print(k)
     centers = clustering2(dane, true_k, centers)
-    time.sleep(70)
+    time.sleep(90)
     centers = connection(centers, i)
 
 clustering3(dane, true_k, centers, i, typ)

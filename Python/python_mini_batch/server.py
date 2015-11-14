@@ -106,7 +106,7 @@ while 1:
     s.close()
     
     
-    L /= i
+    L /= 993131
     
     packet = pickle.dumps(L)
     length = struct.pack('>I', len(packet))

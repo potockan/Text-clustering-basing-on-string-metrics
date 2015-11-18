@@ -1,7 +1,10 @@
 
-library(RSQLite)
+library(rvest)
 library(dplyr)
 library(stringi)
+library(Hmisc)
+library(RSQLite)
+library(compiler)
 
 source("./R/db_exec.R")
 
@@ -86,8 +89,146 @@ for(i in 1:nrow(kategorie)){
 
 kategorie$nowa_kat <- ifelse(kategorie$level == 0, "", kategorie$nowa_kat)
 
-save(list = 'kategorie', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151114.rda")
-load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151114.rda")
+
+###############
+
+expand_tree <- function(link, level) {
+  #print(link)
+  
+  tree_nodes <- 
+    link %>%
+    read_html %>%
+    html_nodes(".CategoryTreeLabel")
+  
+  if (length(tree_nodes) > 0)
+    data_frame(link = 
+                 tree_nodes %>% 
+                 html_attr("href") %>%
+                 paste0("http://pl.wikipedia.org", .),
+               name = html_text(tree_nodes) ) %>%
+    setNames(names(.) %>% paste(level, . , sep = ".") ) else data_frame() 
+}
+
+level00 <- 
+  'http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii' %>%
+  expand_tree("level1") %>%
+  slice(c(10, 14, 69, 96, 101, 155, 176, 188, 220, 234))
+
+
+load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level1.rda")
+
+
+sum(unique(kategorie$nowa_kat) %in% stri_trans_tolower(c('Ezoteryka',
+'Kreacjonizm',
+'Medycyna niekonwencjonalna',
+'Paranauka',
+'Parapsychologia',
+'Programowanie neurolingwistyczne',
+'Przepowiednie',
+'Pseudonaukowcy',
+'Radiestezja',
+'Spirytyzm',
+'Wolna energia',
+'Zjawiska paranormalne'))) #pseudonauka
+
+
+
+sum(unique(kategorie$nowa_kat) %in% stri_trans_tolower(c(
+'Nauki techniczne',
+'Strony przeglądowe - technika',
+'Historia techniki',
+'Modelarstwo',
+'Pożarnictwo',
+'Prawo własności przemysłowej',
+'Produkcja',
+'Przedmioty codziennego użytku',
+'Rzemiosło',
+'Społeczność techniczna',
+'Technika filmowa',
+'Technika jądrowa',
+'Technika satelitarna',
+'Technika szpiegowska',
+'Technika wojskowa',
+'Technologia',
+'Technologia fantastyczna',
+'Transport',
+'Uczelnie techniczne według państw',
+'Urządzenia'
+))) # Technika
+
+technika <- stri_trans_tolower(c(
+  'Nauki techniczne',
+  'Strony przeglądowe - technika',
+  'Historia techniki',
+  'Modelarstwo',
+  'Pożarnictwo',
+  'Prawo własności przemysłowej',
+  'Produkcja',
+  'Przedmioty codziennego użytku',
+  'Rzemiosło',
+  'Społeczność techniczna',
+  'Technika filmowa',
+  'Technika jądrowa',
+  'Technika satelitarna',
+  'Technika szpiegowska',
+  'Technika wojskowa',
+  'Technologia',
+  'Technologia fantastyczna',
+  'Transport',
+  'Uczelnie techniczne według państw',
+  'Urządzenia'
+))
+
+sum(unique(kategorie$nowa_kat) %in% stri_trans_tolower(c(
+'Rankingi',
+'Tablice'
+,'Skarbnica Wikipedii'
+,'Strony przeglądowe - biografie'
+,'Kalendaria'
+,'Strony przeglądowe - kultura'
+,'Listy zamachów terrorystycznych'
+,'Listy na medal'
+,'Strony przeglądowe - nauka'
+,'Strony przeglądowe - społeczeństwo'
+,'Strony przeglądowe - technika'
+,'Strony przeglądowe - uczelnie'
+))) # Strony przeglądowe
+
+str_prz <- stri_trans_tolower(c(
+  'Rankingi',
+  'Tablice'
+  ,'Skarbnica Wikipedii'
+  ,'Strony przeglądowe - biografie'
+  ,'Kalendaria'
+  ,'Strony przeglądowe - kultura'
+  ,'Listy zamachów terrorystycznych'
+  ,'Listy na medal'
+  ,'Strony przeglądowe - nauka'
+  ,'Strony przeglądowe - społeczeństwo'
+  ,'Strony przeglądowe - technika'
+  ,'Strony przeglądowe - uczelnie'
+))
+
+kategorie <- cbind(kategorie, character(nrow(kategorie)))
+names(kategorie)[6] <- "nowa_kat2"
+kategorie$nowa_kat2 <- as.character(kategorie$nowa_kat2)
+kategorie$nowa_kat2 <- kategorie$nowa_kat
+for(i in 1:nrow(kategorie)){
+  kat <- kategorie$nowa_kat[i]
+  if(kat %in% technika)
+    kategorie$nowa_kat2[i] <- 'technika'
+  if(kat %in% str_prz)
+    kategorie$nowa_kat2[i] <- 'strony przeglądowe'
+    
+}
+
+save(list = 'kategorie', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151118.rda")
+load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151118.rda")
+
+
+###############
+
+
 
 
 load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/level10.rda")
@@ -105,6 +246,64 @@ nieskl <- data.frame(name = nieskl)
 
 nieskl <- left_join(nieskl, level10)
 
+for(i in 1:nrow(nieskl)){
+  index <- c(which(kategorie$nowa_kat2 == nieskl$name[i]), 
+    which(kategorie$nowa_kat == nieskl$name[i]))
+  if(length(index) != 0)
+    nieskl$level1.name[i] <- kategorie$nowa_kat2[index[1]]
+  
+}
+
+nieskl <- nieskl %>% group_by(name) %>% distinct()
+
+for(i in 1:nrow(nieskl)){
+  index <- c(which(kategorie$name_new == nieskl$level1.name[i]))
+  if(length(index) != 0 & any(kategorie$nowa_kat2[index] != ''))
+    nieskl$level1.name[i] <- kategorie$nowa_kat2[index[(kategorie$name_new[index] != '')[1]]]
+  
+}
+
+nieskl$level1.name[4] <- 'klasyfikacja nauk'
+nieskl$level1.name[9] <- 'klasyfikacja nauk'
+nieskl$level1.name[10] <- 'kategorie według istot i stworzeń fantastycznych'
+nieskl$level1.name[11] <- 'społeczeństwo'
+nieskl$level1.name[14] <- 'klasyfikacja nauk'
+nieskl$level1.name[15] <- 'klasyfikacja nauk'
+nieskl$level1.name[17] <- 'klasyfikacja nauk'
+nieskl$level1.name[19] <- 'kategorie według położenia geograficznego'
+nieskl$level1.name[20] <- 'sport'
+nieskl$level1.name[19] <- 'kategorie według położenia geograficznego'
+nieskl$level1.name[c(21,22,23,25,26,27,39:48,56,58:61, 63, 67,72, 74:76, 78,85,89,92:96, 100, 101, 103:111,114,120,120)] <- 'kategorie według położenia geograficznego'
 
 
+geo <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), "państw|pojezierze|warszawa|krajobraz|kamienic|rynek|północ|nizina|linia|wodna|prl|gatun|strażni|region|nornik|kraj|ocean|gdańsk|powiat|alp|rio|azja|pasmo|przełęcz|hrabstw|śląsk|dzielnic|tatr|beskid|szczyt|wysp|administr|potok|rzek|wsi|miejscowoś|gmin|jezior|miast|porty|dystrykt|gór"))
+nieskl$level1.name[geo] <- 'kategorie według położenia geograficznego'
 
+sw <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'orunia|zakonni|eparchi|kości|diecezj|świątynie|chrystus|wezwani|zbor|jehow|parafi|święt'))
+nieskl$level1.name[sw] <- 'religie'
+
+woj <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'staroż|senat|sejm|żołnierz|polowe|herb|pistole|batalion|arm|wojsk|pułk|dywizj|altyleri|kawaleri|piechot'))
+nieskl$level1.name[woj] <- 'społeczeństwo'
+
+
+sp <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'żeglug|siatkar|stadion|sezon|league|piłka|formuł|żużel|sport|mistrzostwa|świat|puchar'))
+nieskl$level1.name[sp] <- 'sport'
+
+kult <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'staroż|krętorog|azolidy|głupkow|parti|mięczak|ślimak|średniow|zębowc|mroczko|chińs|roślin|gorzyk|kawa|azynany|makako|ptak'))
+nieskl$level1.name[kult] <- 'klasyfikacja nauk'
+
+szt <-  which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'film|oper|album|artys|artyś|piosenk|singl|sztuka|koncert|zespoł|zespół'))
+nieskl$level1.name[szt] <- 'sztuka'
+
+tech <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'lokomot|ubunt|licyt|silnik'))
+nieskl$level1.name[tech] <- 'technika'
+
+str <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'siog'))
+nieskl$level1.name[str] <- 'strony przeglądowe'
+
+para <- which(stri_detect_regex(stri_trans_tolower(nieskl$name), 'paraps|paranau'))
+nieskl$level1.name[para] <- 'paranauka'
+
+
+nieskl$name[is.na(nieskl$level1.name)]
+sum(is.na(nieskl$level1.name))

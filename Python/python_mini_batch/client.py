@@ -118,7 +118,12 @@ def connection(centers, kl):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #s.setdefaulttimeout(3600)
     s.settimeout(3600)
-    s.connect((HOST, PORT))
+    try:
+        s.connect((HOST, PORT))
+        s.settimeout(None)
+    except EOFError:
+        print('error ', kl)
+        connection(centers, kl)
     packet = pickle.dumps([centers, kl]) ## ???
     length = struct.pack('>I', len(packet))
     packet = length + packet

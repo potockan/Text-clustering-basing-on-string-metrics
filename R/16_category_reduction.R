@@ -24,11 +24,11 @@ expand_tree <- function(link, level) {
     setNames(names(.) %>% paste(level, . , sep = ".") ) else data_frame() 
 }
 
-# level1 <- 
-#   'http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii' %>%
-#   expand_tree("level1") %>%
-#   slice(-c(1:10, 14, 69, 96, 101, 155, 176, 188, 220, 234))# %>%
-#   #slice(220:225)
+level1 <- 
+  'http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii' %>%
+  expand_tree("level1") %>%
+  slice(c(1:10, 14, 69, 96, 101, 155, 176, 188, 220, 234))# %>%
+  #slice(220:225)
 # 
 # save(list = 'level1', file = "/home/npotocka/mgr/Data/RObjects/level1.rda")
 # 

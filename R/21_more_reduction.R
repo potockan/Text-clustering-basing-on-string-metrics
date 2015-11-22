@@ -355,4 +355,119 @@ kategorie %>% left_join(kat_unq) -> kategorie
 save(list = 'kategorie', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151119_ost.rda")
 load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151119_ost.rda")
 
-kategorie %>% group_by(id_new2) %>% count(id_new2) ->aa
+kategorie %>% group_by(nowa_kat2) %>% count(nowa_kat2) ->aa
+
+nowe_kat <- c("lotnictwo", 
+              "bron", 
+              "historia", 
+              "kosciol", 
+              "archipelagi", 
+              "architektura swiata", 
+              "architektura pl", 
+              "geografia pl", 
+              "geografia swiata",
+              "armia", 
+              "gory", 
+              "dzielnice", 
+              "bitwy", 
+              "cmentarze", 
+              "jedn. teryt.", 
+              "doliny", 
+              "oświata", 
+              "gminy", 
+              "hrabstwa", 
+              "jeziora", 
+              "kat wg miejscowosci", 
+              "kolej", 
+              "miasta", 
+              "miejscowosci", 
+              "niziny", 
+              "obiekty sportowe", 
+              "kat wg panstw", 
+              "podzial adm", 
+              "przelecze", 
+              "religia", 
+              "rzeki", 
+              "sport", 
+              "szczyty", 
+              "transport", 
+              "ulice i place", 
+              "wody", 
+              "wsie", 
+              "zabytki", 
+              "zwierzeta") 
+
+#lotnictwo
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1, 9, 73, 98, 259, 270, 271, 730, 731, 1217, 1360, 1374,1380, 1423:1424, 1522, 1718, 1719)] -> kk1
+
+#bron
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(3,4,5,93,94, 268, 1215, 1421, 1422)] -> kk2
+
+
+#historia
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(2, 669:690, 700, 826, 1285, 1555)] -> kk3
+
+#kosciol
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(10, 11,101, 144, 145, 804:817, 1231:1233, 1304:1310,1589:1591)] -> kk4
+
+#archipelagi
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(12:14, 68, 69, 82, 83, 1838:1854)] -> kk5
+
+
+#architektura swiata
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(16,18,19,22,25:29, 31:35, 38, 41:45, 47, 50)] -> kk6
+
+#architektura polski
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(15, 17, 20, 21, 23, 24, 30, 36, 37, 39, 40, 46, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65)] -> kk7
+
+#geografia pl
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(293, 307, 308, 320, 321, 322)] -> kk8
+
+
+#geografia swiata
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(277:292, 294:306, 309:319)] -> kk9
+
+
+#armia
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(6,7,66,67, 78, 79,96,97, 102,151, 231, 267, 269, 272,273,1216,1284,1318:1320,1346, 1362:1364,1554,1736:1747)] -> kk10
+
+kategorie$nowa_kat2[kategorie$name_new %in% kk1] <- nowe_kat[1]
+kategorie$nowa_kat2[kategorie$name_new %in% kk2] <- nowe_kat[2]
+kategorie$nowa_kat2[kategorie$name_new %in% kk3] <- nowe_kat[3]
+kategorie$nowa_kat2[kategorie$name_new %in% kk4] <- nowe_kat[4]
+kategorie$nowa_kat2[kategorie$name_new %in% kk5] <- nowe_kat[5]
+kategorie$nowa_kat2[kategorie$name_new %in% kk6] <- nowe_kat[6]
+kategorie$nowa_kat2[kategorie$name_new %in% kk7] <- nowe_kat[7]
+kategorie$nowa_kat2[kategorie$name_new %in% kk8] <- nowe_kat[8]
+kategorie$nowa_kat2[kategorie$name_new %in% kk9] <- nowe_kat[9]
+kategorie$nowa_kat2[kategorie$name_new %in% kk10] <- nowe_kat[10]

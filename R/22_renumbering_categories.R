@@ -51,7 +51,11 @@ dbGetQuery(con, "select count(distinct id_title) from wiki_category_text_after_r
 dbGetQuery(con, "select count(distinct id) from wiki_category_text_after_reduction")
 
 dbDisconnect(con)
+con1 <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc1/wiki_dl.sqlite")
 
+dbGetQuery(con1, "select count(distinct id_title) from art_word_freq_dl")
+
+dbDisconnect(con1)
 
 # TO DO:
 # polaczyc teksty z kategoriami 

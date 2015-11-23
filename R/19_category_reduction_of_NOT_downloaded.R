@@ -224,6 +224,7 @@ dbExecQuery(con, "INSERT into wiki_category_text_after_reduction(id_title, id_ne
                   tmp_category_text_after_reduction d
                   on e.id_new_cat = d.id_new_cat
                   where e.cnt > 15")
+###########   TUTAJ JEST BLAD. POWINNO BYC JESZCZE GROUP BY ID_TITLE ALBO COS W TYM RODZAJU !!!! ###########   
 
 dbExecQuery(con, "drop table tmp_category_text_after_reduction")
 

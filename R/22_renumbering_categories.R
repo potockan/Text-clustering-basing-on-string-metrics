@@ -14,10 +14,12 @@ prepare_string <- cmpfun(function(str) {
 source("./R/db_exec.R")
 
 
-load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151119_ost.rda")
+load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151123_ost.rda")
 
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+
+dbExecQuery(con, "DROP TABLE IF EXISTS wiki_category_after_reduction2")
 
 dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_after_reduction2 (
   id_new INTEGER NOT NULL,
@@ -43,7 +45,7 @@ lapply(to_insert, function(to_insert) {
 })
 
 
-
+dbGetQuery(con, "select * from wiki_category_after_reduction2 limit 10")
 dbGetQuery(con, "select * from wiki_category_text_after_reduction limit 10")
 dbGetQuery(con, "select count(distinct id_title) from wiki_category_text_after_reduction")
 dbGetQuery(con, "select count(distinct id) from wiki_category_text_after_reduction")
@@ -54,3 +56,7 @@ dbDisconnect(con)
 # TO DO:
 # polaczyc teksty z kategoriami 
 # i poprawic w kazdej z czesci, bo jest zle! (duplikaty)
+
+
+
+

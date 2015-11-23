@@ -355,7 +355,7 @@ kategorie %>% left_join(kat_unq) -> kategorie
 save(list = 'kategorie', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151119_ost.rda")
 load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151119_ost.rda")
 
-kategorie %>% group_by(nowa_kat2) %>% count(nowa_kat2) ->aa
+kategorie %>% group_by(nowa_kat2) %>% count(nowa_kat2) -> aa
 
 nowe_kat <- c("lotnictwo", 
               "bron", 
@@ -369,22 +369,18 @@ nowe_kat <- c("lotnictwo",
               "armia", 
               "gory", 
               "dzielnice", 
-              "bitwy", 
               "cmentarze", 
               "jedn. teryt.", 
-              "doliny", 
               "oświata", 
               "gminy", 
               "hrabstwa", 
               "jeziora", 
-              "kat wg miejscowosci", 
               "kolej", 
               "miasta", 
               "miejscowosci", 
-              "niziny", 
+              "dystrykt",
+              "departament", 
               "obiekty sportowe", 
-              "kat wg panstw", 
-              "podzial adm", 
               "przelecze", 
               "religia", 
               "rzeki", 
@@ -401,7 +397,7 @@ nowe_kat <- c("lotnictwo",
 kategorie$name_new[
   kategorie$nowa_kat2 == 
     "kategorie według położenia geograficznego"] %>% 
-  sort() %>% .[c(1, 9, 73, 98, 259, 270, 271, 730, 731, 1217, 1360, 1374,1380, 1423:1424, 1522, 1718, 1719)] -> kk1
+  sort() %>% .[c(1, 9, 73, 98, 259, 270, 271, 730, 731, 1217, 1358,1360, 1374,1380, 1423:1424, 1522, 1718, 1719)] -> kk1
 
 #bron
 kategorie$name_new[
@@ -414,7 +410,7 @@ kategorie$name_new[
 kategorie$name_new[
   kategorie$nowa_kat2 == 
     "kategorie według położenia geograficznego"] %>% 
-  sort() %>% .[c(2, 669:690, 700, 826, 1285, 1555)] -> kk3
+  sort() %>% .[c(2, 86:91, 669:690, 700, 818:821,826, 1285, 1388,1555, 1735)] -> kk3
 
 #kosciol
 kategorie$name_new[
@@ -439,27 +435,186 @@ kategorie$name_new[
 kategorie$name_new[
   kategorie$nowa_kat2 == 
     "kategorie według położenia geograficznego"] %>% 
-  sort() %>% .[c(15, 17, 20, 21, 23, 24, 30, 36, 37, 39, 40, 46, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65)] -> kk7
+  sort() %>% .[c(15, 17, 20, 21, 23, 24, 30, 36, 37, 39, 40, 46, 48, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,99)] -> kk7
 
 #geografia pl
 kategorie$name_new[
   kategorie$nowa_kat2 == 
     "kategorie według położenia geograficznego"] %>% 
-  sort() %>% .[c(293, 307, 308, 320, 321, 322)] -> kk8
+  sort() %>% .[c(293, 307, 308, 320, 321, 322,1325,1328)] -> kk8
 
 
 #geografia swiata
 kategorie$name_new[
   kategorie$nowa_kat2 == 
     "kategorie według położenia geograficznego"] %>% 
-  sort() %>% .[c(277:292, 294:306, 309:319)] -> kk9
+  sort() %>% .[c(72,277:292, 294:306, 309:319,323,1375,1417,1831)] -> kk9
 
 
 #armia
 kategorie$name_new[
   kategorie$nowa_kat2 == 
     "kategorie według położenia geograficznego"] %>% 
-  sort() %>% .[c(6,7,66,67, 78, 79,96,97, 102,151, 231, 267, 269, 272,273,1216,1284,1318:1320,1346, 1362:1364,1554,1736:1747)] -> kk10
+  sort() %>% .[c(6,7,66,67, 71, 78, 79,96,97,102,151,231,267,269,272,273,666,796,1216,1284,1296,1318:1320,1346,1362:1364,1367,1372,1373,1416,1452,1529,1554,1632,1639,1717,1736:1747)] -> kk10
+
+#gory
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(81, 146:149,266,651:660,667,703,704,1218:1221,1276,1314:1317,1321,1329,1341:1345, 1350:1355,1450,1451,1453,1526,1530,1634,1637,1669,1670,1701,1881:1883)] -> kk11
+
+#dzielnice
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(84,95,232:256,275,1289,1391,1392,1418,1557,1558,1714,1748)] -> kk12
+
+#cmentarze
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(107:123,1326)] -> kk13
+
+#jedn. teryt.
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(128:143,705,706,1329:1340, 1635,1636,1734)] -> kk14
+
+#oswiata
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(257,1213,1290,1291,1676,1677,1697)] -> kk15
+
+#gminy
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(326:648,831,834,835,846,847,1102,1103,1110:1201, 1556, 1586, 1588,1863,1880)] -> kk16
+
+#hrabstwa
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(693:699,880:915,1757:1798)] -> kk17
+
+#jeziora
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(707:725,1347,1348)] -> kk18
+
+#kolej
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(836:842,1560:1578,1640:1645)] -> kk19
+
+#miasta
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(74,260,264,265,274,276,325,649,650,661,668,701,728,855:879,915:978,994:1000,
+                 70,77,80,100,127,150,324,795,797,798,824,844,845,849,851,853,1208,1224,1226,1286,1287,1313,1389,1390,1394,1411,1419,1420,1447,1524,1525,1533,1538,1581,1583,1587,1633,1638,1668,1675,1703:1706,1708,1716,1749,1873,1884)] -> kk20
+
+#miejscowosci
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1001:1007,1101,1104:1109,1202:1204,1871,734:791)] -> kk21
+
+#dystrykt
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(153:230,979:993,1754:1756)] -> kk22
+
+#departament
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1008:1100)] -> kk23
+
+#obiekty sportowe
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1234:1275)] -> kk24
+
+#przelecze
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1397:1410)] -> kk25
+
+#religia
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(726,727,854,1393,1430:1446,1585,1589:1591)] -> kk26
+
+#rzeki
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(75,76,261,1454:1521)] -> kk27
+
+#sport
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(799,1206,1539:1553,1302,1303)] -> kk28
+
+#szczyty
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(124,125,663:665,1368:1371,1594:1626,1855:1862)] -> kk29
+
+#transport
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(801, 1646:1663)] -> kk30
+
+#ulice i place
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(691,692,794,1209,1679:1696,1698:1700,1712,1713)] -> kk31
+
+#wody
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(105,106,729,1227,1381:1384,1425,1528,1537,1720:1733, 1877:1879)] -> kk32
+
+#wsie
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1223,1707,1750:1753,1799:1830)] -> kk33
+
+#zabytki
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(92,152, 833,1210:1212,1277,1294,1295,1376:1379,1532,1582,1864:1869,1875,1876,1885)] -> kk34
+
+#zwierzeta
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(103,104,832,1222,1225,1278:1281,1292,1293,1311,1312,1327,1414,1415,1559,1833:1837,1886:1890)] -> kk35
+
+
+#
+# kategorie$name_new[
+#   kategorie$nowa_kat2 == 
+#     "kategorie według położenia geograficznego"] %>% 
+#   sort() %>% .[] -> kk
+
 
 kategorie$nowa_kat2[kategorie$name_new %in% kk1] <- nowe_kat[1]
 kategorie$nowa_kat2[kategorie$name_new %in% kk2] <- nowe_kat[2]
@@ -471,3 +626,202 @@ kategorie$nowa_kat2[kategorie$name_new %in% kk7] <- nowe_kat[7]
 kategorie$nowa_kat2[kategorie$name_new %in% kk8] <- nowe_kat[8]
 kategorie$nowa_kat2[kategorie$name_new %in% kk9] <- nowe_kat[9]
 kategorie$nowa_kat2[kategorie$name_new %in% kk10] <- nowe_kat[10]
+kategorie$nowa_kat2[kategorie$name_new %in% kk11] <- nowe_kat[11]
+kategorie$nowa_kat2[kategorie$name_new %in% kk12] <- nowe_kat[12]
+kategorie$nowa_kat2[kategorie$name_new %in% kk13] <- nowe_kat[13]
+kategorie$nowa_kat2[kategorie$name_new %in% kk14] <- nowe_kat[14]
+kategorie$nowa_kat2[kategorie$name_new %in% kk15] <- nowe_kat[15]
+kategorie$nowa_kat2[kategorie$name_new %in% kk16] <- nowe_kat[16]
+kategorie$nowa_kat2[kategorie$name_new %in% kk17] <- nowe_kat[17]
+kategorie$nowa_kat2[kategorie$name_new %in% kk18] <- nowe_kat[18]
+kategorie$nowa_kat2[kategorie$name_new %in% kk19] <- nowe_kat[19]
+kategorie$nowa_kat2[kategorie$name_new %in% kk20] <- nowe_kat[20]
+kategorie$nowa_kat2[kategorie$name_new %in% kk21] <- nowe_kat[21]
+kategorie$nowa_kat2[kategorie$name_new %in% kk22] <- nowe_kat[22]
+kategorie$nowa_kat2[kategorie$name_new %in% kk23] <- nowe_kat[23]
+kategorie$nowa_kat2[kategorie$name_new %in% kk24] <- nowe_kat[24]
+kategorie$nowa_kat2[kategorie$name_new %in% kk25] <- nowe_kat[25]
+kategorie$nowa_kat2[kategorie$name_new %in% kk26] <- nowe_kat[26]
+kategorie$nowa_kat2[kategorie$name_new %in% kk27] <- nowe_kat[27]
+kategorie$nowa_kat2[kategorie$name_new %in% kk28] <- nowe_kat[28]
+kategorie$nowa_kat2[kategorie$name_new %in% kk29] <- nowe_kat[29]
+kategorie$nowa_kat2[kategorie$name_new %in% kk30] <- nowe_kat[30]
+kategorie$nowa_kat2[kategorie$name_new %in% kk31] <- nowe_kat[31]
+kategorie$nowa_kat2[kategorie$name_new %in% kk32] <- nowe_kat[32]
+kategorie$nowa_kat2[kategorie$name_new %in% kk33] <- nowe_kat[33]
+kategorie$nowa_kat2[kategorie$name_new %in% kk34] <- nowe_kat[34]
+kategorie$nowa_kat2[kategorie$name_new %in% kk35] <- nowe_kat[35]
+
+save(list = 'kategorie', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151123.rda")
+load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151123.rda")
+
+kategorie %>% group_by(nowa_kat2) %>% count(nowa_kat2) -> aa
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+  "członkowie towarzystw naukowych", 
+  "działalność naukowa",
+  "ludzie związani z oświatą",
+  "naukowcy",
+  "popularyzacja nauki",
+  "szkolnictwo wyższe",
+  "organizacje naukowe"
+  )] <- "oświata"
+
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+  "przestępcy",
+  "palenie tytoniu",
+  "ofiary przestępstw"
+)] <- "problemy społeczne"
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+  "społeczeństwo według państw",
+  "ruchy społeczne",
+  "zbiorowości społeczne"
+)] <- "społeczeństwo"
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+  "biografie według daty urodzin"                
+  ,"biografie według epok i okresów historycznych"
+  ,"biografie według miast"                       
+  ,"biografie według narodowości"                 
+  ,"biografie według osiągnięć i zasług"          
+  ,"biografie według państw"                      
+  ,"biografie według profesji"                    
+  ,"biografie według regionów"                    
+  ,"biografie według religii i wyznań"
+  ,"biografie według daty śmierci"
+)] <- "biografie"
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+  "instytucje kultury",
+  "kulturoznawstwo",
+  "obiekty kultury",
+  "obiekty z listy dziedzictwa unesco",
+  "wystawiennictwo",
+  "kultura według kontynentów",
+  "kultura według państw" 
+)] <- "kultura"
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+  "mleko",
+  "wino",
+  "ziemniak",
+  "potrawy według głównych składników"
+)] <- "jedzenie"
+
+kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+ "religie"
+)] <- "religia"
+
+# kategorie$nowa_kat2[kategorie$nowa_kat2 %in% c(
+#   "kultura starożytnego rzymu"     
+# )] <- "historia"
+
+kategorie %>% group_by(nowa_kat2) %>% count(nowa_kat2) -> aa
+aa[aa$n <= 5,]
+aa$nowa_kat2[aa$n > 5]
+
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(91,92,97)] -> kk1
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(1,4,7,30:32,49,54,55)] -> kk2
+
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(2,25)] -> kk3
+
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(3,27,50,64,69,72)] -> kk4
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(5,6,19:22,41,43,81:87,89)] -> kk5
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(9,10,14:18,56:61,75:77,80)] -> kk6
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(8,11:13,23,24,26,28,29,33:40,44,45,47,48,51,52,53,62,63,66:68,73,79,88,90,93,96,96)] -> kk7
+
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[42] -> kk8
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[46] -> kk9
+
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[65] -> kk10
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(70,94)] -> kk11
+
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[71] -> kk12
+
+kategorie$name_new[
+  kategorie$nowa_kat2 == 
+    "kategorie według położenia geograficznego"] %>% 
+  sort() %>% .[c(74,78)] -> kk13
+
+
+
+
+
+kategorie$nowa_kat2[kategorie$name_new %in% kk1] <- "problemy społeczne"
+kategorie$nowa_kat2[kategorie$name_new %in% kk2] <- "gospodarka"
+kategorie$nowa_kat2[kategorie$name_new %in% kk3] <- "biografie"
+kategorie$nowa_kat2[kategorie$name_new %in% kk4] <- "społeczeństwo"
+kategorie$nowa_kat2[kategorie$name_new %in% kk5] <- "kultura"
+kategorie$nowa_kat2[kategorie$name_new %in% kk6] <- "geografia swiata"
+kategorie$nowa_kat2[kategorie$name_new %in% kk7] <- "geografia społeczno-ekonomiczna"
+kategorie$nowa_kat2[kategorie$name_new %in% kk8] <- "gory"
+kategorie$nowa_kat2[kategorie$name_new %in% kk9] <- "polityka"
+kategorie$nowa_kat2[kategorie$name_new %in% kk10] <- "jedzenie"
+kategorie$nowa_kat2[kategorie$name_new %in% kk11] <- "media"
+kategorie$nowa_kat2[kategorie$name_new %in% kk12] <- "zabytki"
+kategorie$nowa_kat2[kategorie$name_new %in% kk13] <- "kategorie według specjalności lekarskich"
+kategorie$nowa_kat2[69] <- "geografia swiata"
+
+kategorie %>% group_by(nowa_kat2) %>% count(nowa_kat2) -> aa
+aa[aa$n <= 5,]
+aa$nowa_kat2[aa$n > 5]
+
+kategorie <- kategorie %>% select(-id_new2)
+kategorie$nowa_kat2 %>% unique() %>% sort() -> kat_unq
+kat_unq <- data.frame(nowa_kat2 = kat_unq, id_new2 = 1:length(kat_unq))
+kategorie %>% left_join(kat_unq) -> kategorie
+
+save(list = 'kategorie', file = "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151123_ost.rda")
+load("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/categories/kategorie20151123_ost.rda")
+
+  

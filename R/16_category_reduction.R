@@ -79,7 +79,7 @@ level1 <-
 # rm(level4)
 load("/home/npotocka/mgr/Data/RObjects/level5.rda")
 print(6)
-<<<<<<< HEAD
+
 level51 <- level5[1:27831,]
 level52 <- level5[27832:55663,]
 level53 <- level5[55664:83494,]

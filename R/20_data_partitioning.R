@@ -107,23 +107,25 @@ set.seed(82823)
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
-title_num <- dbGetQuery(con, "select id_title, id from wiki_category_text_after_reduction")
+title_num <- dbGetQuery(con, "select id_title, id from wiki_category_text_after_reduction2")
 dbDisconnect(con)
 
 #title_num <- title_num %>% bind_cols(data.frame(id_new_title = 1:nrow(title_num)))
 
 title_shuffle <- sample(title_num$id, nrow(title_num))
 
-#category_partitions(title_shuffle)
+rm(title_num)
 
-#partitions('', title_shuffle)
+category_partitions(title_shuffle)
 
-#partitions('_lcs', title_shuffle)
-#partitions('_dl', title_shuffle)
-#partitions('_jaccard', title_shuffle)
-#partitions('_qgram', title_shuffle)
+partitions('', title_shuffle)
 
-#partitions('_red_lcs', title_shuffle)
+partitions('_lcs', title_shuffle)
+partitions('_dl', title_shuffle)
+partitions('_jaccard', title_shuffle)
+partitions('_qgram', title_shuffle)
+
+partitions('_red_lcs', title_shuffle)
 partitions('_red_dl', title_shuffle)
 partitions('_red_jaccard', title_shuffle)
 partitions('_red_qgram', title_shuffle)
@@ -135,5 +137,5 @@ partitions('_red_qgram_qgram', title_shuffle)
 
 
 # > title_shuffle[1:10]
-# [1]  359038  419564 1708533  138219 1195074 1542630  316539   32556  461362  934010
+# [1] 179519 209782 854266  69109 597536 771313 158269  16278 230680 467003
 

@@ -58,48 +58,48 @@ partitions <- function(typ, art){
   dbDisconnect(con)
 }
 
-# 
-# category_partitions <- function(art){
-#   
-#   ciag <- ceiling(seq(1, length(art), length.out = 14))
-#   
-#   
-#   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
-#   
-#   for(i in 1:13){
-#     message("Connecting to db ", i)
-#     con1 <- dbConnect(SQLite(), dbname = 
-#                         sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite", i))
-#     
-#     message("Taking the data from db")
-#     dane <- dbGetQuery(con, sprintf("select id_title, id_new_cat 
-#                        from wiki_category_text_after_reduction
-#                        where id_title in (%s)", stri_flatten(art[ciag[i]:(ciag[i+1]-1)], collapse = ", ")))
-#     
-#     dbExecQuery(con1, "create table if not exists cat_art (
-#                              id_title INTEGER NOT NULL,
-#                              id_cat
-#     );")
-#     
-#     message("To insert...")
-#     to_insert <- sprintf("(%d, %d)", 
-#                          dane$id_title,
-#                          dane$id_new_cat)
-#     to_insert <- split(to_insert, 
-#                        rep(1:ceiling(length(to_insert)/500), 
-#                            length.out=length(to_insert)))          
-#     
-#     message("Insert")
-#     lapply(to_insert, function(to_insert) {
-#       dbExecQuery(con1, sprintf("INSERT into cat_art(id_title, id_cat)
-#                       values %s", stri_flatten(to_insert, collapse=", ")))
-#     })
-#     dbDisconnect(con1)
-#   }
-#   dbDisconnect(con)
-#   
-# }
-# 
+
+category_partitions <- function(art){
+  
+  ciag <- ceiling(seq(1, length(art), length.out = 14))
+  
+  
+  con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+  
+  for(i in 1:13){
+    message("Connecting to db ", i)
+    con1 <- dbConnect(SQLite(), dbname = 
+                        sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite", i))
+    
+    message("Taking the data from db")
+    dane <- dbGetQuery(con, sprintf("select id_title, id_new_cat 
+                       from wiki_category_text_after_reduction2
+                       where id in (%s)", stri_flatten(art[ciag[i]:(ciag[i+1]-1)], collapse = ", ")))
+    
+    dbExecQuery(con1, "create table if not exists cat_art (
+                             id_title INTEGER NOT NULL,
+                             id_cat
+    );")
+    
+    message("To insert...")
+    to_insert <- sprintf("(%d, %d)", 
+                         dane$id_title,
+                         dane$id_new_cat)
+    to_insert <- split(to_insert, 
+                       rep(1:ceiling(length(to_insert)/500), 
+                           length.out=length(to_insert)))          
+    
+    message("Insert")
+    lapply(to_insert, function(to_insert) {
+      dbExecQuery(con1, sprintf("INSERT into cat_art(id_title, id_cat)
+                      values %s", stri_flatten(to_insert, collapse=", ")))
+    })
+    dbDisconnect(con1)
+  }
+  dbDisconnect(con)
+  
+}
+
 
 
 

@@ -54,8 +54,8 @@ def reading_data(i, typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
      
-    #con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
-    con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
+    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
+    #con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
     c = con.cursor()
     
     if typ == "_":
@@ -63,19 +63,20 @@ def reading_data(i, typ):
     
     c.execute('''select 
     id_title, id_stem_word, freq 
-    from art_word_freq%s
-    order by id_title
-    ''' % (typ))
+    from art_word_freq%s'''  % (typ))
+#   order by id_title 
     
     data = c.fetchall()
     
     con.close()
         
     
-#    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
-#    c = con.cursor()    
-#    
-#    c.execute('select id_category from wiki_unique_category order by id_title')
+    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
+    c = con.cursor()    
+    
+#    c.execute('''select a.id_cat from 
+#    (select id_cat, id_title from cat_art limit 76387) as a
+#    order by a.id_title''')
 #    print("Reading labels...")
 #    labels = c.fetchall()    
 #    con.close()
@@ -91,18 +92,18 @@ def transforming_data(my_data):
 
 
 def clustering1(my_sparse_data, true_k):
-    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=1000, init_size = 2*true_k)
+    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=20000, init_size = 2*true_k)
     km.fit(my_sparse_data)
     return(km.cluster_centers_ * my_sparse_data.shape[0])
     
 
 def clustering2(my_sparse_data, true_k, results):
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=3, batch_size=15000, init_size = 2*true_k)
    km.fit(my_sparse_data)
    return(km.cluster_centers_ * my_sparse_data.shape[0])
    
 def clustering3(my_sparse_data, true_k, results, i, typ):
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=3, batch_size=15000, init_size = 2*true_k)
    km.fit(my_sparse_data)
    np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
    #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
@@ -184,6 +185,8 @@ if opts.true_k:
     true_k = opts.true_k
 else:
     true_k = 100
+    
+np.random.seed(12321)
 t0 = time.time()
 dane = reading_data(i ,typ)
 print("done in %fs" % (time.time() - t0))
@@ -205,3 +208,5 @@ for k in range(44):
 
 clustering3(dane, true_k, centers, i, typ)
 
+
+         

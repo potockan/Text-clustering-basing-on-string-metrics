@@ -207,10 +207,10 @@ for k in range(99):
     centers = clustering2(dane, true_k, centers)
     time.sleep(45)
     centers1 = connection(centers, i)
-    if centers1 == None:
-        centers = connection(centers, i)
-    else:
+    if centers1:
         centers = centers1
+    else:
+        centers = connection(centers, i)
 
 clustering3(dane, true_k, centers, i, typ)
 

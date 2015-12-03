@@ -53,19 +53,19 @@ if len(args) > 0:
 def reading_data(i, typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
+    
+    if typ == "_":
+        typ = ""
      
     #con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
     con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
     c = con.cursor()
     
-    if typ == "_":
-        typ = ""
     
     c.execute('''select 
     id_title, id_stem_word, freq 
-    from art_word_freq%s
-    order by id_title
-    ''' % (typ))
+    from art_word_freq%s'''  % (typ))
+#   order by id_title 
     
     data = c.fetchall()
     
@@ -74,8 +74,10 @@ def reading_data(i, typ):
     
 #    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
 #    c = con.cursor()    
-#    
-#    c.execute('select id_category from wiki_unique_category order by id_title')
+    
+#    c.execute('''select a.id_cat from 
+#    (select id_cat, id_title from cat_art limit 76387) as a
+#    order by a.id_title''')
 #    print("Reading labels...")
 #    labels = c.fetchall()    
 #    con.close()
@@ -91,18 +93,18 @@ def transforming_data(my_data):
 
 
 def clustering1(my_sparse_data, true_k):
-    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=1, batch_size=1000, init_size = 2*true_k)
+    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=5000, init_size = 2*true_k)
     km.fit(my_sparse_data)
     return(km.cluster_centers_ * my_sparse_data.shape[0])
     
 
 def clustering2(my_sparse_data, true_k, results):
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=5000, init_size = 2*true_k)
    km.fit(my_sparse_data)
    return(km.cluster_centers_ * my_sparse_data.shape[0])
    
 def clustering3(my_sparse_data, true_k, results, i, typ):
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=1000, init_size = 2*true_k)
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=5000, init_size = 2*true_k)
    km.fit(my_sparse_data)
    np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
    #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
@@ -118,12 +120,24 @@ def connection(centers, kl):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #s.setdefaulttimeout(3600)
     s.settimeout(3600)
-    s.connect((HOST, PORT))
-    packet = pickle.dumps([centers, kl]) ## ???
-    length = struct.pack('>I', len(packet))
-    packet = length + packet
-    s.sendall(packet)
-    s.close()
+    try:
+        s.connect((HOST, PORT))
+        s.settimeout(None)
+        packet = pickle.dumps([centers, kl]) ## ???
+        length = struct.pack('>I', len(packet))
+        packet = length + packet
+        s.sendall(packet)
+        s.close()
+    except Exception as e:
+        print(e)
+        print('error ', kl)
+        s.close()
+        return np.zeros(centers.shape)
+#    else:
+#        print('error ', kl)
+#        s.close()
+#        return None
+   
     #print ('Received', data_new)
     
     
@@ -179,6 +193,9 @@ if opts.true_k:
     true_k = opts.true_k
 else:
     true_k = 100
+ 
+print("____" + typ + "____")   
+np.random.seed(12321)
 t0 = time.time()
 dane = reading_data(i ,typ)
 print("done in %fs" % (time.time() - t0))
@@ -186,28 +203,27 @@ t0 = time.time()
 dane = transforming_data(dane)
 print("done in %fs" % (time.time() - t0))
 print("n_samples: %d, n_features: %d" % dane.shape)
-#t0 = time.time()
-#centers = clustering1(dane, true_k)
-#print("done in %fs" % (time.time() - t0))
-
-# centers = np.genfromtxt('/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/all/wyniki__.txt', delimiter=';')
-centers = np.genfromtxt('/home/samba/potockan/mgr/all/wyniki_%s.txt' % (typ), delimiter=';')
+t0 = time.time()
+centers = np.loadtxt("/home/samba/potockan/mgr/all/wyniki_%s.txt" % (typ), delimiter = '; ')
 centers = clustering2(dane, true_k, centers)
+print("done in %fs" % (time.time() - t0))
+
 centers = connection(centers, i)
 
-for k in range(14):
+
+for k in range(34):
     print(k)
     centers = clustering2(dane, true_k, centers)
-    time.sleep(90)
-    centers = connection(centers, i)
+    time.sleep(60)
+    centers1 = connection(centers, i)
+    aa = 0
+    while not (centers1.any()) and aa < 5:
+        time.sleep(1)
+        centers1 = connection(centers, i)
+        aa += 1
+    centers = centers1
+        
 
 clustering3(dane, true_k, centers, i, typ)
 
-
-
-
-
-
-
-
-
+         

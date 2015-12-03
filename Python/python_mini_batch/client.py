@@ -53,13 +53,14 @@ if len(args) > 0:
 def reading_data(i, typ):
 #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
-     
-    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
-    #con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
-    c = con.cursor()
     
     if typ == "_":
         typ = ""
+     
+    #con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
+    con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
+    c = con.cursor()
+    
     
     c.execute('''select 
     id_title, id_stem_word, freq 
@@ -71,8 +72,8 @@ def reading_data(i, typ):
     con.close()
         
     
-    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
-    c = con.cursor()    
+#    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
+#    c = con.cursor()    
     
 #    c.execute('''select a.id_cat from 
 #    (select id_cat, id_title from cat_art limit 76387) as a
@@ -92,18 +93,18 @@ def transforming_data(my_data):
 
 
 def clustering1(my_sparse_data, true_k):
-    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=20000, init_size = 2*true_k)
+    km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=5000, init_size = 2*true_k)
     km.fit(my_sparse_data)
     return(km.cluster_centers_ * my_sparse_data.shape[0])
     
 
 def clustering2(my_sparse_data, true_k, results):
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=3, batch_size=15000, init_size = 2*true_k)
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=5000, init_size = 2*true_k)
    km.fit(my_sparse_data)
    return(km.cluster_centers_ * my_sparse_data.shape[0])
    
 def clustering3(my_sparse_data, true_k, results, i, typ):
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=3, batch_size=15000, init_size = 2*true_k)
+   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=5000, init_size = 2*true_k)
    km.fit(my_sparse_data)
    np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
    #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
@@ -113,7 +114,7 @@ def clustering3(my_sparse_data, true_k, results, i, typ):
 
 def connection(centers, kl):
     
-    #HOST = "10.0.0.105"
+    HOST = "10.0.0.106"
     HOST = "192.168.143.79"
     PORT = 50007
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -122,14 +123,21 @@ def connection(centers, kl):
     try:
         s.connect((HOST, PORT))
         s.settimeout(None)
-    except EOFError:
+        packet = pickle.dumps([centers, kl]) ## ???
+        length = struct.pack('>I', len(packet))
+        packet = length + packet
+        s.sendall(packet)
+        s.close()
+    except Exception as e:
+        print(e)
         print('error ', kl)
-        connection(centers, kl)
-    packet = pickle.dumps([centers, kl]) ## ???
-    length = struct.pack('>I', len(packet))
-    packet = length + packet
-    s.sendall(packet)
-    s.close()
+        s.close()
+        return np.zeros(centers.shape)
+#    else:
+#        print('error ', kl)
+#        s.close()
+#        return None
+   
     #print ('Received', data_new)
     
     
@@ -186,6 +194,7 @@ if opts.true_k:
 else:
     true_k = 100
     
+print("____" + typ + "____") 
 np.random.seed(12321)
 t0 = time.time()
 dane = reading_data(i ,typ)
@@ -200,11 +209,19 @@ print("done in %fs" % (time.time() - t0))
 
 centers = connection(centers, i)
 
-for k in range(44):
+
+for k in range(99):
     print(k)
     centers = clustering2(dane, true_k, centers)
-    time.sleep(90)
-    centers = connection(centers, i)
+    time.sleep(40)
+    centers1 = connection(centers, i)
+    aa = 0
+    while not (centers1.any()) and aa < 5:
+        time.sleep(1)
+        centers1 = connection(centers, i)
+        aa += 1
+    centers = centers1
+        
 
 clustering3(dane, true_k, centers, i, typ)
 

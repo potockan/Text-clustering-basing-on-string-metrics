@@ -55,11 +55,13 @@ nazwy <- c('', '_lcs', '_dl','_jaccard','_qgram',
            '_red_lcs','_red_dl','_red_jaccard','_red_qgram',
            '_red_lcs_lcs','_red_dl_dl','_red_jaccard_jaccard','_red_qgram_qgram')
 
-for(n in nazwy){
+aa <- list()
+for(n in 1:length(nazwy)){
   i <- 1
+  typ <- nazwy[n]
   con1 <- dbConnect(SQLite(), dbname = 
                       sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite", i, typ))
-  print(dbGetQuery(con1, sprintf("select count(distinct id_title) from art_word_freq%s", typ)))
+  aa[n] <- dbGetQuery(con1, sprintf("select distinct id_title from art_word_freq%s", typ))
   dbDisconnect(con1)
   
 }
@@ -86,7 +88,11 @@ dbExecQuery(con1, sprintf("insert into cat_art2 (id_title, id_cat)
                           stri_flatten(
                             c(411278, 907399, 473644, 411388, 193317, 358425, 18152, 473968, 474017,
                               327107, 280615, 544189, 278771, 712304, 200423, 578374, 418763, 190832), collapse = ", ")
+                          #391868
                   )
 )
 dbDisconnect(con1)
+
+
+
 

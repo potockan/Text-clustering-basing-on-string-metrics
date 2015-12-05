@@ -99,20 +99,12 @@ def clustering1(my_sparse_data, true_k):
     
 
 def clustering2(my_sparse_data, true_k, results):
-<<<<<<< HEAD
    km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=5000, init_size = 2*true_k)
-=======
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=3, batch_size=5000, init_size = 2*true_k)
->>>>>>> 15c313d62708580b222f49073176c5b6a9b41352
    km.fit(my_sparse_data)
    return(km.cluster_centers_ * my_sparse_data.shape[0])
    
 def clustering3(my_sparse_data, true_k, results, i, typ):
-<<<<<<< HEAD
    km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=1, batch_size=5000, init_size = 2*true_k)
-=======
-   km = MiniBatchKMeans(n_clusters=true_k, init=results, n_init=3, batch_size=5000, init_size = 2*true_k)
->>>>>>> 15c313d62708580b222f49073176c5b6a9b41352
    km.fit(my_sparse_data)
    np.savetxt("/home/samba/potockan/mgr/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
    #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
@@ -140,21 +132,12 @@ def connection(centers, kl):
         print(e)
         print('error ', kl)
         s.close()
-<<<<<<< HEAD
         return np.zeros(centers.shape)
 #    else:
 #        print('error ', kl)
 #        s.close()
 #        return None
    
-=======
-        return None
-    packet = pickle.dumps([centers, kl]) ## ???
-    length = struct.pack('>I', len(packet))
-    packet = length + packet
-    s.sendall(packet)
-    s.close()
->>>>>>> 15c313d62708580b222f49073176c5b6a9b41352
     #print ('Received', data_new)
     
     

@@ -1151,6 +1151,25 @@ sil = \sum\limits_{i=1}^{n}s(\mathbf{x}_i)
 \item Miara silhouette przyjmuje w ogólności większe wartości dla wypukłych skupień.
 \end{itemize}
 
+\section{Metody hierarchiczne}
+
+[TUTAJ CZY WCZESNIEJ??]
+Opis metody hierarchicznej, z wyróżnieniem odmienności najbliższego, najdalszego sąsiada oraz średniej.
+
+\chapter{Kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
+
+Wikipedia\footnote{www.wikipedia.org} jest to wielojęzyczna encyklopedia internetowa, która działa w oparciu o zasadę otwartej treści. Portal umożliwia każdemu z użytkowników odwiedzających stronę, edycję i aktualizację treści w czasie rzeczywistym. Wikipedia ma ponad $35.9$ miliona artykułów we wszystkich wersjach językowych, w tym prawie $5$ milionów w wersji angielskiej i nieco ponad $1.1$ miliona artykułów w języku polskim (dane na sierpień 2015)~\cite{wiki}.
+
+Każdy artykuł może być edytowany przez dowolnego użytkownika, jak również nowe teksty może stworzyć każda osoba odwiedzająca portal. Przy procesie edycji oraz pisania artykułu obowiązują liczne reguły, między innymi takie jak wskazanie źródeł bibliograficznych, podlinkowanie do innych artykułów oraz nadanie artykułowi kategorii tematycznych~\cite{wiki}. 
+
+Ta ostatnia zasada może w szczególności przysporzyć nieco kłopotów. Liczba dostępnych kategorii jest bardzo duża (ponad $125$ tys.), co więcej poziom ich szczegółowości jest zróżnicowany, tzn. mamy kategorie bardzo ogólne (np. \emph{Matematyka}), jak i dość szczegółowe (np. \emph{Działania dwuargumentowe}). Można się spodziewać, że automatyczny podział tekstów na kategorie na podstawie słów, jakie w nich występują, mógłby dać lepszy, bardziej dopasowany do treści, temat. Sprawdzenie jak automatyczny podział tekstów na kategorie tematyczne, przy użyciu występujących w nich słów oraz ich liczności, jest zasadniczym celem tej pracy. Idea działania jest następująca: system analizuje jakie słowa w jakich ilościach występują w danym artykule i następnie przydziela go do grupy artykułów o podobnych słowach (i licznościach). To podejście opiera się na założeniu, że artykuły o podobnej tematyce będą zawierały takie same i/lub podobne do siebie słowa.
+
+\begin{figure}
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=450pt]{wiki2.jpg}\\
+  \caption{Rysunek przedstawia przykładowy artykuł z portalu Wikipedia.  Źródło: \url{http://pl.wikipedia.org/wiki/Dob\%C3\%B3r\_losowy}}\label{wiki}
+\end{figure}
 
 
 %-----------Koniec części zasadniczej-----------

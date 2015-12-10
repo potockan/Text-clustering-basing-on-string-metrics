@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/npotocka/anaconda3/bin/python3
 
 """
 Created on Fri Nov 27 18:49:20 2015
@@ -9,9 +9,8 @@ Created on Fri Nov 27 18:49:20 2015
 import scipy.io.wavfile
 import os
 import numpy as np
-import librosa
-import IPython
-import time, wave, pymedia.audio.sound as sound
+import pyglet
+
 
 
 import odczyt_sciezki as ods
@@ -20,38 +19,23 @@ import zapis_nutek as zn
 
 print(os.getcwd())
 
-utwor = "./utwor1"
+utwor = os.getcwd() + "/utwor1"
 tracks = ods.czytanie_sciezki(utwor)
 sample = ods.czytanie_probek(tracks)
 ll = ws.wczytywanie_probek(utwor, sample)
 y2 = zn.co_po_czym(tracks, sample, ll[1], ll[2])
 
-plik_audio = utwor + "pd_proba1.wav"
+plik_audio = utwor + "/pd_proba1.wav"
+print(plik_audio)
 
 scipy.io.wavfile.write(plik_audio, 
                        ll[0], 
                        np.int16(y2/max(np.abs(y2))*32767))
 
 
-import pyaudio
-import wave
+audio = pyglet.resource.media(plik_audio, streaming = False)
 
-chunk = 1024
-wf = wave.open(plik_audio, 'rb')
-p = pyaudio.PyAudio()
+audio.play()
+#pyglet.app.run()
 
-stream = p.open(
-    format = p.get_format_from_width(wf.getsampwidth()),
-    channels = wf.getnchannels(),
-    rate = wf.getframerate(),
-    output = True)
-data = wf.readframes(chunk)
-
-while data != '':
-    stream.write(data)
-    data = wf.readframes(chunk)
-
-stream.close()
-p.terminate()
-
-os.remove(plik_audio)
+#os.remove(plik_audio)

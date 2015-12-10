@@ -1158,7 +1158,7 @@ Opis metody hierarchicznej, z wyróżnieniem odmienności najbliższego, najdals
 
 \chapter{Kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
 
-Wikipedia\footnote{www.wikipedia.org} jest to wielojęzyczna encyklopedia internetowa, która działa w oparciu o zasadę otwartej treści. Portal umożliwia każdemu z użytkowników odwiedzających stronę, edycję i aktualizację treści w czasie rzeczywistym. Wikipedia ma ponad $35.9$ miliona artykułów we wszystkich wersjach językowych, w tym prawie $5$ milionów w wersji angielskiej i nieco ponad $1.1$ miliona artykułów w języku polskim (dane na sierpień 2015)~\cite{wiki}.
+Wikipedia\footnote{\url{www.wikipedia.org}} jest to wielojęzyczna encyklopedia internetowa, która działa w oparciu o zasadę otwartej treści. Portal umożliwia każdemu z użytkowników odwiedzających stronę, edycję i aktualizację treści w czasie rzeczywistym. Wikipedia ma ponad $35.9$ miliona artykułów we wszystkich wersjach językowych, w tym prawie $5$ milionów w wersji angielskiej i nieco ponad $1.1$ miliona artykułów w języku polskim (dane na sierpień 2015)~\cite{wiki}.
 
 Każdy artykuł może być edytowany przez dowolnego użytkownika, jak również nowe teksty może stworzyć każda osoba odwiedzająca portal. Przy procesie edycji oraz pisania artykułu obowiązują liczne reguły, między innymi takie jak wskazanie źródeł bibliograficznych, podlinkowanie do innych artykułów oraz nadanie artykułowi kategorii tematycznych~\cite{wiki}. 
 
@@ -1172,10 +1172,30 @@ Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana jest n
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=450pt]{wiki2.jpg}\\
-  \caption{Rysunek przedstawia przykładowy artykuł z portalu Wikipedia.  Źródło: \url{http://pl.wikipedia.org/wiki/Dob\%C3\%B3r\_losowy}}\label{wiki}
+  \caption{Przykładowy artykuł z portalu Wikipedia. Na niebiesko wyróżnione zostały linki do innych tekstów z portalu. Źródło: \url{http://pl.wikipedia.org/wiki/Dob\%C3\%B3r\_losowy}}\label{wiki}
 \end{figure}
 
-Zgromadzone dane to zbiór $1\ 075\ 568$ artykułów z polskiej Wikipedii z dnia $2.$ listopada $2014$ roku. Teksty składają się z treści sformułowanych w języku naturalnym, wzorów, linków wewnętrznych Wikipedii, linków do źródeł zewnętrznych, odniesień do źródeł bibliograficznych, cytatów, rysunków (zdjęć, wykresów) wraz z podpisami, tabel, komentarzy, uwag, tagów, sekcji ,,Zobacz też'' oraz kategorii.
+Zgromadzone dane to zbiór $1\ 075\ 568$ artykułów z polskiej Wikipedii z dnia $2.$ listopada $2014$ roku w postaci plików XML~\footnote{Żródło: \url{http://dumps.wikimedia.org/plwiki/20141102/}}. Teksty składają się z treści sformułowanych w języku naturalnym, wzorów, kodów, linków wewnętrznych Wikipedii, linków do źródeł zewnętrznych, odniesień do źródeł bibliograficznych, cytatów, przypisów, rysunków (zdjęć, wykresów) wraz z podpisami, tabel, komentarzy, uwag, sekcji ,,Zobacz też'', kategorii oraz znaczników typowych dla plików HTML-owych. Każdy z wyżej wymienionych elementów został wyróżniony w tekście w inny sposób (np. linki wewnętrzne Wikipedii zawsze znajdowały się wewnątrz podwójnych nawiasów kwadratowych), co nie pozostało bez znaczenia przy wstępnym przetwarzaniu danych.
+
+\section{Wstępne przetwarzanie danych}
+
+Ważnym elementem przy pracy z danymi jest ich wstępna obróbka, szczególnie gdy są to dane tekstowe. Jednocześnie nie ma ogólnych, odpowiednich dla wszystkich zagadnień, reguł postępowania -- schemat działania trzeba dostosować pod konkretny problem i posiadane dane. Naturalnie kwestię wstępnej obróbki danych można pominąć, jednak wiąże się to z ryzykiem negatywnego wpływu na działanie algorytmu. Co więcej w przypadku gdy szczególnie istotne są słowa znajdujące się w tekście, przygotowanie danych może okazać się jedną z kluczowych kwestii, jeśli chodzi o jakość działania algorytmu.
+
+Jak wspomniano wcześniej pobrane dane składają się w dużej mierze z treści sformułowanych w języku naturalnym, jak i zawartości technicznej takiej jak linki czy znaczniki HTML-owe. Określenie istotności treści zawartej w poszczególnych częściach jest zasadniczym problemem przy wstępnej obróbce danych. Przyjmijmy, że część związaną z językiem naturalnym będziemy nazywać ,,opisową'', natomiast inne fragmenty -- ,,techniczną''. Związane są z nimi następujące aspekty (zaznaczmy, że rozważania te wymagają nieformalnego podejścia do sprawy, intuicji oraz początkowego przejrzenia tekstów, co jest nieodłączną częścią praktycznej analizy danych):
+\begin{itemize}
+\item Część opisowa zawiera główny opis artykuły, można się więc spodziewać, że w tej części zawarte zostanie meritum tekstu.
+\item Linki składają się ze słowa, które pojawia się w tekście, jak i odniesienia do innej strony. Ta pierwsza część może więc zawierać dużo informacji o temacie tekstu.
+\item Wzory oraz kody mogą dużo powiedzieć o tematyce artykułu (np. bardzo łatwo odróżnić wzór chemiczny od matematycznego), jednak w większości składają się one ze znaków (np. pojedynczych liter), które mogą być charakterystyczne dla wielu problemów.
+\item Cytaty mogą być ważne, choć często mogą mocno odbiegać od głównej tematyki tekstu.
+\item Przypisy są dodatkową informacją zawartą w tekście, często poruszające tematy poboczne.
+\item Odniesienia bibliograficzne, choć ważne z punktu widzenia artykułu, nie wnoszą dużo informacji o tematyce artykułu.
+\item Część artykułów zawiera bardzo dużo tabel, które czasem stanowią niemal jedyną treść. Jednakowoż służą one uporządkowaniu wiedzy i treść w nich zawarta często nie wnosi istotnych informacji o tematyce tekstu, zawierając jedynie słowa hasłowe bądź wylistowania danych zagadnień.
+\item Podpisy pod rysunkami są zazwyczaj powtórzeniem zdań bądź ich fragmentów z części opisowej.
+\item Sekcja ,,Zobacz też'' może być ważna, gdyż wskazuje na połączenia tematyczne między tekstami.
+\item Podobnie kategorie wskazują w szczególności na tematy poruszanego zagadnienia.
+\item Znaczniki HTML-owe oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji na temat tekstu i służą jedynie odpowiedniemu wyświetleniu treści.
+\end{itemize}
+
 
 
 %-----------Koniec części zasadniczej-----------

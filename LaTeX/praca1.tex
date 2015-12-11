@@ -1175,27 +1175,36 @@ Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana jest n
   \caption{Przykładowy artykuł z portalu Wikipedia. Na niebiesko wyróżnione zostały linki do innych tekstów z portalu. Źródło: \url{http://pl.wikipedia.org/wiki/Dob\%C3\%B3r\_losowy}}\label{wiki}
 \end{figure}
 
-Zgromadzone dane to zbiór $1\ 075\ 568$ artykułów z polskiej Wikipedii z dnia $2.$ listopada $2014$ roku w postaci plików XML~\footnote{Żródło: \url{http://dumps.wikimedia.org/plwiki/20141102/}}. Teksty składają się z treści sformułowanych w języku naturalnym, wzorów, kodów, linków wewnętrznych Wikipedii, linków do źródeł zewnętrznych, odniesień do źródeł bibliograficznych, cytatów, przypisów, rysunków (zdjęć, wykresów) wraz z podpisami, tabel, komentarzy, uwag, sekcji ,,Zobacz też'', kategorii oraz znaczników typowych dla plików HTML-owych. Każdy z wyżej wymienionych elementów został wyróżniony w tekście w inny sposób (np. linki wewnętrzne Wikipedii zawsze znajdowały się wewnątrz podwójnych nawiasów kwadratowych), co nie pozostało bez znaczenia przy wstępnym przetwarzaniu danych.
+Zgromadzone dane to zbiór $1\ 075\ 568$ artykułów z polskiej Wikipedii z dnia $2.$ listopada $2014$ roku w postaci plików XML~\footnote{Żródło: \url{http://dumps.wikimedia.org/plwiki/20141102/}}. Teksty składają się z treści sformułowanych w języku naturalnym, wzorów, kodów, linków wewnętrznych Wikipedii, linków do źródeł zewnętrznych, odniesień do źródeł bibliograficznych, cytatów, przypisów, rysunków (zdjęć, wykresów) wraz z podpisami, tabel, komentarzy, uwag, spisu treści, sekcji ,,Zobacz też'', kategorii oraz znaczników typowych dla plików HTML-owych. Każdy z wyżej wymienionych elementów został wyróżniony w tekście w inny sposób (np. linki wewnętrzne Wikipedii zawsze znajdowały się wewnątrz podwójnych nawiasów kwadratowych), co nie pozostało bez znaczenia przy wstępnym przetwarzaniu danych.
 
 \section{Wstępne przetwarzanie danych}
 
 Ważnym elementem przy pracy z danymi jest ich wstępna obróbka, szczególnie gdy są to dane tekstowe. Jednocześnie nie ma ogólnych, odpowiednich dla wszystkich zagadnień, reguł postępowania -- schemat działania trzeba dostosować pod konkretny problem i posiadane dane. Naturalnie kwestię wstępnej obróbki danych można pominąć, jednak wiąże się to z ryzykiem negatywnego wpływu na działanie algorytmu. Co więcej w przypadku gdy szczególnie istotne są słowa znajdujące się w tekście, przygotowanie danych może okazać się jedną z kluczowych kwestii, jeśli chodzi o jakość działania algorytmu.
 
-Jak wspomniano wcześniej pobrane dane składają się w dużej mierze z treści sformułowanych w języku naturalnym, jak i zawartości technicznej takiej jak linki czy znaczniki HTML-owe. Określenie istotności treści zawartej w poszczególnych częściach jest zasadniczym problemem przy wstępnej obróbce danych. Przyjmijmy, że część związaną z językiem naturalnym będziemy nazywać ,,opisową'', natomiast inne fragmenty -- ,,techniczną''. Związane są z nimi następujące aspekty (zaznaczmy, że rozważania te wymagają nieformalnego podejścia do sprawy, intuicji oraz początkowego przejrzenia tekstów, co jest nieodłączną częścią praktycznej analizy danych):
+Jak wspomniano wcześniej pobrane dane składają się w dużej mierze z treści sformułowanych w języku naturalnym, jak i zawartości technicznej takiej jak linki czy znaczniki HTML-owe. Określenie istotności treści zawartej w poszczególnych częściach jest zasadniczym problemem przy wstępnej obróbce danych. Przyjmijmy, że część związaną z językiem naturalnym będziemy nazywać ,,tekstową'', a pozostałe części tekstu -- ,,techniczną''. Związane są z nimi następujące aspekty (zaznaczmy, że rozważania te wymagają nieformalnego podejścia, intuicji oraz początkowego przejrzenia tekstów, co jest nieodłączną częścią praktycznej analizy danych):
 \begin{itemize}
-\item Część opisowa zawiera główny opis artykuły, można się więc spodziewać, że w tej części zawarte zostanie meritum tekstu.
+\item Część tekstowa zawiera główny opis artykuły, można się więc spodziewać, że w tej części zawarte zostanie meritum tekstu.
 \item Linki składają się ze słowa, które pojawia się w tekście, jak i odniesienia do innej strony. Ta pierwsza część może więc zawierać dużo informacji o temacie tekstu.
-\item Wzory oraz kody mogą dużo powiedzieć o tematyce artykułu (np. bardzo łatwo odróżnić wzór chemiczny od matematycznego), jednak w większości składają się one ze znaków (np. pojedynczych liter), które mogą być charakterystyczne dla wielu problemów.
+\item Wzory oraz kody mogą dużo powiedzieć o tematyce artykułu (np. bardzo łatwo odróżnić wzór chemiczny od matematycznego), jednak w większości składają się one ze krótkich ciągów znaków (np. pojedynczych liter), które mogą być charakterystyczne dla wielu problemów.
 \item Cytaty mogą być ważne, choć często mogą mocno odbiegać od głównej tematyki tekstu.
 \item Przypisy są dodatkową informacją zawartą w tekście, często poruszające tematy poboczne.
 \item Odniesienia bibliograficzne, choć ważne z punktu widzenia artykułu, nie wnoszą dużo informacji o tematyce artykułu.
 \item Część artykułów zawiera bardzo dużo tabel, które czasem stanowią niemal jedyną treść. Jednakowoż służą one uporządkowaniu wiedzy i treść w nich zawarta często nie wnosi istotnych informacji o tematyce tekstu, zawierając jedynie słowa hasłowe bądź wylistowania danych zagadnień.
 \item Podpisy pod rysunkami są zazwyczaj powtórzeniem zdań bądź ich fragmentów z części opisowej.
+\item Spis treści zawiera tematów, które są następnie powtórzone w tekście.
 \item Sekcja ,,Zobacz też'' może być ważna, gdyż wskazuje na połączenia tematyczne między tekstami.
 \item Podobnie kategorie wskazują w szczególności na tematy poruszanego zagadnienia.
 \item Znaczniki HTML-owe oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji na temat tekstu i służą jedynie odpowiedniemu wyświetleniu treści.
 \end{itemize}
 
+Wstępną obróbkę danych przeprowadzono uwzględniając powyższe aspekty. Początkowo z części tekstowej usunięto wszystkie znaki nie będące literami alfabetu łacińskiego [ŁACIŃSKIEGO CZY JAKIEGOŚ INNEGO?
+BYŁO O TAK:
+\begin{verbatim}
+text5 <- stri_trans_general(text4, "NFKC; NFC; Any-lower")
+words <- stri_extract_all_words(text5)
+words_all <- lapply(words, stri_subset_regex, "^\\p{script=latin}+$", omit_na=TRUE)
+\end{verbatim}
+]. Poddano jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, zostawiono bez zmian. Wzory oraz kody usunięto w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierały. Cytaty pozostawiono bez zmian. Przypisy usunięto z artykułów, jako że zawierają jedynie dodatkową treść. Źródła bibliograficzne usunięto w całości. Teksty oczyszczono także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiono jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usunięto jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczono z tytułów, które pojawiały się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}.
 
 
 %-----------Koniec części zasadniczej-----------

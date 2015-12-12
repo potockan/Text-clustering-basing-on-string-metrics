@@ -82,14 +82,15 @@ n_once_all <- sum(word_stat_all$word_cnt==1)/n_words_all*100
 W polskiej Wikipedii znaleziono \Sexpr{n_words} unikalnych słów. \Sexpr{n_once}\% z nich występuje dokładnie w jednym tekście, natomiast \Sexpr{n_once_all}\% występuje tylko raz. Dobrze obrazuje to poniższy histogram.
 
 <<hist, dependson='ws'>>=
-ggplot(word_stat, aes(x=word_cnt), main="Liczba występowania słów w artykułach") + geom_histogram(fill="white", colour="black")
+ggplot(word_stat, aes(x=word_cnt), main="Liczba występowania słów w artykułach") + 
+  geom_histogram(fill="white", colour="black")
 @
 
 Słowa występujące tylko w jednym tekście to zazwyczaj liczby oraz słowa w obcych językach, przykładowo:
 
 <<once, dependson='ws'>>=
-set.seed(208)
-sample(word_stat$word[word_stat$word_cnt==1], 10)
+set.seed(6785)
+cat(sample(word_stat$word[word_stat$word_cnt==1], 10), sep = ", ")
 @
 
 choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \emph{uchybiają} jest odmianą czasownika \emph{uchybiać}. Należy wziąć pod uwagę takie słowa, gdyż mogą one polepszyć jakość dopasowania tekstów pod względem tematycznym.
@@ -143,7 +144,7 @@ Po usunięciu wyżej wymienionych słów pozostaje \Sexpr{n_no_stp} unikalnych s
 <<hist_stp, dependson='rm_stp'>>=
 ggplot(word_no_stp, aes(x=word)) +
 geom_histogram(fill="white", colour="black")
-print(summary(word_no_stp$word_cnt)
+print(summary(word_no_stp$word_cnt))
 @
 
 

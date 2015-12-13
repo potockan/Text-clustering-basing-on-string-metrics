@@ -1165,11 +1165,19 @@ Każdy artykuł może być edytowany przez dowolnego użytkownika, jak również
 
 Ta ostatnia zasada może w szczególności przysporzyć nieco kłopotów. Liczba dostępnych kategorii jest bardzo duża (ponad $125$ tys. w polskiej wersji językowej), co więcej poziom ich szczegółowości jest zróżnicowany, tzn. mamy kategorie bardzo ogólne (np. \emph{Matematyka}), jak i dość szczegółowe (np. \emph{Działania dwuargumentowe}). Można się spodziewać, że automatyczny podział tekstów na kategorie na podstawie słów, jakie w nich występują, mógłby dać lepszy, bardziej dopasowany do treści, temat. Sprawdzenie jak automatyczny podział tekstów na kategorie tematyczne, przy użyciu występujących w nich słów oraz ich liczności, jest zasadniczym celem tej pracy. Idea działania jest następująca: algorytm analizuje jakie słowa w jakich ilościach występują w danym artykule i następnie przydziela go do grupy artykułów które zawierają takie same i podobne słowa w zbliżonych licznościach. To podejście opiera się na założeniu, że artykuły o podobnej tematyce będą zawierały takie same lub podobne do siebie słowa. 
 
+Schemat działania algorytmu jest następujący:
+\begin{enumerate}
+\item Wstępne przetwarzanie danych.
+\item Utworzenie skupień ,,podobnych'' słów.
+\item Stworzenie macierzy o wymiarach liczba artykułów $\times$ liczba słów, gdzie wartością jest liczność występowania danego słowa w artykule.
+\item Użycie algorytmu $k$-średnich do podzielenia tekstów na skupienia.
+\end{enumerate}
+
 \section{Opis danych}
 
 Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana jest na artykułach polskiej wersji Wikipedii. Omówimy teraz rzeczony zbiór danych.
 
-\begin{figure}
+\begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=450pt]{wiki2.jpg}\\
@@ -1189,23 +1197,16 @@ Jak wspomniano wcześniej pobrane dane składają się w dużej mierze z treści
 \item Wzory oraz kody mogą dużo powiedzieć o tematyce artykułu (np. bardzo łatwo odróżnić wzór chemiczny od matematycznego), jednak w większości składają się one ze krótkich ciągów znaków (np. pojedynczych liter), które mogą być charakterystyczne dla wielu problemów.
 \item Cytaty mogą być ważne, choć często mogą mocno odbiegać od głównej tematyki tekstu.
 \item Przypisy są dodatkową informacją zawartą w tekście, często poruszające tematy poboczne.
-\item Odniesienia bibliograficzne, choć ważne z punktu widzenia artykułu, nie wnoszą dużo informacji o tematyce artykułu.
+\item Odniesienia bibliograficzne, choć ważne z punktu widzenia wartości treści zawartych w artykule, nie wnoszą istotnych informacji o tematyce artykułu.
 \item Część artykułów zawiera bardzo dużo tabel, które czasem stanowią niemal jedyną treść. Jednakowoż służą one uporządkowaniu wiedzy i treść w nich zawarta często nie wnosi istotnych informacji o tematyce tekstu, zawierając jedynie słowa hasłowe bądź wylistowania danych zagadnień.
 \item Podpisy pod rysunkami są zazwyczaj powtórzeniem zdań bądź ich fragmentów z części opisowej.
-\item Spis treści zawiera tematów, które są następnie powtórzone w tekście.
+\item Spis treści zawiera tytuły, które są następnie powtórzone w tekście.
 \item Sekcja ,,Zobacz też'' może być ważna, gdyż wskazuje na połączenia tematyczne między tekstami.
 \item Podobnie kategorie wskazują w szczególności na tematy poruszanego zagadnienia.
-\item Znaczniki HTML-owe oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji na temat tekstu i służą jedynie odpowiedniemu wyświetleniu treści.
+\item Znaczniki HTML-owe oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji o tematyce tekstu i służą jedynie odpowiedniemu wyświetleniu treści.
 \end{itemize}
 
-Wstępną obróbkę danych przeprowadzono uwzględniając powyższe aspekty. Początkowo z części tekstowej usunięto wszystkie znaki nie będące literami alfabetu łacińskiego [ŁACIŃSKIEGO CZY JAKIEGOŚ INNEGO?
-BYŁO O TAK:
-\begin{verbatim}
-text5 <- stri_trans_general(text4, "NFKC; NFC; Any-lower")
-words <- stri_extract_all_words(text5)
-words_all <- lapply(words, stri_subset_regex, "^\\p{script=latin}+$", omit_na=TRUE)
-\end{verbatim}
-]. Poddano jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, zostawiono bez zmian. Wzory oraz kody usunięto w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierały. Cytaty pozostawiono bez zmian. Przypisy usunięto z artykułów, jako że zawierają jedynie dodatkową treść. Źródła bibliograficzne usunięto w całości. Teksty oczyszczono także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiono jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usunięto jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczono z tytułów, które pojawiały się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}.
+Wstępną obróbkę danych przeprowadzono uwzględniając powyższe aspekty. Początkowo z części tekstowej usunięto wszystkie znaki nie będące literami alfabetu łacińskiego. Poddano jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, zostawiono bez zmian. Wzory oraz kody usunięto w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierały. Cytaty pozostawiono bez zmian. Przypisy usunięto z artykułów, jako że zawierają jedynie dodatkową treść. Źródła bibliograficzne usunięto w całości. Teksty oczyszczono także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiono jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usunięto jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczono z tytułów, które pojawiały się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}.
 
 %w ilu tekstach wystąpiło dane słowo
 \begin{figure}[!h]
@@ -1215,9 +1216,8 @@ words_all <- lapply(words, stri_subset_regex, "^\\p{script=latin}+$", omit_na=TR
   \caption{Histogram logarytmu dziesiętnego z liczby artykułów, w których dane słowo występuje.}\label{plot:001}
 \end{figure}
 
-Tak otrzymane teksty podzielono na słowa, które przekształcono do wyrazów o małych literach. Do każdego tekstu dodano informacje jakie słowa i w jakich licznościach wystąpiły. W ten sposób otrzymano $2\ 806\ 765$ różnych słów we wszystkich, tj. w $1\ 075\ 568$, artykułach. $49\%$ słów występuje tylko w jednym tekście (p. rys.~\ref{plot:001}). Nieco ponad $3.5\%$ słów wystąpiło w stu i więcej artykułach, natomiast jedynie $0.6\%$ wszystkich wyrazów pojawiło się w więcej niż tysiącu tekstów.
 
-$44\%$ słów wystąpiło dokładnie raz we wszystkich artykułach (p. rys.~\ref{plot:002}). Prawie $4.3\%$ wyrazów pojawiło się ponad sto razy, natomiast mniej niż jeden procent słów wystąpiło tysiąc i więcej razy.
+Tak otrzymane teksty podzielono na słowa, które przekształcono do wyrazów o małych literach. Do każdego tekstu dodano informacje o tym, jakie słowa i w jakich licznościach w nim wystąpiły. W ten sposób otrzymano $2\ 806\ 765$ różnych słów we wszystkich, tj. w $1\ 075\ 568$, artykułach. $49\%$ słów występuje tylko w jednym tekście (p. rys.~\ref{plot:001}). Nieco ponad $3.5\%$ słów wystąpiło w stu i więcej artykułach, natomiast jedynie $0.6\%$ wszystkich wyrazów pojawiło się w więcej niż tysiącu tekstów.
 
 %ile razy w ogóle wystąpiło dane słowo
 \begin{figure}[!h]
@@ -1226,6 +1226,8 @@ $44\%$ słów wystąpiło dokładnie raz we wszystkich artykułach (p. rys.~\ref
   \includegraphics[width=350pt, height=200pt]{plot2.pdf}\\
   \caption{Histogram logarytmu dziesiętnego z liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
 \end{figure}
+
+$44\%$ słów wystąpiło dokładnie raz we wszystkich artykułach (p. rys.~\ref{plot:002}). Prawie $4.3\%$ wyrazów pojawiło się ponad sto razy, natomiast mniej niż jeden procent słów wystąpiło tysiąc i więcej razy.
 
 Słowa występujące tylko w jednym tekście to zazwyczaj słowa w obcych językach, przykładowo: \verb|jużdortransstroj, youtsos, odety, knežlaz, pallebitzke, rulicach, werkowie|, \verb|rumilla, metyklotiazyd, bazelak|,
 choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \verb|uchybiają| jest odmianą czasownika \verb|uchybiać|. Takie słowa warto wziąć pod uwagę przy analizie, gdyż są ,,podobne'' do słów częściej występujących, a więc mogą polepszyć jakość dopasowania pod względem tematycznym.
@@ -1274,12 +1276,12 @@ sze, natychmiast, nią, nic, nich, nie, niego, niej, niemu, nigdy, nim, nimi,
 niż, obok, od, około, on, ona, one, oni, ono, owszem, po, pod, ponieważ, 
 przed, przedtem, są, sam, sama, się, skąd, tak, taki, tam, ten, to, tobą, 
 tobie, tu, tutaj, twoi, twój, twoja, twoje, ty, wam, wami, was, wasi, wasz, 
-wasza, wasze, we, więc, wszystko, wtedy, wy, żaden, zawsze, że.
+wasza, wasze, we, więc, wszystko, wtedy, wy, żaden, zawsze, że
 \end{verbatim}
 
-Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Uczyniono to w dalszej części wstępnej obróbki tekstów, co zostanie opisane poniżej.
+Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Uczyniono to w kolejnym etapie wstępnej obróbki tekstów. Łącznie ze zbioru słów usunięto $1\ 822$ wyrazy.
 
-Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram logarytmu dziesiętnego liczby unikalnych słów w tekstach przedstawia rys.~\ref{plot:004}.
+Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2\ 272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram logarytmu dziesiętnego liczby unikalnych słów w tekstach przedstawia rys.~\ref{plot:004}.
 
 \begin{figure}[!h]
   \centering
@@ -1296,6 +1298,17 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa. Najkrótsze w
   \includegraphics[width=350pt, height=200pt]{plot3.pdf}\\
   \caption{Wykres skrzynkowy długości słów.}\label{plot:003}
 \end{figure}
+
+
+\section{Jakiś mądry tytuł / Utworzenie skupień ,,podobnych'' słów}
+
+Po wstępnej obróbce danych uzyskano $2\ 804\ 943$ unikalnych słów, z czego blisko połowa wystąpiła jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które występują w artykule a daną wejściową jest macierz o wymiarach liczba artykułów$\times$liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 804\ 943$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
+
+Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Dalej dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę danych, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
+
+
+
+
 %-----------Koniec części zasadniczej-----------
 
 

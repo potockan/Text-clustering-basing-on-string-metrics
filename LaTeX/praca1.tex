@@ -62,8 +62,9 @@
 %\addcontentsline{toc}{chapter}{Wstęp}
 %COŚ tu będzie.
 
-\chapter{Odległości na przestrzeni ciągów znaków}\label{metryki-na-przestrzeni-ciagow-znakow}
-%\color{red}
+\chapter{Odległości na przestrzeni ciągów znaków}
+\label{metryki-na-przestrzeni-ciagow-znakow}
+
 
 \section{Podstawowe definicje}
 
@@ -1184,7 +1185,7 @@ Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana jest n
   \caption{Przykładowy artykuł z portalu Wikipedia. Na niebiesko wyróżnione zostały linki do innych tekstów z portalu. Źródło: \url{http://pl.wikipedia.org/wiki/Dob\%C3\%B3r\_losowy}}\label{wiki}
 \end{figure}
 
-Zgromadzone dane to zbiór $1\ 075\ 568$ artykułów z polskiej Wikipedii z dnia $2.$ listopada $2014$ roku w postaci plików XML~\footnote{Żródło: \url{http://dumps.wikimedia.org/plwiki/20141102/}}. Teksty składają się z treści sformułowanych w języku naturalnym, wzorów, kodów, linków wewnętrznych Wikipedii, linków do źródeł zewnętrznych, odniesień do źródeł bibliograficznych, cytatów, przypisów, rysunków (zdjęć, wykresów) wraz z podpisami, tabel, komentarzy, uwag, spisu treści, sekcji ,,Zobacz też'', kategorii oraz znaczników typowych dla plików HTML-owych. Każdy z wyżej wymienionych elementów został wyróżniony w tekście w inny sposób (np. linki wewnętrzne Wikipedii zawsze znajdowały się wewnątrz podwójnych nawiasów kwadratowych), co nie pozostało bez znaczenia przy wstępnym przetwarzaniu danych.
+Zgromadzone dane to zbiór $1\ 075\ 568$ artykułów z polskiej Wikipedii z dnia $2.$ listopada $2014$ roku w postaci plików XML~\footnote{Żródło: \url{http://dumps.wikimedia.org/plwiki/20141102/}}. Teksty składają się z treści sformułowanych w języku naturalnym, wzorów, kodów, linków wewnętrznych Wikipedii, linków do źródeł zewnętrznych, odniesień do źródeł bibliograficznych, cytatów, przypisów, rysunków (zdjęć, wykresów) wraz z podpisami, tabel, komentarzy, uwag, spisu treści, sekcji ,,Zobacz też'', kategorii oraz znaczników typowych dla plików HTML-owych. Każdy z wyżej wymienionych elementów jest wyróżniony w tekście w inny sposób (np. linki wewnętrzne Wikipedii zawsze znajdowały się wewnątrz podwójnych nawiasów kwadratowych), co nie pozostaje bez znaczenia przy wstępnym przetwarzaniu danych.
 
 \section{Wstępne przetwarzanie danych}
 
@@ -1206,7 +1207,7 @@ Jak wspomniano wcześniej pobrane dane składają się w dużej mierze z treści
 \item Znaczniki HTML-owe oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji o tematyce tekstu i służą jedynie odpowiedniemu wyświetleniu treści.
 \end{itemize}
 
-Wstępną obróbkę danych przeprowadzono uwzględniając powyższe aspekty. Początkowo z części tekstowej usunięto wszystkie znaki nie będące literami alfabetu łacińskiego. Poddano jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, zostawiono bez zmian. Wzory oraz kody usunięto w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierały. Cytaty pozostawiono bez zmian. Przypisy usunięto z artykułów, jako że zawierają jedynie dodatkową treść. Źródła bibliograficzne usunięto w całości. Teksty oczyszczono także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiono jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usunięto jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczono z tytułów, które pojawiały się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}.
+Wstępną obróbkę danych przeprowadzamy uwzględniając powyższe aspekty. Początkowo z części tekstowej usuwamy wszystkie znaki nie będące literami alfabetu łacińskiego. Poddajemy jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, pozostawiamy bez zmian. Wzory oraz kody usuwamy w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierają. Cytaty pozostawiamy bez zmian. Przypisy usuwamy z artykułów, jako że zawierają jedynie dodatkową z punktu widzenia głównego tekstu, treść. Źródła bibliograficzne usuwamy w całości. Teksty oczyszczamy także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiamy jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usuwamy jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczamy z tytułów, które pojawiają się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}.
 
 %w ilu tekstach wystąpiło dane słowo
 \begin{figure}[!h]
@@ -1217,7 +1218,7 @@ Wstępną obróbkę danych przeprowadzono uwzględniając powyższe aspekty. Poc
 \end{figure}
 
 
-Tak otrzymane teksty podzielono na słowa, które przekształcono do wyrazów o małych literach. Do każdego tekstu dodano informacje o tym, jakie słowa i w jakich licznościach w nim wystąpiły. W ten sposób otrzymano $2\ 806\ 765$ różnych słów we wszystkich, tj. w $1\ 075\ 568$, artykułach. $49\%$ słów występuje tylko w jednym tekście (p. rys.~\ref{plot:001}). Nieco ponad $3.5\%$ słów wystąpiło w stu i więcej artykułach, natomiast jedynie $0.6\%$ wszystkich wyrazów pojawiło się w więcej niż tysiącu tekstów.
+Tak otrzymane teksty dzielimy na słowa, które przekształcamy do wyrazów o małych literach. Nie chcemy rozróżniać słów ze względu na wielkość liter, gdyż nie powinna ona mieć znaczenia dla tematyki treści. Do każdego tekstu dodajemy informację o tym, jakie słowa i w jakich licznościach w nim występują. W ten sposób otrzymujemy $2\ 806\ 765$ różnych słów we wszystkich, tj. w $1\ 075\ 568$, artykułach. $49\%$ słów występuje tylko w jednym tekście (p. rys.~\ref{plot:001}). Nieco ponad $3.5\%$ słów znajduje się w stu i więcej artykułach, natomiast jedynie $0.6\%$ wszystkich wyrazów pojawia się w więcej niż tysiącu tekstów.
 
 %ile razy w ogóle wystąpiło dane słowo
 \begin{figure}[!h]
@@ -1227,7 +1228,7 @@ Tak otrzymane teksty podzielono na słowa, które przekształcono do wyrazów o 
   \caption{Histogram logarytmu dziesiętnego z liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
 \end{figure}
 
-$44\%$ słów wystąpiło dokładnie raz we wszystkich artykułach (p. rys.~\ref{plot:002}). Prawie $4.3\%$ wyrazów pojawiło się ponad sto razy, natomiast mniej niż jeden procent słów wystąpiło tysiąc i więcej razy.
+$44\%$ słów występuje dokładnie raz we wszystkich artykułach (p. rys.~\ref{plot:002}). Prawie $4.3\%$ wyrazów pojawia się ponad sto razy, natomiast mniej niż jeden procent słów występuje tysiąc i więcej razy.
 
 Słowa występujące tylko w jednym tekście to zazwyczaj słowa w obcych językach, przykładowo: \verb|jużdortransstroj, youtsos, odety, knežlaz, pallebitzke, rulicach, werkowie|, \verb|rumilla, metyklotiazyd, bazelak|,
 choć czasem są to słowa będące odmianą słów bardziej częściej występujących, np. słowo \verb|uchybiają| jest odmianą czasownika \verb|uchybiać|. Takie słowa warto wziąć pod uwagę przy analizie, gdyż są ,,podobne'' do słów częściej występujących, a więc mogą polepszyć jakość dopasowania pod względem tematycznym.
@@ -1279,7 +1280,7 @@ tobie, tu, tutaj, twoi, twój, twoja, twoje, ty, wam, wami, was, wasi, wasz,
 wasza, wasze, we, więc, wszystko, wtedy, wy, żaden, zawsze, że
 \end{verbatim}
 
-Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Uczyniono to w kolejnym etapie wstępnej obróbki tekstów. Łącznie ze zbioru słów usunięto $1\ 822$ wyrazy.
+Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Dokonujemy tego w kolejnym etapie wstępnej obróbki tekstów. Łącznie ze zbioru słów usuwamy $1\ 822$ wyrazy.
 
 Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2\ 272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram logarytmu dziesiętnego liczby unikalnych słów w tekstach przedstawia rys.~\ref{plot:004}.
 
@@ -1290,7 +1291,7 @@ Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru 
   \caption{Histogram logarytmu dziesiętnego liczby unikalnych słów w artykule.}\label{plot:004}
 \end{figure}
 
-Mediana długości słów wynosi $9$, średnia jest nieco wyższa. Najkrótsze występujące słowa są jednoznakowe, jest ich $249$. Najdłuższe słowo ma $128$ znaków. Słowa o długości ponad $11$ znaków stanowią $19.5\%$ wszystkich słów.
+Mediana długości słów wynosi $9$, średnia jest nieco wyższa (p. rys.~\ref{plot:003}). Najkrótsze występujące słowa są jednoznakowe, jest ich $249$. Najdłuższe słowo ma $128$ znaków. Słowa o długości ponad $11$ znaków stanowią $19.5\%$ wszystkich słów.
 
 \begin{figure}[!h]
   \centering
@@ -1300,11 +1301,17 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa. Najkrótsze w
 \end{figure}
 
 
-\section{Jakiś mądry tytuł / Utworzenie skupień ,,podobnych'' słów}
+\section{Utworzenie skupień ,,podobnych'' słów / Jakiś mądry tytuł}
 
-Po wstępnej obróbce danych uzyskano $2\ 804\ 943$ unikalnych słów, z czego blisko połowa wystąpiła jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które występują w artykule a daną wejściową jest macierz o wymiarach liczba artykułów$\times$liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 804\ 943$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
+Po wstępnej obróbce danych dostajemy $2\ 804\ 943$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 804\ 943$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
 
-Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Dalej dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę danych, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
+Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Podobieństwo słów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
+
+Aby podzielić zbiór słów na skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od siebie i zastosowanie algorytmu aglomeracyjnego. Jednakowoż wiąże się to z dużą złożonością pamięciową i obliczeniową, stąd też nie został wykorzystany w niniejszej pracy. Inny pomysł polega na przyłączaniu do skupienia słów dopóty, dopóki średnia odległość w zbiorze nie przekroczy zadanej liczby. Wstępne testy na losowej próbce tysiąca słów wykazały, że jakość takiego podziału jest słaba, a czas obliczeń względnie długi.
+
+Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}.
+
+W ten sposób pogrupowano $733\ 828$ słów w $186 942$ skupienia, co stanowi ok. $27\%$ wszystkich słów.
 
 
 

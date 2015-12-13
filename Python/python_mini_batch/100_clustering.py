@@ -1,4 +1,4 @@
-#/usr/bin/python3
+#!/usr/bin/python3
 
 """
 Created on Thu Nov 12 12:29:04 2015
@@ -55,7 +55,7 @@ if len(args) > 0:
 
 
 def reading_data(i, typ):
-#c.execute('select * from wiki_stem_word_reorder')
+    #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
     
     if typ == "_":
@@ -99,7 +99,7 @@ def transforming_data(my_data):
 def clustering1(my_sparse_data, true_k, b):
     km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=b, init_size = 2*true_k)
     km.fit(my_sparse_data)
-    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%d_%s.txt" % (i, b, typ), km.labels_, delimiter = ', ')
+    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions2/czesc%d/wyniki_%d_%s.txt" % (i, b, typ), km.labels_, delimiter = ', ')
     return(km)
     
 
@@ -115,17 +115,17 @@ def clustering1(my_sparse_data, true_k, b):
 #   #np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyniki_%s.txt" % (i, typ), km.labels_, delimiter = ', ')
 
 
-def reading_labels(typ, i):
+def reading_labels(typ, i, id_title):
     if typ == "_":
         typ = ""
-    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite" % (i))
+    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
     c = con.cursor()    
     
     c.execute('''
-    select a.id_cat from 
-    cat_art2 as a
-    order by id_title
-    ''')
+    select a.id_new_cat from 
+    wiki_category_text_after_reduction2 as a
+    where a.id in %s
+    ''' % str(id_title))
     print("Reading labels...")
     labels = c.fetchall()    
     con.close()
@@ -160,37 +160,52 @@ np.random.seed(12321)
 t0 = time.time()
 dane = reading_data(i ,typ)
 print("done in %fs" % (time.time() - t0))
+id_title = list(set([x[0] for x in dane]))
+id_title.sort()
+print(len(id_title))
 t0 = time.time()
 dane = transforming_data(dane)
+for aa in range(3,14):
+    print(aa)
+    dane2 = reading_data(aa ,typ)
+    id_title2 = list(set([x[0] for x in dane2]))
+    id_title2.sort()
+    id_title = id_title + id_title2
+    dane = sps.vstack([dane,transforming_data(dane2)])
+    print(len(id_title))
+    del dane2
+print("done in %fs" % (time.time() - t0))   
+t0 = time.time()
+labels = reading_labels(typ, i, tuple(id_title))
 print("done in %fs" % (time.time() - t0))
 print("n_samples: %d, n_features: %d" % dane.shape)
-t0 = time.time()
-km = clustering1(dane, true_k, b)
-print("done in %fs" % (time.time() - t0))
-t0 = time.time()
-labels = reading_labels(typ, i)
-print("done in %fs" % (time.time() - t0))
 
-
-#print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels, km.labels_))
-#print("Completeness: %0.3f" % metrics.completeness_score(labels, km.labels_))
-#print("V-measure: %0.3f" % metrics.v_measure_score(labels, km.labels_))
-#print("Adjusted Rand-Index: %.3f" % metrics.adjusted_rand_score(labels, km.labels_))
-#print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(dane, km.labels_, sample_size=10000))
-#print("Adjusted Mutual Information: %0.3f" % metrics.adjusted_mutual_info_score(labels, km.labels_)) 
-#print("Normalized Mutual Information: %0.3f" % metrics.normalized_mutual_info_score(labels, km.labels_))
-
-wyn = [
-metrics.homogeneity_score(labels, km.labels_),
-metrics.completeness_score(labels, km.labels_),
-metrics.v_measure_score(labels, km.labels_),
-metrics.adjusted_rand_score(labels, km.labels_),
-metrics.silhouette_score(dane, km.labels_, sample_size=10000),
-metrics.adjusted_mutual_info_score(labels, km.labels_),
-metrics.normalized_mutual_info_score(labels, km.labels_)
-]
-
-thefile = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wyn_%d_%s" % (i, b, typ)
-with open(thefile, 'w') as f:
-    for s in wyn:
-        f.write(str(s) + '\n')
+for b in [5000, 10000, 35000, 70000]:
+    print("*******" + str(b) + "*******")
+    t0 = time.time()
+    km = clustering1(dane, true_k, b)
+    print("done in %fs" % (time.time() - t0))
+    
+    
+    #print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels, km.labels_))
+    #print("Completeness: %0.3f" % metrics.completeness_score(labels, km.labels_))
+    #print("V-measure: %0.3f" % metrics.v_measure_score(labels, km.labels_))
+    #print("Adjusted Rand-Index: %.3f" % metrics.adjusted_rand_score(labels, km.labels_))
+    #print("Silhouette Coefficient: %0.3f" % metrics.silhouette_score(dane, km.labels_, sample_size=10000))
+    #print("Adjusted Mutual Information: %0.3f" % metrics.adjusted_mutual_info_score(labels, km.labels_)) 
+    #print("Normalized Mutual Information: %0.3f" % metrics.normalized_mutual_info_score(labels, km.labels_))
+    
+    wyn = [
+    metrics.homogeneity_score(labels, km.labels_),
+    metrics.completeness_score(labels, km.labels_),
+    metrics.v_measure_score(labels, km.labels_),
+    metrics.adjusted_rand_score(labels, km.labels_),
+    metrics.silhouette_score(dane, km.labels_, sample_size=10000),
+    metrics.adjusted_mutual_info_score(labels, km.labels_),
+    metrics.normalized_mutual_info_score(labels, km.labels_)
+    ]
+    
+    thefile = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions2/czesc%d/wyn_%d_%s" % (i, b, typ)
+    with open(thefile, 'w') as f:
+        for s in wyn:
+            f.write(str(s) + '\n')

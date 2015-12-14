@@ -1309,12 +1309,49 @@ Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazó
 
 Aby podzielić zbiór słów na skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od siebie i zastosowanie algorytmu aglomeracyjnego. Jednakowoż wiąże się to z dużą złożonością pamięciową i obliczeniową, stąd też nie został wykorzystany w niniejszej pracy. Inny pomysł polega na przyłączaniu do skupienia słów dopóty, dopóki średnia odległość w zbiorze nie przekroczy zadanej liczby. Wstępne testy na losowej próbce tysiąca słów wykazały, że jakość takiego podziału jest słaba, a czas obliczeń względnie długi.
 
-Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}.
+\emph{\textbf{Stemming.}}
+Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta}, które charakteryzuje podzbiór. Będziemy je nazywać słowem-reprezentantem lub po prostu \emph{reprezentantem}. W ten sposób do odpowiedniego skupienia możemy odnosić się poprzez jego reprezentanta.
 
-W ten sposób pogrupowano $733\ 828$ słów w $186 942$ skupienia, co stanowi ok. $27\%$ wszystkich słów.
+\begin{table}[!h]
+\centering
+\begin{tabular}{|rl|rr|}
+  \hline
+ & Język & Liczba słów & Procent ogółu\\ 
+  \hline
+1 & polski & 677 444 & 24.2 \\ 
+  2 & angielski & 41 087 & 1.5 \\ 
+  3 & niemiecki & 21 117 & 0.8 \\ 
+  4 & francuski & 20 438 & 0.7 \\ \hline
+  5 & ogółem & 733 828 & 27.1 \\ 
+   \hline
+\end{tabular}
+\caption{Liczba słów na których zastosowano \emph{stemming} w poszczególnych językach}.
+\label{tab:002}
+\end{table}
+
+Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. W ten sposób pogrupowano $733\ 828$ słów w $186\ 942$ skupienia, co stanowi ok. $27\%$ wszystkich słów. Ponieważ część słów stanowią wyrazy obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}).
+
+[TO DO !!]Przykładowe skupienia prezentuje tabela~ref{tab:003}.
 
 
 
+\textbf{Podział przy użyciu metryk.}
+Tak zaproponowany podział słów na skupienia wykorzystuje jedynie ok. $27\%$ zbioru wszystkich wyrazów. Co więcej wiele z podzbiorów jest zaledwie kilkuelementowa (p. rys/tabela~ref{...}). Stąd można zastosować następujące kroki, które po pierwsze zredukują bardziej liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Kroki te są następujące[PLIK 14]:
+\begin{enumerate}
+\item\label{p:001} Dołączenie do skupień słów jeszcze niepogrupowanych.
+\item\label{p:002} Dołączenie do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
+\item Zastosowanie najpierw kroku~\ref{p:001}, a następnie kroku~\ref{p:002}.
+\end{enumerate}
+
+Omówimy teraz bliżej na czym polegają powyższe kroki.
+
+\textbf{Krok 1.} W kroku tym chcemy użyć większej liczby dostępnych słów. Dzięki temu zwiększą się liczności występowania grup słów w tekście, co być może polepszy jakość podziału artykułów na skupienia. Krok ten jednak nie zmieni liczby skupień. 
+
+Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy to pierwsze w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
+
+[NAPISAĆ PSEUDOKOD???] 
+
+\textbf{Krok 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczby skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
 
 %-----------Koniec części zasadniczej-----------
 

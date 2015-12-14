@@ -1303,7 +1303,7 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa (p. rys.~\ref{
 
 \section{Utworzenie skupień ,,podobnych'' słów / Jakiś mądry tytuł}
 
-Po wstępnej obróbce danych dostajemy $2\ 804\ 943$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 804\ 943$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
+Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
 
 Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Podobieństwo słów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
 
@@ -1318,25 +1318,80 @@ Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo 
   \hline
  & Język & Liczba słów & Procent ogółu\\ 
   \hline
-1 & polski & 677 444 & 24.2 \\ 
+1 & polski & 664 315 & 23.7 \\ 
   2 & angielski & 41 087 & 1.5 \\ 
   3 & niemiecki & 21 117 & 0.8 \\ 
   4 & francuski & 20 438 & 0.7 \\ \hline
-  5 & ogółem & 733 828 & 27.1 \\ 
+  5 & ogółem & 746 942 & 26.6 \\ 
    \hline
 \end{tabular}
 \caption{Liczba słów na których zastosowano \emph{stemming} w poszczególnych językach}.
 \label{tab:002}
 \end{table}
 
-Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. W ten sposób pogrupowano $733\ 828$ słów w $186\ 942$ skupienia, co stanowi ok. $27\%$ wszystkich słów. Ponieważ część słów stanowią wyrazy obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}).
+Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. W ten sposób pogrupowano $746\ 942$ słów w $186\ 958$ skupienia, co stanowi ok. $27\%$ wszystkich słów. Ponieważ część słów stanowią wyrazy obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}). Przykładowe skupienia prezentuje tabela~\ref{tab:003}. Słowa w podzbiorach są podobne tematycznie, do skupienia o reprezentancie \verb|główny| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny.
 
-[TO DO !!]Przykładowe skupienia prezentuje tabela~ref{tab:003}.
-
-
+[TO DO. ZMIENIC TE TABELE, TAK ZEBY BYLA SZERSZA NIZ DLUZSZA, P. RYCIACZEK STR. 70-72]
+\begin{table}[!h]
+\centering
+\begin{tabular}{|lllllllll|}
+  \hline
+czas & główny & miał & nazwa & nr & osoba & udział & wieś & zostać \\ 
+  \hline \hline
+czasie & głównie & miał & nazwa & nr & osób & udział & wsi & został \\ 
+  czasach & główne & miały & nazwę & nry & osoby & udziału & wsie & została \\ 
+  czas & główną & miałem & nazwy & nru & osoba & udziałem & wieś & zostały \\ 
+  czasom & głównych & miału & nazwą & nrem & osobą & udziale & wsią & zostało \\ 
+   & głównego & miałach & nazwie & nrze & osobę & udziały & wsiach & zostanie \\ 
+   & głównym & miale & nazw & nrów & osobom & udziałów & wsiami & zostali \\ 
+   & główna & miałów & nazwami &  & osobie & udziałami & wsiom & zostać \\ 
+   & głównymi & miałami & nazwach &  & osobami & udziałach &  & zostaną \\ 
+   & główny & miałom & nazwom &  & osobach & udziałom &  & zostania \\ 
+   & głównej &  &  &  & osobo &  &  & zostałby \\ 
+   & główni &  &  &  &  &  &  & zostałaby \\ 
+   & głównemu &  &  &  &  &  &  & zostałyby \\ 
+   & niegłówny &  &  &  &  &  &  & zostaniu \\ 
+   & niegłównym &  &  &  &  &  &  & zostałem \\ 
+   & niegłówne &  &  &  &  &  &  & zostałoby \\ 
+   & niegłównych &  &  &  &  &  &  & zostaniesz \\ 
+   & niegłówną &  &  &  &  &  &  & zostanę \\ 
+   &  &  &  &  &  &  &  & zostaliby \\ 
+   &  &  &  &  &  &  &  & zostaliśmy \\ 
+   &  &  &  &  &  &  &  & zostaniemy \\ 
+   &  &  &  &  &  &  &  & zostaniem \\ 
+   &  &  &  &  &  &  &  & zostałam \\ 
+   &  &  &  &  &  &  &  & zostałeś \\ 
+   &  &  &  &  &  &  &  & zostaliście \\ 
+   &  &  &  &  &  &  &  & zostaniecie \\ 
+   &  &  &  &  &  &  &  & zostałaś \\ 
+   &  &  &  &  &  &  &  & zostałbym \\ 
+   &  &  &  &  &  &  &  & zostalibyśmy \\ 
+   &  &  &  &  &  &  &  & zostałbyś \\ 
+   &  &  &  &  &  &  &  & zostano \\ 
+   &  &  &  &  &  &  &  & zostałabym \\ \hline
+\end{tabular}
+\caption{Przykładowe skupienia uzyskane przy pomocy \emph{stemmingu}.}
+\label{tab:003}
+\end{table}
 
 \textbf{Podział przy użyciu metryk.}
-Tak zaproponowany podział słów na skupienia wykorzystuje jedynie ok. $27\%$ zbioru wszystkich wyrazów. Co więcej wiele z podzbiorów jest zaledwie kilkuelementowa (p. rys/tabela~ref{...}). Stąd można zastosować następujące kroki, które po pierwsze zredukują bardziej liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Kroki te są następujące[PLIK 14]:
+Tak zaproponowany podział słów na skupienia wykorzystuje jedynie ok. $27\%$ zbioru wszystkich wyrazów. Co więcej większość z podzbiorów jest zaledwie kilkuelementowa (p. tabela~\ref{tab:004}). 
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|r|r|r|r|r|r|}
+  \hline
+Min. & 1st Qu. & Median & Mean & 3rd Qu. & Max. \\ 
+  \hline
+1 & 1 & 2 & 4 & 5 & 89 \\ 
+   \hline
+\end{tabular}
+\caption{Rozkład liczby słów w skupieniu.}
+\label{tab:004}
+\end{table}
+
+
+Stąd można zastosować następujące kroki, które po pierwsze zredukują bardziej liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Kroki te są następujące[PLIK 14]:
 \begin{enumerate}
 \item\label{p:001} Dołączenie do skupień słów jeszcze niepogrupowanych.
 \item\label{p:002} Dołączenie do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
@@ -1349,9 +1404,11 @@ Omówimy teraz bliżej na czym polegają powyższe kroki.
 
 Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy to pierwsze w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
 
-[NAPISAĆ PSEUDOKOD???] 
+[TO DO. NAPISAĆ PSEUDOKOD!!] 
 
 \textbf{Krok 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczby skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
+
+[TO DO. NAPISAĆ PSEUDOKOD!!] 
 
 %-----------Koniec części zasadniczej-----------
 

@@ -66,7 +66,7 @@ aa <- xtable::xtable(skupienia3)
 print(aa,  include.rownames = FALSE)
 
 
-#####
+#################
 liczn <- dbGetQuery(con, "select count(1) from wiki_hunspell_clust2 group by id_stem_word")
 
 liczn <- summary(liczn$`count(1)`)
@@ -75,7 +75,26 @@ liczn2 <- data.frame(t(matrix(liczn)))
 names(liczn2) <- names(liczn)
 xtable::xtable(liczn2, digits = 0)
 
-
 dbDisconnect(con)
+
+##################
+skupienia <- data.frame(zbior = c("clust", "clust_lcs", "clust_dl", "clust_jaccard", "clust_qgram", 
+                     "clust_red_lcs", "clust_red_dl", "clust_red_jaccard", "clust_red_qgram", 
+                     "clust_lcs_red_lcs", "clust_dl_red_dl", "clust_jaccard_red_jaccard", "clust_qgram_red_qgram"),
+           liczba_skupien = c(
+             rep("186 958", 5),
+             rep("43 919", 4),
+             "65 350", "66 378", "69 570", "62 434"
+           ),
+           liczba_slow = c(
+             "746 957", "1 080 260", "1 080 260", "1 070 750", "1 070 750",
+             "743 053", "743 053", "739 338", "739 338",
+             "1 037 393", "1 060 474", "1 063 131", "1 063 131"
+           )
+           )
+
+xtable::xtable(skupienia)
+
+
 
 

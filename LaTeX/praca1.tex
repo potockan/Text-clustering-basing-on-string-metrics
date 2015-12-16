@@ -1391,24 +1391,98 @@ Min. & 1st Qu. & Median & Mean & 3rd Qu. & Max. \\
 \end{table}
 
 
-Stąd można zastosować następujące kroki, które po pierwsze zredukują bardziej liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Kroki te są następujące[PLIK 14]:
+Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują bardziej liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Algorytmy te polegają na [PLIK 14]:
 \begin{enumerate}
-\item\label{p:001} Dołączenie do skupień słów jeszcze niepogrupowanych.
-\item\label{p:002} Dołączenie do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
-\item Zastosowanie najpierw kroku~\ref{p:001}, a następnie kroku~\ref{p:002}.
+\item\label{p:001} Dołączeniu do skupień słów jeszcze niepogrupowanych.
+\item\label{p:002} Dołączeniu do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
+\item Zastosowaniu najpierw punktu~\ref{p:001}, a następnie punktu~\ref{p:002}.
 \end{enumerate}
 
-Omówimy teraz bliżej na czym polegają powyższe kroki.
+Omówimy teraz bliżej na czym polegają powyższe algorytmy.
 
-\textbf{Krok 1.} W kroku tym chcemy użyć większej liczby dostępnych słów. Dzięki temu zwiększą się liczności występowania grup słów w tekście, co być może polepszy jakość podziału artykułów na skupienia. Krok ten jednak nie zmieni liczby skupień. 
+\textbf{Algorytm 1.} W kroku tym chcemy użyć większej liczby dostępnych słów. Dzięki temu zwiększą się liczności występowania grup słów w tekście, co być może polepszy jakość podziału artykułów na skupienia. Algorytm ten jednak nie zmieni liczby skupień. 
 
-Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy to pierwsze w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
+Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej (p.~\ref{alg:004}). Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
 
-[TO DO. NAPISAĆ PSEUDOKOD!!] 
+\begin{algorithm}[h!]
+\begin{algorithmic}[1]
+		\State given: data set of representants $R$, data set of words to categorize $W$, metric $d$
+        \For {$w \in W $}
+            \State $C(w) = \arg \min\limits_{i:\ r_i \in R} d(w,r_i)$
+            \If {$\textrm{length}(C(w)) > 1$}
+            	\State $C(w) = C(w)[1]$
+            \EndIf
+       \EndFor
+\end{algorithmic}
+\caption{Algorytm przydzielający niepogrupowane słowo do skupienia.}\label{alg:004}
+\end{algorithm}
 
-\textbf{Krok 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczby skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
+\textbf{Algorytm 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczby skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
 
-[TO DO. NAPISAĆ PSEUDOKOD!!] 
+Schemat działania jest następujący (p. algorytm~\ref{alg:005}): sprawdzamy, jakie są liczności wszystkich skupień. Jeśli liczność skupienia jest większa od pięciu, to do takiego podzbioru będziemy dodawać inne grupy słów. W przeciwnym przypadku, podzbiór przyłączamy do skupienia, które miało więcej niż pięć elementów. Te pierwsze podzbiory nazwijmy dużymi skupieniami, natomiast te drugie -- małymi. Mając tak podzielone skupienia, bierzemy ich reprezentantów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w algorytmie~\ref{alg:004}: liczymy odległość reprezentanta małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego reprezentanta było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
+
+\begin{algorithm}[h!]
+\begin{algorithmic}[1]
+		\State given: data set of representants $R$, vector of clusters' size $\mathbf{s}$, metric $d$
+		\State $R_m = \emptyset, R_d = \emptyset$
+		\For {$r \in R$}
+			\If {$s_r \leq 5$}
+				\State $R_m = R_m \cup r$
+			\Else
+				\State $R_d = R_d \cup r$
+			\EndIf
+		\EndFor
+        \For {$w \in C_m $}
+        	\If {$|w| < 4$}
+        		\State continue / next
+        	\EndIf
+            \State $C(w) = \arg\min\limits_{i:\ r_i \in R_d} d(w,r_i)$
+            \If {$\textrm{length}(C(w)) > 1$}
+            	\State $C(w) = C(w)[1]$
+            \EndIf
+       \EndFor
+\end{algorithmic}
+\caption{Algorytm łączący małe i duże skupienia.}\label{alg:005}
+\end{algorithm}
+
+\textbf{Algorytm 3.} Krok trzeci polega na wykonaniu najpierw algorytmu pierwszego, a następnie drugiego.
+
+\textbf{Wybór odległości.} Mając trzy powyższe algorytmy, możemy przystąpić do dalszej obróbki zbioru słów. Zanim to jednak nastąpi należy wybrać odległości, dzięki którym będzie to możliwe. W rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow} przedstawiono pięć odległości opartych na operacjach edycyjnych, trzy odległości oparte na $q$-gramach oraz dwie miary heurystyczne. 
+
+Odległość Hamminga odrzucamy, gdyż można ją zastosować jedynie na napisach o tej samej długości. Odległości najdłuższego wspólnego podnapisu, Levenshteina, optymalnego dopasowania napisów i Damerau-Levenshteina różnią się jedynie zbiorem bazowych operacji edycyjnych, często dając tę samą odległość. Stąd postanowiliśmy użyć dwóch ,,skrajnych'' odległości, tj. takich, które pozwalają na najmniejszą i największą liczbę bazowych operacji edycyjnych, tj. odległość najdłuższego wspólnego podnapisu i Damerau-Levenshteina. 
+
+Z odległości opartych na $q$-gramach wybraliśmy odległość Jaccarda oraz $q$-gramową jako najbardziej reprezentatywne. W obu przypadkach $q=4$. Dzięki takiemu podejściu unikniemy przetwarzania słów o długości mniejszej niż cztery znaki.
+
+Miary heurystyczne pominęliśmy.
+
+\textbf{Otrzymane zbiory.} Na zbiorze skupień otrzymanym po wykonaniu \emph{stemmingu} zastosowano trzy powyższe algorytmy przy użyciu każdej z czterech odległości, dostając łącznie $13$ różnych zbiorów skupień. Zbiory te oznaczmy jako \emph{clust\_X} gdzie X jest przyrostkiem oznaczającym algorytm i zastosowaną odległość. W przypadku, gdy dołączaliśmy słowa do istniejących skupień (tj. zastosowany był algorytm~\ref{alg:004}) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jaccard} lub \emph{qgram}, np. \emph{clust\_lcs}. Jeśli użyliśmy algorytmu~\ref{alg:005}, zmniejszający liczbę skupień, to dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to łączymy je w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Zbiór otrzymany po wykonaniu \emph{stemmingu} oznaczamy po prostu \emph{clust}. 
+
+Statystyki dot. zbiorów z tabeli~\ref{tab:005}.
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|rl|rr|}
+  \hline
+ & Zbiór & Liczba skupień & Liczba słów\\ 
+  \hline
+1 & clust & 186 958 & 746 957 \\ 
+  2 & clust\_lcs & 186 958 & 1 080 260 \\ 
+  3 & clust\_dl & 186 958 & 1 080 260 \\ 
+  4 & clust\_jaccard & 186 958 & 1 070 750 \\ 
+  5 & clust\_qgram & 186 958 & 1 070 750 \\ \hline
+  6 & clust\_red\_lcs & 43 919 & 743 053 \\ 
+  7 & clust\_red\_dl & 43 919 & 743 053 \\ 
+  8 & clust\_red\_jaccard & 43 919 & 739 338 \\ 
+  9 & clust\_red\_qgram & 43 919 & 739 338 \\ \hline
+  10 & clust\_lcs\_red\_lcs & 65 350 & 1 037 393 \\ 
+  11 & clust\_dl\_red\_dl & 66 378 & 1 060 474 \\ 
+  12 & clust\_jaccard\_red\_jaccard & 69 570 & 1 063 131 \\ 
+  13 & clust\_qgram\_red\_qgram & 62 434 & 1 063 131 \\ 
+   \hline
+\end{tabular}
+\caption{Zbiory skupień wraz z ich liczbą oraz z liczbą słów w skupieniu.}
+\label{tab:005}
+\end{table}
 
 %-----------Koniec części zasadniczej-----------
 

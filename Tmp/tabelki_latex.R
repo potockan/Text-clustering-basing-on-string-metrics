@@ -22,6 +22,8 @@ xtable::xtable(aa)
 # takich wykresow mozna zrobic od 3 do 6
 library(RSQLite)
 library(tidyr)
+library(stringi)
+library(dplyr)
 
 con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
@@ -50,7 +52,7 @@ l <- max(bb)
 
 cc <- list()
 for(i in 1:(length(bb)-1)){
-  cc[[i]] <- c(skupienia2[(bb[i]+1):bb[i+1],i], rep(NA, 31))[1:31]
+  cc[[i]] <- c(skupienia2[(bb[i]+1):bb[i+1],i])#, rep(NA, 31))[1:31]
   
 }
 
@@ -65,6 +67,11 @@ for(i in 1:ncol(skupienia3)){
 aa <- xtable::xtable(skupienia3)
 print(aa,  include.rownames = FALSE)
 
+
+skupienia4 <- lapply(cc, stri_flatten, collapse = ", ")
+skupienia4 <- data.frame(reprezentant = names(skupienia2), slowa = matrix(skupienia4))
+aa <- xtable::xtable(skupienia4)
+print(aa,  include.rownames = FALSE)
 
 #################
 liczn <- dbGetQuery(con, "select count(1) from wiki_hunspell_clust2 group by id_stem_word")

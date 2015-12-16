@@ -1297,7 +1297,7 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa (p. rys.~\ref{
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=350pt, height=200pt]{plot3.pdf}\\
-  \caption{Wykres skrzynkowy długości słów.}\label{plot:003}
+  \caption{TO DO : ZMIEN TEN WYKRES NA HISOGRAM. Wykres skrzynkowy długości słów.}\label{plot:003}
 \end{figure}
 
 
@@ -1307,10 +1307,10 @@ Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z czego 
 
 Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Podobieństwo słów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
 
-Aby podzielić zbiór słów na skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od siebie i zastosowanie algorytmu aglomeracyjnego. Jednakowoż wiąże się to z dużą złożonością pamięciową i obliczeniową, stąd też nie został wykorzystany w niniejszej pracy. Inny pomysł polega na przyłączaniu do skupienia słów dopóty, dopóki średnia odległość w zbiorze nie przekroczy zadanej liczby. Wstępne testy na losowej próbce tysiąca słów wykazały, że jakość takiego podziału jest słaba, a czas obliczeń względnie długi.
+Aby podzielić zbiór słów na skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od siebie i zastosowanie algorytmu aglomeracyjnego. Jednakowoż wiąże się to z dużą złożonością pamięciową i obliczeniową, stąd też podejście takie nie zostało wykorzystane w niniejszej pracy. Inny pomysł polega na przyłączaniu do skupienia słów dopóty, dopóki średnia odległość w zbiorze nie przekroczy zadanej liczby. Wstępne testy na losowej próbce tysiąca słów wykazały, że jakość takiego podziału jest słaba, a czas obliczeń względnie długi.
 
 \emph{\textbf{Stemming.}}
-Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta}, które charakteryzuje podzbiór. Będziemy je nazywać słowem-reprezentantem lub po prostu \emph{reprezentantem}. W ten sposób do odpowiedniego skupienia możemy odnosić się poprzez jego reprezentanta.
+Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta}, które jednoznacznie charakteryzuje podzbiór. Będziemy je nazywać słowem-reprezentantem lub po prostu \emph{reprezentantem}. W ten sposób do odpowiedniego skupienia możemy odnosić się poprzez jego reprezentanta.
 
 \begin{table}[!h]
 \centering
@@ -1329,46 +1329,31 @@ Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo 
 \label{tab:002}
 \end{table}
 
-Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. W ten sposób pogrupowano $746\ 942$ słów w $186\ 958$ skupienia, co stanowi ok. $27\%$ wszystkich słów. Ponieważ część słów stanowią wyrazy obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}). Przykładowe skupienia prezentuje tabela~\ref{tab:003}. Słowa w podzbiorach są podobne tematycznie, do skupienia o reprezentancie \verb|główny| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny.
+Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. W ten sposób grupujemy $746\ 942$ słów, co stanowi ok. $27\%$ wszystkich słów, w $186\ 958$ skupienia. Ponieważ część wyrazów stanowią słowa obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}). Przykładowe skupienia prezentuje tabela~\ref{tab:003}. Warto zauważyć, że słowa w podzbiorach są podobne tematycznie, choć do skupienia o reprezentancie \verb|główny| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny.
 
-[TO DO. ZMIENIC TE TABELE, TAK ZEBY BYLA SZERSZA NIZ DLUZSZA, P. RYCIACZEK STR. 70-72]
 \begin{table}[!h]
 \centering
-\begin{tabular}{|lllllllll|}
+\begin{tabular}{|l|l|}
   \hline
-czas & główny & miał & nazwa & nr & osoba & udział & wieś & zostać \\ 
-  \hline \hline
-czasie & głównie & miał & nazwa & nr & osób & udział & wsi & został \\ 
-  czasach & główne & miały & nazwę & nry & osoby & udziału & wsie & została \\ 
-  czas & główną & miałem & nazwy & nru & osoba & udziałem & wieś & zostały \\ 
-  czasom & głównych & miału & nazwą & nrem & osobą & udziale & wsią & zostało \\ 
-   & głównego & miałach & nazwie & nrze & osobę & udziały & wsiach & zostanie \\ 
-   & głównym & miale & nazw & nrów & osobom & udziałów & wsiami & zostali \\ 
-   & główna & miałów & nazwami &  & osobie & udziałami & wsiom & zostać \\ 
-   & głównymi & miałami & nazwach &  & osobami & udziałach &  & zostaną \\ 
-   & główny & miałom & nazwom &  & osobach & udziałom &  & zostania \\ 
-   & głównej &  &  &  & osobo &  &  & zostałby \\ 
-   & główni &  &  &  &  &  &  & zostałaby \\ 
-   & głównemu &  &  &  &  &  &  & zostałyby \\ 
-   & niegłówny &  &  &  &  &  &  & zostaniu \\ 
-   & niegłównym &  &  &  &  &  &  & zostałem \\ 
-   & niegłówne &  &  &  &  &  &  & zostałoby \\ 
-   & niegłównych &  &  &  &  &  &  & zostaniesz \\ 
-   & niegłówną &  &  &  &  &  &  & zostanę \\ 
-   &  &  &  &  &  &  &  & zostaliby \\ 
-   &  &  &  &  &  &  &  & zostaliśmy \\ 
-   &  &  &  &  &  &  &  & zostaniemy \\ 
-   &  &  &  &  &  &  &  & zostaniem \\ 
-   &  &  &  &  &  &  &  & zostałam \\ 
-   &  &  &  &  &  &  &  & zostałeś \\ 
-   &  &  &  &  &  &  &  & zostaliście \\ 
-   &  &  &  &  &  &  &  & zostaniecie \\ 
-   &  &  &  &  &  &  &  & zostałaś \\ 
-   &  &  &  &  &  &  &  & zostałbym \\ 
-   &  &  &  &  &  &  &  & zostalibyśmy \\ 
-   &  &  &  &  &  &  &  & zostałbyś \\ 
-   &  &  &  &  &  &  &  & zostano \\ 
-   &  &  &  &  &  &  &  & zostałabym \\ \hline
+Reprezentant & Słowa w skupieniu \\ \hline
+  \hline
+czas & czasie, czasach, czas, czasom \\ \hline
+  główny & głównie, główne, główną, głównych, głównego, głównym, główna, głównymi, \\
+& główny, głównej, główni, głównemu, niegłówny, niegłównym, niegłówne, \\
+& niegłównych, niegłówną \\ \hline
+  miał & miał, miały, miałem, miału, miałach, miale, miałów, miałami, miałom \\ \hline
+  nazwa & nazwa, nazwę, nazwy, nazwą, nazwie, nazw, nazwami, nazwach, nazwom \\ \hline
+  nr & nr, nry, nru, nrem, nrze, nrów \\ \hline
+  osoba & osób, osoby, osoba, osobą, osobę, osobom, osobie, osobami, osobach, osobo \\ \hline
+  udział & udział, udziału, udziałem, udziale, udziały, udziałów, udziałami, udziałach, \\
+& udziałom \\ \hline
+  wieś & wsi, wsie, wieś, wsią, wsiach, wsiami, wsiom \\ \hline
+  zostać & został, została, zostały, zostało, zostanie, zostali, zostać, zostaną, zostania, \\
+& zostałby, zostałaby, zostałyby, zostaniu, zostałem, zostałoby, zostaniesz,\\
+& zostanę, zostaliby, zostaliśmy, zostaniemy, zostaniem, zostałam, zostałeś, \\ 
+& zostaliście, zostaniecie, zostałaś, zostałbym, zostalibyśmy, zostałbyś, \\
+& zostano, zostałabym \\ 
+   \hline
 \end{tabular}
 \caption{Przykładowe skupienia uzyskane przy pomocy \emph{stemmingu}.}
 \label{tab:003}
@@ -1391,18 +1376,18 @@ Min. & 1st Qu. & Median & Mean & 3rd Qu. & Max. \\
 \end{table}
 
 
-Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują bardziej liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Algorytmy te polegają na [PLIK 14]:
+Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Procedury te polegają na [PLIK 14]:
 \begin{enumerate}
 \item\label{p:001} Dołączeniu do skupień słów jeszcze niepogrupowanych.
 \item\label{p:002} Dołączeniu do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
 \item Zastosowaniu najpierw punktu~\ref{p:001}, a następnie punktu~\ref{p:002}.
 \end{enumerate}
 
-Omówimy teraz bliżej na czym polegają powyższe algorytmy.
+Omówimy teraz bliżej na czym polegają powyższe kroki.
 
-\textbf{Algorytm 1.} W kroku tym chcemy użyć większej liczby dostępnych słów. Dzięki temu zwiększą się liczności występowania grup słów w tekście, co być może polepszy jakość podziału artykułów na skupienia. Algorytm ten jednak nie zmieni liczby skupień. 
+\textbf{Procedura 1.} W kroku tym chcemy użyć większej liczby dostępnych słów. Dzięki temu zwiększą się liczności występowania grup słów w tekście, co być może polepszy jakość podziału artykułów na skupienia. Algorytm ten jednak nie zmieni liczby skupień. 
 
-Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej (p.~\ref{alg:004}). Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
+Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej (p. algorytm~\ref{alg:004}). Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszy w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
@@ -1417,9 +1402,7 @@ Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadne
 \caption{Algorytm przydzielający niepogrupowane słowo do skupienia.}\label{alg:004}
 \end{algorithm}
 
-\textbf{Algorytm 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczby skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
-
-Schemat działania jest następujący (p. algorytm~\ref{alg:005}): sprawdzamy, jakie są liczności wszystkich skupień. Jeśli liczność skupienia jest większa od pięciu, to do takiego podzbioru będziemy dodawać inne grupy słów. W przeciwnym przypadku, podzbiór przyłączamy do skupienia, które miało więcej niż pięć elementów. Te pierwsze podzbiory nazwijmy dużymi skupieniami, natomiast te drugie -- małymi. Mając tak podzielone skupienia, bierzemy ich reprezentantów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w algorytmie~\ref{alg:004}: liczymy odległość reprezentanta małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego reprezentanta było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
+\textbf{Procedura 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczba skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
@@ -1445,42 +1428,49 @@ Schemat działania jest następujący (p. algorytm~\ref{alg:005}): sprawdzamy, j
 \caption{Algorytm łączący małe i duże skupienia.}\label{alg:005}
 \end{algorithm}
 
-\textbf{Algorytm 3.} Krok trzeci polega na wykonaniu najpierw algorytmu pierwszego, a następnie drugiego.
+Schemat działania jest następujący (p. algorytm~\ref{alg:005}): sprawdzamy, jakie są liczności wszystkich skupień. Jeśli liczność skupienia jest większa od pięciu, to taki podzbiór oznaczamy jako ,,duży''. Do takich skupień będziemy przyłączać mniejsze podgrupy. Jeśli liczność skupienia jest mniejsza lub równa $5$, to podzbiór oznaczamy jako ,,mały''. Takie skupienie będziemy przyłączać do podzbiorów ,,dużych''. Te pierwsze skupienia nazwijmy dużymi skupieniami, natomiast te drugie -- małymi. 
+
+Mając tak podzielone skupienia, weźmy reprezentantów małych podzbiorów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w algorytmie~\ref{alg:004}: liczymy odległość reprezentanta małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego reprezentanta było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
+
+
+
+\textbf{Procedura 3.} Krok trzeci polega na wykonaniu najpierw procedury pierwszej, a następnie drugiej.
 
 \textbf{Wybór odległości.} Mając trzy powyższe algorytmy, możemy przystąpić do dalszej obróbki zbioru słów. Zanim to jednak nastąpi należy wybrać odległości, dzięki którym będzie to możliwe. W rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow} przedstawiono pięć odległości opartych na operacjach edycyjnych, trzy odległości oparte na $q$-gramach oraz dwie miary heurystyczne. 
 
-Odległość Hamminga odrzucamy, gdyż można ją zastosować jedynie na napisach o tej samej długości. Odległości najdłuższego wspólnego podnapisu, Levenshteina, optymalnego dopasowania napisów i Damerau-Levenshteina różnią się jedynie zbiorem bazowych operacji edycyjnych, często dając tę samą odległość. Stąd postanowiliśmy użyć dwóch ,,skrajnych'' odległości, tj. takich, które pozwalają na najmniejszą i największą liczbę bazowych operacji edycyjnych, tj. odległość najdłuższego wspólnego podnapisu i Damerau-Levenshteina. 
+Odległość Hamminga odrzucamy, gdyż można ją zastosować jedynie na napisach o tej samej długości. Odległości najdłuższego wspólnego podnapisu, Levenshteina, optymalnego dopasowania napisów i Damerau-Levenshteina różnią się jedynie zbiorem bazowych operacji edycyjnych, często dając tę samą odległość. Stąd postanowiliśmy użyć dwóch ,,skrajnych'' odległości, tj. takich, które pozwalają na najmniejszą i największą liczbę bazowych operacji edycyjnych, czyli odległość najdłuższego wspólnego podnapisu i Damerau-Levenshteina. 
 
-Z odległości opartych na $q$-gramach wybraliśmy odległość Jaccarda oraz $q$-gramową jako najbardziej reprezentatywne. W obu przypadkach $q=4$. Dzięki takiemu podejściu unikniemy przetwarzania słów o długości mniejszej niż cztery znaki.
+Z odległości opartych na $q$-gramach wyselekcjonowaliśmy odległość Jaccarda oraz $q$-gramową jako najbardziej reprezentatywne. W obu przypadkach wybraliśmy $q=4$. Dzięki takiemu podejściu unikniemy przetwarzania słów o długości mniejszej niż cztery znaki.
 
 Miary heurystyczne pominęliśmy.
 
-\textbf{Otrzymane zbiory.} Na zbiorze skupień otrzymanym po wykonaniu \emph{stemmingu} zastosowano trzy powyższe algorytmy przy użyciu każdej z czterech odległości, dostając łącznie $13$ różnych zbiorów skupień. Zbiory te oznaczmy jako \emph{clust\_X} gdzie X jest przyrostkiem oznaczającym algorytm i zastosowaną odległość. W przypadku, gdy dołączaliśmy słowa do istniejących skupień (tj. zastosowany był algorytm~\ref{alg:004}) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jaccard} lub \emph{qgram}, np. \emph{clust\_lcs}. Jeśli użyliśmy algorytmu~\ref{alg:005}, zmniejszający liczbę skupień, to dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to łączymy je w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Zbiór otrzymany po wykonaniu \emph{stemmingu} oznaczamy po prostu \emph{clust}. 
+\textbf{Otrzymane zbiory.} Na zbiorze skupień otrzymanym po wykonaniu \emph{stemmingu} zastosowano trzy powyższe algorytmy przy użyciu każdej z czterech odległości, dostając łącznie $13$ różnych zbiorów skupień (wliczając w to zbiór, otrzymany ze \emph{stemmingu}). Zbiory te oznaczmy jako \emph{clust\_X} gdzie X jest przyrostkiem oznaczającym algorytm i zastosowaną odległość. W przypadku, gdy dołączaliśmy słowa do istniejących skupień (tj. zastosowany był algorytm~\ref{alg:004}) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jaccard} lub \emph{qgram}, np. \emph{clust\_lcs}. Jeśli użyliśmy algorytmu~\ref{alg:005}, zmniejszającego liczbę skupień, to dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to łączymy je w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Zbiór otrzymany po wykonaniu \emph{stemmingu} oznaczamy po prostu \emph{clust}. 
 
-Statystyki dot. zbiorów z tabeli~\ref{tab:005}.
+
+Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zbiorów zawiera tabela~\ref{tab:005}. Zbiory, na których zastosowano algorytm~\ref{alg:004} lub jedynie \emph{stemming} zawierają $186\ 958$ skupień, co dało redukcję ok. $93\%$ względem oryginalnego zbioru słów (tj. $2\ 806\ 765$). W skupieniach tych znajduje się od  prawie $750\ 000$ do ponad $1\ 000\ 000$ słów, czyli między $27\%$ a $38\%$ wszystkich wejściowych wyrazów. Druga grupa zbiorów, tj. taka, która jest wynikiem działania algorytmu~\ref{alg:005} zawiera dokładnie $43\ 919$ skupienia, co daje redukcję równą $98.4\%$. Słowa zawarte w tych skupieniach stanowią ok. $26\%$ wejściowego zbioru wyrazów. Trzecia grupa zbiorów, ma nieco mniejszą redukcję niż poprzednia i wynosi prawie $98\%$, zawierając jednocześnie ok. $38\%$ wszystkich wyrazów.
 
 \begin{table}[!h]
 \centering
-\begin{tabular}{|rl|rr|}
+\begin{tabular}{|rl|rr|rr|}
   \hline
- & Zbiór & Liczba skupień & Liczba słów\\ 
+ & Zbiór & Liczba skupień & Redukcja & Liczba słów & Procent \\ 
   \hline
-1 & clust & 186 958 & 746 957 \\ 
-  2 & clust\_lcs & 186 958 & 1 080 260 \\ 
-  3 & clust\_dl & 186 958 & 1 080 260 \\ 
-  4 & clust\_jaccard & 186 958 & 1 070 750 \\ 
-  5 & clust\_qgram & 186 958 & 1 070 750 \\ \hline
-  6 & clust\_red\_lcs & 43 919 & 743 053 \\ 
-  7 & clust\_red\_dl & 43 919 & 743 053 \\ 
-  8 & clust\_red\_jaccard & 43 919 & 739 338 \\ 
-  9 & clust\_red\_qgram & 43 919 & 739 338 \\ \hline
-  10 & clust\_lcs\_red\_lcs & 65 350 & 1 037 393 \\ 
-  11 & clust\_dl\_red\_dl & 66 378 & 1 060 474 \\ 
-  12 & clust\_jaccard\_red\_jaccard & 69 570 & 1 063 131 \\ 
-  13 & clust\_qgram\_red\_qgram & 62 434 & 1 063 131 \\ 
+1 & clust & 186 958 & 93.3\% & 746 957 & 27\% \\ 
+  2 & clust\_lcs & 186 958 & 93.3\% & 1 080 260 & 38\% \\ 
+  3 & clust\_dl & 186 958 & 93.3\% & 1 080 260 & 38\% \\ 
+  4 & clust\_jaccard & 186 958 & 93.3\% & 1 070 750 & 38\% \\ 
+  5 & clust\_qgram & 186 958 & 93.3\% & 1 070 750 & 38\% \\ \hline
+  6 & clust\_red\_lcs & 43 919 & 98.4\% & 743 053 & 26\% \\ 
+  7 & clust\_red\_dl & 43 919 & 98.4\% & 743 053 & 26\% \\ 
+  8 & clust\_red\_jaccard & 43 919 & 98.4\% & 739 338 & 26\% \\ 
+  9 & clust\_red\_qgram & 43 919 & 98.4\% & 739 338 & 26\% \\ \hline
+  10 & clust\_lcs\_red\_lcs & 65 350 & 97.7\% & 1 037 393 & 37\% \\ 
+  11 & clust\_dl\_red\_dl & 66 378 & 97.6\% & 1 060 474 & 38\% \\ 
+  12 & clust\_jaccard\_red\_jaccard & 69 570 & 97.5\% & 1 063 131 & 38\% \\ 
+  13 & clust\_qgram\_red\_qgram & 62 434 & 97.8\% & 1 063 131 & 38\% \\ 
    \hline
 \end{tabular}
-\caption{Zbiory skupień wraz z ich liczbą oraz z liczbą słów w skupieniu.}
+\caption{Zbiory skupień wraz z ich liczbą oraz liczbą słów w skupieniu. Redukcja oznacza procent zredukowania z wejściowego zbioru słów do liczby otrzymanych skupień. Ostatnia kolumna mówi ile procent wszystkich słów zbioru wejściowego znajduje się w skupieniu.}
 \label{tab:005}
 \end{table}
 

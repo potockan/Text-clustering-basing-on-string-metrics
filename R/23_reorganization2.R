@@ -22,7 +22,7 @@ wiki_word_clust3_freq <- function(typ){
                            id_stem_word INTEGER NOT NULL,
                            id_orig_stem_word INTEGER NOT NULL,
                            freq INTEGER NOT NULL,
-                           FOREIGN KEY (id_title) REFERENCES wiki_category_text_after_reduction(id),
+                           FOREIGN KEY (id_title) REFERENCES wiki_category_text_after_reduction2(id),
                            FOREIGN KEY (id_orig_stem_word) REFERENCES wiki_word(id)
   )", typ))
   

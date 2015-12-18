@@ -25,7 +25,7 @@ library(stringi)
 lapply(t, stri_flatten, collapse = " ")
 #for(i in 1:13)
   #cat(t[[i]], file = sprintf("/home/samba/potockan/mgr/czesc%d/skrypt1.sh", i))
-  cat(t[[i]], file = sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions4/czesc%d/skrypt1.sh", i))
+  cat(t[[i]], file = sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions3/czesc%d/skrypt1.sh", i))
 
 
 

@@ -68,7 +68,8 @@ def reading_data(i, typ):
     
     c.execute('''select 
     id_title, id_stem_word, freq 
-    from art_word_freq%s'''  % (typ))
+    from art_word_freq%s
+    '''  % (typ))
     #   order by id_title 
     
     data = c.fetchall()
@@ -99,7 +100,7 @@ def transforming_data(my_data):
 def clustering1(my_sparse_data, true_k, b):
     km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=b, max_no_improvement = None, max_iter = 20)
     km.fit(my_sparse_data)
-    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions4/czesc%d/wyniki_%d_%s.txt" % (i, b, typ), km.labels_, delimiter = ', ')
+    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions3/czesc%d/wyniki_%d_%s.txt" % (i, b, typ), km.labels_, delimiter = ', ')
     return(km)
     
 
@@ -162,18 +163,20 @@ dane = reading_data(i ,typ)
 print("done in %fs" % (time.time() - t0))
 id_title = list(set([x[0] for x in dane]))
 id_title.sort()
+#id_title = id_title[0:25000]
 print(len(id_title))
 t0 = time.time()
 dane = transforming_data(dane)
-#for aa in range(3,14):
-#    print(aa)
-#    dane2 = reading_data(aa ,typ)
-#    id_title2 = list(set([x[0] for x in dane2]))
-#    id_title2.sort()
-#    id_title = id_title + id_title2
-#    dane = sps.vstack([dane,transforming_data(dane2)])
-#    print(len(id_title))
-#    del dane2
+#dane = dane[0:25000,:]
+for aa in range(3,14):
+    print(aa)
+    dane2 = reading_data(aa ,typ)
+    id_title2 = list(set([x[0] for x in dane2]))
+    id_title2.sort()
+    id_title = id_title + id_title2
+    dane = sps.vstack([dane,transforming_data(dane2)])
+    print(len(id_title))
+    del dane2
 print("done in %fs" % (time.time() - t0))   
 t0 = time.time()
 labels = reading_labels(typ, i, tuple(id_title))
@@ -205,7 +208,7 @@ for b in [5000, 10000, 35000, 70000]:
     metrics.normalized_mutual_info_score(labels, km.labels_)
     ]
     
-    thefile = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions4/czesc%d/wyn_%d_%s" % (i, b, typ)
+    thefile = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions3/czesc%d/wyn_%d_%s" % (i, b, typ)
     with open(thefile, 'w') as f:
         for s in wyn:
             f.write(str(s) + '\n')

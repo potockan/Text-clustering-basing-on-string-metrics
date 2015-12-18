@@ -82,7 +82,7 @@ liczn2 <- data.frame(t(matrix(liczn)))
 names(liczn2) <- names(liczn)
 xtable::xtable(liczn2, digits = 0)
 
-dbDisconnect(con)
+
 
 ##################
 skupienia <- data.frame(zbior = c("clust", "clust_lcs", "clust_dl", "clust_jaccard", "clust_qgram", 
@@ -93,15 +93,29 @@ skupienia <- data.frame(zbior = c("clust", "clust_lcs", "clust_dl", "clust_jacca
              rep("43 919", 4),
              "65 350", "66 378", "69 570", "62 434"
            ),
+           redukcja = c(rep("6.6%", 5),
+                        rep("98.4%", 4),
+                        "97.7%", "97.6%", "97.5%", "97.8%"),
            liczba_slow = c(
              "746 957", "1 080 260", "1 080 260", "1 070 750", "1 070 750",
              "743 053", "743 053", "739 338", "739 338",
              "1 037 393", "1 060 474", "1 063 131", "1 063 131"
+           ),
+           procent_wszystkich = c(
+             "27%", "38%", "38%", "38%", "38%", 
+             "26%", "26%", "26%", "26%", 
+             "37%", "38%", "38%", "38%"
            )
            )
 
 xtable::xtable(skupienia)
 
+#################
+dbListTables(con)
 
+dbGetQuery(con, "select count(distinct id_category) from wiki_unique_category")
+dbGetQuery(con, "select count(distinct id_new) from wiki_category_after_reduction")
+dbGetQuery(con, "select count(distinct id_new) from wiki_category_after_reduction2")
 
+dbDisconnect(con)
 

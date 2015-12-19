@@ -820,7 +820,7 @@ T = W + B = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = k}\sum\limits_{C
 
 Mając tak sformułowany rozkład sumy $T$ widzimy, że zmieniając podział punktów na skupienia zmienia się zarówno suma $W$, jak i $B$. Można więc sformułować problem analizy skupień jako zadanie minimalizacji sumy $W$ lub, równoważnie, maksymalizacji sumy $B$. Maksymalizacja $B$ to po prostu maksymalizacja rozproszenia punktów z różnych podzbiorów, co jest równoznaczne z minimalizacją rozproszenia punktów z tego samego skupienia. Stąd, rozwiązaniem problemu analizy skupień jest dokonanie takiego podziału próby, aby zminimalizować sumę $W$. Ze względu na złożoność obliczeniową, niemożliwe jest bezpośrednie rozwiązanie tego problemu~\cite{Koronacki2005:statystyczne}.
 
-Przez $n_l$ oznaczmy liczność $l$-tego skupienia i niech $\mathbf{m}_l = \frac{1}{n_l} \sum\limits_{C(i) = k} \mathbf{x}_i$ oznacza wektorową średnią obserwacji z $l$-tego skupienia. Łatwo zauważyć, że~\cite{Koronacki2005:statystyczne}
+Przez $n_l$ oznaczmy liczność $l$-tego skupienia i niech $\mathbf{m}_l = \frac{1}{n_l} \sum\limits_{C(i) = l} \mathbf{x}_i$ oznacza wektorową średnią obserwacji z $l$-tego skupienia. Łatwo zauważyć, że~\cite{Koronacki2005:statystyczne}
 \begin{equation}
 \label{eq:013}
 W = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} n_l \norm{\mathbf{x}_i - \mathbf{m}_l}_2^2
@@ -833,6 +833,8 @@ W = \frac{1}{2}\sum\limits_{l=1}^{k}\sum\limits_{C(i) = l} n_l \norm{\mathbf{x}_
 \end{equation}
 
 Algorytmy, które rozwiązują problem minimalizacji sumy~\ref{eq:014}, znane są pod nazwą \emph{metody $k$-średnich}.
+
+Zauważmy, że wszystkie znane i stosowane wersje algorytmów $k$-średnich są zbieżne. W tym celu wystarczy, aby w każdej iteracji algorytmu suma $\widetilde{W}$ była zmniejszona. W przeciwnym przypadku algorytm zostaje zatrzymany. Warto zauważyć jednak, że rozwiązanie takie może nie prowadzić do rozwiązania optymalnego, tj. algorytm może zatrzymać działanie w minimum lokalnym wartości $\widetilde{W}$, zamiast zbiec do minimum globalnego. Stąd zaleca się wielokrotne stosowanie danego algorytmu z różnymi warunkami początkowymi~\cite{Koronacki2005:statystyczne}.
 
 \section{Algorytmy}
 
@@ -870,7 +872,7 @@ Mając daną funkcję kosztu $\widetilde{W} = \widetilde{W}(\mathbf{m}, \mathbf{
 \begin{equation}
 \mathbf{m}^{(t+1)}_l = \mathbf{m}_l^{(t)} + \gamma \sum\limits_{i=1}^{n} \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
 \end{equation}
-gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}[, a $t$ oznacza iterację algorytmu - PISAC TO??]~\cite{Bottou2012:sgdtricks}. Parametrem uczenia, które daje najlepsze rezultaty dla algorytmu $k$-średnich jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm \emph{wsadowego spadku gradientu}, w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
+gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}, a $t$ oznacza iterację algorytmu~\cite{Bottou2012:sgdtricks}. Parametrem uczenia, które daje najlepsze rezultaty dla algorytmu $k$-średnich jest $\frac{1}{n_{C(i)}}$. Stąd też algorytm \emph{wsadowego spadku gradientu}, w każdej iteracji algorytmu aktualizuje wektor $\mathbf{m}$ następująco~\cite{Bottou1995:convergenceproperties}:
 
 %Jeśli początkowa wartość zmiennej $\mathbf{m}^(0)$ jest dostatecznie blisko optimum i parametr $\gamma$ jest dobrze dobrany, to algorytm osiąga złożoność liniową.
 
@@ -966,21 +968,21 @@ Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obse
 
 
 
-Algorytm oparty na stochastycznym spadku gradientu (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest $t$ razy~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
+Algorytm oparty na stochastycznym spadku gradientu (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest do uzyskania zbieżności~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
 		\State given: $k$, data set $X$, iterations $t$
         \State initialize randomly $m_l, \ \forall l=1, ..., k$
         \State initialize $n_l = 0, \ \forall l=1, ..., k$
-        \For {$a = 1, \ldots, t $}
+        \Repeat
         	\State randomly pick one observation $\mathbf{x}_i$ from $X$
             %\For {$i = 1, \ldots, n$}
                 \State $C(i) = \arg \min\limits_{l} \norm{\mathbf{x}_i - \mathbf{m}_l }_2^2 $
                 \State $n_{C(i)} = n_{C(i)} + 1$
                 \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
             %\EndFor
-       \EndFor
+       \Until{convergence}
 \end{algorithmic}
 \caption{Algorytm SGD $k$-średnich}\label{alg:002}
 \end{algorithm}
@@ -992,7 +994,7 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
 		\State given: $k$, data set $X$, iterations $t$, mini-batch size $b$
         \State initialize randomly $m_l, \ \forall l=1, ..., k$
         \State initialize $n_l = 0, \ \forall l=1, ..., k$
-        \For {$a = 1, \ldots, t $}
+        \Repeat
         	%\State shuffle data set $X$
         	\State $B = b$ observations randomly picked from $X$
             \For {$i : \mathbf{x}_i \in B$}
@@ -1002,23 +1004,39 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
                 \State $n_{C(i)} = n_{C(i)} + 1$
                 \State $\mathbf{m}_{C(i)} = \mathbf{m}_{C(i)} + \frac{1}{n_{C(i)}}\norm{\mathbf{x}_i - \mathbf{m}_{C(i)}}_2$
             \EndFor
-       \EndFor
+       \Until{convergence}
 \end{algorithmic}
 \caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
 \end{algorithm}
 
 [CZY PODAWAC TUTAJ PRZYKLAD + RYSUNKI Z \cite{Sculley2010:webkmeans} O TYM ZE MINI-BATCH JEST TAKI SUPER W POR. Z INNYMI??]
 
+\section{Metody hierarchiczne}
+
+Metody hierarchiczne to zbiór algorytmów analizy skupień, które nie wymagają znajomości liczby skupień. W niniejszym podrozdziale przedstawimy pokrótce schemat ich działania w dowolnej przestrzeni obserwacji.
+
+Powyżej przedstawiliśmy algorytm $k$-średnich, dzielący zbiór z przestrzeni euklidesowej na podzbiory punktów podobnych do siebie, tj. mieliśmy do czynienia ze zmiennymi liczbowym. Problem ten można uogólnić dla obserwacji z dowolnej przestrzeni. Po pierwsze odległość euklidesową z równania~\ref{eq:014} można zamienić na dowolną funkcję odmienności $d$ między obserwacjami z danej przestrzeni. Po drugie trzeba zastąpić średnie skupień $\mathbf{m}_l, l=1,\ldots,k$ inną wartością wektorową, która miałaby sens w przypadku np. atrybutów jakościowych. Wartość ta to punkt ze zbioru obserwacji, który minimalizuje sumę odległości między nim samym, a pozostałymi punktami ze skupienia:
+\begin{equation}
+\mathbf{m}_l = \min\limits_{\mathbf{y} \in X} \sum\limits_{i = C(l)} d(\mathbf{x}_i, \mathbf{y}),
+\end{equation}
+gdzie $X$ to zbiór obserwacji.
+
+Przejdźmy do metod hierarchicznych analizy skupień. Jak wspomniano wcześniej, nie wymagają one specyfikowania liczby podzbiorów. Zamiast tego trzeba zdefiniować miarę odmienności (rozłącznych) zbiorów obserwacji, opartą na odmienności pojedynczych punktów w tych zbiorach. Jak sugeruje nazwa, metody te konstruują hierarchiczną reprezentację, w której skupienie na każdym poziomie hierarchii powstaje poprzez połączenie skupień z najbliższego niższego poziomu. Na najniższym poziomie znajdują się skupienia złożone z pojedynczych obserwacji. Najwyższy poziom to skupienie zawierające wszystkie obserwacje ze zbioru~\cite{Hastie2009:elements}.
+
+Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielące. [TO DO !]
+
+[TUTAJ CZY WCZESNIEJ??]
+Opis metody hierarchicznej, z wyróżnieniem odmienności najbliższego, najdalszego sąsiada oraz średniej.
 
 \section{Metody oceny jakości podziału na skupienia}
 
 [TUTUAJ KORZYSTALAM MOCNO Z DOKUMENTACJI SCIKIT: \url{http://scikit-learn.org/stable/modules/clustering.html#clustering-evaluation}  ZAWRZEC TO GDZIES??]
 
-Ocena skuteczności działania algorytmów analizy skupień nie należy do zadań tak prostych jak np. ocena modelu klasyfikacji pod nadzorem. W szczególności żadna metoda ocena nie powinna brać pod uwagę wartości etykiety skupienia, ale powinna sprawdzać, czy zbiór danych jest dobrze podzielony, tzn. czy obserwacje w poszczególnych skupieniach są do siebie ,,podobne'', a obserwacje z różnych skupień -- ,,niepodobne'', zgodnie z przyjętą metryką podobieństwa. W niniejszych podrozdziale przedstawimy kilka miar oceny jakości podziału na skupienia.
+Dokonawszy podziału zbioru na skupienia, należy ocenić jakość zastosowanego algorytmu. Ocena skuteczności działania algorytmów analizy skupień nie należy do zadań tak prostych jak np. ocena modelu klasyfikacji pod nadzorem. W szczególności żadna metoda ocena nie powinna brać pod uwagę wartości etykiety skupienia, ale powinna sprawdzać, czy zbiór danych jest dobrze podzielony, tzn. czy obserwacje w poszczególnych skupieniach są do siebie ,,podobne'', a obserwacje z różnych skupień -- ,,niepodobne'', zgodnie z przyjętą metryką podobieństwa. W niniejszych podrozdziale przedstawimy kilka miar oceny jakości podziału na skupienia.
 
 Przyjmujemy następującego założenia: Niech $K$ i $C$ oznaczają dwa różne podziały $n$-elementowego zbioru $X$ na skupienia. Zazwyczaj $K$ oznacza podział uzyskany przy pomocy algorytmu dzielącego zbiór, a $C$ jest zbiorem prawdziwych klas, do których należą obserwacje, choć $K$ i $C$ mogą również oznaczać dwa niezależne podziały uzyskane przy pomocy różnych algorytmów.
 
-\subsection{Skorygowany indeks Randa []Adjusted Rand Index [JAK TO PRZETŁUMACZYĆ ???]]}
+\subsection{Skorygowany indeks Randa [Adjusted Rand Index [JAK TO PRZETŁUMACZYĆ ???]]}
 
 Niech $a_1$ oznacza liczbę par elementów z $X$, które mają wspólne skupienie zarówno w $K$, jak i w $C$, natomiast przez $a_0$ oznaczmy liczbę par elementów z $X$, które mają zostały przypisane do innych skupień zarówno w $K$, jak i w $C$. Elementy, które spełniają jeden z powyższych warunki oznaczają zgodność podziałów $K$ i $C$. Możemy wówczas zdefiniować \emph{indeks Randa}~\cite{Rand1971:objective}:
 \begin{equation}
@@ -1154,10 +1172,6 @@ sil = \sum\limits_{i=1}^{n}s(\mathbf{x}_i)
 \item Miara silhouette przyjmuje w ogólności większe wartości dla wypukłych skupień.
 \end{itemize}
 
-\section{Metody hierarchiczne}
-
-[TUTAJ CZY WCZESNIEJ??]
-Opis metody hierarchicznej, z wyróżnieniem odmienności najbliższego, najdalszego sąsiada oraz średniej.
 
 \chapter{Kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
 

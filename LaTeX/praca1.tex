@@ -808,6 +808,12 @@ Analiza skupień polega na wyróżnieniu w zbiorze ustalonej liczby rozłącznyc
 
 \section{Metoda $k$-średnich}
 
+[TO DO: DOROBIC PRZYKLADY:
+- (2.1, 2.1) POKAZAC SKUPIENIA OTRZYMANE PRZY UZYCIU 3/4 ALGORYTMOW NP. NA IRISIE
+- (2.3) NARYSOWAC JAKIS DENDROGRAM
+- (2.3) POKAZAC ODMIENNOSCI NAJBLIZSZEGO, NAJDALSZEGO, SREDNIEGO
+- (2.4) PRZYKLADY JAKOSCI NA PODSTAWIE JAKICHS LOSOWYCH KLAS]
+
 Rozważmy przestrzeń euklidesową $\mathbb{R}^p$ i niech będzie dana liczba skupień $k$. Wówczas zadanie znalezienia skupień o wyżej wymienionych własnościach można sprowadzić do dobrze określonego zadania optymalizacji. Weźmy próbę $n$-elementową obserwacji $\mathbf{x}_i,\ i = 1,\ldots,n$ o wartościach w $\mathbb{R}^p$. %Niech $d_{ij} = d(\mathbf{x}_i, \mathbf{x}_j)$ oznacza kwadrat odległości między obserwacjami $\mathbf{x}_i$ i $\mathbf{x}_j$. Wówczas 
 Suma kwadratów odległości między obserwacjami próby wynosi~\cite{Koronacki2005:statystyczne}
 \begin{equation}
@@ -1023,10 +1029,40 @@ gdzie $X$ to zbiór obserwacji.
 
 Przejdźmy do metod hierarchicznych analizy skupień. Jak wspomniano wcześniej, nie wymagają one specyfikowania liczby podzbiorów. Zamiast tego trzeba zdefiniować miarę odmienności (rozłącznych) zbiorów obserwacji, opartą na odmienności pojedynczych punktów w tych zbiorach. Jak sugeruje nazwa, metody te konstruują hierarchiczną reprezentację, w której skupienie na każdym poziomie hierarchii powstaje poprzez połączenie skupień z najbliższego niższego poziomu. Na najniższym poziomie znajdują się skupienia złożone z pojedynczych obserwacji. Najwyższy poziom to skupienie zawierające wszystkie obserwacje ze zbioru~\cite{Hastie2009:elements}.
 
-Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielące. [TO DO !]
+Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielące. W tej pierwszej, na początku tworzy się tyle skupień ile jest obserwacji w zbiorze, traktując każdą obserwację jako osobne skupienie. Następnie w każdym kroku łączona jest ta para podzbiorów, które są od siebie najmniej odmienne. W ten sposób na kolejnym poziomie otrzymujemy (przynajmniej) o jedno skupienie mniej. Procedura łącząca skupienia najmniej odmienne trwa nadal, w każdym kolejnym kroku zmniejszając liczbę skupień. W ostatnim kroku algorytmu otrzymujemy jedno duże skupienie zawierające wszystkie obserwacje z próby~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
-[TUTAJ CZY WCZESNIEJ??]
-Opis metody hierarchicznej, z wyróżnieniem odmienności najbliższego, najdalszego sąsiada oraz średniej.
+Metoda dzieląca działa odwrotnie: zaczynam od jednego skupienia zawierające cały zbiór. Następnie w każdym kroku algorytmu jedno ze skupień dzielone jest na dwa skupienia, w których odmienność jest największa. W ten sposób na kolejnym poziomie otrzymujemy (przynajmniej) o jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, a każdym kolejnym kroku otrzymując coraz więcej skupień. W ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to liczba obserwacji). Warto przy tym zauważyć, że algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+
+Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metoda dzieląca jest o wiele bardziej złożona obliczeniowo, skupimy się na metodzie aglomeracyjnej, jako tej częściej stosowanej w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj trzy najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada oraz średnią odmienność. Oznaczmy przez $D_{ij}$ odmienność między skupieniem $i$-tym a $j$-tym, których liczności wynoszą odpowiednio $n_i, n_j$\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+
+\begin{definition}
+\emph{Odmienność najbliższego sąsiada} (ang. \emph{single linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako najmniejszą spośród wszystkich możliwych odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
+$$
+D_{ij} = \min\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_a, \mathbf{x}_b).
+$$
+\end{definition}
+
+\begin{definition}
+\emph{Odmienność najdalszego sąsiada} (ang. \emph{complete linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako największą spośród wszystkich możliwych odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
+$$
+D_{ij} = \max\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_a, \mathbf{x}_b).
+$$
+\end{definition}
+
+\begin{definition}
+\emph{Odmienność średnią} (ang. \emph{average linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako średnią odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
+$$
+D_{ij} = \frac{1}{n_i n_j}\sum\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_a, \mathbf{x}_b).
+$$
+\end{definition}
+
+Odmienność najbliższego sąsiada wymaga żeby jedna odmienność $d(\mathbf{x}_a, \mathbf{x}_b)$, gdzie $\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)$, miała małą wartość, aby uznać dwa podzbiory za bliskie sobie, bez względu na odmienności innych obserwacji z tych dwóch grup. Metoda ta będzie zatem mieć skłonność do łączenia, skupień połączonych przez szereg bliskich obserwacji pośrednich. Takie zjawisko nazywane jest \emph{efektem łańcuchowym} i uważane jest za wadę tej metody. Skupienia otrzymane w wyniku jej działania często nie są zwarte, jako że podobieństwo skupień określone jest na podstawie dwóch najbliższych obserwacji~\cite{Hastie2009:elements}. Odmienność najbliższego sąsiada daje zazwyczaj skupienia wąskie i wydłużone~\cite{Koronacki2005:statystyczne}. 
+
+Metoda odmienności najdalszego sąsiada ma działanie odwrotne. Dwa skupienia są do siebie podobne, wtedy i tylko wtedy gdy wszystkie obserwacje z ich połączenia są dość podobne. Jednakowoż, metoda ta może nie zachowywać własności ,,bliskości'' dwóch podzbiorów, tj. obserwacje przypisane do danego skupienia mogą znajdować się o wiele bliżej obserwacji z innego podzbioru, niż do punktów ze swojego skupienia~\cite{Hastie2009:elements}. W wyniku jej działania otrzymujemy podzbiory o kulistym kształcie~\cite{Koronacki2005:statystyczne}.
+
+Metoda średniej odmienności jest kompromisem pomiędzy dwoma powyższymi. Próbuje ona dać skupienia relatywnie zwarte i relatywnie oddalone od siebie~\cite{Hastie2009:elements}. Podobnie jak metoda odmienności najdalszego sąsiada, daje ona skupienia o kształcie kulistym~\cite{Koronacki2005:statystyczne}.
+
+Jeśli odmienności poszczególnych obserwacji mają silną tendencję do skupiania się, przy czym każde skupienie jest zwarte i dobrze odseparowane, to wszystkie trzy metody dadzą podobne rezultaty~\cite{Hastie2009:elements}.
 
 \section{Metody oceny jakości podziału na skupienia}
 
@@ -1128,11 +1164,11 @@ Warto zwrócić uwagę na fakt, że jednorodność, zgodność oraz miara V są 
 
 \textbf{Wady:}
 \begin{itemize}
-\item Powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary ARI. [CHYBA TEGO NIE ROZUEMIM - W ZALETACH BYLO, ZE MIARY TE SA NZAL. OD LICZNOSCI PROBKI/KLAS/KLASTROW...]
+\item Powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary ARI.
 \item W przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
 \end{itemize}
 
-\subsection{Miara silhouette}
+\subsection{Miara silhouettes}
 
 Sylwetki obserwacji (czy też \emph{silhouettes}) są użyteczne, gdy odległości są określone na relatywnej skali (ratio scale??) oraz gdy pożądane są wyraźnie odseparowane skupienia. Aby skonstruować sylwetkę obserwacji potrzebne są dwie rzeczy: podział zbioru na skupienia $C$ oraz miarę odległości $d$ pomiędzy obserwacjami~\cite{Rousseeuw1987:silhoutte}.
 
@@ -1320,12 +1356,12 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa (p. rys.~\ref{
 
 Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
 
-Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Podobieństwo słów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
+Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Podobieństwo (odmienność) słów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
 
 Aby podzielić zbiór słów na skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od siebie i zastosowanie algorytmu aglomeracyjnego. Jednakowoż wiąże się to z dużą złożonością pamięciową i obliczeniową, stąd też podejście takie nie zostało wykorzystane w niniejszej pracy. Inny pomysł polega na przyłączaniu do skupienia słów dopóty, dopóki średnia odległość w zbiorze nie przekroczy zadanej liczby. Wstępne testy na losowej próbce tysiąca słów wykazały, że jakość takiego podziału jest słaba, a czas obliczeń względnie długi.
 
 \emph{\textbf{Stemming.}}
-Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta}, które jednoznacznie charakteryzuje podzbiór. Będziemy je nazywać słowem-reprezentantem lub po prostu \emph{reprezentantem}. W ten sposób do odpowiedniego skupienia możemy odnosić się poprzez jego reprezentanta.
+Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta} (środek), które jednoznacznie charakteryzuje podzbiór. Będziemy je nazywać środkiem, słowem-reprezentantem lub po prostu \emph{reprezentantem} skupienia. W ten sposób do odpowiedniego podzbioru słów możemy odnosić się poprzez jego reprezentanta.
 
 \begin{table}[!h]
 \centering
@@ -1344,7 +1380,9 @@ Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo 
 \label{tab:002}
 \end{table}
 
-Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. W ten sposób grupujemy $746\ 942$ słów, co stanowi ok. $27\%$ wszystkich słów, w $186\ 958$ skupienia. Ponieważ część wyrazów stanowią słowa obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}). Przykładowe skupienia prezentuje tabela~\ref{tab:003}. Warto zauważyć, że słowa w podzbiorach są podobne tematycznie, choć do skupienia o reprezentancie \verb|główny| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny.
+Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. Aplikacja ta ma wbudowany słownik słów języka polskiego wraz z ich odmianami. Do każdego wyrazu jest też przypisany jego rdzeń. Sposób działania jest następujący: program znajduje szukane słowo w słowniku, a następnie zwraca jego rdzeń lub nie zwraca nic, jeśli słowo nie pasuje do żadnego wyrazu ze słownika. W szczególności słownik nie zawiera wyrazów, w których popełniono tzw. ,,literówki'' ani złączeń słów.
+
+Ponieważ część wyrazów stanowią słowa obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (p. tabela~\ref{tab:002}). W ten sposób grupujemy $746\ 942$ słów, co stanowi ok. $27\%$ wszystkich słów, w $186\ 958$ skupienia. Przykładowe skupienia prezentuje tabela~\ref{tab:003}. Warto zauważyć, że słowa w podzbiorach są podobne tematycznie, choć do skupienia o reprezentancie \verb|główny| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny.
 
 \begin{table}[!h]
 \centering
@@ -1402,7 +1440,8 @@ Omówimy teraz bliżej na czym polegają powyższe kroki.
 
 \textbf{Procedura 1.} W kroku tym chcemy użyć większej liczby dostępnych słów. Dzięki temu zwiększą się liczności występowania grup słów w tekście, co być może polepszy jakość podziału artykułów na skupienia. Algorytm ten jednak nie zmieni liczby skupień. 
 
-Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej (p. algorytm~\ref{alg:004}). Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszy w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
+Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadnego skupienia. Liczymy odległość tego wyrazu (przy użyciu odległości zdefiniowanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}) od wszystkich słów-reprezentantów dotychczasowo otrzymanych skupień. Słowo przydzielamy do tego podzbioru, do którego reprezentanta było mu najbliżej (p. algorytm~\ref{alg:004}). Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku środków, wybieramy pierwszy w kolejności. Jeśli odległość słowa do wszystkich reprezentantów jest nieokreślona lub równa nieskończoności, to wyraz ten pomijamy, tj. nie dodajemy go do żadnego ze skupień. Taka sytuacja może się zdarzyć, w przypadku zastosowania odległości opartych na $q$-gramach, gdy długość słowa jest mniejsza od $q$.
+
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
@@ -1416,6 +1455,8 @@ Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadne
 \end{algorithmic}
 \caption{Algorytm przydzielający niepogrupowane słowo do skupienia.}\label{alg:004}
 \end{algorithm}
+
+Zauważmy, że powyższy algorytm podobny jest do metody aglomeracyjnej analizy skupień. Różnice polegają na tym, że do utworzonych już skupień przyłączamy pojedyncze obserwacje (słowa), a kryterium oceny odmienności jest odległość danego słowa od środka (reprezentanta) skupienia.
 
 \textbf{Procedura 2.} W tym kroku chcemy zredukować liczbę uzyskanych skupień. Dzięki temu zwiększą się liczności występowania grup słów w tekście, a ponadto zmniejszy się liczba skupień, co może przyczynić się do lepszego działania algorytmu dzielącego teksty na skupienia.
 
@@ -1445,7 +1486,9 @@ Schemat działania jest następujący: bierzemy słowo nieprzydzielone do żadne
 
 Schemat działania jest następujący (p. algorytm~\ref{alg:005}): sprawdzamy, jakie są liczności wszystkich skupień. Jeśli liczność skupienia jest większa od pięciu, to taki podzbiór oznaczamy jako ,,duży''. Do takich skupień będziemy przyłączać mniejsze podgrupy. Jeśli liczność skupienia jest mniejsza lub równa $5$, to podzbiór oznaczamy jako ,,mały''. Takie skupienie będziemy przyłączać do podzbiorów ,,dużych''. Te pierwsze skupienia nazwijmy dużymi skupieniami, natomiast te drugie -- małymi. 
 
-Mając tak podzielone skupienia, weźmy reprezentantów małych podzbiorów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w algorytmie~\ref{alg:004}: liczymy odległość reprezentanta małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego reprezentanta było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
+Mając tak podzielone skupienia, weźmy reprezentantów małych podzbiorów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w algorytmie~\ref{alg:004}: liczymy odległość środka małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego środka było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
+
+Zauważmy, że algorytm ten to po prostu metoda aglomeracyjna z innym niż zaprezentowane w rozdziale~\ref{analiza-skupien} kryterium liczenia odmienności dwóch skupień. W tej procedurze odmienność między podzbiorami określona jest jako odległość między środkami (reprezentantami) skupień.
 
 
 
@@ -1495,169 +1538,241 @@ Mając tak zdefiniowane skupienia słów możemy przystąpić do podziału zbior
 
 Aby więc użyć algorytmu mini-wsadowego musimy wybrać najpierw liczbę skupień $k$ oraz parametr $b$, określający ile obserwacji będzie miało swój wkład w każdej iteracji. Zajmijmy się najpierw tą drugą wartością. Ponieważ nie wiemy jak bardzo jakość podziału zależy od parametru $b$, postanowiliśmy sprawdzić działanie algorytmu dla czterech wartości $b$: $5\ 000$, $10\ 000$, $35\ 000$ oraz $70\ 000$. Dostaniemy w ten sposób $52$ wyniki analizy, oparte na $13$ różnych zbiorach wejściowych.
 
-Zanim określimy wartość parametru $k$, zastanówmy się w jaki sposób będziemy mierzyć jakość otrzymanych podziałów. Cztery na pięć zaprezentowanych miar w rozdziale~\ref{analiza-skupien} wymaga znajomości prawdziwego podziału zbioru. Przypomnijmy, że nasz zbiór danych to artykuły z polskiej Wikipedii, które mają określoną kategorię tematyczną. Można więc wykorzystać znaną nam wiedzę o kategoriach i na jej podstawie określić jakość podziału otrzymanego w wyniku działania algorytmu. Liczba różnych kategorii, które określają tematykę artykułów wynosi $56\ 283$. Próba wykonania analizy skupień przy użyciu algorytmu mini-wsadowego z tak dużym $k$, zakończyła się niepowodzeniem, mimo posiadania dużej ilości pamięci RAM (ponad $100$ GB). Stąd też nastąpiła potrzeba zredukowania tej liczby. Ponieważ struktura kategorii Wikipedii jest drzewiasta (por. \url{http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii}), można zastąpić kategorię przypisaną do artykułu kategorią ogólniejszą. Po takiej redukcji otrzymano $6\ 922$ grup tematycznych. Jednak rozkład liczby artykułów w otrzymanych kategoriach był mocno skośny. Taka sytuacja jest silnie niesprzyjająca, gdyż chcemy mieć podobne liczności w grupach. Ręcznie podzielono zatem najbardziej liczne tematy na podtematy, natomiast te o najmniejszej liczności połączono zachowując przy tym podobieństwo tematyki. W ten sposób uzyskano sto różnych tematów o podobnym rozkładzie liczby artykułów. Wstępne testy wykazały, że tak otrzymane $k$ pozwala na dokonanie obliczeń w relatywnie krótkim czasie i nie zajmując dużej ilości pamięci RAM.
+Zanim określimy wartość parametru $k$, zastanówmy się w jaki sposób będziemy mierzyć jakość otrzymanych podziałów. Cztery na pięć zaprezentowanych miar w rozdziale~\ref{analiza-skupien} wymaga znajomości prawdziwego podziału zbioru. Przypomnijmy, że nasz zbiór danych to artykuły z polskiej Wikipedii, które mają określoną kategorię tematyczną. Można więc wykorzystać znaną nam wiedzę o kategoriach i na jej podstawie określić jakość podziału otrzymanego w wyniku działania algorytmu. Liczba różnych kategorii, które określają tematykę artykułów wynosi $56\ 283$. Próba wykonania analizy skupień przy użyciu algorytmu mini-wsadowego z tak dużym $k$, zakończyła się niepowodzeniem, mimo posiadania dużej ilości pamięci RAM (wraz z partycją wymiany (SWAP) ponad $100$ GB). Stąd też nastąpiła potrzeba zredukowania tej liczby. Ponieważ struktura kategorii Wikipedii jest drzewiasta~\footnote{por. \url{http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii}}, można zastąpić kategorię przypisaną do artykułu kategorią ogólniejszą. Po takiej redukcji otrzymano $6\ 922$ grup tematycznych. Jednak rozkład liczby artykułów w otrzymanych kategoriach był mocno skośny. Taka sytuacja jest silnie niesprzyjająca, gdyż chcemy mieć podobne liczności w grupach. Ręcznie podzielono zatem najbardziej liczne tematy na podtematy, natomiast te o najmniejszej liczności połączono zachowując przy tym podobieństwo tematyki. W ten sposób uzyskano sto różnych tematów o podobnym rozkładzie liczby artykułów. Wstępne testy wykazały, że tak otrzymane $k$ pozwala na dokonanie obliczeń w relatywnie krótkim czasie i nie zajmując dużej ilości pamięci RAM.
 
-\begin{table}[!h]
-\centering
-\begin{tabular}{rllrrrrr}
-  \hline
- & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes \\ 
-  \hline
-1 & \_ & 5000 & 0.19 & 0.51 & 0.27 & 0.01 & -0.19 \\ 
-  2 & \_ & 10000 & 0.19 & 0.50 & 0.28 & 0.01 & -0.19 \\ 
-  3 & \_ & 35000 & 0.22 & 0.53 & 0.31 & 0.02 & -0.20 \\ 
-  4 & \_ & 70000 & 0.22 & 0.52 & 0.31 & 0.02 & -0.19 \\ \hline
-  5 & \_lcs & 5000 & 0.17 & 0.51 & 0.26 & 0.01 & -0.22 \\ 
-  6 & \_lcs & 10000 & 0.17 & 0.51 & 0.26 & 0.01 & -0.21 \\ 
-  7 & \_lcs & 35000 & 0.18 & 0.53 & 0.27 & 0.01 & -0.21 \\ 
-  8 & \_lcs & 70000 & 0.19 & 0.52 & 0.28 & 0.01 & -0.24 \\ \hline
-  9 & \_dl & 5000 & 0.20 & 0.51 & 0.28 & 0.01 & -0.20 \\ 
-  10 & \_dl & 10000 & 0.19 & 0.51 & 0.27 & 0.01 & -0.20 \\ 
-  11 & \_dl & 35000 & 0.21 & 0.52 & 0.30 & 0.02 & -0.20 \\ 
-  12 & \_dl & 70000 & 0.22 & 0.53 & 0.31 & 0.01 & -0.22 \\ \hline
-  13 & \_jaccard & 5000 & 0.18 & 0.53 & 0.27 & 0.01 & -0.24 \\ 
-  14 & \_jaccard & 10000 & 0.19 & 0.50 & 0.27 & 0.01 & -0.21 \\ 
-  15 & \_jaccard & 35000 & 0.19 & 0.51 & 0.28 & 0.01 & -0.21 \\ 
-  16 & \_jaccard & 70000 & 0.21 & 0.51 & 0.30 & 0.01 & -0.22 \\ \hline
-  17 & \_qgram & 5000 & 0.18 & 0.50 & 0.26 & 0.01 & -0.22 \\ 
-  18 & \_qgram & 10000 & 0.18 & 0.47 & 0.26 & 0.02 & -0.21 \\ 
-  19 & \_qgram & 35000 & 0.21 & 0.52 & 0.30 & 0.02 & -0.22 \\ 
-  20 & \_qgram & 70000 & 0.19 & 0.49 & 0.28 & 0.01 & -0.19 \\ \hline
-  21 & \_red\_lcs & 5000 & 0.19 & 0.54 & 0.29 & 0.01 & -0.21 \\ 
-  22 & \_red\_lcs & 10000 & 0.20 & 0.51 & 0.28 & 0.01 & -0.21 \\ 
-  23 & \_red\_lcs & 35000 & 0.22 & 0.53 & 0.31 & 0.02 & -0.13 \\ 
-  24 & \_red\_lcs & 70000 & 0.24 & 0.52 & 0.32 & 0.03 & -0.18 \\ \hline
-  25 & \_red\_dl & 5000 & 0.20 & 0.53 & 0.29 & 0.01 & -0.21 \\ 
-  26 & \_red\_dl & 10000 & 0.21 & 0.51 & 0.29 & 0.02 & -0.19 \\ 
-  27 & \_red\_dl & 35000 & 0.21 & 0.51 & 0.30 & 0.02 & -0.15 \\ 
-  28 & \_red\_dl & 70000 & 0.24 & 0.53 & 0.33 & 0.02 & -0.19 \\ \hline
-  29 & \_red\_jaccard & 5000 & 0.20 & 0.48 & 0.28 & 0.01 & -0.17 \\ 
-  30 & \_red\_jaccard & 10000 & 0.22 & 0.51 & 0.31 & 0.02 & -0.21 \\ 
-  31 & \_red\_jaccard & 35000 & 0.22 & 0.51 & 0.30 & 0.02 & -0.20 \\ 
-  32 & \_red\_jaccard & 70000 & 0.22 & 0.51 & 0.31 & 0.01 & -0.21 \\ \hline
-  33 & \_red\_qgram & 5000 & 0.18 & 0.41 & 0.25 & 0.02 & -0.10 \\ 
-  34 & \_red\_qgram & 10000 & 0.19 & 0.42 & 0.26 & 0.02 & -0.11 \\ 
-  35 & \_red\_qgram & 35000 & 0.20 & 0.42 & 0.27 & 0.02 & -0.12 \\ 
-  36 & \_red\_qgram & 70000 & 0.20 & 0.42 & 0.27 & 0.02 & -0.11 \\ \hline
-  37 & \_red\_lcs\_lcs & 5000 & 0.18 & 0.52 & 0.26 & 0.01 & -0.23 \\ 
-  38 & \_red\_lcs\_lcs & 10000 & 0.18 & 0.57 & 0.27 & 0.01 & -0.25 \\ 
-  39 & \_red\_lcs\_lcs & 35000 & 0.18 & 0.55 & 0.27 & 0.01 & -0.23 \\ 
-  40 & \_red\_lcs\_lcs & 70000 & 0.23 & 0.57 & 0.33 & 0.01 & -0.24 \\ \hline
-  41 & \_red\_dl\_dl & 5000 & 0.18 & 0.54 & 0.27 & 0.01 & -0.18 \\ 
-  42 & \_red\_dl\_dl & 10000 & 0.21 & 0.57 & 0.31 & 0.01 & -0.26 \\ 
-  43 & \_red\_dl\_dl & 35000 & 0.20 & 0.58 & 0.30 & 0.01 & -0.26 \\ 
-  44 & \_red\_dl\_dl & 70000 & 0.23 & 0.57 & 0.33 & 0.01 & -0.21 \\ \hline
-  45 & \_red\_jaccard\_jaccard & 5000 & 0.19 & 0.48 & 0.27 & 0.01 & -0.15 \\ 
-  46 & \_red\_jaccard\_jaccard & 10000 & 0.20 & 0.50 & 0.29 & 0.01 & -0.24 \\ 
-  47 & \_red\_jaccard\_jaccard & 35000 & 0.22 & 0.51 & 0.31 & 0.02 & -0.21 \\ 
-  48 & \_red\_jaccard\_jaccard & 70000 & 0.23 & 0.52 & 0.32 & 0.02 & -0.21 \\ \hline
-  49 & \_red\_qgram\_qgram & 5000 & 0.17 & 0.45 & 0.25 & 0.01 & -0.21 \\ 
-  50 & \_red\_qgram\_qgram & 10000 & 0.19 & 0.46 & 0.26 & 0.01 & -0.21 \\ 
-  51 & \_red\_qgram\_qgram & 35000 & 0.20 & 0.47 & 0.28 & 0.01 & -0.20 \\ 
-  52 & \_red\_qgram\_qgram & 70000 & 0.18 & 0.45 & 0.26 & 0.01 & -0.16 \\ 
-   \hline
-\end{tabular}
-\end{table}
+\section{Analiza wyników}
+ 
+[TO DO!]
 
-
-\begin{table}[!h]
-\centering
-\begin{tabular}{rllrrrrr}
-  \hline
- & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes \\ 
-  \hline
-1 & \_ & 5000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.20 \\ 
-  2 & \_ & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.23 \\ 
-  3 & \_ & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 \\ 
-  4 & \_ & 70000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.22 \\ \hline
-  5 & \_lcs & 5000 & 0.02 & 0.07 & 0.04 & 0.00 & -0.20 \\ 
-  6 & \_lcs & 10000 & 0.02 & 0.06 & 0.04 & 0.00 & -0.23 \\ 
-  7 & \_lcs & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 \\ 
-  8 & \_lcs & 70000 & 0.02 & 0.06 & 0.03 & -0.00 & -0.19 \\ \hline
-  9 & \_dl & 5000 & 0.02 & 0.06 & 0.04 & 0.00 & -0.20 \\ 
-  10 & \_dl & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.22 \\ 
-  11 & \_dl & 35000 & 0.02 & 0.07 & 0.03 & -0.00 & -0.23 \\ 
-  12 & \_dl & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.22 \\ \hline
-  13 & \_jaccard & 5000 & 0.02 & 0.07 & 0.03 & 0.00 & -0.19 \\ 
-  14 & \_jaccard & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.19 \\ 
-  15 & \_jaccard & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 \\ 
-  16 & \_jaccard & 70000 & 0.02 & 0.05 & 0.03 & 0.00 & -0.17 \\ \hline
-  17 & \_qgram & 5000 & 0.02 & 0.06 & 0.04 & 0.00 & -0.20 \\ 
-  18 & \_qgram & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.22 \\ 
-  19 & \_qgram & 35000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.19 \\ 
-  20 & \_qgram & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.22 \\ \hline
-  21 & \_red\_lcs & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 \\ 
-  22 & \_red\_lcs & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 \\ 
-  23 & \_red\_lcs & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.15 \\ 
-  24 & \_red\_lcs & 70000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.21 \\ \hline
-  25 & \_red\_dl & 5000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.19 \\ 
-  26 & \_red\_dl & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 \\ 
-  27 & \_red\_dl & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 \\ 
-  28 & \_red\_dl & 70000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.19 \\ \hline
-  29 & \_red\_jaccard & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 \\ 
-  30 & \_red\_jaccard & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 \\ 
-  31 & \_red\_jaccard & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.18 \\ 
-  32 & \_red\_jaccard & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 \\ \hline
-  33 & \_red\_qgram & 5000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.12 \\ 
-  34 & \_red\_qgram & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.09 \\ 
-  35 & \_red\_qgram & 35000 & 0.03 & 0.05 & 0.03 & 0.00 & -0.09 \\ 
-  36 & \_red\_qgram & 70000 & 0.02 & 0.05 & 0.03 & 0.00 & -0.10 \\ \hline
-  37 & \_red\_lcs\_lcs & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 \\ 
-  38 & \_red\_lcs\_lcs & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.19 \\ 
-  39 & \_red\_lcs\_lcs & 35000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.22 \\ 
-  40 & \_red\_lcs\_lcs & 70000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.19 \\ \hline
-  41 & \_red\_dl\_dl & 5000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.25 \\ 
-  42 & \_red\_dl\_dl & 10000 & 0.03 & 0.07 & 0.04 & 0.00 & -0.20 \\ 
-  43 & \_red\_dl\_dl & 35000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.23 \\ 
-  44 & \_red\_dl\_dl & 70000 & 0.02 & 0.06 & 0.04 & 0.00 & -0.20 \\ \hline
-  45 & \_red\_jaccard\_jaccard & 5000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.22 \\ 
-  46 & \_red\_jaccard\_jaccard & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.21 \\ 
-  47 & \_red\_jaccard\_jaccard & 35000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.20 \\ 
-  48 & \_red\_jaccard\_jaccard & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 \\ \hline
-  49 & \_red\_qgram\_qgram & 5000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.17 \\ 
-  50 & \_red\_qgram\_qgram & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 \\ 
-  51 & \_red\_qgram\_qgram & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 \\ 
-  52 & \_red\_qgram\_qgram & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 \\ 
-   \hline
-\end{tabular}
-\end{table}
+Bla bla bla bla bla bla
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=400pt]{plot15.pdf}\\
-  \caption{Jednorodność.}\label{plot:005}
+  \caption{Jednorodność, zupełność.}\label{plot:005}
 \end{figure}
 
-%\begin{figure}[!h]
-%  \centering
-%  % Requires \usepackage{graphicx}
-%  \includegraphics[width=350pt, height=200pt]{plot6.pdf}\\
-%  \caption{Zupełność.}\label{plot:006}
-%\end{figure}
+
+Bla bla bla bla bla bla
 
 \begin{figure}[!h]
   \centering
-  % Requires \usepackage{graphicx}
   \includegraphics[width=400pt]{plot17.pdf}\\
-  \caption{Miara V.}\label{plot:007}
+  \caption{Miara V, ARI.}\label{plot:007}
 \end{figure}
 
-%\begin{figure}[!h]
-%  \centering
-%  % Requires \usepackage{graphicx}
-%  \includegraphics[width=350pt, height=200pt]{plot8.pdf}\\
-%  \caption{ARI.}\label{plot:008}
-%\end{figure}
+
+Bla bla bla bla bla bla
 
 \begin{figure}[!h]
   \centering
-  % Requires \usepackage{graphicx}
   \includegraphics[width=400pt]{plot18.pdf}\\
-  %\caption{Silhouettes.}\label{plot:009}
+  \caption{Silhouettes.}\label{plot:009}
 \end{figure}
 
+Bla bla bla bla bla bla
 
+\section{Szczegółowe wyniki}
+
+[NIE WIEM GDZIE TO RZUCIĆ, MOŻE WARTO GDZIEŚ NA KONIEC JAKO DODATEK?]
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|rlr|rrr|rr|r|}
+\hline
+  & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes & Część \\ 
+  \hline
+1 & clust & 5000 & 0.04 & 0.06 & 0.05 & 0.00 & -0.23 & 100\% \\ 
+  2 & clust & 10000 & 0.03 & 0.05 & 0.03 & 0.00 & -0.26 & 100\% \\ 
+  3 & clust & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.12 & 100\% \\ 
+  4 & clust & 70000 & 0.02 & 0.06 & 0.03 & -0.00 & -0.15 & 100\% \\ 
+   \hline
+5 & clust\_lcs & 5000 & 0.02 & 0.04 & 0.02 & 0.00 & -0.31 & 100\% \\ 
+  6 & clust\_lcs & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.26 & 100\% \\ 
+  7 & clust\_lcs & 35000 & 0.03 & 0.07 & 0.04 & 0.00 & -0.21 & 100\% \\ 
+  8 & clust\_lcs & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.15 & 100\% \\ 
+   \hline
+9 & clust\_dl & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.24 & 100\% \\ 
+  10 & clust\_dl & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.22 & 100\% \\ 
+  11 & clust\_dl & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 & 100\% \\ 
+  12 & clust\_dl & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.15 & 100\% \\ 
+   \hline
+13 & clust\_jac & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.23 & 100\% \\ 
+  14 & clust\_jac & 10000 & 0.02 & 0.06 & 0.03 & 0.00 & -0.29 & 100\% \\ 
+  15 & clust\_jac & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.18 & 100\% \\ 
+  16 & clust\_jac & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.19 & 100\% \\ 
+   \hline
+17 & clust\_qg & 5000 & 0.02 & 0.04 & 0.02 & 0.00 & -0.29 & 100\% \\ 
+  18 & clust\_qg & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.26 & 100\% \\ 
+  19 & clust\_qg & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.18 & 100\% \\ 
+  20 & clust\_qg & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
+   \hline
+21 & clust\_red\_lcs & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.22 & 100\% \\ 
+  22 & clust\_red\_lcs & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.25 & 100\% \\ 
+  23 & clust\_red\_lcs & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
+  24 & clust\_red\_lcs & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.18 & 100\% \\ 
+   \hline
+25 & clust\_red\_dl & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.22 & 100\% \\ 
+  26 & clust\_red\_dl & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.21 & 100\% \\ 
+  27 & clust\_red\_dl & 35000 & 0.03 & 0.06 & 0.04 & -0.00 & -0.15 & 100\% \\ 
+  28 & clust\_red\_dl & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
+   \hline
+29 & clust\_red\_jac & 5000 & 0.01 & 0.05 & 0.02 & 0.00 & -0.27 & 100\% \\ 
+  30 & clust\_red\_jac & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.24 & 100\% \\ 
+  31 & clust\_red\_jac & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
+  32 & clust\_red\_jac & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.15 & 100\% \\ 
+   \hline
+33 & clust\_red\_qg & 5000 & 0.02 & 0.05 & 0.03 & 0.00 & -0.11 & 100\% \\ 
+  34 & clust\_red\_qg & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.10 & 100\% \\ 
+  35 & clust\_red\_qg & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.05 & 100\% \\ 
+  36 & clust\_red\_qg & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.07 & 100\% \\ 
+   \hline
+37 & clust\_lcs\_red\_lcs & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.24 & 100\% \\ 
+  38 & clust\_lcs\_red\_lcs & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.25 & 100\% \\ 
+  39 & clust\_lcs\_red\_lcs & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 & 100\% \\ 
+  40 & clust\_lcs\_red\_lcs & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.18 & 100\% \\ 
+   \hline
+41 & clust\_dl\_red\_dl & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.23 & 100\% \\ 
+  42 & clust\_dl\_red\_dl & 10000 & 0.03 & 0.06 & 0.04 & -0.00 & -0.17 & 100\% \\ 
+  43 & clust\_dl\_red\_dl & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.17 & 100\% \\ 
+  44 & clust\_dl\_red\_dl & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 & 100\% \\ 
+   \hline
+45 & clust\_jac\_red\_jac & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.22 & 100\% \\ 
+  46 & clust\_jac\_red\_jac & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.24 & 100\% \\ 
+  47 & clust\_jac\_red\_jac & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.15 & 100\% \\ 
+  48 & clust\_jac\_red\_jac & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.16 & 100\% \\ 
+   \hline
+49 & clust\_qg\_red\_qg & 5000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.21 & 100\% \\ 
+  50 & clust\_qg\_red\_qg & 10000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.23 & 100\% \\ 
+  51 & clust\_qg\_red\_qg & 35000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
+  52 & clust\_qg\_red\_qg & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|rlr|rrr|rr|r|}
+\hline
+  & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes & Część \\ 
+  \hline
+53 & clust & 5000 & 0.21 & 0.57 & 0.31 & 0.01 & -0.26 & 15\% \\ 
+  54 & clust & 10000 & 0.23 & 0.54 & 0.32 & 0.01 & -0.15 & 15\% \\ 
+  55 & clust & 35000 & 0.22 & 0.53 & 0.32 & 0.02 & -0.16 & 15\% \\ 
+  56 & clust & 70000 & 0.23 & 0.53 & 0.32 & 0.02 & -0.16 & 15\% \\ 
+   \hline
+57 & clust\_lcs & 5000 & 0.27 & 0.58 & 0.37 & 0.03 & -0.25 & 15\% \\ 
+  58 & clust\_lcs & 10000 & 0.21 & 0.53 & 0.30 & 0.01 & -0.12 & 15\% \\ 
+  59 & clust\_lcs & 35000 & 0.20 & 0.54 & 0.29 & 0.01 & -0.23 & 15\% \\ 
+  60 & clust\_lcs & 70000 & 0.27 & 0.56 & 0.36 & 0.03 & -0.17 & 15\% \\ 
+   \hline
+61 & clust\_dl & 5000 & 0.20 & 0.51 & 0.29 & 0.01 & -0.17 & 15\% \\ 
+  62 & clust\_dl & 10000 & 0.22 & 0.55 & 0.31 & 0.01 & -0.18 & 15\% \\ 
+  63 & clust\_dl & 35000 & 0.23 & 0.53 & 0.32 & 0.02 & -0.16 & 15\% \\ 
+  64 & clust\_dl & 70000 & 0.23 & 0.54 & 0.32 & 0.02 & -0.24 & 15\% \\ 
+   \hline
+65 & clust\_jac & 5000 & 0.28 & 0.58 & 0.37 & 0.03 & -0.24 & 15\% \\ 
+  66 & clust\_jac & 10000 & 0.23 & 0.53 & 0.32 & 0.01 & -0.14 & 15\% \\ 
+  67 & clust\_jac & 35000 & 0.19 & 0.50 & 0.28 & 0.01 & -0.17 & 15\% \\ 
+  68 & clust\_jac & 70000 & 0.22 & 0.52 & 0.31 & 0.02 & -0.16 & 15\% \\ 
+   \hline
+69 & clust\_qg & 5000 & 0.21 & 0.49 & 0.29 & 0.01 & -0.15 & 15\% \\ 
+  70 & clust\_qg & 10000 & 0.21 & 0.52 & 0.30 & 0.01 & -0.17 & 15\% \\ 
+  71 & clust\_qg & 35000 & 0.23 & 0.52 & 0.32 & 0.02 & -0.15 & 15\% \\ 
+  72 & clust\_qg & 70000 & 0.23 & 0.51 & 0.32 & 0.02 & -0.20 & 15\% \\ 
+   \hline
+73 & clust\_red\_lcs & 5000 & 0.24 & 0.58 & 0.34 & 0.02 & -0.27 & 15\% \\ 
+  74 & clust\_red\_lcs & 10000 & 0.27 & 0.55 & 0.36 & 0.03 & -0.13 & 15\% \\ 
+  75 & clust\_red\_lcs & 35000 & 0.22 & 0.55 & 0.31 & 0.01 & -0.17 & 15\% \\ 
+  76 & clust\_red\_lcs & 70000 & 0.25 & 0.54 & 0.34 & 0.03 & -0.16 & 15\% \\ 
+   \hline
+77 & clust\_red\_dl & 5000 & 0.24 & 0.53 & 0.33 & 0.02 & -0.14 & 15\% \\ 
+  78 & clust\_red\_dl & 10000 & 0.24 & 0.55 & 0.33 & 0.02 & -0.13 & 15\% \\ 
+  79 & clust\_red\_dl & 35000 & 0.23 & 0.53 & 0.33 & 0.02 & -0.15 & 15\% \\ 
+  80 & clust\_red\_dl & 70000 & 0.25 & 0.55 & 0.34 & 0.02 & -0.17 & 15\% \\ 
+   \hline
+81 & clust\_red\_jac & 5000 & 0.20 & 0.50 & 0.28 & 0.01 & -0.28 & 15\% \\ 
+  82 & clust\_red\_jac & 10000 & 0.26 & 0.52 & 0.34 & 0.03 & -0.17 & 15\% \\ 
+  83 & clust\_red\_jac & 35000 & 0.25 & 0.52 & 0.34 & 0.03 & -0.15 & 15\% \\ 
+  84 & clust\_red\_jac & 70000 & 0.20 & 0.48 & 0.29 & 0.01 & -0.17 & 15\% \\ 
+   \hline
+85 & clust\_red\_qg & 5000 & 0.18 & 0.45 & 0.26 & 0.01 & -0.10 & 15\% \\ 
+  86 & clust\_red\_qg & 10000 & 0.21 & 0.43 & 0.28 & 0.02 & -0.08 & 15\% \\ 
+  87 & clust\_red\_qg & 35000 & 0.22 & 0.43 & 0.29 & 0.02 & -0.08 & 15\% \\ 
+  88 & clust\_red\_qg & 70000 & 0.20 & 0.43 & 0.27 & 0.02 & -0.10 & 15\% \\ 
+   \hline
+89 & clust\_lcs\_red\_lcs & 5000 & 0.26 & 0.57 & 0.36 & 0.03 & -0.25 & 15\% \\ 
+  90 & clust\_lcs\_red\_lcs & 10000 & 0.22 & 0.54 & 0.31 & 0.01 & -0.17 & 15\% \\ 
+  91 & clust\_lcs\_red\_lcs & 35000 & 0.22 & 0.56 & 0.32 & 0.01 & -0.17 & 15\% \\ 
+  92 & clust\_lcs\_red\_lcs & 70000 & 0.27 & 0.56 & 0.36 & 0.04 & -0.18 & 15\% \\ 
+   \hline
+93 & clust\_dl\_red\_dl & 5000 & 0.21 & 0.53 & 0.31 & 0.01 & -0.18 & 15\% \\ 
+  94 & clust\_dl\_red\_dl & 10000 & 0.24 & 0.55 & 0.33 & 0.01 & -0.24 & 15\% \\ 
+  95 & clust\_dl\_red\_dl & 35000 & 0.23 & 0.57 & 0.33 & 0.02 & -0.17 & 15\% \\ 
+  96 & clust\_dl\_red\_dl & 70000 & 0.22 & 0.54 & 0.32 & 0.01 & -0.17 & 15\% \\ 
+   \hline
+97 & clust\_jac\_red\_jac & 5000 & 0.21 & 0.50 & 0.30 & 0.01 & -0.17 & 15\% \\ 
+  98 & clust\_jac\_red\_jac & 10000 & 0.24 & 0.51 & 0.32 & 0.02 & -0.22 & 15\% \\ 
+  99 & clust\_jac\_red\_jac & 35000 & 0.22 & 0.51 & 0.31 & 0.02 & -0.18 & 15\% \\ 
+  100 & clust\_jac\_red\_jac & 70000 & 0.24 & 0.51 & 0.33 & 0.02 & -0.18 & 15\% \\ 
+   \hline
+101 & clust\_qg\_red\_qg & 5000 & 0.24 & 0.52 & 0.32 & 0.02 & -0.22 & 15\% \\ 
+  102 & clust\_qg\_red\_qg & 10000 & 0.22 & 0.48 & 0.31 & 0.02 & -0.15 & 15\% \\ 
+  103 & clust\_qg\_red\_qg & 35000 & 0.24 & 0.49 & 0.32 & 0.03 & -0.16 & 15\% \\ 
+  104 & clust\_qg\_red\_qg & 70000 & 0.21 & 0.47 & 0.29 & 0.02 & -0.17 & 15\% \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|rlr|rrr|rr|r|}
+\hline
+  & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes & Część \\ 
+  \hline
+105 & clust & 5000 & 0.32 & 0.69 & 0.44 & 0.04 & -0.17 & 2\% \\ 
+  106 & clust & 10000 & 0.34 & 0.71 & 0.46 & 0.08 & -0.15 & 2\% \\ 
+   \hline
+107 & clust\_lcs & 5000 & 0.35 & 0.69 & 0.46 & 0.06 & -0.17 & 2\% \\ 
+  108 & clust\_lcs & 10000 & 0.33 & 0.70 & 0.45 & 0.07 & -0.17 & 2\% \\ 
+   \hline
+109 & clust\_dl & 5000 & 0.33 & 0.69 & 0.45 & 0.05 & -0.18 & 2\% \\ 
+  110 & clust\_dl & 10000 & 0.34 & 0.70 & 0.45 & 0.08 & -0.17 & 2\% \\ 
+   \hline
+111 & clust\_jac & 5000 & 0.32 & 0.69 & 0.44 & 0.05 & -0.19 & 2\% \\ 
+  112 & clust\_jac & 10000 & 0.30 & 0.72 & 0.43 & 0.05 & -0.17 & 2\% \\ 
+   \hline
+113 & clust\_qg & 5000 & 0.31 & 0.69 & 0.43 & 0.05 & -0.18 & 2\% \\ 
+  114 & clust\_qg & 10000 & 0.32 & 0.68 & 0.44 & 0.08 & -0.13 & 2\% \\ 
+   \hline
+115 & clust\_red\_lcs & 5000 & 0.32 & 0.69 & 0.44 & 0.05 & -0.16 & 2\% \\ 
+  116 & clust\_red\_lcs & 10000 & 0.35 & 0.71 & 0.47 & 0.09 & -0.13 & 2\% \\ 
+   \hline
+117 & clust\_red\_dl & 5000 & 0.36 & 0.70 & 0.48 & 0.08 & -0.12 & 2\% \\ 
+  118 & clust\_red\_dl & 10000 & 0.34 & 0.70 & 0.46 & 0.08 & -0.14 & 2\% \\ 
+   \hline
+119 & clust\_red\_jac & 5000 & 0.35 & 0.64 & 0.45 & 0.08 & -0.12 & 2\% \\ 
+  120 & clust\_red\_jac & 10000 & 0.36 & 0.66 & 0.46 & 0.12 & -0.09 & 2\% \\ 
+   \hline
+121 & clust\_red\_qg & 5000 & 0.31 & 0.58 & 0.41 & 0.07 & -0.05 & 2\% \\ 
+  122 & clust\_red\_qg & 10000 & 0.32 & 0.58 & 0.41 & 0.12 & -0.08 & 2\% \\ 
+   \hline
+123 & clust\_lcs\_red\_lcs & 5000 & 0.33 & 0.70 & 0.45 & 0.06 & -0.17 & 2\% \\ 
+  124 & clust\_lcs\_red\_lcs & 10000 & 0.34 & 0.71 & 0.46 & 0.08 & -0.11 & 2\% \\ 
+   \hline
+125 & clust\_dl\_red\_dl & 5000 & 0.33 & 0.69 & 0.45 & 0.05 & -0.17 & 2\% \\ 
+  126 & clust\_dl\_red\_dl & 10000 & 0.34 & 0.69 & 0.46 & 0.09 & -0.13 & 2\% \\ 
+   \hline
+127 & clust\_jac\_red\_jac & 5000 & 0.35 & 0.68 & 0.47 & 0.07 & -0.13 & 2\% \\ 
+  128 & clust\_jac\_red\_jac & 10000 & 0.33 & 0.69 & 0.44 & 0.08 & -0.12 & 2\% \\ 
+   \hline
+129 & clust\_qg\_red\_qg & 5000 & 0.33 & 0.64 & 0.43 & 0.07 & -0.14 & 2\% \\ 
+  130 & clust\_qg\_red\_qg & 10000 & 0.33 & 0.65 & 0.43 & 0.10 & -0.13 & 2\% \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 %-----------Koniec części zasadniczej-----------
 

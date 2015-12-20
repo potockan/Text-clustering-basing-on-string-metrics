@@ -2,6 +2,7 @@
 library(dplyr)
 library(ggplot2)
 library(stringi)
+library(gridExtra)
 
 obrobka_wynikow <- function(partition){
   nazwy <- c('_', '_lcs', '_dl','_jaccard','_qgram',
@@ -52,6 +53,7 @@ obrobka_wynikow <- function(partition){
     )
   }
   wyniki[,1] <- stri_paste("clust", wyniki[,1])
+  wyniki[wyniki[,1] == "clust_",1] <- "clust"
   
   names(wyniki) <- c("Typ danych", 
                      "Batch size",
@@ -72,7 +74,7 @@ obrobka_wynikow <- function(partition){
 }
 
 
-wyniki <- obrobka_wynikow("partitions2")
+wyniki <- obrobka_wynikow("partitions3")
 wyniki <- cbind(wyniki, liczba_obs = rep("100%", 52))
 wyniki <- obrobka_wynikow("partitions4") %>% 
   cbind(liczba_obs = rep("15%", 52)) %>% 
@@ -82,10 +84,12 @@ wyniki <- obrobka_wynikow("partitions5") %>%
   bind_rows(wyniki, .)
 
 knitr::kable(wyniki)
+#names(wyniki) <- c("Typ danych", "Batch", "Jedn.", "Zup.", "Miara V", "ARI", "Silhouettes", "Część")
 xtable::xtable(wyniki)
 
 write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151205.csv")
 write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151213.csv")
+write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv", row.names = FALSE)
 
 j <- 5
 nazwy <- names(wyniki)[3:7]
@@ -105,13 +109,13 @@ for(i in seq(1, length(nazwy), by = 2)){
       theme(axis.text.x = element_text(angle = 45, hjust = 0.9), 
             legend.position = "top") +
       guides(fill=guide_legend(title="Batch size"))
-    print(g[[k]])
-    print(j)
-    print(j+5)
-    ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[k]])
-    pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
-    print(g[[k]])
-    dev.off()
+#     print(g[[k]])
+#     print(j)
+#     print(j+5)
+#     ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[k]])
+#     pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
+#     print(g[[k]])
+#     dev.off()
     j <- j+1
   }
   print(j+8)
@@ -121,5 +125,22 @@ for(i in seq(1, length(nazwy), by = 2)){
                     nrow = 2, ncol = 1)
   dev.off()
 }
+
+
+wyniki <- read.csv("/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv")
+names(wyniki)[c(1,5)] <- c("Typ danych", "Miara V")
+library(xtable)
+aa <- xtable(wyniki[1:52,])
+align(aa) <- "|rlr|rrr|rr|r|"
+print(aa, hline.after = c(0, seq(4, 52, 4)))
+
+aa <- xtable(wyniki[53:104,])
+align(aa) <- "|rlr|rrr|rr|r|"
+print(aa, hline.after = c(0, seq(4, 52, 4)))
+
+aa <- xtable(wyniki[105:130,])
+align(aa) <- "|rlr|rrr|rr|r|"
+print(aa, hline.after = c(0, seq(2, 26, 2)))
+
 
 

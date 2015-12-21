@@ -58,7 +58,7 @@ obrobka_wynikow <- function(partition){
   names(wyniki) <- c("Typ danych", 
                      "Batch size",
                      "Jednorodnosc", 
-                     "Zupelnosc", 
+                     "Zgodnosc", 
                      "Miara V", 
                      "Skorygowany indeks Randa",
                      "Silhouettes",
@@ -92,7 +92,7 @@ write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/
 write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv", row.names = FALSE)
 
 j <- 5
-nazwy <- names(wyniki)[3:7]
+nazwy <- names(wyniki)[3:6]
 for(i in seq(1, length(nazwy), by = 2)){
   g <- list()
   for(k in 1:2){
@@ -109,20 +109,20 @@ for(i in seq(1, length(nazwy), by = 2)){
       theme(axis.text.x = element_text(angle = 45, hjust = 0.9), 
             legend.position = "top") +
       guides(fill=guide_legend(title="Batch size"))
-#     print(g[[k]])
-#     print(j)
-#     print(j+5)
-#     ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[k]])
-#     pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
-#     print(g[[k]])
-#     dev.off()
+    print(g[[k]])
+    print(j)
+    print(j+5)
+    ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[k]])
+    #pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
+    #print(g[[k]])
+    #dev.off()
     j <- j+1
   }
   print(j+8)
   pdf(file = paste0("LaTeX/plot",j+8,".pdf"))
-  g <- grid.arrange(g[[1]], 
-                    g[[2]], 
-                    nrow = 2, ncol = 1)
+  grid.arrange(a,
+               b,
+               nrow = 2, ncol = 1)
   dev.off()
 }
 

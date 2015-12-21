@@ -1146,7 +1146,7 @@ H(K) & = - \sum\limits_{k = 1}^{|K|}\frac{n_k}{n}\cdot \log{\frac{n_k}{n}},  \\
 H(K|C) & = - \sum\limits_{c = 1}^{|C|}\sum\limits_{k = 1}^{|K|}\frac{n_{c,k}}{n}\cdot \log{\frac{n_{c,k}}{n_c}}
 \end{align*}
 
-\emph{Miara $\textrm{V}$}. Mając zdefiniowane miary jednorodności i zgodności, możemy wyliczyć miarę $\textrm{V}$ jako ważoną średnią harmoniczną tych dwóch miar~\cite{Rosenberg2007:vmeasure}:
+\textbf{Miara $\textrm{V}$}. Mając zdefiniowane miary jednorodności i zgodności, możemy wyliczyć miarę $\textrm{V}$ jako ważoną średnią harmoniczną tych dwóch miar~\cite{Rosenberg2007:vmeasure}:
 \begin{equation}
 \textrm{V}_{\beta} = \frac{(1+\beta)\cdot h \cdot c}{(\beta \cdot h) + c}
 \end{equation}
@@ -1532,6 +1532,8 @@ Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zb
 \label{tab:005}
 \end{table}
 
+[TO DO: DODAC PRZYKLADOWE SKUPIENIA DLA WSZYSTKICH 13 ZBIOROW]
+
 \section{Podział tekstów}
 
 Mając tak zdefiniowane skupienia słów możemy przystąpić do podziału zbioru artykułów. Do tego celu użyjemy algorytmu mini-wsadowego $k$-średnich (algorytm~\ref{alg:003} z rozdziału~\ref{analiza-skupien}). Przypomnijmy, że algorytm ten jest metodą pośrednią pomiędzy algorytmem wsadowym, który w każdej iteracji opiera się na wszystkich obserwacjach, a algorytmem SGD, biorącym w każdej iteracji po jednej obserwacji ze zbioru. 
@@ -1540,38 +1542,65 @@ Aby więc użyć algorytmu mini-wsadowego musimy wybrać najpierw liczbę skupie
 
 Zanim określimy wartość parametru $k$, zastanówmy się w jaki sposób będziemy mierzyć jakość otrzymanych podziałów. Cztery na pięć zaprezentowanych miar w rozdziale~\ref{analiza-skupien} wymaga znajomości prawdziwego podziału zbioru. Przypomnijmy, że nasz zbiór danych to artykuły z polskiej Wikipedii, które mają określoną kategorię tematyczną. Można więc wykorzystać znaną nam wiedzę o kategoriach i na jej podstawie określić jakość podziału otrzymanego w wyniku działania algorytmu. Liczba różnych kategorii, które określają tematykę artykułów wynosi $56\ 283$. Próba wykonania analizy skupień przy użyciu algorytmu mini-wsadowego z tak dużym $k$, zakończyła się niepowodzeniem, mimo posiadania dużej ilości pamięci RAM (wraz z partycją wymiany (SWAP) ponad $100$ GB). Stąd też nastąpiła potrzeba zredukowania tej liczby. Ponieważ struktura kategorii Wikipedii jest drzewiasta~\footnote{por. \url{http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii}}, można zastąpić kategorię przypisaną do artykułu kategorią ogólniejszą. Po takiej redukcji otrzymano $6\ 922$ grup tematycznych. Jednak rozkład liczby artykułów w otrzymanych kategoriach był mocno skośny. Taka sytuacja jest silnie niesprzyjająca, gdyż chcemy mieć podobne liczności w grupach. Ręcznie podzielono zatem najbardziej liczne tematy na podtematy, natomiast te o najmniejszej liczności połączono zachowując przy tym podobieństwo tematyki. W ten sposób uzyskano sto różnych tematów o podobnym rozkładzie liczby artykułów. Wstępne testy wykazały, że tak otrzymane $k$ pozwala na dokonanie obliczeń w relatywnie krótkim czasie i nie zajmując dużej ilości pamięci RAM.
 
-\section{Analiza wyników}
- 
-[TO DO!]
+Wstępne testy na ok. $2\%$ artykułów wykazały dość dobre przyporządkowanie (jednorodność i zgodność na poziomie, odpowiednio, $0.3$ i $0.7$). Testy na większej próbce ok. $15\%$ tekstów dały wyniki nieco gorsze (jednorodność i zgodność na poziomie, odpowiednio $0.2$ i $0.5$). Stąd też postanowiono przeanalizować działanie algorytmu dla trzech różnych liczności próbki: $100\%$ ($1\ 075\ 568$ artykułów), ok. $15\%$ ($152\ 772$ artykuły) oraz ok. $2\%$ zbioru ($25\ 000$ artykułów). Dla tej ostatniej próbki za wartość parametru $b$, określającego liczbę obserwacji mających wkład w każdej iteracji algorytmu, przyjęliśmy $5\ 000$ oraz $10\ 000$. Większe wartości (tj. $35\ 000$ oraz $70\ 000$) nie mają sensu, gdyż są większe od liczności próby.
 
-Bla bla bla bla bla bla
+Wszystkie analizy puszczono z tym samym ziarnem losowania, tj. w każdej analizie obserwacje były losowane w tej samej kolejności. 
+
+\section{Analiza wyników}
+
+[TO DO - JESZCZE LICZE ROZNE WARIANTY]
+ 
+W niniejszym podrozdziale przeanalizujemy uzyskane wyniki dla uzyskanych podziałów tekstów.
+
+Dokładne wyniki można znaleźć w tabelach~\ref{tab:005},~\ref{tab:006} oraz~\ref{tab:007}. Na rysunkach~\ref{plot:005},~\ref{plot:006},~\ref{plot:007},~\ref{plot:008} oraz~\ref{plot:009} prezentujemy wartości uzyskanych, odpowiednio, jednorodności, zgodności, miary V, skorygowanego indeksu Randa oraz miary silhouettes dla wszystkich zbudowanych podziałów zbiorów. Przypomnijmy, że klasami porównawczymi do uzyskanych podziałów są tematy artykułów.
+
+Weźmy pierwszy wykres, tj. jednorodności. Na pierwszy rzut oka widać, że największe wartości tej miary uzyskał podział zbudowany na $2\%$ zbioru, uzyskując, nieco ponad $0.3$ dla wszystkich uzyskanych podziałów. Nieco mniejszą wartość jednorodności dostaliśmy w przypadku podziału $15\%$ artykułów o średniej równej ok. $0.2$. Dla całego zbioru jednorodność jest bardzo mała i wynosi jedynie ok. $0.03$. Oznacza to, że zdecydowana większość skupień zawiera teksty z różnych klas (tematów), co jest cechą wysoce niepożądaną. Wynika z tego, że czym mniejszy zbiór, tym lepszy jego podział ze względu na temat.
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=400pt]{plot15.pdf}\\
-  \caption{Jednorodność, zupełność.}\label{plot:005}
+  \includegraphics[width=400pt]{plot5.pdf}\\
+  \caption{Jednorodność.}\label{plot:005}
 \end{figure}
 
+Przyjrzyjmy się teraz wartościom jednorodności ze względu na wielkość parametru $b$. Można stwierdzić, że wartość $b$ nie ma istotnego wpływu na wysokość jednorodności. Warto przy tym zauważyć, że często jednorodność ma największą wartość dla $b=5\ 000$ (zwłaszcza w przypadku podziału zbudowanego na całym zbiorze artykułów), co wydaje się być sprzeczne z teorią zaprezentowaną w rozdziale~\ref{analiza-skupien}.
 
-Bla bla bla bla bla bla
+W końcu spójrzmy na wartości jednorodności w podziale na użyty zbiór (skupień) słów.
+
+[TO DO]
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=400pt]{plot17.pdf}\\
-  \caption{Miara V, ARI.}\label{plot:007}
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=400pt]{plot6.pdf}\\
+  \caption{Zgodność.}\label{plot:006}
 \end{figure}
 
-
-Bla bla bla bla bla bla
+[TO DO]
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=400pt]{plot18.pdf}\\
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=400pt]{plot7.pdf}\\
+  \caption{Miara V.}\label{plot:007}
+\end{figure}
+
+[TO DO]
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=400pt]{plot8.pdf}\\
+  \caption{ARI.}\label{plot:008}
+\end{figure}
+
+[TO DO]
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=400pt]{plot9.pdf}\\
   \caption{Silhouettes.}\label{plot:009}
 \end{figure}
 
-Bla bla bla bla bla bla
 
 \section{Szczegółowe wyniki}
 
@@ -1581,7 +1610,7 @@ Bla bla bla bla bla bla
 \centering
 \begin{tabular}{|rlr|rrr|rr|r|}
 \hline
-  & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes & Część \\ 
+  & Typ danych & $b$ & Jedn. & Zg. & Miara V & ARI & Silhouettes & Część \\ 
   \hline
 1 & clust & 5000 & 0.04 & 0.06 & 0.05 & 0.00 & -0.23 & 100\% \\ 
   2 & clust & 10000 & 0.03 & 0.05 & 0.03 & 0.00 & -0.26 & 100\% \\ 
@@ -1649,6 +1678,8 @@ Bla bla bla bla bla bla
   52 & clust\_qg\_red\_qg & 70000 & 0.03 & 0.06 & 0.04 & 0.00 & -0.14 & 100\% \\ 
    \hline
 \end{tabular}
+\caption{Wyniki dla całego zbioru.}
+\label{tab:006}
 \end{table}
 
 
@@ -1656,7 +1687,7 @@ Bla bla bla bla bla bla
 \centering
 \begin{tabular}{|rlr|rrr|rr|r|}
 \hline
-  & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes & Część \\ 
+  & Typ danych & $b$ & Jedn. & Zg. & Miara V & ARI & Silhouettes & Część \\ 
   \hline
 53 & clust & 5000 & 0.21 & 0.57 & 0.31 & 0.01 & -0.26 & 15\% \\ 
   54 & clust & 10000 & 0.23 & 0.54 & 0.32 & 0.01 & -0.15 & 15\% \\ 
@@ -1724,13 +1755,15 @@ Bla bla bla bla bla bla
   104 & clust\_qg\_red\_qg & 70000 & 0.21 & 0.47 & 0.29 & 0.02 & -0.17 & 15\% \\ 
    \hline
 \end{tabular}
+\caption{Wyniki dla ok. $15\%$ zbioru.}
+\label{tab:007}
 \end{table}
 
 \begin{table}[!h]
 \centering
 \begin{tabular}{|rlr|rrr|rr|r|}
 \hline
-  & Typ danych & Batch & Jedn. & Zup. & Miara V & ARI & Silhouettes & Część \\ 
+  & Typ danych & $b$ & Jedn. & Zg. & Miara V & ARI & Silhouettes & Część \\ 
   \hline
 105 & clust & 5000 & 0.32 & 0.69 & 0.44 & 0.04 & -0.17 & 2\% \\ 
   106 & clust & 10000 & 0.34 & 0.71 & 0.46 & 0.08 & -0.15 & 2\% \\ 
@@ -1772,6 +1805,8 @@ Bla bla bla bla bla bla
   130 & clust\_qg\_red\_qg & 10000 & 0.33 & 0.65 & 0.43 & 0.10 & -0.13 & 2\% \\ 
    \hline
 \end{tabular}
+\caption{Wyniki dla ok. $2\%$ zbioru.}
+\label{tab:008}
 \end{table}
 
 %-----------Koniec części zasadniczej-----------

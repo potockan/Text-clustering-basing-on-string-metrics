@@ -13,7 +13,7 @@ t <- list()
   b <- character()
   for(a in nazwy){
     #for(bb in c(5000, 10000, 35000, 70000))
-      b <- c(b,sprintf("python /home/natalia/Text-clustering-basing-on-string-metrics/Python/python_mini_batch/101_clustering.py --i %d --typ %s; ", i, a))
+      b <- c(b,sprintf("python /home/natalia/Text-clustering-basing-on-string-metrics/Python/python_mini_batch/102_clustering.py --i %d --typ %s; ", i, a))
   }
   t[[i]] <- b
 #}
@@ -25,7 +25,7 @@ library(stringi)
 lapply(t, stri_flatten, collapse = " ")
 #for(i in 1:13)
   #cat(t[[i]], file = sprintf("/home/samba/potockan/mgr/czesc%d/skrypt1.sh", i))
-  cat(t[[i]], file = sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions3/czesc%d/skrypt1.sh", i))
+  cat(t[[i]], file = sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions6/czesc%d/skrypt1.sh", i), sep = "\n")
 
 
 

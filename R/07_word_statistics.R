@@ -100,20 +100,28 @@ data.frame(dl = stri_length(word_stat$word)) -> word_length
 word_length <- bind_cols(word_length, data.frame(l = rep(1, nrow(word_length))))
 
 
-ggplot(word_length, aes(factor(l), dl)) +
-  geom_boxplot() +
-  xlab("") +
-  ylab("") +
-  theme(text = element_text(size=25),
-        axis.text.x = element_text(size = 25), 
-        axis.text.y = element_text(size = 25))
+# ggplot(word_length, aes(factor(l), dl)) +
+#   geom_boxplot() +
+#   xlab("") +
+#   ylab("") +
+#   theme(text = element_text(size=25),
+#         axis.text.x = element_text(size = 25), 
+#         axis.text.y = element_text(size = 25))
+# 
+# word_length %>% 
+#   filter(dl <= 11) %>% 
+# ggplot(aes(factor(l), dl)) +
+#   geom_boxplot()
 
 word_length %>% 
-  filter(dl <= 11) %>% 
-ggplot(aes(factor(l), dl)) +
-  geom_boxplot()
-
-
+  ggplot(aes(x=log2(dl)), main="Liczba występowania słów w artykułach") + 
+  geom_histogram(fill="white", colour="black") +
+  xlab("log10(licznosc)") +
+  ylab("czestosc") +
+  theme(text = element_text(size=25),
+        axis.text.x = element_text(size = 25), 
+        axis.text.y = element_text(size = 25)) +
+  scale_y_continuous(label=scientific_format())
 
 
 top10 <- head(word_stat, 20)

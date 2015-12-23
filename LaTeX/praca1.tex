@@ -808,11 +808,11 @@ Analiza skupień polega na wyróżnieniu w zbiorze ustalonej liczby rozłącznyc
 
 \section{Metoda $k$-średnich}
 
-[TO DO: DOROBIC PRZYKLADY:
-- (2.1, 2.1) POKAZAC SKUPIENIA OTRZYMANE PRZY UZYCIU 3/4 ALGORYTMOW NP. NA IRISIE
-- (2.3) NARYSOWAC JAKIS DENDROGRAM
-- (2.3) POKAZAC ODMIENNOSCI NAJBLIZSZEGO, NAJDALSZEGO, SREDNIEGO
-- (2.4) PRZYKLADY JAKOSCI NA PODSTAWIE JAKICHS LOSOWYCH KLAS]
+[TO DO: DOROBIC PRZYKLADY:\\
+- (2.1, 2.1) POKAZAC SKUPIENIA OTRZYMANE PRZY UZYCIU 3/4 ALGORYTMOW NP. NA IRISIE\\
+- (2.3) NARYSOWAC JAKIS DENDROGRAM\\
+- (2.3) POKAZAC ODMIENNOSCI NAJBLIZSZEGO, NAJDALSZEGO, SREDNIEGO\\
+- (2.4) PRZYKLADY JAKOSCI NA PODSTAWIE JAKICHS LOSOWYCH KLAS\\]
 
 Rozważmy przestrzeń euklidesową $\mathbb{R}^p$ i niech będzie dana liczba skupień $k$. Wówczas zadanie znalezienia skupień o wyżej wymienionych własnościach można sprowadzić do dobrze określonego zadania optymalizacji. Weźmy próbę $n$-elementową obserwacji $\mathbf{x}_i,\ i = 1,\ldots,n$ o wartościach w $\mathbb{R}^p$. %Niech $d_{ij} = d(\mathbf{x}_i, \mathbf{x}_j)$ oznacza kwadrat odległości między obserwacjami $\mathbf{x}_i$ i $\mathbf{x}_j$. Wówczas 
 Suma kwadratów odległości między obserwacjami próby wynosi~\cite{Koronacki2005:statystyczne}
@@ -870,7 +870,7 @@ Algorytm wsadowy jest najbardziej popularnym i najczęściej stosowanym algorytm
 
 \subsection{Algorytmy oparte na spadku gradientu}
 
-Algorytmy oparte na spadku gradientu są często stosowane np. w regresji liniowej~\cite{Bottou2012:sgdtricks}. Idea polega na szukaniu minimum z danej funkcji kosztu, w kolejnych krokach algorytmu aktualizując zmienną, w kierunku, w którym spadek gradientu był największy. Każda aktualizacja zależy od parametru, zwanego \emph{parametrem uczenia}, który musi być odpowiednio dobrany. W niniejszej sekcji [podrozdziale?] opiszemy trzy algorytmy oparte na spadku gradientu.
+Algorytmy oparte na spadku gradientu są często stosowane np. w regresji liniowej~\cite{Bottou2012:sgdtricks}. Idea polega na szukaniu minimum z danej funkcji kosztu, w kolejnych krokach algorytmu aktualizując zmienną, w kierunku, w którym spadek gradientu był największy. Każda aktualizacja zależy od parametru, zwanego \emph{parametrem uczenia}, który musi być odpowiednio dobrany. W niniejszym podrozdziale opiszemy trzy algorytmy oparte na spadku gradientu.
 
 %[NIE WIEM CZY PISAĆ TU WIĘCEJ O GRADIENT DESCENT, Z KTOREGO TO WSZYSTKO POCHODZI, CZY SOBIE DAROWAC]
 
@@ -892,7 +892,7 @@ gdzie $\gamma$ jest odpowiednio dobranym \emph{parametrem uczenia}, a $t$ oznacz
 %\end{array}\right.
 \end{equation}
 
-Algorytm \emph{stochastycznego spadku gradientu}, ozn. SGD, jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{Bottou2012:sgdtricks}:
+Algorytm \emph{stochastycznego spadku gradientu}, ozn. SGD (ang. \emph{stochastic gradient descent}), jest daleko idącym uproszczeniem. Zamiast liczyć gradient z $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ wprost, każda iteracja estymuje gradient na podstawie \emph{jednej losowo wybranej} obserwacji $\mathbf{x}_i$~\cite{Bottou2012:sgdtricks}:
 \begin{equation}
 \mathbf{m}_l^{(t+1)} = \mathbf{m}_l^{(t)} + \gamma \frac{\partial \widetilde{W}(\mathbf{m}, \mathbf{x}_i)}{\partial \mathbf{m}}
 \end{equation}
@@ -901,7 +901,7 @@ gdzie $\gamma$ jest odpowiednio dobranym parametrem uczenia. Tak samo jak w przy
 \begin{align}
 n^{(t+1)}_l& = n^{(t)}_l + \left\{
 \begin{array}{l l}     
-    1, & \text{gdy } l = C(j) \\
+    1, & \text{gdy } l = C(i1) \\
     0, & \text{wpp.}
 \end{array}\right. \\
 \mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} + \left\{
@@ -974,7 +974,7 @@ Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obse
 
 
 
-Algorytm oparty na stochastycznym spadku gradientu (znany również pod nazwą algorytmu \emph{online'owego} [I TAK I NIE - ZALEZY OD ARTICLE'A]) rozpoczyna się tak samo, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest do uzyskania zbieżności~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
+Algorytm oparty na stochastycznym spadku gradientu rozpoczyna się tak samo jak algorytm wsadowy, tj. inicjalizacją losowych $k$ środków skupień. Następnie zbiór obserwacji jest mieszany i obserwacje po kolei są przydzielane do najbliższego skupienia. Środki skupień przeliczane są po każdym przydzieleniu punktu do skupienia. Procedura ta powtarzana jest do uzyskania zbieżności~\cite{Bottou1995:convergenceproperties}. Algorytm ten jest dużo szybszy od dwóch wcześniejszych, kosztem dokładności rozwiązania~\cite{Bottou2012:sgdtricks}.
 
 \begin{algorithm}[h!]
 \begin{algorithmic}[1]
@@ -1021,7 +1021,7 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
 
 Metody hierarchiczne to zbiór algorytmów analizy skupień, które nie wymagają znajomości liczby skupień. W niniejszym podrozdziale przedstawimy pokrótce schemat ich działania w dowolnej przestrzeni obserwacji.
 
-Powyżej przedstawiliśmy algorytm $k$-średnich, dzielący zbiór z przestrzeni euklidesowej na podzbiory punktów podobnych do siebie, tj. mieliśmy do czynienia ze zmiennymi liczbowym. Problem ten można uogólnić dla obserwacji z dowolnej przestrzeni. Po pierwsze odległość euklidesową z równania~\ref{eq:014} można zamienić na dowolną funkcję odmienności $d$ między obserwacjami z danej przestrzeni. Po drugie trzeba zastąpić średnie skupień $\mathbf{m}_l, l=1,\ldots,k$ inną wartością wektorową, która miałaby sens w przypadku np. atrybutów jakościowych. Wartość ta to punkt ze zbioru obserwacji, który minimalizuje sumę odległości między nim samym, a pozostałymi punktami ze skupienia:
+Powyżej przedstawiliśmy algorytm $k$-średnich, dzielący zbiór z przestrzeni euklidesowej na podzbiory punktów podobnych do siebie, tj. mieliśmy do czynienia ze zmiennymi liczbowym. Problem ten można uogólnić dla obserwacji z dowolnej przestrzeni. Po pierwsze odległość euklidesową z równania~\ref{eq:014} można zamienić na dowolną funkcję odmienności $d$ między obserwacjami z danej przestrzeni. Po drugie trzeba zastąpić średnie skupień $\mathbf{m}_l, l=1,\ldots,k$ inną wartością wektorową, która miałaby sens w przypadku np. atrybutów jakościowych. Wartość ta to punkt ze zbioru obserwacji, który minimalizuje sumę odległości między nim samym, a pozostałymi punktami ze skupienia~\cite{Koronacki2005:statystyczne}:
 \begin{equation}
 \mathbf{m}_l = \min\limits_{\mathbf{y} \in X} \sum\limits_{i = C(l)} d(\mathbf{x}_i, \mathbf{y}),
 \end{equation}
@@ -1031,7 +1031,7 @@ Przejdźmy do metod hierarchicznych analizy skupień. Jak wspomniano wcześniej,
 
 Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielące. W tej pierwszej, na początku tworzy się tyle skupień ile jest obserwacji w zbiorze, traktując każdą obserwację jako osobne skupienie. Następnie w każdym kroku łączona jest ta para podzbiorów, które są od siebie najmniej odmienne. W ten sposób na kolejnym poziomie otrzymujemy (przynajmniej) o jedno skupienie mniej. Procedura łącząca skupienia najmniej odmienne trwa nadal, w każdym kolejnym kroku zmniejszając liczbę skupień. W ostatnim kroku algorytmu otrzymujemy jedno duże skupienie zawierające wszystkie obserwacje z próby~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
-Metoda dzieląca działa odwrotnie: zaczynam od jednego skupienia zawierające cały zbiór. Następnie w każdym kroku algorytmu jedno ze skupień dzielone jest na dwa skupienia, w których odmienność jest największa. W ten sposób na kolejnym poziomie otrzymujemy (przynajmniej) o jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, a każdym kolejnym kroku otrzymując coraz więcej skupień. W ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to liczba obserwacji). Warto przy tym zauważyć, że algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+Metoda dzieląca działa odwrotnie: zaczynamy od jednego skupienia zawierającego cały zbiór. Następnie w każdym kroku algorytmu jedno ze skupień dzielone jest na dwa skupienia, w których odmienność jest największa. W ten sposób na kolejnym poziomie otrzymujemy o jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, w każdym kolejnym kroku otrzymując coraz więcej skupień. W ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to liczba obserwacji). Warto przy tym zauważyć, że algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
 Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metoda dzieląca jest o wiele bardziej złożona obliczeniowo, skupimy się na metodzie aglomeracyjnej, jako tej częściej stosowanej w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj trzy najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada oraz średnią odmienność. Oznaczmy przez $D_{ij}$ odmienność między skupieniem $i$-tym a $j$-tym, których liczności wynoszą odpowiednio $n_i, n_j$\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
@@ -1056,9 +1056,9 @@ D_{ij} = \frac{1}{n_i n_j}\sum\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C
 $$
 \end{definition}
 
-Odmienność najbliższego sąsiada wymaga żeby jedna odmienność $d(\mathbf{x}_a, \mathbf{x}_b)$, gdzie $\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)$, miała małą wartość, aby uznać dwa podzbiory za bliskie sobie, bez względu na odmienności innych obserwacji z tych dwóch grup. Metoda ta będzie zatem mieć skłonność do łączenia, skupień połączonych przez szereg bliskich obserwacji pośrednich. Takie zjawisko nazywane jest \emph{efektem łańcuchowym} i uważane jest za wadę tej metody. Skupienia otrzymane w wyniku jej działania często nie są zwarte, jako że podobieństwo skupień określone jest na podstawie dwóch najbliższych obserwacji~\cite{Hastie2009:elements}. Odmienność najbliższego sąsiada daje zazwyczaj skupienia wąskie i wydłużone~\cite{Koronacki2005:statystyczne}. 
+Odmienność najbliższego sąsiada wymaga żeby jedna odmienność $d(\mathbf{x}_a, \mathbf{x}_b)$, gdzie $\mathbf{x}_a \in C(i)$, $\mathbf{x}_b \in C(j)$, miała małą wartość, aby uznać dwa podzbiory za bliskie sobie, bez względu na odmienności innych obserwacji z tych dwóch grup. Metoda ta będzie zatem mieć skłonność do łączenia, skupień połączonych przez szereg bliskich obserwacji pośrednich. Takie zjawisko nazywane jest \emph{efektem łańcuchowym} i uważane jest za wadę tej metody. Skupienia otrzymane w wyniku jej działania często nie są zwarte, jako że podobieństwo skupień określone jest na podstawie dwóch najbliższych obserwacji~\cite{Hastie2009:elements}. Odmienność najbliższego sąsiada daje zazwyczaj skupienia wąskie i wydłużone~\cite{Koronacki2005:statystyczne}. 
 
-Metoda odmienności najdalszego sąsiada ma działanie odwrotne. Dwa skupienia są do siebie podobne, wtedy i tylko wtedy gdy wszystkie obserwacje z ich połączenia są dość podobne. Jednakowoż, metoda ta może nie zachowywać własności ,,bliskości'' dwóch podzbiorów, tj. obserwacje przypisane do danego skupienia mogą znajdować się o wiele bliżej obserwacji z innego podzbioru, niż do punktów ze swojego skupienia~\cite{Hastie2009:elements}. W wyniku jej działania otrzymujemy podzbiory o kulistym kształcie~\cite{Koronacki2005:statystyczne}.
+Metoda odmienności najdalszego sąsiada ma działanie odwrotne. Dwa skupienia są do siebie podobne, wtedy i tylko wtedy, gdy wszystkie obserwacje z ich połączenia są dość podobne. Jednakowoż, metoda ta może nie zachowywać własności ,,bliskości'' dwóch podzbiorów, tj. obserwacje przypisane do danego skupienia mogą znajdować się o wiele bliżej obserwacji z innego podzbioru, niż do punktów ze swojego skupienia~\cite{Hastie2009:elements}. W wyniku jej działania otrzymujemy podzbiory o kulistym kształcie~\cite{Koronacki2005:statystyczne}.
 
 Metoda średniej odmienności jest kompromisem pomiędzy dwoma powyższymi. Próbuje ona dać skupienia relatywnie zwarte i relatywnie oddalone od siebie~\cite{Hastie2009:elements}. Podobnie jak metoda odmienności najdalszego sąsiada, daje ona skupienia o kształcie kulistym~\cite{Koronacki2005:statystyczne}.
 
@@ -1074,7 +1074,7 @@ Przyjmujemy następującego założenia: Niech $K$ i $C$ oznaczają dwa różne 
 
 \subsection{Skorygowany indeks Randa [Adjusted Rand Index [JAK TO PRZETŁUMACZYĆ ???]]}
 
-Niech $a_1$ oznacza liczbę par elementów z $X$, które mają wspólne skupienie zarówno w $K$, jak i w $C$, natomiast przez $a_0$ oznaczmy liczbę par elementów z $X$, które mają zostały przypisane do innych skupień zarówno w $K$, jak i w $C$. Elementy, które spełniają jeden z powyższych warunki oznaczają zgodność podziałów $K$ i $C$. Możemy wówczas zdefiniować \emph{indeks Randa}~\cite{Rand1971:objective}:
+Niech $a_1$ oznacza liczbę par elementów z $X$, które mają wspólne skupienie zarówno w $K$, jak i w $C$, natomiast przez $a_0$ oznaczmy liczbę par elementów z $X$, które mają zostały przypisane do innych skupień zarówno w $K$, jak i w $C$. Elementy, które spełniają jeden z powyższych warunków oznaczają zgodność podziałów $K$ i $C$. Możemy wówczas zdefiniować \emph{indeks Randa}~\cite{Rand1971:objective}:
 \begin{equation}
 \textrm{RI} = \frac{a_0+a_1}{{n \choose 2} }
 \end{equation}
@@ -1084,7 +1084,7 @@ Wartości indeksu Randa znajdują się w przedziale $[0,1]$. W praktyce jednak $
 \begin{equation}
 \textrm{ARI} = \frac{2 (a_0 a_1 - b_0 b_1) }{(a_0 + b_0)(b_0 + a_1) + (a_0 + b_1)(b_1 + a_1)},
 \end{equation}
-gdzie $b_0$ oznacza liczbę par elementów z $X$, które należą do tego skupienia w $K$, ale do różnych skupień w $C$, natomiast $b_1$ oznacza liczbę par elementów z $X$, które należą do różnych skupień w $K$, ale do tego samego skupienia w $C$.
+gdzie $b_0$ oznacza liczbę par elementów z $X$, które należą do tego samego skupienia w $K$, ale do różnych skupień w $C$, natomiast $b_1$ oznacza liczbę par elementów z $X$, które należą do różnych skupień w $K$, ale do tego samego skupienia w $C$.
 
 %Przykładowo, jeśli chcemy podzielić sześcioelementowy zbiór na trzy skupienia i $K = [1, 1, 2, 2, 3, 3]$, a $C = [2, 1, 3, 1, 2, 2]$, to $a = 1$, a $b = 9$. Stąd $\textrm{RI} = \frac{1+9}{{6 \choose 2} } \approx 0.67$.
 
@@ -1348,7 +1348,7 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa (p. rys.~\ref{
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=350pt, height=200pt]{plot3.pdf}\\
-  \caption{TO DO : ZMIEN TEN WYKRES NA HISOGRAM. Wykres skrzynkowy długości słów.}\label{plot:003}
+  \caption{Histogram logarytmu dziesiętnego długości słów.}\label{plot:003}
 \end{figure}
 
 
@@ -1429,7 +1429,7 @@ Min. & 1st Qu. & Median & Mean & 3rd Qu. & Max. \\
 \end{table}
 
 
-Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Procedury te polegają na [PLIK 14]:
+Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Procedury te polegają na [PLIK R/14]:
 \begin{enumerate}
 \item\label{p:001} Dołączeniu do skupień słów jeszcze niepogrupowanych.
 \item\label{p:002} Dołączeniu do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
@@ -1488,7 +1488,7 @@ Schemat działania jest następujący (p. algorytm~\ref{alg:005}): sprawdzamy, j
 
 Mając tak podzielone skupienia, weźmy reprezentantów małych podzbiorów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w algorytmie~\ref{alg:004}: liczymy odległość środka małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego środka było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
 
-Zauważmy, że algorytm ten to po prostu metoda aglomeracyjna z innym niż zaprezentowane w rozdziale~\ref{analiza-skupien} kryterium liczenia odmienności dwóch skupień. W tej procedurze odmienność między podzbiorami określona jest jako odległość między środkami (reprezentantami) skupień.
+Zauważmy, że druga część algorytmu to po prostu metoda aglomeracyjna z innym niż zaprezentowane w rozdziale~\ref{analiza-skupien} kryterium liczenia odmienności dwóch skupień. W tej procedurze odmienność między podzbiorami określona jest jako odległość między środkami (reprezentantami) skupień.
 
 
 
@@ -1496,9 +1496,9 @@ Zauważmy, że algorytm ten to po prostu metoda aglomeracyjna z innym niż zapre
 
 \textbf{Wybór odległości.} Mając trzy powyższe algorytmy, możemy przystąpić do dalszej obróbki zbioru słów. Zanim to jednak nastąpi należy wybrać odległości, dzięki którym będzie to możliwe. W rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow} przedstawiono pięć odległości opartych na operacjach edycyjnych, trzy odległości oparte na $q$-gramach oraz dwie miary heurystyczne. 
 
-Odległość Hamminga odrzucamy, gdyż można ją zastosować jedynie na napisach o tej samej długości. Odległości najdłuższego wspólnego podnapisu, Levenshteina, optymalnego dopasowania napisów i Damerau-Levenshteina różnią się jedynie zbiorem bazowych operacji edycyjnych, często dając tę samą odległość. Stąd postanowiliśmy użyć dwóch ,,skrajnych'' odległości, tj. takich, które pozwalają na najmniejszą i największą liczbę bazowych operacji edycyjnych, czyli odległość najdłuższego wspólnego podnapisu i Damerau-Levenshteina. 
+Odległość Hamminga odrzucamy, gdyż można ją zastosować jedynie na napisach o tej samej długości. Odległości najdłuższego wspólnego podnapisu, Levenshteina, optymalnego dopasowania napisów i Damerau-Levenshteina różnią się jedynie zbiorem bazowych operacji edycyjnych, często dając tę samą odległość. Stąd postanowiliśmy użyć dwóch ,,skrajnych'' odległości, tj. takich, które pozwalają na najmniejszą i największą liczbę bazowych operacji edycyjnych, czyli odległość najdłuższego wspólnego podnapisu (lcs) i Damerau-Levenshteina (dl). 
 
-Z odległości opartych na $q$-gramach wyselekcjonowaliśmy odległość Jaccarda oraz $q$-gramową jako najbardziej reprezentatywne. W obu przypadkach wybraliśmy $q=4$. Dzięki takiemu podejściu unikniemy przetwarzania słów o długości mniejszej niż cztery znaki.
+Z odległości opartych na $q$-gramach wyselekcjonowaliśmy odległość Jaccarda (jac) oraz $q$-gramową (qg) jako najbardziej reprezentatywne. W obu przypadkach wybraliśmy $q=4$. Dzięki takiemu podejściu unikniemy przetwarzania słów o długości mniejszej niż cztery znaki.
 
 Miary heurystyczne pominęliśmy.
 
@@ -1548,13 +1548,12 @@ Wszystkie analizy puszczono z tym samym ziarnem losowania, tj. w każdej analizi
 
 \section{Analiza wyników}
 
-[TO DO - JESZCZE LICZE ROZNE WARIANTY]
- 
+
 W niniejszym podrozdziale przeanalizujemy uzyskane wyniki dla uzyskanych podziałów tekstów.
 
 Dokładne wyniki można znaleźć w tabelach~\ref{tab:005},~\ref{tab:006} oraz~\ref{tab:007}. Na rysunkach~\ref{plot:005},~\ref{plot:006},~\ref{plot:007},~\ref{plot:008} oraz~\ref{plot:009} prezentujemy wartości uzyskanych, odpowiednio, jednorodności, zgodności, miary V, skorygowanego indeksu Randa oraz miary silhouettes dla wszystkich zbudowanych podziałów zbiorów. Przypomnijmy, że klasami porównawczymi do uzyskanych podziałów są tematy artykułów.
 
-Weźmy pierwszy wykres, tj. jednorodności. Na pierwszy rzut oka widać, że największe wartości tej miary uzyskał podział zbudowany na $2\%$ zbioru, uzyskując, nieco ponad $0.3$ dla wszystkich uzyskanych podziałów. Nieco mniejszą wartość jednorodności dostaliśmy w przypadku podziału $15\%$ artykułów o średniej równej ok. $0.2$. Dla całego zbioru jednorodność jest bardzo mała i wynosi jedynie ok. $0.03$. Oznacza to, że zdecydowana większość skupień zawiera teksty z różnych klas (tematów), co jest cechą wysoce niepożądaną. Wynika z tego, że czym mniejszy zbiór, tym lepszy jego podział ze względu na temat.
+Weźmy pierwszy wykres, tj. jednorodność. Na pierwszy rzut oka widać, że największe wartości tej miary uzyskał podział zbudowany na $2\%$ zbioru, uzyskując, nieco ponad $0.3$ dla wszystkich uzyskanych podziałów. Nieco mniejszą wartość jednorodności dostaliśmy w przypadku podziału $15\%$ artykułów o średniej równej ok. $0.2$. Dla całego zbioru jednorodność jest bardzo mała i wynosi jedynie ok. $0.03$. Oznacza to, że zdecydowana większość skupień zawiera teksty z różnych klas (tematów), co jest cechą wysoce niepożądaną. Wynika z tego, że czym mniejszy zbiór, tym lepszy jego podział ze względu na temat.
 
 \begin{figure}[!h]
   \centering
@@ -1565,9 +1564,9 @@ Weźmy pierwszy wykres, tj. jednorodności. Na pierwszy rzut oka widać, że naj
 
 Przyjrzyjmy się teraz wartościom jednorodności ze względu na wielkość parametru $b$. Można stwierdzić, że wartość $b$ nie ma istotnego wpływu na wysokość jednorodności. Warto przy tym zauważyć, że często jednorodność ma największą wartość dla $b=5\ 000$ (zwłaszcza w przypadku podziału zbudowanego na całym zbiorze artykułów), co wydaje się być sprzeczne z teorią zaprezentowaną w rozdziale~\ref{analiza-skupien}.
 
-W końcu spójrzmy na wartości jednorodności w podziale na użyty zbiór (skupień) słów. Najwyższą wartość jednorodności uzyskano dla zbiorów \emph{clust\_red\_jac} oraz \emph{clust\_red\_dl}, \emph{clust\_jac} i \emph{clust} dla, odpowiednio, podziale opartym na $2\%$, $15\%$ oraz $100\%$ zbioru. Wysoką wartość jednorodności uzyskano również dla \emph{clust\_lcs}, \emph{clust\_red\_lcs}, \emph{clust\_jac\_red\_jac}. Stąd też można wnioskować, że wpływ na jakość podziału miała procedura zmniejszająca liczbę skupień. Co więcej, najlepsze rezultaty uzyskano przy użyciu odległości Jaccarda oraz lcs. Warto przy tym zauważyć, że we wszystkich przypadkach najgorsze podziały uzyskano dla odległości $q$-gramowej.
+W końcu spójrzmy na wartości jednorodności w podziale na użyty zbiór (skupień) słów. Najwyższą wartość jednorodności uzyskano dla zbiorów \emph{clust\_red\_jac} oraz \emph{clust\_red\_dl}, \emph{clust\_jac} i \emph{clust} dla, odpowiednio, podziału opartego na $2\%$, $15\%$ oraz $100\%$ zbioru. Wysoką wartość jednorodności uzyskano również dla \emph{clust\_lcs}, \emph{clust\_red\_lcs}, \emph{clust\_jac\_red\_jac}. Stąd też można wnioskować, że pozytywny wpływ na jakość podziału miała procedura zmniejszająca liczbę skupień. Co więcej, najlepsze rezultaty uzyskano przy użyciu odległości Jaccarda oraz lcs. Warto przy tym zauważyć, że we wszystkich przypadkach najgorsze podziały uzyskano dla odległości $q$-gramowej.
 
-Przejdźmy do analizy zgodności podziału zbiorów na skupienia. [TO DO]
+Przejdźmy do analizy zgodności podziału zbiorów na skupienia. Najwyższe wartości tej miary uzyskano na $2\%$ zbioru tekstów i zawierały się w przedziale $[0.58, 0.72]$. Nieco mniejsze wartości zgodności dostaliśmy dla $15\%$ zbioru i wynosiła ona średnio $0.52$. Najniższe wartości zgodności uzyskano dla całego zbioru tekstów i były one równe ok. $0.06$. Oznacza to, że obserwacje z danej klasy (tematu) znajdują się w prawie wszystkich możliwych skupieniach, a więc podział taki jest słaby. Stąd, czym mniejszy zbiór tym lepszy podział pod względem tematycznym.
 
 \begin{figure}[!h]
   \centering
@@ -1576,7 +1575,9 @@ Przejdźmy do analizy zgodności podziału zbiorów na skupienia. [TO DO]
   \caption{Zgodność.}\label{plot:006}
 \end{figure}
 
-[TO DO]
+Przyjrzyjmy się teraz wartościom zgodności ze względu na wielkość parametru $b$. Dla analizy wykonanej na $2\%$ zbioru istotnie lepsze rezultaty uzyskano dla $b = 10\ 000$ -- w prawie wszystkich przypadkach zgodność jest wyższa o $0.01-0.02$. Dalej, dla $15\%$ tekstów w większości przypadków najlepsze wyniki dał algorytm z $b = 5\ 000$. Dla pełnego zbioru artykułów miara zgodności jest równa dla prawie wszystkich grup.
+
+Dalej spójrzmy na wartości zgodności w podziale na użyty zbiór (skupień) słów. Widać, że w przypadku dwóch mniejszych zbiorów tekstów, miara ta dla jest istotnie niższa dla skupień, które opierały się na odległości $q$-gramowej, tj. \emph{clust\_qg, clust\_red\_qg} oraz \emph{clust\_qg\_red\_qg} niż w analogicznych grupach, dla których użyto innej odległości. Z drugiej strony, średnio najlepsze wyniki uzyskano dla tych podzbiorów, do utworzenia których zastosowano metrykę lcs. Pośrednio znalazły się odległości dl oraz jac. Lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005}, choć różnice pomiędzy nimi są niewielkie.
 
 \begin{figure}[!h]
   \centering
@@ -1585,7 +1586,9 @@ Przejdźmy do analizy zgodności podziału zbiorów na skupienia. [TO DO]
   \caption{Miara V.}\label{plot:007}
 \end{figure}
 
-[TO DO]
+Ponieważ miara V jest średnią harmoniczną dwóch poprzednich miar, skupimy się jedynie na analizie uzyskanych wyników dla różnych zbiorów wejściowych. Jak można było się spodziewać, najlepsze wyniki uzyskano dla zbiorów, które budowane były przy użyciu odległości lcs. W drugiej kolejności najlepiej wypadła metryka dl. Również lepszy podział uzyskano, gdy zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005}. 
+
+Przejdźmy do skorygowanego indeksu Randa. Podobnie jak w przypadku poprzednich miar, najwyższe wartości ARI uzyskano dla najmniejszego zbioru, i wynosiły średnio $0.07$; $0.02$ -- dla analizy opartej o $15\%$ zbioru wejściowego oraz $0.00$ na podziale wykonanym na wszystkich artykułach. Oznacza to, że podział tekstów na skupienia jest mocno niezgodny z klasami (tematami) artykułów. 
 
 \begin{figure}[!h]
   \centering
@@ -1593,7 +1596,11 @@ Przejdźmy do analizy zgodności podziału zbiorów na skupienia. [TO DO]
   \caption{ARI.}\label{plot:008}
 \end{figure}
 
-[TO DO]
+W przypadku zbioru $2\%$ tekstów, wyższą wartość ARI uzyskano dla $b = 10\ 000$. Dla drugiego pod względem liczności obserwacji zbioru, najwyższą wartość uzyskano dla $b=70\ 000$. W przypadku analizy opartej na wszystkich artykułach $b$ nie miało wpływu na wartość ARI.
+
+Przyjrzyjmy się teraz wartościom ARI pod względem zbioru, który był dzielony na skupienia. Odwrotnie niż wcześniej najwyższe wartości tej miary uzyskano dla \emph{clust\_red\_jac} oraz \emph{clust\_red\_qg} dla najmniejszego zbioru. W przypadku dwóch pozostałych najlepszy okazał się podział zastosowany na zbiorach opartych o odległość lcs. Podobnie jak poprzednio lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005} niż w przypadku zbiorów otrzymanych w wyniku działania tylko~\ref{alg:004}.
+
+Przejdźmy do miary silhouettes (sylwetek). Ze względu na złożoność obliczeniową niemożliwe było policzenie średniej z sylwetek wszystkich obserwacji. Uzyskane sylwetki są średnią z próbki $10\ 000$ losowych punktów. Wszystkie uzyskane wartości silhouettes są mniejsze od zera, czyli często teksty nie są dobrze przypisane do skupienia, tzn. lepsze byłoby przyporządkowanie danego artykułu do innej grupy niż tej, do której został przypisany.
 
 \begin{figure}[!h]
   \centering
@@ -1601,6 +1608,22 @@ Przejdźmy do analizy zgodności podziału zbiorów na skupienia. [TO DO]
   \caption{Silhouettes.}\label{plot:009}
 \end{figure}
 
+Największe wartości sylwetek uzyskano dla \emph{clust\_red\_qg}, co oznacza, że uzyskane przyporządkowania tekstów do skupień były lepsze niż w przypadku pozostałych zbiorów. Najniższe wartości uzyskano dla zbiorów opartych na odległości lcs i Jaccarda.
+
+Podsumowując:
+\begin{itemize}
+\item najlepszy podział artykułów na grupy tematyczne uzyskano dla $2\%$ tekstów,
+\item parametr $b$ nie miał istotnego wpływu na jakość uzyskanego podziału,
+\item najlepsze wyniki uzyskano dla zbiorów powstałych przy użyciu odległości lcs,
+\item lepszy podział dostaliśmy, gdy zbiór przetworzono algorytmem~\ref{alg:005}, tj. zmniejszono liczbę skupień słów.
+\end{itemize}
+
+[TO DO:\\
+- DLACZEGO WYSZLO TAK SLABO - JESZCZE NIE WIEM\\
+- LICZNOSCI SKUPIEN\\
+- PRZYKLADY JAKIE BYLY ARTYKULY W SKUPIENIACH\\
+- CZY PODZIALY BYLY ZGODNE MIEDZY SOBA\\
+]
 
 \section{Szczegółowe wyniki}
 

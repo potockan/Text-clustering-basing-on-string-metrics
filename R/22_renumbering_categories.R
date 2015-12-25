@@ -46,7 +46,7 @@ lapply(to_insert, function(to_insert) {
 
 
 dbGetQuery(con, "select * from wiki_category_after_reduction2 limit 10")
-dbGetQuery(con, "select * from wiki_category_text_after_reduction limit 10")
+dbGetQuery(con, "select * from wiki_category_text_after_reduction2 limit 10")
 dbGetQuery(con, "select count(distinct id_title) from wiki_category_text_after_reduction")
 dbGetQuery(con, "select count(distinct id) from wiki_category_text_after_reduction")
 
@@ -109,7 +109,7 @@ dbGetQuery(con, "select count(distinct id) from wiki_category_text_after_reducti
 #####
 
 
-
+dbExecQuery(con, "DROP TABLE IF EXISTS wiki_category_text_after_reduction2")
 
 dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_text_after_reduction2 (
   id INTEGER NOT NULL PRIMARY KEY,
@@ -122,7 +122,7 @@ dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_category_text_after_reduction2
 
 dbExecQuery(con, "INSERT into wiki_category_text_after_reduction2(id_title, id_new_cat, id_old_cat)
 
-                  select c.id_title, c.id_new_cat, c.id_old_cat
+                  select c.id_title, d.id_new, c.id_old_cat
                   from wiki_category_after_reduction2 d
                   join 
                   wiki_category_text_after_reduction_single c
@@ -133,6 +133,8 @@ dbExecQuery(con, "INSERT into wiki_category_text_after_reduction2(id_title, id_n
 
 dbGetQuery(con, "select count(distinct id_title) from wiki_category_text_after_reduction2")
 dbGetQuery(con, "select count(distinct id) from wiki_category_text_after_reduction2")
+dbGetQuery(con, "select count(distinct id_new_cat) from wiki_category_text_after_reduction2")
+dbGetQuery(con, "select count(distinct id_old_cat) from wiki_category_text_after_reduction2")
 
 ###########################
 # Nowe tabele: 

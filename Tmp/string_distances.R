@@ -4,8 +4,13 @@ stringdist('kozak', 'foczka', method = 'hamming')
 stringdist('koza', 'foka', method = 'lcs')
 stringdist('koza', 'foka', method = 'lv')
 stringdist('kozak', 'foczka', method = 'lv', weight = c(0.1, 1, 0.3))
-stringdist('kozak', 'foczka', method = 'lv', weight = c(0.1, 1, 0.3))
+stringdist('kozak', 'foczka', method = 'lv', weight = c(d=0.1, i=1, s=0.3))
 stringdist('foczka', 'koza', method = 'lv', weight = c(0.1, 1, 0.3))
+
+stringdist('kozak', 'foczka', method = 'lv', weight = c(d=0.1, i=1, s=0.3))
+
+stringdist('foczka', 'kozak', method = 'lv', weight = c(0.1, 1, 0.3))
+
 
 stringdist('koza', 'foka', method = 'osa')
 stringdist('palec', 'palace', method = 'osa')

@@ -18,7 +18,7 @@ obrobka_wynikow <- function(partition){
     for(j in 1:length(liczby)){
       k<- k+1
       aa[k] <- read.table(sprintf(
-        "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/%s/czesc1/wyn_%d_%s",
+        "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/%s/czesc1/wyni_%d_%s",
         partition, liczby[j], nazwy[i]),  
         header = FALSE)
     }
@@ -91,39 +91,32 @@ write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/
 write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151213.csv")
 write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv", row.names = FALSE)
 
-j <- 5
-nazwy <- names(wyniki)[3:6]
-for(i in seq(1, length(nazwy), by = 2)){
-  g <- list()
-  for(k in 1:2){
-    print(nazwy[i+k-1])
-    g[[k]] <- 
+j <- 10
+nazwy <- names(wyniki)[3:7]
+for(i in 1:length(nazwy)){
+    g[[i]] <- 
       ggplot(wyniki, 
              aes(x=factor(`Typ danych`, levels = unique(wyniki$`Typ danych`)), 
-                 y=eval(parse(text = paste0("`",nazwy[i+k-1], "`"))), 
+                 y=eval(parse(text = paste0("`",nazwy[i], "`"))), 
                  fill=factor(`Batch size`, levels = sort(unique(as.numeric(wyniki$`Batch size`)))))) + 
       geom_bar(stat="identity", position="dodge") +
       facet_wrap(~liczba_obs) +
-      ylab(nazwy[i+k-1]) +
+      ylab(nazwy[i]) +
       xlab("Typ danych") +
       theme(axis.text.x = element_text(angle = 45, hjust = 0.9), 
             legend.position = "top") +
       guides(fill=guide_legend(title="Batch size"))
-    print(g[[k]])
-    print(j)
-    print(j+5)
     ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[k]])
     #pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
     #print(g[[k]])
     #dev.off()
     j <- j+1
-  }
-  print(j+8)
-  pdf(file = paste0("LaTeX/plot",j+8,".pdf"))
-  grid.arrange(a,
-               b,
-               nrow = 2, ncol = 1)
-  dev.off()
+#   print(j+8)
+#   pdf(file = paste0("LaTeX/plot",j+8,".pdf"))
+#   grid.arrange(a,
+#                b,
+#                nrow = 2, ncol = 1)
+#   dev.off()
 }
 
 

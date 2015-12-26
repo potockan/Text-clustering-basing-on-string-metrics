@@ -323,7 +323,7 @@ Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak
 \cprotect\caption{Przykład optymalnego dopasowania między napisami \verb|foczka| i \verb|kozak|.}\label{rys:001}
 \end{figure}
 
-Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie między zbiorem ścisłych ścieżek edycyjnych i zbiorem [optymalnych?] dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej poprzez problem znalezienia optymalnego dopasowania, co też zastosujemy dalej~\cite{Boytsov2011:indexingmethods}.
+Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie między zbiorem ścisłych ścieżek edycyjnych i zbiorem [optymalnych?] dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej przez problem znalezienia optymalnego dopasowania, co też zastosujemy dalej~\cite{Boytsov2011:indexingmethods}.
 
 \textbf{Obliczanie odległości edycyjnej.} Główną zasadą dynamicznego algorytmu, liczącego koszt optymalnego dopasowania, jest wyrażenie kosztu dopasowania pomiędzy napisami $s$ i $t$, używając kosztu dopasowania ich przedrostków. Rozważmy prefiks $s_{1:i}$ o długości $i$ i przedrostek $t_{1:j}$ o długości $j$, odpowiednio napisów $s$ i $t$. Załóżmy, że $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ jest optymalnym dopasowaniem między $s_{1:i}$ i $t_{1:j}$, którego koszt oznaczamy przez $C_{i,j}$~\cite{Boytsov2011:indexingmethods}.
 
@@ -381,7 +381,7 @@ $$
 Odległość Hamminga zlicza liczbę indeksów (p. rys.~\ref{rys:002}), na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
 
 \begin{example}
-Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{\mathrm{hamming}}(\verb|koza|, \verb|foka|) = 2$, natomiast między słowami \verb|kozak| i \verb|foczka| wynosi ona $d_{\mathrm{hamming}}(\verb|kozak|, \verb|foczka|) = \infty$, gdyż $|\verb|kozak| | \neq | \verb|foczka| |$.
+Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{\mathrm{hamming}}(\verb|koza|,$ $\verb|foka|) = 2$, natomiast między słowami \verb|kozak| i \verb|foczka| wynosi ona $d_{\mathrm{hamming}}(\verb|kozak|, \verb|foczka|) = \infty$, gdyż $|\verb|kozak| | \neq | \verb|foczka| |$.
 \end{example}
 
 \begin{figure}[width=80pt]
@@ -411,7 +411,7 @@ Rozważmy teraz odległość najdłuższego wspólnego podnapisu (ang. \emph{lon
 \item $i^\prime = i$ oraz $j^\prime = j - 1$.
 \end{itemize}
 
-Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu [NIE WIEM CZY TO JEST DOBRZE!!!!]:
+Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu:
 
 \begin{equation*}
 C_{i,j} = \min\left\{
@@ -478,7 +478,7 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też in
 \cprotect\caption{Przykład odległości najdłuższego wspólnego podnapisu między napisami \verb|kozak| i \verb|foczka|.}\label{rys:003}
 \end{figure}
 
-Jak widać na~rysunku, znaki \verb|k|, \verb|a|, \verb|f|, \verb|c| i \verb|a| w pierwszym przypadku oraz \verb|k|, \verb|k|, \verb|f|, \verb|c| i \verb|k| w drugim, pozostają bez pary, dając odległość równą~$5$.
+Jak widać, znaki \verb|k|, \verb|a|, \verb|f|, \verb|c| i \verb|a| w pierwszym przypadku oraz \verb|k|, \verb|k|, \verb|f|, \verb|c| i \verb|k| w drugim, pozostają bez pary, dając odległość równą~$5$.
 
 
 Przejdźmy do odległości Levenshteina, $d_{\mathrm{lv}}$. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:005}:
@@ -522,7 +522,7 @@ Odległość Levenshteina oznaczamy przez $d_{\mathrm{lv}}$.
 %Odległość ta~zlicza ważoną sumę usunięć, wstawień oraz zamian znaków, potrzebnych do~przetworzenia jednego napisu w~drugi. Gdy za~wagi przyjmie się $1$~mamy do~czynienia ze~zwykłą odległością Levenshteina, np.~
 
 \begin{example}
-Odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 4$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[1]{zm.\ k\ na\ a} \verb|foczka|$.
+Odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|,$ $\verb|foczka|) = 4$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[1]{zm.\ k\ na\ a} \verb|foczka|$.
 \end{example}
 
 Powyższy przykład ilustruje dodatkową elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, bowiem daje ona mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany, zamiast wstawienia i~usunięcia~\cite{Loo2014:stringdist}. Co więcej, ścieżka edycyjna między tymi słowami może być inna i zawierać usunięcie, i wstawienie zamiast dwóch ostatnich zamian znaków.
@@ -634,7 +634,7 @@ C_{i,j} = \min\left\{
 Co więcej, Lowrance i Wagner wykazali, że wewnętrzne minimum w rekurencji~\ref{eq:008} jest osiągane dla największych $i^{\prime} < i$ oraz $j^{\prime} < j$, które spełniają $s_i = t_{j^{\prime}}$ oraz $\ s_{i^{\prime}} = t_j$. Odległość Damerau-Levenshteina oznaczamy przez $d_{dl}$.
 
 \begin{example}
-Odległość optymalnego dopasowania napisów oraz Damerau-Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi $3$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{transp.\ a\ i\ k} \verb|foczka|$.
+Odległość optymalnego dopasowania napisów oraz Damerau-Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi $3$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak|$ $\xrightarrow[1]{transp.\ a\ i\ k} \verb|foczka|$.
 \end{example}
 
 W~przypadku odległości Levenshteina, optymalnego dopasowania napisów oraz Damerau-Levenshteina, maksymalna odległość między napisami $s$~i~$t$~wynosi $\max\{|s|, |t|\}$. Jednak warto zauważyć, że gdy liczba dopuszczalnych operacji edycyjnych rośnie, to liczba dopuszczalnych ścieżek między napisami wzrasta, co pozwala czasem zmniejszyć odległość między napisami. Dlatego relację między zaprezentowanymi powyżej odległościami można podsumować następująco~\cite{Loo2014:stringdist}:
@@ -657,10 +657,10 @@ Jako że odległości Hamminga i najdłuższego wspólnego podnapisu nie mają w
 
 \subsection{Odległości oparte na $q$-gramach}
 
-Przypomnijmy, że $q$-gramem nazywamy napis składający się z $q$ kolejnych (przylegających) znaków. $q$-gramy związane z napisem $s$ są otrzymywane przez przesuwanie przez napis $s$ ,,okna'' o szerokości $q$ znaków i zapisaniu występujących $q$-gramów. Przykładowo digramy napisu \verb|ela| to \verb|el| i \verb|la|. Oczywiście taka procedura nie ma sensu, gdy $q > |s|$ lub gdy $q = 0$. Z tego powodu definiujemy następujące przypadki brzegowe dla wszystkich odległości $d(s,t,q)$ opartych na $q$-gramach:
+Przypomnijmy, że $q$-gramem nazywamy napis składający się z $q$ kolejnych (przylegających) znaków. $q$-gramy związane z napisem $s$ są otrzymywane przez przesuwanie przez napis $s$ ,,okna'' o szerokości $q$ znaków i zapisaniu występujących $q$-gramów. Przykładowo digramy napisu \verb|ela| to \verb|el| i \verb|la|. Oczywiście taka procedura nie ma sensu, gdy $q > |s|$ lub gdy $q = 0$. Z tego powodu definiujemy następujące przypadki brzegowe dla wszystkich odległości $d_q(s,t)$ opartych na $q$-gramach:
 
 \begin{align*}
-d_q(s,t) &= \infty, \text{ gdy } q > min\{|s|, |t|\},\\
+d_q(s,t) &= \infty, \text{ gdy } q > \min\{|s|, |t|\},\\
 d_0(s,t) &= \infty, \text{ gdy } |s| + |t| > 0, \\
 d_0(\varepsilon,\varepsilon) &= 0.
 \end{align*}
@@ -683,7 +683,7 @@ Odległość Jaccarda między napisami \verb|papaja| i \verb|japa| dla $q = 2$ w
 
 %Odległość Jaccarda nie spełnia definicji metryki, bowiem $d_{jaccard}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{jaccard}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
 
-Inną odległością opartą na $q$-gramach jest odległość $q$-gramowa. Otrzymuje się ją poprzez wylistowanie $q$-gramów występujących w obu napisach i policzenie $q$-gramów, które nie są wspólne [dla obu napisów]~\cite{Loo2014:stringdist}. Formalnie można to zapisać następująco:
+Inną odległością opartą na $q$-gramach jest odległość $q$-gramowa. Otrzymuje się ją przez wylistowanie $q$-gramów występujących w obu napisach i policzenie $q$-gramów, które nie są wspólne dla obu napisów~\cite{Loo2014:stringdist}. Formalnie można to zapisać następująco:
 
 \begin{definition}
 Niech $s = s_1 s_2 \ldots s_n$ będzie napisem z $\Sigma^*$ i niech $x \in \Sigma^q$ będzie $q$-gramem. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to $x$ \emph{wystąpiło} w $s$. Niech $\mathbf{v}(s,q)$ będzie wektorem o długości $|\Sigma|^q$, którego zmienne oznaczają liczbę wystąpień wszystkich możliwych $q$-gramów z $\Sigma^q$ w $s$. Niech $s, t \in \Sigma^*$ oraz $q>0$ będzie liczbą naturalną. \emph{Odległość $q$-gramową} między napisami $s$ i $t$ definiuje się następująco~\cite{Ukkonen1992:approxqgrams}:
@@ -715,7 +715,88 @@ gdzie $\norm{\cdot}_2$ oznacza zwykłą normę Euklidesową. Odległość cosinu
 Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość cosinusowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\textrm{cos}}(\verb|papaja|, \verb|japa|, 2) \approx 0.127$, bo $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$ (p. przykład \ref{ex:001}), więc $d_{cos}(\verb|papaja|, \verb|japa|, 2) = 1 - \frac{4}{\sqrt{3}\cdot\sqrt{7}} \approx 0.127$.
 \end{example}
 
-Wszystkie trzy odległości oparte na $q$-gramach są nieujemne i symetryczne. Odległości Jaccarda i $q$-gramowa spełniają również nierówność trójkąta [DOWODY???], w odróżnieniu od odległości cosinusowej. Żadna z powyższych miar nie spełnia warunku identyczności, ponieważ zarówno $\mathcal{Q}(s,q)$, jak i $\mathbf{v}(s,q)$ jest funkcją wiele-do-jednego. Jako przykład, zauważmy, że $\mathcal{Q}(\verb|abaca|,2) = \mathcal{Q}(\verb|acaba|,2)$ oraz $\mathbf{v}(\verb|abaca|,2) = \mathbf{v}(\verb|acaba|,2)$, więc $d_{\textrm{jac}}(\verb|abaca|, \verb|acaba|, 2) = d_{\mathtt{q}\textrm{gram}}(\verb|abaca|, \verb|acaba|, 2) = d_{\textrm{cos}}(\verb|abaca|, \verb|acaba|, 2) = 0$. Innymi słowy, odległość oparta na $q$-gramach równa zero, nie gwarantuje, że $s = t$. [Inne własności $\mathbf{v}(s,q)$ można znaleźć w~\cite{Ukkonen1992:approxqgrams}.]
+Wszystkie trzy odległości oparte na $q$-gramach są nieujemne i symetryczne. Odległości Jaccarda i $q$-gramowa spełniają również nierówność trójkąta (dowody poniżej), w odróżnieniu od odległości cosinusowej. Żadna z powyższych miar nie spełnia warunku identyczności, ponieważ zarówno $\mathcal{Q}(s,q)$, jak i $\mathbf{v}(s,q)$ jest funkcją wiele-do-jednego. Jako przykład, zauważmy, że $\mathcal{Q}(\verb|abaca|,2) = \mathcal{Q}(\verb|acaba|,2)$ oraz $\mathbf{v}(\verb|abaca|,2) = \mathbf{v}(\verb|acaba|,2)$, więc $d_{\textrm{jac}}(\verb|abaca|, \verb|acaba|, 2) = d_{\mathtt{q}\textrm{gram}}(\verb|abaca|, \verb|acaba|, 2) = d_{\textrm{cos}}(\verb|abaca|, \verb|acaba|, 2) = 0$. Innymi słowy, odległość oparta na $q$-gramach równa zero, nie gwarantuje, że $s = t$. Inne własności $\mathbf{v}(s,q)$ można znaleźć w~\cite{Ukkonen1992:approxqgrams}.
+
+Udowodnimy teraz, że odległość Jaccarda i $q$-gramowa spełniają nierówność trójkąta.
+
+\begin{lemma}
+Niech odległość Jaccarda będzie dana następującym wzorem:
+$$
+d(A, B) = 1 - \frac{|A\cap B|}{|A\cup B|} .
+$$
+Wówczas $d$ spełnia nierówność trójkąta:
+$$
+\forall A, B, C\ \ d(A, C) \geq d(A,B) + d(B, C).
+$$
+\end{lemma}
+
+\begin{proof}
+Przypuśćmy, że nierówność nie jest spełniona, tj. istnieją zbiory $A, B$ oraz $C$, takie, że $ d(A, C) > d(A,B) + d(B, C)$. Wówczas
+$$
+1 - \frac{|A\cap C|}{|A\cup C|} > 1 - \frac{|A\cap B|}{|A\cup B|} + 1 - \frac{|B\cap C|}{|B\cup C|}
+$$
+lub równoważnie
+\begin{equation}
+\label{eq:015}
+\frac{|A\cap B|}{|A\cup B|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|} > 1.
+\end{equation}
+Ponieważ postulujemy, że nierówność trójkąta nie jest spełniona, chcemy aby lewa strona ostatniej nierówności była jak najmniejsza. Stąd wystarczy rozważyć przypadki, gdy $A \subseteq B$ lub $B \subseteq A$, gdyż w przeciwnym przypadku, dla $B' = A\cap B$ mamy
+$$
+\frac{|A\cap B'|}{|A\cup B'|} = \frac{|A\cap B|}{|A\cup (A \cap B)|} \geq \frac{|A\cap B|}{|A\cup B|}.
+$$
+Zastępujemy zatem $B$ przez $B'$ i dostajemy:
+$$
+\frac{|A\cap B'|}{|A\cup B'|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|} \geq \frac{|A\cap B|}{|A\cup B|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|}.
+$$
+Analogicznie możemy rozważyć jedynie przypadki gdy $C \subseteq B$ lub $B \subseteq C$. Przeanalizujmy teraz cztery przypadki.
+
+Przypadek 1. $A\subseteq B$ oraz $C \subseteq B$. Wówczas
+\begin{multline*}
+\frac{|A\cap B|}{|A\cup B|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|} = 
+\frac{|A|}{|B|} + \frac{|C|}{|B|} - \frac{|A\cap C|}{|A\cup C|} =
+\frac{|A| + |C|}{|B|} - \frac{|A\cap C|}{|A\cup C|} =\\
+= \frac{|A\cup C| + |A\cap C|}{|B|} - \frac{|A\cap C|}{|A\cup C|} \leq 
+\frac{|A\cup C|}{|B} + \frac{|A\cap C|}{|B|} - \frac{|A\cap C|}{|B|} = 
+\frac{|A\cup C|}{|B}  \leq 1
+\end{multline*}
+
+Przypadek 2. $A\subseteq B$ oraz $B \subseteq C$. Wówczas
+$$
+\frac{|A\cap B|}{|A\cup B|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|} = 
+\frac{|A|}{|B|} + \frac{|B|}{|C|} - \frac{|A|}{|C|} \leq 
+\frac{|A|}{|C|} + \frac{|B|}{|C|} - \frac{|A|}{|C|} = 
+\frac{|B|}{|C|} \leq 1
+$$
+
+Przypadek 3. $C\subseteq B$ oraz $B \subseteq A$. Wówczas
+$$
+\frac{|A\cap B|}{|A\cup B|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|} = 
+\frac{|B|}{|A|} + \frac{|C|}{|B|} - \frac{|C|}{|A|} \leq 
+\frac{|B|}{|A|} + \frac{|C|}{|A|} - \frac{|C|}{|A|} =
+\frac{|B|}{|A|} \leq 1
+$$
+
+Przypadek 4. $B\subseteq A$ oraz $B \subseteq C$. Wówczas
+$$
+\frac{|A\cap B|}{|A\cup B|} + \frac{|B\cap C|}{|B\cup C|} - \frac{|A\cap C|}{|A\cup C|} = 
+\frac{|B|}{|A|} + \frac{|B|}{|C|} - \frac{|A\cap C|}{|A\cup C|} \leq 
+\frac{|A \cap C|}{|A|} + \frac{|B|}{|C|} - \frac{|A\cap C|}{|A|} =
+\frac{|B|}{|C|} \leq 1
+$$
+
+Wszystkie cztery powyższe przypadki są w sprzeczności ze stwierdzeniem, że wyrażenie~\ref{eq:015} jest ostro większe od $1$. Stąd założenie jest nieprawdziwe, więc nierówność trójkąta jest spełniona~\cite{Wilbik2012:distance}.
+\end{proof}
+
+\begin{lemma}
+Odległość $q$-gramowa spełnia nierówność trójkąta:
+$$
+d_{\mathtt{q}\textrm{gram}}(s,t) \leq d_{\mathtt{q}\textrm{gram}}(s,u) + d_{\mathtt{q}\textrm{gram}}(u,t).
+$$
+\end{lemma}
+
+\begin{proof}
+TO DO
+\end{proof}
 
 
 \subsection{Miary heurystyczne}
@@ -1606,7 +1687,7 @@ W przypadku zbioru $2\%$ tekstów, wyższą wartość ARI uzyskano dla $b = 10\ 
 
 Przyjrzyjmy się teraz wartościom ARI pod względem zbioru, który był dzielony na skupienia. Odwrotnie niż wcześniej najwyższe wartości tej miary uzyskano dla \emph{clust\_red\_jac} oraz \emph{clust\_red\_qg} dla najmniejszego zbioru. W przypadku dwóch pozostałych najlepszy okazał się podział zastosowany na zbiorach opartych o odległość lcs. Podobnie jak poprzednio lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005} niż w przypadku zbiorów otrzymanych w wyniku działania tylko~\ref{alg:004}.
 
-Przejdźmy do miary silhouettes (sylwetek). Ze względu na złożoność obliczeniową niemożliwe było policzenie średniej z sylwetek wszystkich obserwacji. Uzyskane sylwetki są średnią z próbki $10\ 000$ losowych punktów. Wszystkie uzyskane wartości silhouettes są mniejsze od zera, czyli często teksty nie są dobrze przypisane do skupienia, tzn. lepsze byłoby przyporządkowanie danego artykułu do innej grupy niż tej, do której został przypisany.
+Przejdźmy do miary silhouettes (sylwetek). Ze względu na złożoność obliczeniową niemożliwe było policzenie średniej z sylwetek wszystkich obserwacji. Uzyskane sylwetki są średnią z próbki $10\ 000$ losowykch punktów. Wszystkie uzyskane wartości silhouettes są mniejsze od zera, czyli często teksty nie są dobrze przypisane do skupienia, tzn. lepsze byłoby przyporządkowanie danego artykułu do innej grupy niż tej, do której został przypisany.
 
 \begin{figure}[!h]
   \centering

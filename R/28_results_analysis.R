@@ -26,12 +26,12 @@ obrobka_wynikow <- function(partition){
   j <- 4
   if(partition == "partitions5")
     j <- 2
-  wyniki <- data.frame(matrix(ncol = 9))
+  wyniki <- data.frame(matrix(ncol = 10))
   for(i in length(aa):1){
     k <- i%%j
     nazwy[ceiling(i/j)] %>% 
       c(liczby[ifelse(k == 0, j, k)], aa[[i]] ) %>% 
-      matrix(ncol = 9) %>% 
+      matrix(ncol = 10) %>% 
       data.frame() %>% 
       bind_rows(wyniki) %>% 
       as.data.frame() -> wyniki
@@ -63,10 +63,11 @@ obrobka_wynikow <- function(partition){
                      "Skorygowany indeks Randa",
                      "Silhouettes",
                      "AMI",
-                     "NMI")
+                     "NMI",
+                     "Indeks Fowlkesa Mallowsa")
   
   wyniki <- as.data.frame(wyniki)
-  for(i in 3:9)
+  for(i in 3:10)
     wyniki[,i] <- as.numeric(wyniki[,i])
   
   wyniki <- wyniki[,-c(8,9)]
@@ -83,16 +84,17 @@ wyniki <- obrobka_wynikow("partitions5") %>%
   cbind(liczba_obs = rep("2%", 26)) %>% 
   bind_rows(wyniki, .)
 
-knitr::kable(wyniki)
+# knitr::kable(wyniki)
 #names(wyniki) <- c("Typ danych", "Batch", "Jedn.", "Zup.", "Miara V", "ARI", "Silhouettes", "Część")
-xtable::xtable(wyniki)
+# xtable::xtable(wyniki)
 
-write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151205.csv")
-write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151213.csv")
-write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv", row.names = FALSE)
+# write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151205.csv")
+# write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151213.csv")
+# write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv", row.names = FALSE)
 
 j <- 10
-nazwy <- names(wyniki)[3:7]
+g <- list()
+nazwy <- names(wyniki)[3:8]
 for(i in 1:length(nazwy)){
     g[[i]] <- 
       ggplot(wyniki, 
@@ -106,7 +108,7 @@ for(i in 1:length(nazwy)){
       theme(axis.text.x = element_text(angle = 45, hjust = 0.9), 
             legend.position = "top") +
       guides(fill=guide_legend(title="Batch size"))
-    ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[k]])
+    ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[i]])
     #pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
     #print(g[[k]])
     #dev.off()
@@ -119,21 +121,22 @@ for(i in 1:length(nazwy)){
 #   dev.off()
 }
 
-
-wyniki <- read.csv("/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151220.csv")
-names(wyniki)[c(1,5)] <- c("Typ danych", "Miara V")
+wyniki <- wyniki[,c(1:6,8,7,9)]
+# write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151227.csv", row.names = FALSE)
+wyniki <- read.csv("/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151227.csv")
+names(wyniki) <- c("Typ danych", "Batch", "Jedn.", "Zup.", "Miara V", "ARI", "FMI", "Silhouettes", "Część")
 library(xtable)
 aa <- xtable(wyniki[1:52,])
-align(aa) <- "|rlr|rrr|rr|r|"
-print(aa, hline.after = c(0, seq(4, 52, 4)))
+align(aa) <- "|rlr|rrr|rr|r|r|"
+print(aa, hline.after = c(-1, 0, seq(4, 52, 4)))
 
 aa <- xtable(wyniki[53:104,])
-align(aa) <- "|rlr|rrr|rr|r|"
-print(aa, hline.after = c(0, seq(4, 52, 4)))
+align(aa) <- "|rlr|rrr|rr|r|r|"
+print(aa, hline.after = c(-1, 0, seq(4, 52, 4)))
 
 aa <- xtable(wyniki[105:130,])
-align(aa) <- "|rlr|rrr|rr|r|"
-print(aa, hline.after = c(0, seq(2, 26, 2)))
+align(aa) <- "|rlr|rrr|rr|r|r|"
+print(aa, hline.after = c(-1, 0, seq(2, 26, 2)))
 
 
 #############

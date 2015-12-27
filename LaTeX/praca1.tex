@@ -73,12 +73,12 @@
 Niech  $\Sigma = \{\sigma_1, \ldots, \sigma_k\}$ będzie skończonym uporządkowanym zbiorem o~liczności $|\Sigma|$, zwanym \emph{alfabetem}.~\emph{Napisem} nazywamy skończony ciąg znaków z~$\Sigma$.~Zbiór wszystkich napisów o~długości $n$~nad $\Sigma$~jest oznaczony przez $\Sigma^n$,~podczas gdy przez $\Sigma^* = \bigcup_{n=1}^{\infty}\Sigma^n$ rozumiemy zbiór wszystkich napisów utworzonych ze~znaków z~$\Sigma$~\cite{Boytsov2011:indexingmethods}.
 \end{definition}
 
-O~ile nie podano inaczej, używamy zmiennych $s,\ t,\ u,\ v,\ w,\ x,\ y$ jako oznaczenie napisów oraz $a,\ b,\ c$ do oznaczenia napisów jednoznakowych albo po~prostu \emph{znaków}. Pusty napis jest oznaczany przez $\varepsilon$. Przez $|s|$, dla każdego napisu $s \in \Sigma^*$, rozumiemy jego długość, czyli liczbę znaków w~napisie. Ciąg napisów i/lub znaków oznacza ich złączenie, np. $stu$ to napis powstały ze złączenia napisów $s, t$ oraz $u$, natomiast $abc$, to napis powstały ze złączenia znaków $a, b$ oraz $c$~\cite{Boytsov2011:indexingmethods}. Dla rozróżnienia napisów od~zmiennych reprezentujących napis, te~pierwsze oznaczamy pismem maszynowym, np.~\verb|napis|.
+O~ile nie podano inaczej, używamy zmiennych $s,\ t,\ u,\ v,\ w,\ x,\ y$ jako oznaczenie napisów oraz $a,\ b,\ c$ do oznaczenia napisów jednoznakowych albo po~prostu \emph{znaków}. Pusty napis jest oznaczany przez $\varepsilon$. Przez $|s|$, dla każdego napisu $s \in \Sigma^*$, rozumiemy jego długość, czyli liczbę znaków w~napisie. Ciąg napisów i/lub znaków oznacza ich złączenie, np. $stu$ to napis powstały ze złączenia napisów $s, t$ oraz $u$, natomiast $abc$, to napis powstały ze złączenia znaków $a, b$ oraz $c$. Dla rozróżnienia napisów od~zmiennych reprezentujących napis, te~pierwsze oznaczamy pismem maszynowym, np.~\verb|napis|.
 
 Poprzez $s_i$~rozumiemy $i$-ty znak z~napisu $s$,~dla każdego $i \in \{1,\ldots,|s|\}$. Podciąg kolejnych przylegających do~siebie znaków z~napisu nazywamy \emph{podnapisem}. Podnapisem napisu $s$,~który zaczyna się od~$i$-tego znaku, a~kończy na~$j$-tym znaku, oznaczamy przez $s_{i:j}$, tj. $s_{i:j} = s_is_{i+1}\ldots s_j$ dla $i \leq j$. Zakładamy również, że~jeśli $j < i$, to $s_{i:j} = \varepsilon$~\cite{Boytsov2011:indexingmethods,Loo2014:stringdist}.
 
 \begin{definition}
-Załóżmy, że~napis $s$~jest reprezentacją złączenia trzech, być może pustych, podnapisów $w$, $x$ i $y$, tj. $s = wxy$. Wówczas podnapis $w$ nazywamy \emph{przedrostkiem}, natomiast podnapis $y$ -- przyrostek~\cite{Boytsov2011:indexingmethods}.
+Załóżmy, że~napis $s$~jest reprezentacją złączenia trzech, być może pustych, podnapisów $w$, $x$ i $y$, tj. $s = wxy$. Wówczas podnapis $w$ nazywamy \emph{przedrostkiem}, natomiast podnapis $y$ -- przyrostkiem~\cite{Boytsov2011:indexingmethods}.
 \end{definition}
 
 \begin{definition}
@@ -91,7 +91,7 @@ Podnapis złożony z kolejnych, przylegających do siebie, znaków napisu, o ust
 
 
 \begin{example}
-Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = \verb|ela|$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma^*$. Co więcej, mamy $s_1 = \verb|e|$, $s_2 = \verb|l|$, $s_3 = \verb|a|$. Podnapis $1:2$ napisu $s$ to $s_{1:2} = \verb|el|$. W napisie tym mamy do czynienia jedynie z $q$-gramami o $q$ równym jeden, dwa oraz trzy, odpowiednio: $\verb|e|,\ \verb|l|,\ \verb|a|$; $\verb|el|,\ \verb|la|$ oraz $\verb|ela|$.
+Niech $\Sigma$ będzie alfabetem złożonym z~$26$ małych liter alfabetu łacińskiego oraz niech $s = \verb|ela|$. Wówczas mamy $|s| = 3$, $s \in \Sigma^3$ oraz $s \in \Sigma^*$. Co więcej, mamy $s_1 = \verb|e|$, $s_2 = \verb|l|$, $s_3 = \verb|a|$. Podnapis $1\!\!:\!\!2$ napisu $s$ to $s_{1:2} = \verb|el|$. W napisie tym mamy do czynienia jedynie z $q$-gramami o $q$ równym jeden, dwa oraz trzy, odpowiednio: $\verb|e|,\ \verb|l|,\ \verb|a|$; $\verb|el|,\ \verb|la|$ oraz $\verb|ela|$.
 \end{example}
 
 
@@ -127,7 +127,7 @@ We wszystkich przykładach niniejszego rozdziału zakładamy, jeśli nie podano 
 
 \section{Odległości na przestrzeni ciągów znaków}
 
-Określanie odległości między napisami jest ważną częścią przetwarzania danych, zwłaszcza w problemach takich jak dopasowanie statystyczne, wyszukiwanie tekstów, klasyfikacja tekstów czy sprawdzanie pisowni. Największa trudność polega na policzeniu podobieństwa między dwoma napisami w terminach metryk na przestrzeni ciągów znaków.  W niniejszym podrozdziale zajmiemy się takimi odległościami, tj. funkcjami $d: \Sigma^* \times \Sigma^* \rightarrow [0, \infty)$. W literaturze można znaleźć wiele różnych funkcji tego typu, które różnią się genezą powstania, podejściem do problemu oraz zastosowaniami. W pracy zajmiemy się jednak odległościami, która można podzielić na~trzy garupy:
+Określanie odległości między napisami jest ważną częścią przetwarzania danych, zwłaszcza w problemach takich jak dopasowanie statystyczne, wyszukiwanie tekstów, klasyfikacja tekstów czy sprawdzanie pisowni. Największa trudność polega na policzeniu podobieństwa między dwoma napisami w terminach metryk na przestrzeni ciągów znaków.  W niniejszym podrozdziale zajmiemy się odległościami na napisach, tj. funkcjami $d: \Sigma^* \times \Sigma^* \rightarrow [0, \infty)$. W literaturze można znaleźć wiele różnych funkcji tego typu, które różnią się genezą powstania, podejściem do problemu oraz zastosowaniami. W pracy zajmiemy się jednak odległościami, która można podzielić na~trzy garupy:
 \begin{itemize}
 \item oparte na~operacjach edycyjnych (\emph{edit operations}),
 \item oparte na~$q$-gramach,
@@ -135,7 +135,7 @@ Określanie odległości między napisami jest ważną częścią przetwarzania 
 \end{itemize}
 
 
-Pierwszy rodzaj odległości jest najczęściej używany w algorytmach zajmujących się optymalnym dopasowaniem, dlatego też poświęcimy mu największą część niniejszego rozdziału. Aby wyliczyć odległość opartą na operacjach edycyjnych, trzeba określić liczbę fundamentalnych transformacji potrzebnych do przetworzenia jednego napisu w drugi. Mogą się w nich zawierać substytucje, usunięcia, wstawienia oraz transpozycje znaków. Odległości oparte na $q$-gramach pozwalają na określenie podobieństwa między dwoma napisami poprzez porównanie występowania $q$-elementowych ciągów znaków. Natomiast miary heurystyczne są rzadko stosowane, gdyż nie mają silnych matematycznych podstaw, ale zostały rozwinięte jako praktyczne narzędzie stosowane w konkretnych przypadkach.
+Pierwszy rodzaj odległości jest najczęściej używany w algorytmach zajmujących się optymalnym dopasowaniem napisów, dlatego też poświęcimy mu największą część niniejszego rozdziału. Aby wyliczyć odległość opartą na operacjach edycyjnych, trzeba określić liczbę fundamentalnych transformacji potrzebnych do przetworzenia jednego napisu w drugi. Mogą się w nich zawierać zamiany, usunięcia, wstawienia oraz transpozycje znaków. Odległości oparte na $q$-gramach pozwalają na określenie podobieństwa między dwoma napisami poprzez porównanie występowania $q$-elementowych ciągów znaków. Natomiast miary heurystyczne są rzadko stosowane, gdyż nie mają silnych matematycznych podstaw, ale zostały rozwinięte jako praktyczne narzędzie stosowane w konkretnych przypadkach.
 
 \subsection{Odległości oparte na operacjach edycyjnych}
 
@@ -196,7 +196,7 @@ Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o w
 Mając dany zbiór bazowych operacji edycyjnych $\mathbb{B}$ oraz funkcję $\delta$,~która nadaje koszt wszystkim bazowym operacjom edycyjnym z~$\mathbb{B}$,~uogólniona odległość edycyjna między napisami $s$~i~$t$~jest zdefiniowana jako minimalny spośród kosztów wszystkich możliwych ścieżek edycyjnych, które przekształcają $s$~w~$t$~\cite{Boytsov2011:indexingmethods}.
 \end{definition}
 
-[KONFLIKT Z OSTATNIM ZDANIEM POPRZEDNIEGO AKAPITU - UOGOLNIONYMI ODL. ED.] Zazwyczaj koszt pojedynczej operacji z $\mathbb{B}$ jest równy jeden. Czasem jednak nadaje się poszczególnym operacjom różne koszty, dając np. transpozycji mniejszą wagę niż wstawieniu znaku. Gdy koszt wszystkich operacji jest równy jeden, to mówimy po prostu o odległości edycyjnej, natomiast gdy różne operacje mają różne wagi, to mówimy o \emph{ważonej} odległości edycyjnej.
+Zazwyczaj koszt pojedynczej operacji z $\mathbb{B}$ jest równy jeden. Czasem jednak nadaje się poszczególnym operacjom różne koszty, dając np. transpozycji mniejszą wagę niż wstawieniu znaku. Gdy koszt wszystkich operacji jest równy jeden, to mówimy po prostu o odległości edycyjnej, natomiast gdy różne operacje mają różne wagi, to mówimy o \emph{ważonej} odległości edycyjnej.
 
 \begin{property}\label{wl:002}
 Zakładamy, że funkcja kosztu $\delta(s \rightarrow t)$ ma następujące własności~\cite{Boytsov2011:indexingmethods}:
@@ -261,14 +261,14 @@ Dowolna nieścisła odległość edycyjna ogranicza z dołu odpowiadającą jej 
 Powyższe wynika natychmiast z obserwacji, że optymalna ścieżka edycyjna zawiera jednoznakowe usunięcia, wstawienia oraz zamiany, które nigdy nie modyfikują podnapisu więcej niż raz.
 
 \begin{lemma}
-Nieścisła odległość Damerau-Levenshteina oraz ścisła odległość Damerau-Levenshteina są różnymi funkcjami. Co więcej, ścisła odległość Damerau-Levenshteina nie jest metryką, gdyż nie jest subaddytywna~\cite{Boytsov2011:indexingmethods}.
+Nieścisła odległość Damerau-Levenshteina oraz ścisła odległość Damerau-~Levenshteina są różnymi funkcjami. Co więcej, ścisła odległość Damerau-Levenshteina nie jest metryką, gdyż nie jest subaddytywna~\cite{Boytsov2011:indexingmethods}.
 \end{lemma}
 
 \begin{proof}
-Ścisła odległość Damerau-Levenshteina traktuje transpozycję (tj. zamianę dwóch przylegających do siebie znaków) jako bazową operację edycyjną. Aby udowodnić lemat podamy przykłąd, w którym zakaz modyfikacji znaków już stransponowanych odróżnia odległość Damerau-Levenshteina od ścisłej odległości Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}.
+Ścisła odległość Damerau-Levenshteina traktuje transpozycję (tj. zamianę dwóch przylegających do siebie znaków) jako bazową operację edycyjną. Aby udowodnić lemat podamy przykład, w którym zakaz modyfikacji znaków już stransponowanych odróżnia odległość Damerau-Levenshteina od ścisłej odległości Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}.
 \end{proof}
 
-Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierws zamienia znaki \verb|a| i \verb|b|, a następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że wstawienie przekształca już transformowany napis. Jednakowoż, jeśli kolejne przekształcenia tego samego podnapisu są wykluczone, to najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, składa się z trzech operacji edycyjnych, np. $(\verb|ba| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|c|, \varepsilon \rightarrow \verb|b|)$. Stąd, nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
+Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierws zamienia znaki \verb|a| i \verb|b|, a następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że wstawienie przekształca już transformowany napis. Jednakowoż, jeśli kolejne przekształcenia tego samego podnapisu są wykluczone, to najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w \verb|acb|, składa się z trzech operacji edycyjnych, np. $(\verb|b| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|c|, \varepsilon \rightarrow \verb|b|)$. Stąd, nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
 
 Ścisła odległość Damerau-Levenshteina nie spełnia nierówności trójkąta, gdyż
 $$
@@ -287,7 +287,9 @@ Ponieważ ścisła i nieścisła odległość Damerau-Levenshteina są różnymi
 
 \textbf{Optymalne dopasowanie.} % Problem optymalnego obliczenia odległości Damerau-Levenshteina został rozwiązany przez Lowrance'a i Wagnera~\cite{Wagner1975:extensionstring}. W dalszej części podajemy formalne definicje oraz przegląd klasycznych dynamicznych algorytmów wyliczających odległość Levenshteina.
 
+\begin{definition}
 Niech napisy $s$ i $t$ zostaną podzielone na tę samą liczbę, być może pustych, podnapisów: $s = s_1 s_2 \ldots s_l$ i $t = t_1 t_2 \ldots t_l$, takich, że $s_i \rightarrow t_i \in \mathbb{B}$. Co więcej, zakładamy, że $s_i$ i $t_j$ nie mogą być puste dla $i = j$. Mówimy, że ten podział definiuje \emph{dopasowanie} $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ pomiędzy napisami $s$ i $t$, w którym podnapis $s_i$ jest dopasowany do podnapisu $t_i$~\cite{Boytsov2011:indexingmethods}.
+\end{definition}
 
 Dopasowanie reprezentuje ścisłą ścieżkę edycyjną $E = s_1 \rightarrow t_1, s_2 \rightarrow t_2, \ldots, s_l \rightarrow t_l$. Definiujemy \emph{koszt dopasowania} $A$ jako koszt odpowiadającej mu ścieżki edycyjnej i oznaczamy go przez $\delta(A)$:
 
@@ -323,7 +325,7 @@ Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak
 \cprotect\caption{Przykład optymalnego dopasowania między napisami \verb|foczka| i \verb|kozak|.}\label{rys:001}
 \end{figure}
 
-Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie między zbiorem ścisłych ścieżek edycyjnych i zbiorem [optymalnych?] dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej przez problem znalezienia optymalnego dopasowania, co też zastosujemy dalej~\cite{Boytsov2011:indexingmethods}.
+Warto zauważyć, że istnieje różnowartościowe (1-1) mapowanie między zbiorem ścisłych ścieżek edycyjnych i zbiorem optymalnych dopasowań: każda ścisła ścieżka edycyjna o minimalnym koszcie reprezentuje dopasowanie o najmniejszym koszcie i odwrotnie. Stąd można zastąpić problem znalezienia optymalnej ścisłej odległości edycyjnej przez problem znalezienia optymalnego dopasowania, co też zastosujemy dalej~\cite{Boytsov2011:indexingmethods}.
 
 \textbf{Obliczanie odległości edycyjnej.} Główną zasadą dynamicznego algorytmu, liczącego koszt optymalnego dopasowania, jest wyrażenie kosztu dopasowania pomiędzy napisami $s$ i $t$, używając kosztu dopasowania ich przedrostków. Rozważmy przedrostek $s_{1:i}$ o długości $i$ i przedrostek $t_{1:j}$ o długości $j$, odpowiednio napisów $s$ i $t$. Załóżmy, że $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ jest optymalnym dopasowaniem między $s_{1:i}$ i $t_{1:j}$, którego koszt oznaczamy przez $C_{i,j}$~\cite{Boytsov2011:indexingmethods}.
 
@@ -405,7 +407,7 @@ Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{\mat
 
 
 
-Rozważmy teraz odległość najdłuższego wspólnego podnapisu (ang. \emph{longest common substring}), gdzie $s_{i^\prime:i}\rightarrow t_{j^\prime:j}$ to wstawienia i usunięcia znaków o koszcie równym jeden. Wówczas istnieją dwie kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:005}, odpowiadające usunięciu i wstawieniu, odpowiednio:
+Rozważmy teraz odległość najdłuższego wspólnego podnapisu (ang. \emph{longest common substring}), gdzie $s_{i^\prime:i}\rightarrow t_{j^\prime:j}$ to wstawienia i usunięcia znaków o koszcie równym jeden. Wówczas istnieją dwie kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:004}, odpowiadające usunięciu i wstawieniu, odpowiednio:
 \begin{itemize}
 \item $i^\prime = i - 1$ oraz $j^\prime = j$,
 \item $i^\prime = i$ oraz $j^\prime = j - 1$.
@@ -481,7 +483,10 @@ Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też in
 Jak widać, znaki \verb|k|, \verb|a|, \verb|f|, \verb|c| i \verb|a| w pierwszym przypadku oraz \verb|k|, \verb|k|, \verb|f|, \verb|c| i \verb|k| w drugim, pozostają bez pary, dając odległość równą~$5$.
 
 
-Przejdźmy do odległości Levenshteina, $d_{\mathrm{lv}}$. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:005}:
+
+
+
+Przejdźmy do odległości Levenshteina. Odległość ta dopuszcza, oprócz usunięć i wstawień, także zamiany znaków. Istnieją zatem  trzy kombinacje $i^\prime$ oraz $j^\prime$ z ogólnej rekurencji \ref{eq:005}:
 \begin{itemize}
 \item $i^\prime = i - 1$ oraz $j^\prime = j$,
 \item $i^\prime = i$ oraz $j^\prime = j - 1$,
@@ -525,16 +530,16 @@ Odległość Levenshteina oznaczamy przez $d_{\mathrm{lv}}$.
 Odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|,$ $\verb|foczka|) = 4$, bo $\verb|kozak| \xrightarrow[1]{zm.\ k\ na\ f} \verb|fozak|  \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[1]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[1]{zm.\ k\ na\ a} \verb|foczka|$.
 \end{example}
 
-Powyższy przykład ilustruje dodatkową elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, bowiem daje ona mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany, zamiast wstawienia i~usunięcia~\cite{Loo2014:stringdist}. Co więcej, ścieżka edycyjna między tymi słowami może być inna i zawierać usunięcie, i wstawienie zamiast dwóch ostatnich zamian znaków.
+Powyższy przykład ilustruje dodatkową elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, bowiem daje ona mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany, zamiast wstawienia i~usunięcia~\cite{Loo2014:stringdist}. Co więcej, ścieżka edycyjna między tymi słowami może być inna i zawierać usunięcie i wstawienie zamiast dwóch ostatnich zamian znaków.
 
 
 Przypomnijmy, że mówimy o ważonej odległości, gdy zmienimy koszty poszczególnych operacji na różne od jeden.
 Gdy za~koszt przyjmiemy np. $(0.1, 1, 0.3)$ dla usunięć, wstawień i zamian znaków odpowiednio, to uogólniona odległość Levenshteina między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 1.9$, bo~$\verb|kozak|  \xrightarrow[0.3]{zm.\ k\ na\ f} \verb|fozak| \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[0.3]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[0.3]{zm.\ k\ na\ a} \verb|foczka|$.
 
-Uogólniona odległość Levenshteina spełnia definicję metryki, gdy koszt usunięcia jest równy kosztowi wstawienia znaku. W przeciwnym przypadku nie spełnia ona założenia o~symetrii. Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz kosztów usunięcia i wstawienia znaku,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy transformacji napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład:
+Ważona odległość Levenshteina spełnia definicję metryki, gdy koszt usunięcia jest równy kosztowi wstawienia znaku. W przeciwnym przypadku nie spełnia ona założenia o~symetrii. Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz kosztów usunięcia i wstawienia znaku,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy transformacji napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład:
 
 \begin{example}
-Przyjmijmy za~koszt usunięcia, wstawienia i zamiany znaku odpowiednio $(1, 0.1, 0.3)$. Wówczas uogólniona odległość Levenshteina dla napisów \verb|koza| i~\verb|foczka| wynosi:
+Przyjmijmy za~koszt usunięcia, wstawienia i zamiany znaku odpowiednio $(0.1, 1, 0.3)$. Wówczas uogólniona odległość Levenshteina dla napisów \verb|kozak| i~\verb|foczka| wynosi:
 \begin{equation}
 \label{eq:001}
 d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 1.9,
@@ -570,7 +575,9 @@ $$
 czyli analogicznie, jak w~przypadku \ref{eq:001}.
 \end{example}
 
-Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równa ścisłej odległości Levenshteina. Z drugiej strony, ścisła odległość edycyjna jest równa kosztowi optymalnego dopasowania. Stąd rekurencja \ref{eq:004} liczy nieścisłą odległość Levenshteina. Często w literaturze można znaleźć, że następujące bezpośrednie uogólnienie, dodające transpozycję do zbioru bazowych operacji edycyjnych, rekurencji \ref{eq:006} liczy (nieścisłą) odległość Damerau-Levenshteina~\cite{Boytsov2011:indexingmethods}:
+
+
+Zgodnie z lematem \ref{lem:001} nieścisła odległość Levenshteina jest równa ścisłej odległości Levenshteina. Z drugiej strony, ścisła odległość edycyjna jest równa kosztowi optymalnego dopasowania. Stąd rekurencja \ref{eq:004} liczy nieścisłą odległość Levenshteina. Spójrzmy na następujące bezpośrednie uogólnienie rekurencji \ref{eq:006}, dodające transpozycję do zbioru bazowych operacji edycyjnych~\cite{Boytsov2011:indexingmethods}:
 
 \begin{equation}
 \label{eq:007}
@@ -615,7 +622,7 @@ C_{i,j} = \min\left\{
 %$$
 %W ostatnim przykładzie, zmniejszenie odległości poprzez zamianę liter $|a|$ i $|b|$, a następnie wstwienie litery $|c|$ spowodowałoby dwukrotne przekształcenie tego samego podnapisu. Z tego powodu odległość optymalnego dopasowania napisów bywa również nazywana \emph{ścisłą odległością Damerau-Levenshteina} i jest często mylona z właściwą \emph{odległością Damerau-Levenshteina}. Ta ostatnia pozwala na przekształcanie tego samego podnapisu wielokrotnie i jest metryką w rozumieniu definicjij \ref{def:001}, ale nie spełnia założenia o nie przekształcaniu wielokrotnie tego samego podnapisu \cite{Loo2014:stringdist}.
 
-Jednak rekurencja \ref{eq:007} liczy odległość optymalnego dopasowania napisów, czyli ścisłą odległość Damerau-Levenshteina, która nie zawsze jest równa odległości Damerau-Levenshteina. Dla przykładu, odległość między napisami \verb|ba| i \verb|acb| wyliczona przy pomocy rekurencji \ref{eq:007} jest równa trzy, natomiast odległość Damerau-Levenshteina między tymi napisami wynosi dwa.
+Rekurencja \ref{eq:007} liczy odległość optymalnego dopasowania napisów (ozn. $d_{\mathrm{osa}}$), czyli ścisłą odległość Damerau-Levenshteina, która nie zawsze jest równa odległości Damerau-Levenshteina. Dla przykładu, odległość między napisami \verb|ba| i \verb|acb| wyliczona przy pomocy rekurencji \ref{eq:007} jest równa trzy, natomiast odległość Damerau-Levenshteina między tymi napisami wynosi dwa.
 
 Rekurencyjna definicja odległości Damerau-Levenshteina została po raz pierwszy podana przez Lowrance'a i Wagnera~\cite{Wagner1975:extensionstring}. W ich definicji zamiana zostaje zastąpiona przez minimalizację po możliwych transpozycjach między danym znakiem a wszystkimi nie przetransformowanymi znakami, przy czym koszt transpozycji wzrasta wraz z odległością między transponowanymi znakami~\cite{Loo2014:stringdist}. Innymi słowy, do $\mathbb{B}$ należą wstawienia, usunięcia, zamiany oraz operacje $axb \rightarrow bya$ o koszcie równym $|x| + |y| + 1$~\cite{Boytsov2011:indexingmethods}. Mając tak zdefiniowane $\mathbb{B}$ ogólna rekurencja~\ref{eq:004} dla odległości Damerau-Levenshteina przedstawia się następująco: 
 
@@ -668,7 +675,7 @@ d_0(\varepsilon,\varepsilon) &= 0.
 Najprostszą odległością między napisami, opartą na $q$-gramach, otrzymuje się poprzez wypisanie unikalnych $q$-gramów w obu napisach i porównanie które są wspólne. Jeśli przez $\mathcal{Q}(s,q)$ oznaczymy zbiór unikalnych $q$-gramów występujących w napisie $s$, to możemy zdefiniować odległość Jaccarda~\cite{Loo2014:stringdist}:
 
 \begin{definition}
-Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{\textrm{jac}}$, między napisami $s$ i $t$ definiuje się jako
+Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{\mathrm{jac}}$, między napisami $s$ i $t$ definiuje się jako
 \begin{equation*}
 d_{\mathrm{jac}}(s,t,q) = 1 - \frac{|\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q)|}{|\mathcal{Q}(s,q) \cup \mathcal{Q}(t,q)|},
 \end{equation*}
@@ -693,11 +700,11 @@ d_{\mathtt{q}\mathrm{gram}}(s,t,q) = \norm{\mathbf{v}(s,q) - \mathbf{v}(t,q)}_1 
 \end{equation}
 \end{definition} 
 
-Wzór \ref{eq:009} definiuje odległość $q$-gramową między napisami $s$ i $t$ jako odległość $L_1$ pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$. Zauważmy, że, zamiast sprawdzać wystąpienie wszystkich możliwych $q$-gramów z $\Sigma^q$ w napisach $s$i $t$, wystarczy policzyć jedynie liczbę faktycznie występujących $q$-gramów w obu napisach, by obliczyć odległość $q$-gramową~\cite{Loo2014:stringdist}.
+Wzór \ref{eq:009} definiuje odległość $q$-gramową między napisami $s$ i $t$ jako odległość $L_1$ pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$. Zauważmy, że, zamiast sprawdzać wystąpienie wszystkich możliwych $q$-gramów z $\Sigma^q$ w napisach $s$ i $t$, wystarczy policzyć jedynie liczbę faktycznie występujących $q$-gramów w obu napisach, by obliczyć odległość $q$-gramową~\cite{Loo2014:stringdist}.
 
 \begin{example}
 \label{ex:001}
-Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość $q$-gramowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathtt{q}\mathrm{gram}}(\verb|papaja|, \verb|japa|, 2) = 2$. Wszystkie możliwe digramy występujące w napisach  \verb|papaja| i \verb|japa| to \verb|aj|, \verb|ap|, \verb|ja| i \verb|pa|. Zatem $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$. Stąd $d_{\mathtt{q}gram}(\verb|papaja|, \verb|japa|, 2) =  \norm{(1,1,1,2) - (0,1,1,1)}_1 = 2$.
+Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość $q$-gramowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathtt{q}\mathrm{gram}}(\verb|papaja|, \verb|japa|, 2) = 2$. Wszystkie możliwe digramy występujące w napisach  \verb|papaja| i \verb|japa| to \verb|aj|, \verb|ap|, \verb|ja| i \verb|pa|. Zatem $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$. Stąd $d_{\mathtt{q}\mathrm{gram}}(\verb|papaja|, \verb|japa|, 2) =  \norm{(1,1,1,2) - (0,1,1,1)}_1 = 2$.
 \end{example}
 
 %Odległość $q$-gramowa również nie spełnia definicji metryki, bowiem $d_{\mathtt{q}gram}(s,t) = 0$ nawet wówczas, gdy $s \neq t$. Przykładowo $d_{\mathtt{q}gram}(\verb|abaca|, \verb|acaba|, 2) = 0 $, mimo że $\verb|abaca| \neq \verb|acaba|$.
@@ -712,12 +719,12 @@ d_{\mathrm{cos}}(s,t,q) = 1 - \frac{ \mathbf{v}(s,q) \cdot \mathbf{v}(t,q) }{ \n
 gdzie $\norm{\cdot}_2$ oznacza zwykłą normę Euklidesową. Odległość cosinusowa wynosi zero, gdy $s=t$ oraz jeden, gdy $s$ i $t$ nie mają wspólnych $q$-gramów. Odległość ta powinna być interpretowana jako kąt pomiędzy $\mathbf{v}(s,q)$ i $\mathbf{v}(t,q)$, jako że drugie wyrażenie równania \ref{eq:010} przedstawia cosinus kąta między dwoma wektorami.
 
 \begin{example}
-Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość cosinusowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathrm{cos}}(\verb|papaja|, \verb|japa|, 2) \approx 0.127$, bo $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$ (p. przykład \ref{ex:001}), więc $d_{cos}(\verb|papaja|, \verb|japa|, 2) = 1 - \frac{4}{\sqrt{3}\cdot\sqrt{7}} \approx 0.127$.
+Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość cosinusowa między napisami \verb|papaja| i \verb|japa| dla $q = 2$ wynosi: $d_{\mathrm{cos}}(\verb|papaja|, \verb|japa|, 2) \approx 0.127$, bo $\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a  $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$ (p. przykład \ref{ex:001}), więc $d_{\mathrm{cos}}(\verb|papaja|, \verb|japa|, 2) = 1 - \frac{4}{\sqrt{3}\cdot\sqrt{7}} \approx 0.127$.
 \end{example}
 
 Wszystkie trzy odległości oparte na $q$-gramach są nieujemne i symetryczne. Odległości Jaccarda i $q$-gramowa spełniają również nierówność trójkąta (dowód dla tej pierwszej poniżej), w odróżnieniu od odległości cosinusowej. Żadna z powyższych miar nie spełnia warunku identyczności, ponieważ zarówno $\mathcal{Q}(s,q)$, jak i $\mathbf{v}(s,q)$ jest funkcją wiele-do-jednego. Jako przykład, zauważmy, że $\mathcal{Q}(\verb|abaca|,2) = \mathcal{Q}(\verb|acaba|,2)$ oraz $\mathbf{v}(\verb|abaca|,2) = \mathbf{v}(\verb|acaba|,2)$, więc $d_{\mathrm{jac}}(\verb|abaca|, \verb|acaba|, 2) = d_{\mathtt{q}\mathrm{gram}}(\verb|abaca|, \verb|acaba|, 2) = d_{\mathrm{cos}}(\verb|abaca|, \verb|acaba|, 2) = 0$. Innymi słowy, odległość oparta na $q$-gramach równa zero, nie gwarantuje, że $s = t$. Inne własności $\mathbf{v}(s,q)$ można znaleźć w~\cite{Ukkonen1992:approxqgrams}.
 
-Udowodnimy teraz, że odległość Jaccarda i $q$-gramowa spełniają nierówność trójkąta.
+Udowodnimy teraz, że odległość Jaccarda spełnia nierówność trójkąta.
 
 \begin{lemma}
 Niech odległość Jaccarda będzie dana następującym wzorem:
@@ -790,7 +797,7 @@ Wszystkie cztery powyższe przypadki są w sprzeczności ze stwierdzeniem, że w
 \subsection{Miary heurystyczne}
 
 
-Odległość Jaro została stworzona [wymyślona, zdefiniowana???] w amerykańskim Bureau of the Census (rządowa agencja, która jest odpowiedzialna m.in. za spis ludności Stanów Zjednoczonych) w celu połączenia rekordów, które były wpisane w niewłaściwe pola formularza oraz zlikwidowaniu literówek. Pierwszy publiczny opis tej odległości pojawił się w instrukcji obsługi~cite{Jaro1978:usermanual}, co może wyjaśniać dlaczego nie jest rozpowszechniona w literaturze informatycznej. Jednak odległość ta została skutecznie zastosowana w statystycznych problemach dopasowania w przypadku dość krótkich napisów, głównie imion, nazwisk oraz danych adresowych~\cite{Loo2014:stringdist}.
+Odległość Jaro została stworzona w amerykańskim Bureau of the Census (rządowa agencja, która jest odpowiedzialna m.in. za spis ludności Stanów Zjednoczonych) w celu połączenia rekordów, które były wpisane w niewłaściwe pola formularza oraz zlikwidowaniu literówek. Pierwszy publiczny opis tej odległości pojawił się w instrukcji obsługi~\cite{Jaro1978:usermanual}, co może wyjaśniać dlaczego nie jest rozpowszechniona w literaturze informatycznej. Jednak odległość ta została skutecznie zastosowana w statystycznych problemach dopasowania w przypadku dość krótkich napisów, głównie imion, nazwisk oraz danych adresowych~\cite{Loo2014:stringdist}.
 
 Rozumowanie stojące za odległością Jaro jest następujące: błędny znak oraz transpozycje znaków są spowodowane błędem przy wpisywaniu, ale mało prawdopodobne jest znalezienie błędnego znaku w miejscu odległym od zamierzonego, żeby mogło to być spowodowane błędem przy wpisywaniu. Stąd odległość Jaro mierzy liczbę wspólnych znaków w dwóch napisach, które nie są zbyt odległe od siebie i dodaje karę za dopasowanie znaków, które są stransponowane. Formalna definicja wygląda następująco~\cite{Loo2014:stringdist}:
 
@@ -804,7 +811,7 @@ i każdy znak z $s$ może być wspólny ze znakiem z $t$ tylko raz. W końcu, je
 Wówczas \emph{odległość Jaro} definiuje się jako:
 \begin{equation}
 \label{eq:011}
-d_{jaro}(s,t) = \left\{
+d_{\mathrm{jaro}}(s,t) = \left\{
 \begin{array}{l l}     
     0, & \text{gdy } s = t = \varepsilon \\
     1, & \text{gdy } m = 0 \text{ i } |s| + |t| > 0 \\
@@ -815,6 +822,9 @@ d_{jaro}(s,t) = \left\{
 
 Odległość Jaro przyjmuje wartości z przedziału $[0,1]$, gdzie zero oznacza, że $s = t$, natomiast jeden wskazuje na kompletną odmienność napisów z $m = T = 0$.
 
+\begin{example}
+Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|)  \approx 0.261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (p. rys.~\ref{rys:005}), co daje odległość równą $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0.261$.
+\end{example}
 
 \begin{figure}[width=80pt]
 \centering
@@ -841,9 +851,6 @@ Odległość Jaro przyjmuje wartości z przedziału $[0,1]$, gdzie zero oznacza,
 \cprotect\caption{Przykład odległości Jaro między napisami \verb|kozak| i \verb|foczka|.}\label{rys:005}
 \end{figure}
 
-\begin{example}
-Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{jaro}(\verb|kozak|, \verb|foczka|)  \approx 0.261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (p. rys.~\ref{rys:005}), co daje odległość równą $d_{jaro}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0.261$.
-\end{example}
 
 Winkler rozszerzył odległość Jaro przez włączenie dodatkowej kary za błędny znak wśród pierwszych czterech znaków napisu~\cite{Loo2014:stringdist}:
 
@@ -852,28 +859,28 @@ Niech $s$ i $t$ będą napisami z $\Sigma^*$, $\ell(s,t)$ oznacza długość naj
 
 \begin{equation}
 \label{eq:012}
-d_{jw}(s,t, p) = d_{jaro}(s,t)[1 - p\ell(s,t)]
+d_{\mathrm{jw}}(s,t, p) = d_{\mathrm{jaro}}(s,t)[1 - p\ell(s,t)]
 \end{equation}
 \end{definition}
 
-Czynnik $p$ określa jak bardzo różnice w czterech pierwszych znakach w obu napisach wpływają na odległość między nimi. Zmienna $p$ jest liczbą z przedziału $[0, \frac{1}{4}]$, by mieć pewność, że odległość Jaro-Winklera miała wartości w przedziale $[0,1]$ ($0 \leq d_{jw}(s,t) \leq 1$). Jeśli $p=0$, to odległość ta redukuje się do odległości Jaro i wszystkie znaki wnoszą taki sam wkład do funkcji odległości. Jeśli $p = \frac{1}{4}$, to odległość Jaro-Winklera jest równa zero nawet wówczas gdy tylko cztery pierwsze znaki w obu napisach pokrywają się. Powód jest taki, że podobno ludzie są mniej skłonni do popełniania błędów w czterech pierwszych znakach lub też są one lepiej zauważalne, więc różnice w pierwszych czterech znakach wskazują na większe prawdopodobieństwo, że dwa napisy są rzeczywiście różne~\cite{Loo2014:stringdist}. Wikler~\cite{Winkler1990:stringcomparator} używał w swoich badaniach $p = 0.1$ i zauważył lepsze rezultaty niż dla $p = 0$.
+Czynnik $p$ określa jak bardzo różnice w czterech pierwszych znakach w obu napisach wpływają na odległość między nimi. Zmienna $p$ jest liczbą z przedziału $[0, \frac{1}{4}]$, by mieć pewność, że odległość Jaro-Winklera miała wartości w przedziale $[0,1]$ ($0 \leq d_{jw}(s,t) \leq 1$). Jeśli $p=0$, to odległość ta redukuje się do odległości Jaro i wszystkie znaki wnoszą taki sam wkład do funkcji odległości. Jeśli $p = \frac{1}{4}$, to odległość Jaro-Winklera jest równa zero nawet wówczas gdy tylko cztery pierwsze znaki w obu napisach pokrywają się. Powód jest taki, że podobno ludzie są mniej skłonni do popełniania błędów w czterech pierwszych znakach lub też są one lepiej zauważalne, więc różnice w pierwszych czterech znakach wskazują na większe prawdopodobieństwo, że dwa napisy są rzeczywiście różne~\cite{Loo2014:stringdist}. Winkler~\cite{Winkler1990:stringcomparator} używał w swoich badaniach $p = 0.1$ i zauważył lepsze rezultaty niż dla $p = 0$.
 
 \begin{example}
 Odległość Jaro-Winklera między napisami \verb|faktura| i \verb|faktyczny| dla $p = 0$, $p = 0.1$ oraz $p = 0.25$ wynosi odpowiednio: 
 \begin{equation*}
   \left.\begin{array}{l@{}l}
-    d_{jw}(\verb|faktura|, \verb|faktyczny|, p = 0.00) & \approx 0.328 = d_{jaro}(\verb|faktura|, \verb|faktyczny|) \\
-    d_{jw}(\verb|faktura|, \verb|faktyczny|, p = 0.10) & \approx 0.197  \\
-    d_{jw}(\verb|faktura|, \verb|faktyczny|, p = 0.25) & =  0
+    d_{\mathrm{jw}}(\verb|faktura|, \verb|faktyczny|, p = 0.00) & \approx 0.328 = d_{\mathrm{jaro}}(\verb|faktura|, \verb|faktyczny|) \\
+    d_{\mathrm{jw}}(\verb|faktura|, \verb|faktyczny|, p = 0.10) & \approx 0.197  \\
+    d_{\mathrm{jw}}(\verb|faktura|, \verb|faktyczny|, p = 0.25) & =  0
   \end{array}\right.
 \end{equation*}
 \end{example}
 
-Łatwo zauważyć z równań \ref{eq:011} i \ref{eq:012}, że odległości Jaro i Jaro-Winklera, dla $p \neq \frac{a}{4}$, są nieujemne,  symetryczne i spełniają warunek identycznościowy [DOWOD??]. Nierówność trójkatą w obu przypadkach nie jest jednak spełniona. Rozważmy następujący przykład: $s = \verb|ab|, t = \verb|cb|, u = \verb|cd|$. Jako że napisy $s$ i $u$ nie mają wspólnych znaków, to odległość Jaro między nimi wynosi $d_{jaro}(s, u) = 0$, podczas gdy $d_{jaro}(s, t) = d_{jaro}(t, u) = \frac{1}{3}$, więc w tym przypadku $d_{jaro}(s, u)$ jest większe od $d_{jaro}(s, t) + d_{jaro}(t, u)$. Z tego łatwo zauważyć, że odległość Jaro-Winklera nie spełnia nierówności trójkąta  dla tego samego przykładu dla $p \in [0, \frac{1}{4}]$~\cite{Loo2014:stringdist}.
+Łatwo zauważyć z równań \ref{eq:011} i \ref{eq:012}, że odległości Jaro i Jaro-Winklera, dla $p \neq \frac{a}{4}$, są nieujemne,  symetryczne i spełniają warunek identycznościowy. Nierówność trójkąta w obu przypadkach nie jest jednak spełniona. Rozważmy następujący przykład: $s = \verb|ab|, t = \verb|cb|, u = \verb|cd|$. Jako że napisy $s$ i $u$ nie mają wspólnych znaków, to odległość Jaro między nimi wynosi $d_{\mathrm{jaro}}(s, u) = 1$, podczas gdy $d_{\mathrm{jaro}}(s, t) = d_{\mathrm{jaro}}(t, u) = \frac{1}{3}$, więc w tym przypadku $d_{jaro}(s, u)$ jest większe od $d_{\mathrm{jaro}}(s, t) + d_{jaro}(t, u)$. Z tego łatwo zauważyć, że odległość Jaro-Winklera nie spełnia nierówności trójkąta  dla tego samego przykładu dla $p \in [0, \frac{1}{4}]$~\cite{Loo2014:stringdist}.
 
 %\subsection{Podsumowanie}
 
-W niniejszym rozdziale przedstawiono odległości określone na napisach [czy też przestrzeni ciągów znaków]. Mając do wyboru wachlarz różnych funkcji nasuwa się pytanie której użyć. Ostateczna decyzja zależy od konkretnego przypadku, jednak istnieją pewne ogólne reguły. Wybór pomiędzy odległościami opartymi na operacjach edycyjnych i $q$-gramach z jednej strony, a miarami heurystycznymi z drugiej zależy w dużej mierze od długości napisów -- te ostatnie są dedykowane krótszym napisom takim jak np. dane osobowe. W odróżnieniu od odległości opartych na operacjach edycyjnych i miarach heurystycznych, odległości oparte na $q$-gramach można łatwo policzyć dla bardzo długich tekstów, jako że liczba $q$-gramów możliwych do utworzenia z języka naturalnego (dla niezbyt małego $q$, tj. $q \geq 3$) jest z reguły o wiele mniejsza niż liczba $q$-gramów, którą można otrzymać z całego alfabetu. Wybór pośród odległości opartych na operacjach edycyjnych zależy przede wszystkim od dokładności jaką chce się otrzymać. Przykładowo do wyszukiwania haseł w słowniku, gdzie różnice między dobranymi napisami są niewielkie, odległości pozwalające na więcej operacji edycyjnych (tak jak np. odległość Damerau-Levenshteina) mogą dać lepsze rezultaty. Odległości Jaro i Jaro-Winklera zostały skonstruowane do krótkich, napisanych przez człowieka, napisów, więc ich zakres zastosowania powinien być jasny.
+W niniejszym rozdziale przedstawiono odległości określone na przestrzeni ciągów znaków. Mając do wyboru wachlarz różnych funkcji nasuwa się pytanie której użyć. Ostateczna decyzja zależy od konkretnego przypadku, jednak istnieją pewne ogólne reguły. Wybór pomiędzy odległościami opartymi na operacjach edycyjnych i $q$-gramach z jednej strony, a miarami heurystycznymi z drugiej zależy w dużej mierze od długości napisów -- te ostatnie są dedykowane krótszym napisom takim jak np. dane osobowe. W odróżnieniu od odległości opartych na operacjach edycyjnych i miarach heurystycznych, odległości oparte na $q$-gramach można łatwo policzyć dla bardzo długich tekstów, jako że liczba $q$-gramów możliwych do utworzenia z języka naturalnego (dla niezbyt małego $q$, tj. $q \geq 3$) jest z reguły o wiele mniejsza niż liczba $q$-gramów, którą można otrzymać z całego alfabetu. Wybór pośród odległości opartych na operacjach edycyjnych zależy przede wszystkim od dokładności jaką chce się otrzymać. Przykładowo do wyszukiwania haseł w słowniku, gdzie różnice między dobranymi napisami są niewielkie, odległości pozwalające na więcej operacji edycyjnych (tak jak np. odległość Damerau-Levenshteina) mogą dać lepsze rezultaty. Odległości Jaro i Jaro-Winklera zostały skonstruowane do krótkich, napisanych przez człowieka, napisów, więc ich zakres zastosowania powinien być jasny.
 
 
 \chapter{Analiza skupień metodą $k$-średnich}

@@ -29,3 +29,4 @@ Tmp/Ryciakowa_praca/*
 /Papers/Statystyczne Systemy Uczace - Koronacki, Cwik.pdf
 *.ipynb_checkpoints*
 *.wav
+*/__pycache__/*

@@ -144,9 +144,9 @@ print(aa, hline.after = c(-1, 0, seq(2, 26, 2)))
 #%>% filter(liczba_obs == '2%')
 
 wyn <- wyniki %>% 
-  filter(liczba_obs == '2%') %>% 
+  #filter(liczba_obs == '2%') %>% 
   group_by(liczba_obs, `Typ danych`) %>% 
-  summarise(zg = mean(Silhouettes))
+  summarise(zg = mean(`Indeks Fowlkesa Mallowsa`))
 
 
 

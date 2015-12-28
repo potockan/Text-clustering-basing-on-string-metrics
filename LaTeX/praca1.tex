@@ -402,7 +402,7 @@ Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{\mat
     ;
     
 \end{tikzpicture}
-\cprotect\caption{Przykład dopasowania przy pomocy odległości Hamming między napisami \verb|koza| i \verb|foka|.}\label{rys:002}
+\cprotect\caption{Przykład dopasowania przy pomocy odległości Hamminga między napisami \verb|koza| i \verb|foka|.}\label{rys:002}
 \end{figure}
 
 
@@ -416,11 +416,11 @@ Rozważmy teraz odległość najdłuższego wspólnego podnapisu (ang. \emph{lon
 Uwzględniając powyższe uproszczenia, możemy następująco przepisać ogólną postać rekurencji \ref{eq:004} dla odległości najdłuższego wspólnego podnapisu:
 
 \begin{equation*}
-C_{i,j} = \min\left\{
+C_{i,j} = \left\{
 \begin{array}{l l}     
     0, & \text{gdy } i = j = 0 \\
-    C_{i-1, j} + 1, & \text{gdy } i > 0 \\
-    C_{i, j-1} + 1, & \text{gdy } j > 0
+    C_{i-1, j-1}, & \text{gdy } s_i = t_j, i, j > 0  \\
+    1 + \min\{C_{i-1, j}, C_{i, j-1}\}, & \text{wpp.} \\    
 \end{array}\right.
 \end{equation*}
 
@@ -634,7 +634,7 @@ C_{i,j} = \min\left\{
     C_{i-1, j} + 1, & \text{gdy } i > 0 \\
     C_{i, j-1} + 1, & \text{gdy } j > 0 \\
     C_{i-1, j-1} + [s_{i}\neq t_{j}], & \text{gdy } i, j > 0 \\
-    \min\limits_{\substack{0 < i^{\prime} < i,\ 0 < j^{\prime} < j  \\ s_i = t_{j^{\prime}},\ s_{i^{\prime}} = t_j}} C_{i^{\prime}-1, j^{\prime}-1} + (i-i^{\prime}) + (j-j^{\prime}) - 1
+    \min\limits_{\substack{0 < i^{\prime} < i,\ 0 < j^{\prime} < j  \\ s_i = t_{j^{\prime}},\ s_{i^{\prime}} = t_j}} \{C_{i^{\prime}-1, j^{\prime}-1} + (i-i^{\prime}) + (j-j^{\prime}) - 1\}
 \end{array}\right.
 \end{equation}
 

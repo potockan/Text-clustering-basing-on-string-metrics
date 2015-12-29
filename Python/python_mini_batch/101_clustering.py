@@ -199,7 +199,7 @@ else:
 print("____" + typ + "____") 
 np.random.seed(12321)
 t0 = time.time()
-for ttt in ["sum"]:#, "count"]:
+for ttt in ["count"]:#, "sum"]:
     print("*******" + str(ttt) + "*******")
     t0 = time.time()
     wagi0 = wagi(typ, ttt)

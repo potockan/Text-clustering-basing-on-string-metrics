@@ -13,10 +13,10 @@ dbDisconnect(con)
 
 languages <- c("pl_PL", "en_GB", "fr_FR", "de_DE")
 #languages <- c("pl", "en", "fr", "de")
-file.copy("/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words.txt", 
-          "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt", overwrite = TRUE)
-file.copy("/dragon/Text-clustering-basing-on-string-metrics//Data//RObjects/words_no_stpw.rds", 
-          "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.rds", overwrite = TRUE)
+file.copy("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words.txt", 
+          "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.txt", overwrite = TRUE)
+file.copy("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_no_stpw.rds", 
+          "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.rds", overwrite = TRUE)
 
 #file1 - morfologik analysis
 #file2 - save analyzed

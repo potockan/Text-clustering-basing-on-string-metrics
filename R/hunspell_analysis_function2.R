@@ -19,8 +19,8 @@ hunspell_analysis <- function(file1, file2){
   dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust2 (
               id_word INTEGER NOT NULL,
               id_stem_word INTEGER NOT NULL,
-              FOREIGN KEY (id_word) REFERENCES wiki_word(id),
-              FOREIGN KEY (id_stem_word) REFERENCES wiki_word(id)
+              FOREIGN KEY (id_word) REFERENCES wiki_word2(id),
+              FOREIGN KEY (id_stem_word) REFERENCES wiki_word2(id)
   );")
   dbExecQuery(con, "create table if not exists tmp_hunspell (
               word VARCHAR(256) NOT NULL,
@@ -33,6 +33,9 @@ hunspell_analysis <- function(file1, file2){
   message("File reading")
   f <- file(file1, "r")
   #i <- 0
+  
+  slowa_out <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/slowa_out.rds")
+  
   #reading the stemmed words
   while (length(txt <- readLines(con = f, n=8192)) > 0) {
     #i <- i+1
@@ -40,6 +43,7 @@ hunspell_analysis <- function(file1, file2){
     #choosins only stemmed words
     txt <- txt[stri_detect_fixed(txt, " ")]
     txt <- txt[which(stri_length(txt)>0)]
+    txt <- stri_trans_tolower(txt)
     txt_split <- lapply(stri_split_fixed(txt, " "), function(txt){
       p1 <- stri_match_first_regex(txt, "st:(.+)")[,2] %>% .[!is.na(.)]
       p <- c(txt[1],p1)
@@ -59,6 +63,8 @@ hunspell_analysis <- function(file1, file2){
       #print(3)
       if(length(dupl)>0)
         m1 <- matrix(m1[-dupl,], ncol = 2)
+      
+      m1 <- m1[-which(m1[,2] %in% slowa_out),]
       
       #saving words that were stemmed
       cat(m1[,1], file = file2, append = TRUE, sep = '\n')
@@ -92,6 +98,7 @@ on a.word = b.word) c
 join
 wiki_word d
 on c.stem_word = d.word
+group by d.id, c.id_word
 ")
   dbExecQuery(con, "drop table tmp_hunspell")
   print(dbGetQuery(con, "select count (id_word) from wiki_hunspell_clust2"))

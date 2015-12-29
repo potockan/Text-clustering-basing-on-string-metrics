@@ -16,6 +16,7 @@ hunspell_analysis <- function(file1, file2){
   message("DB connect")
   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
   #dbExecQuery(con, "drop table wiki_hunspell_clust2")
+  #dbExecQuery(con, "drop table tmp_hunspell")
   dbExecQuery(con, "CREATE TABLE IF NOT EXISTS wiki_hunspell_clust2 (
               id_word INTEGER NOT NULL,
               id_stem_word INTEGER NOT NULL,
@@ -47,8 +48,8 @@ hunspell_analysis <- function(file1, file2){
     txt_split <- lapply(stri_split_fixed(txt, " "), function(txt){
       p1 <- stri_match_first_regex(txt, "st:(.+)")[,2] %>% .[!is.na(.)]
       p <- c(txt[1],p1)
-#       p <- unlist(stri_split_fixed(txt, "st:") )
-#       p <- p[which(stri_length(p)>0 & p!="fl")]
+      #       p <- unlist(stri_split_fixed(txt, "st:") )
+      #       p <- p[which(stri_length(p)>0 & p!="fl")]
       n <- length(p)
       if(n==1)
         p[2] <- ""
@@ -64,24 +65,26 @@ hunspell_analysis <- function(file1, file2){
       if(length(dupl)>0)
         m1 <- matrix(m1[-dupl,], ncol = 2)
       
-      m1 <- m1[-which(m1[,2] %in% slowa_out),]
+      m1 <- matrix(m1[-which(m1[,2] %in% slowa_out),], ncol = 2, byrow = FALSE)
       
-      #saving words that were stemmed
-      cat(m1[,1], file = file2, append = TRUE, sep = '\n')
-      #print(4)
-      to_insert <- sprintf("(%s, %s)", prepare_string(stri_trans_tolower(m1[,1])), prepare_string(stri_trans_tolower(m1[,2])))
-      #print(5)
-      to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500),
-                                        length.out=length(to_insert)))
-      #inserting into tmp table
-      tryCatch({
-        lapply(to_insert, function(to_insert) {
-          dbExecQuery(con, sprintf("INSERT into tmp_hunspell(word, stem_word)
+      if(length(m1) > 0){
+        #saving words that were stemmed
+        cat(m1[,1], file = file2, append = TRUE, sep = '\n')
+        #print(4)
+        to_insert <- sprintf("(%s, %s)", prepare_string(stri_trans_tolower(m1[,1])), prepare_string(stri_trans_tolower(m1[,2])))
+        #print(5)
+        to_insert <- split(to_insert, rep(1:ceiling(length(to_insert)/500),
+                                          length.out=length(to_insert)))
+        #inserting into tmp table
+        tryCatch({
+          lapply(to_insert, function(to_insert) {
+            dbExecQuery(con, sprintf("INSERT into tmp_hunspell(word, stem_word)
                                    values %s", stri_flatten(to_insert, collapse=",")))
-        })
+          })
         },
         finally = next)
       }
+    }
   }
   message("File closing")
   close(f)
@@ -93,15 +96,17 @@ from
 (select a.word, a.stem_word, b.id as id_word
 from tmp_hunspell a
 join
-wiki_word b
+wiki_word2 b
 on a.word = b.word) c
 join
-wiki_word d
+wiki_word2 d
 on c.stem_word = d.word
-group by d.id, c.id_word
+
 ")
+  #group by d.id, c.id_word
   dbExecQuery(con, "drop table tmp_hunspell")
-  print(dbGetQuery(con, "select count (id_word) from wiki_hunspell_clust2"))
+  print(dbGetQuery(con, "select count (distinct id_word) from wiki_hunspell_clust2"))
+  print(dbGetQuery(con, "select count (1) from wiki_hunspell_clust2"))
   message("DB disconnect")
   dbDisconnect(con)
-  }
+}

@@ -28,9 +28,9 @@ file.copy("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_
 
 file1 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analiza_morfologiczna.txt"
 file2 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_analized.txt"
-file3 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.txt"
-file4 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize.rds"
-file5 <- "/dragon/Text-clustering-basing-on-string-metrics/Data//RObjects/words_to_analize_upper.txt"
+file3 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.txt"
+file4 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize.rds"
+file5 <- "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_to_analize_upper.txt"
 
 
 for(lang in languages){

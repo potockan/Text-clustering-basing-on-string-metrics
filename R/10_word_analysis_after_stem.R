@@ -1,3 +1,11 @@
+### new
+### stemmed: 473496 / 1019320 == 46.45 %
+### 430401 Polish words
+### 27274 == 457675 - 430401 English words
+### 8126 == 465801 - 457675 French words
+### 7695 == 473496 - 465801 German words
+
+### old
 ### stemmed: 746 957 / 2 805 858 == 26.62134 %
 ### 664 315 Polish words
 ### 41 087 == 705402 - 664315 English words

@@ -1207,27 +1207,33 @@ Przyjmujemy następującego założenia: Niech $K$ i $C$ oznaczają dwa różne 
 
 \subsection{[TO DO] Indeks Fowlkesa-Mallowsa}
 
-Niech $a_1$ oznacza liczbę par elementów z $X$, które mają wspólne skupienie zarówno w $K$, jak i w $C$, natomiast przez $a_0$ oznaczmy liczbę par elementów z $X$, które mają zostały przypisane do innych skupień zarówno w $K$, jak i w $C$. Elementy, które spełniają jeden z powyższych warunków oznaczają zgodność podziałów $K$ i $C$. Możemy wówczas zdefiniować \emph{indeks Randa}~\cite{Rand1971:objective}:
+\begin{definition}
+Niech macierz $M = [m_{ij}],$ $i,j = 1,\ldots, k$ oznacza liczbę elementów z $X$, które należą do $i$-tego skupienia w $K$ i $j$-tego skupienia w $C$. Możemy wówczas zdefiniować \emph{indeks Fowlkesa-Mallowsa}, ozn. indeks $\mathrm{FM}$~\cite{Fowlkes1983:fmindex}:
 \begin{equation}
-\textrm{RI} = \frac{a_0+a_1}{{n \choose 2} }
+\mathrm{FM} = \frac{T}{\sqrt{P\cdot Q}},
 \end{equation}
+gdzie 
+\begin{align*}
+& T = \sum\limits_{i=1}^{k}\sum\limits_{j=1}^{k} m_{ij}^2 - n,\\
+& P = \sum\limits_{i=1}^{k} (\sum\limits_{j=1}^{k} m_{ij})^2 - n,\\
+& Q = \sum\limits_{j=1}^{k} (\sum\limits_{i=1}^{k} m_{ij})^2 - n.
+\end{align*}
+\end{definition}
 
-Wartości indeksu Randa znajdują się w przedziale $[0,1]$. W praktyce jednak $\textrm{RI}$ leży często pomiędzy $0.5$, a $1$. Co więcej, miara ta nie gwarantuje, że losowy podział zbioru da wartość indeksu bliską zeru. Z tego powodu $\textrm{RI}$ jest zazwyczaj używana w skorygowanej formie~\cite{Lawrence1985:comparing}:
+Wartości indeksu FM znajdują się w przedziale $[0,1]$..
 
-\begin{equation}
-\textrm{ARI} = \frac{2 (a_0 a_1 - b_0 b_1) }{(a_0 + b_0)(b_0 + a_1) + (a_0 + b_1)(b_1 + a_1)},
-\end{equation}
-gdzie $b_0$ oznacza liczbę par elementów z $X$, które należą do tego samego skupienia w $K$, ale do różnych skupień w $C$, natomiast $b_1$ oznacza liczbę par elementów z $X$, które należą do różnych skupień w $K$, ale do tego samego skupienia w $C$.
-
-%Przykładowo, jeśli chcemy podzielić sześcioelementowy zbiór na trzy skupienia i $K = [1, 1, 2, 2, 3, 3]$, a $C = [2, 1, 3, 1, 2, 2]$, to $a = 1$, a $b = 9$. Stąd $\textrm{RI} = \frac{1+9}{{6 \choose 2} } \approx 0.67$.
-
-
-%Miara ta nie gwarantuje, że losowy podział zbioru da wartość indeksu bliską zeru. Stąd, mamy \emph{skorygowany indeks Randa}~\cite{Lawrence1985:comparing}:
-%\begin{equation}
-%\textrm{ARI} = \frac{\textrm{RI} - \mathbb{E}(\textrm{RI}) }{\max{\textrm{RI}} - \mathbb{E}(\textrm{RI}) },
-%\end{equation}
+Przykładowo, jeśli mamy dany sześcioelementowy zbiór, który dzielimy na trzy skupienia i $K = [1, 1, 2, 2, 3, 3]$, a $C = [2, 1, 3, 1, 2, 2]$, to 
+$$
+M = \begin{bmatrix}
+      1 & 1 & 0 \\
+      1 & 0 & 1 \\
+      0 & 2 & 0
+     \end{bmatrix},
+$$
+$T = 2$, $Q = 6$, a $P = 8$. Stąd $\mathrm{FM} = \frac{2}{\sqrt{6\cdot 8}} \approx 0.29$.
 
 
+[TO DO]
 
 \textbf{Zalety:}
 \begin{itemize}
@@ -1245,11 +1251,14 @@ gdzie $b_0$ oznacza liczbę par elementów z $X$, które należą do tego samego
 
 Niech $C$ oznacza zbiór prawdziwych klas, do których należą obserwacje. Mówimy, że podział zbioru jest \emph{jednorodny}, jeśli wszystkie skupienia zawierają jedynie obserwacje z jednej klasy. Podział zbioru jest \emph{zupełny}, jeśli wszystkie obserwacje z danej klasy są w tym samym skupieniu. Jednorodność i zupełność podziału mogą być często w opozycji do siebie, tzn. gdy jednorodność rośnie, to zupełność zazwyczaj maleje i odwrotnie. Przykładowo, rozważmy dwa skrajne podziały. W przypadku pierwszego, gdy przydzielamy wszystkie obserwacje do jednego skupienia, to dostajemy idealną zupełność -- wszystkie elementy z jednej klasy należą do tego samego skupienia. Jednakże, podział taki jest tak \emph{nie}jednorodny, jak to tylko możliwe, skoro wszystkie klasy znajdują się w jednym skupieniu. Z drugiej strony, rozważmy przydzielenie każdej obserwacji do osobnego skupienia. W tym przypadku, podział jest idealnie jednorodny -- każde skupienie zawiera jedynie obserwacje z jednej klasy. Jednak w terminach zupełności, taki podział bardzo słaby, chyba że rzeczywiście każda klasa zawiera jeden element. Miara $\textrm{V}$ jest ważoną średnią harmoniczną dwóch powyższych miar~\cite{Rosenberg2007:vmeasure}.
 
+[TO DO POWIEDZIEC COS O ENTROPII]
 
 \textbf{Jednorodność}. Żeby spełnić kryteria, jak musi spełniać podział jednorodny, każde ze skupień musi zawierać tylko i wyłącznie te obserwacje, które należą do jednej klasy. To znaczy, że rozkład klas w każdym ze skupień powinien skośny i zawierać tylko jedną klasę, tj. entropia powinna wynosić zero. Aby ustalić jak blisko idealnego znajduje się dany podział, sprawdzamy warunkową entropię rozkładu klas pod warunkiem zaproponowanego podziału. W idealnie jednorodnym podziale, ta wartość, tj. $H(C|K)$, wynosi zero. Jednak w przeciwnym przypadku, wartość ta zależy od wielkości zbioru i rozkładu klas. Stąd, zamiast badać warunkową entropię, normalizujemy tę wartość przez maksymalną redukcję entropii jaką informacja o podziale może przynieść, tj. $H(C)$~\cite{Rosenberg2007:vmeasure}.
 
 Zauważmy, że $H(C|K)$ jest maksymalne (i równe $H(C)$), kiedy podział na skupienia nie wnosi żadnej nowej informacji -- rozkład klas w każdym skupieniu jest równy ogólnemu rozkładowi klas. $H(C|K)$ jest równy zeru, gdy każde skupienie zawiera jedynie obserwacje z jednej klasy, tj. w przypadku idealnie jednorodnego podziału. W przypadku zdegenerowanym, gdy $H(C) = 0$, kiedy istnieje tylko jedna klasa, definiujemy jednorodność jako równą $1$. W idealnie jednorodnym rozwiązaniu, taka normalizacja, tj. $\frac{H(C|K)}{H(C)}$, wynosi zero. Stąd, aby utrzymać konwencję, że wartość $1$ jest pożądana, a wartość $0$ jest niepożądana, definiujemy jednorodność jako~\cite{Rosenberg2007:vmeasure}:
 
+\begin{definition}
+Przez \emph{jednorodność} rozumiemy:
 \begin{equation}
 h = %\left\{
 %\begin{array}{l l}     
@@ -1263,46 +1272,53 @@ H(C) & = - \sum\limits_{c = 1}^{|C|}\frac{n_c}{n}\cdot \log{\frac{n_c}{n}},  \\
 H(C|K) & = - \sum\limits_{c = 1}^{|C|}\sum\limits_{k = 1}^{|K|}\frac{n_{c,k}}{n}\cdot \log{\frac{n_{c,k}}{n_k}},
 \end{align*}
 gdzie $n_c$ oznacza liczność klasy $c$, $c = \{1,\ldots, |C|\}$, a $n_{c,k}$ oznacza liczbę elementów, która należy do klasy $c$ i skupienia $k$, $k = \{1,\ldots, |K|\}$.
+\end{definition}
 
 \textbf{Zgodność}. Miara zgodności jest symetryczna do miary jednorodności. Aby spełnić warunki zgodności, podział zbioru musi przydzielić wszystkie obserwacje z jednej klasy, do tego samego skupienia. Żeby policzyć zgodność, badamy rozkład przypisanych skupień w obrębie jednej klasy. W idealnie zgodnym podziale, każdy z rozkładów będzie skośny i będzie zawierać jedynie tylko jedno skupienie. Możemy oszacować poziom skośności, licząc warunkową entropię zaproponowanego podziału pod warunkiem klas, tj. $H(K|C)$. W idealnie zgodnym rozwiązaniu $H(K|C) = 0$. Jednak w najgorszym możliwym przypadku, gdy wszystkie obserwacje z tej samej klasy są we wszystkich skupieniach, rozkład tych ostatnich jest równy rozkładowi rozmiarów klastrów, $H(K|C)$ jest maksymalne i równe $H(K)$. W końcu, w zdegenerowanym przypadku, kiedy $H(K) = 0$, kiedy mamy tylko jedno skupienie, definiujemy zgodność jako równą $1$. Stąd, robiąc symetryczne wyliczenie do poprzedniego, definiujemy zgodność jako~\cite{Rosenberg2007:vmeasure}:
 
+\begin{definition}
+Przez \emph{zgodność} rozumiemy:
 \begin{equation}
 c = % \left\{
 1 - \frac{H(K|C)}{H(K)}, % & \text{w przeciwnym przypadku}
 %\end{array}\right.
 \end{equation}
-gdzie
+gdzie:
 \begin{align*}
 H(K) & = - \sum\limits_{k = 1}^{|K|}\frac{n_k}{n}\cdot \log{\frac{n_k}{n}},  \\
-H(K|C) & = - \sum\limits_{c = 1}^{|C|}\sum\limits_{k = 1}^{|K|}\frac{n_{c,k}}{n}\cdot \log{\frac{n_{c,k}}{n_c}}.
+H(K|C) & = - \sum\limits_{c = 1}^{|C|}\sum\limits_{k = 1}^{|K|}\frac{n_{c,k}}{n}\cdot \log{\frac{n_{c,k}}{n_c}},
 \end{align*}
+gdzie $n_c$ oznacza liczność klasy $c$, $c = \{1,\ldots, |C|\}$, a $n_{c,k}$ oznacza liczbę elementów, która należy do klasy $c$ i skupienia $k$, $k = \{1,\ldots, |K|\}$.
+\end{definition}
 
-\textbf{Miara $\textrm{V}$}. Mając zdefiniowane miary jednorodności i zgodności, możemy wyliczyć miarę $\textrm{V}$ jako ważoną średnią harmoniczną tych dwóch miar~\cite{Rosenberg2007:vmeasure}:
+\textbf{Miara $\textrm{V}$}. Mając zdefiniowane miary jednorodności i zgodności, możemy wyliczyć ich średnią harmoniczną~\cite{Rosenberg2007:vmeasure}:
+
+\begin{definition}
+Niech $h$ oznacza jednorodność, a $c$ zgodność. Przez \emph{miarę V} rozumiemy:
 \begin{equation}
 \textrm{V}_{\beta} = \frac{(1+\beta)\cdot h \cdot c}{(\beta \cdot h) + c},
 \end{equation}
-gdzie $\beta \in (0,1)$. Zauważmy, że jeśli $\beta$ jest mniejsza niż $1$, jednorodność ma większą wagę niż zgodność. Często za $\beta$ przyjmuje się po prostu $1$, dając równą wagę obu miarom.
+gdzie $\beta \in (0,1)$.
+\end{definition}
+
+Zauważmy, że jeśli $\beta$ jest mniejsza niż $1$, jednorodność ma większą wagę niż zgodność. Często za $\beta$ przyjmuje się po prostu $1$, dając równą wagę obu miarom.
 
 Warto zwrócić uwagę na fakt, że jednorodność, zgodność oraz miara V są niezależne od liczby klas, skupień, liczby obserwacji oraz użytego algorytmu. Stąd miary te mogą być używane do porównania każdego algorytmu dzielącego na skupienia, niezależnie od powyższych parametrów. Co więcej, wyliczając zarówno jednorodność, jak i zgodność, może zostać otrzymana bardziej precyzyjna ocena jakości podziału skupień.
 
-\textbf{Zalety:}
-\begin{itemize}
-\item Miary te dają wartości z przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to bardzo dobre rozwiązanie.
-\item Intuicyjna interpretacja: podział z niską wartością miary V może zostać oceniony w terminach jednorodności i zgodności, aby mieć lepsze pojęcie o błędach jakich dokonał algorytm.
-\item Brak założeń o strukturze skupienia: przy pomocy powyższych miar można porównywać podział na skupienia uzyskany przy pomocy różnych algorytmów, które mają różne założenia o strukturze skupienia.
-\end{itemize}
 
+Wszystkie trzy wyżej zaprezentowane miary dają wartości z przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to bardzo dobre rozwiązanie. Mają one intuicyjną interpretację: podział z niską wartością miary V może zostać oceniony w terminach jednorodności i zgodności, aby mieć lepsze pojęcie o błędach jakich dokonał algorytm. Dodatkowo, aby jednorodność, zgodność oraz miara V nie mają założeń o strukturze skupienia: przy ich pomocy można porównywać podział na skupienia uzyskany przy użyciu różnych algorytmów, które mają różne założenia o strukturze skupienia. 
 
-\textbf{Wady:}
-\begin{itemize}
-\item Powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary ARI.
-\item W przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
-\end{itemize}
+Z drugiej jest strony powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary ARI.
+Dodatkowo, w przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
+
 
 \subsection{Miara silhouettes}
 
-Sylwetki obserwacji (czy też \emph{silhouettes}) są użyteczne, gdy odległości są określone na relatywnej skali (ratio scale??) oraz gdy pożądane są wyraźnie odseparowane skupienia. Aby skonstruować sylwetkę obserwacji potrzebne są dwa elementy: podział zbioru na skupienia $C$ oraz miarę odległości $d$ pomiędzy obserwacjami~\cite{Rousseeuw1987:silhoutte}.
+Sylwetki obserwacji (czy też \emph{silhouettes}) są użyteczne, gdy odległości są określone na skali przedziałowej oraz gdy pożądane są wyraźnie odseparowane skupienia. Co więcej nie wymagana jest znajomość prawdziwych klas, do których należą obserwacje, a mówi jedynie o jakości uzyskanego podziału.
 
+Aby skonstruować sylwetkę obserwacji potrzebne są dwa elementy: podział zbioru na skupienia $C$ oraz miarę odległości $d$ pomiędzy obserwacjami~\cite{Rousseeuw1987:silhoutte}.
+
+\begin{definition}
 Weźmy każdą obserwację z próbki $\mathbf{x}_i$ i oznaczmy przez $C(i)$ skupienie, do którego należy. Średnią odmiennością $\mathbf{x}_i$ od swojego skupienia nazywamy~\cite{Rousseeuw1987:silhoutte}:
 \begin{equation*}
 a(\mathbf{x}_i) = \frac{\sum_{u \in C(i)} d(\mathbf{x}_i, u)}{n_{C(i)}}.
@@ -1311,33 +1327,29 @@ a(\mathbf{x}_i) = \frac{\sum_{u \in C(i)} d(\mathbf{x}_i, u)}{n_{C(i)}}.
 \begin{equation*}
 c(\mathbf{x}_i, J) = \frac{\sum_{u \in J} d(\mathbf{x}_i, u)}{n_{J}}.
 \end{equation*}
+\end{definition}
 Wówczas możemy wyliczyć odległość obserwacji $\mathbf{x}_i$ od najbliższego skupienia innego niż $C(i)$:
 \begin{equation*}
 b(\mathbf{x}_i) = \min\limits_{j \neq i} c(\mathbf{x}_i, J).
 \end{equation*}
 
-Skupienie $L$, dla którego minimum jest osiągnięte (tj. $b(\mathbf{x}_i) = c(\mathbf{x}_i, L)$) nazywamy sąsiadem obserwacji $\mathbf{x}_i$. Jest ono drugim najlepszym wyborem dla tej obserwacji. Stąd znajomość sąsiada jest bardzo użyteczna, gdyż mówi o tym które skupienie zostałoby wybrane, gdyby nie zostało nim skupienie $C(i)$. Sylwetka obserwacji jest definiowana następująco~\cite{Rousseeuw1987:silhoutte}:
+
+Skupienie $L$, dla którego minimum jest osiągnięte (tj. $b(\mathbf{x}_i) = c(\mathbf{x}_i, L)$) nazywamy sąsiadem obserwacji $\mathbf{x}_i$. Jest ono drugim najlepszym wyborem dla tej obserwacji. Stąd znajomość sąsiada jest bardzo użyteczna, gdyż mówi o tym które skupienie zostałoby wybrane, gdyby nie zostało nim skupienie $C(i)$.
+
+\begin{definition}
+Sylwetka obserwacji jest definiowana następująco~\cite{Rousseeuw1987:silhoutte}:
 \begin{equation*}
-s(\mathbf{x}_i) = \frac{b(\mathbf{x}_i) - a(\mathbf{x}_i)}{\max{b(\mathbf{x}_i), a(\mathbf{x}_i)}}
+s(\mathbf{x}_i) = \frac{b(\mathbf{x}_i) - a(\mathbf{x}_i)}{\max{b(\mathbf{x}_i), a(\mathbf{x}_i)}}.
 \end{equation*}
+\end{definition}
 
 Sylwetki otrzymujemy dla każdej obserwacji z osobna, ale najczęściej interesująca jest miara zdefiniowana dla całego zbioru, stąd sylwetką zbioru nazywamy średnią z sylwetek po wszystkich obserwacjach:
 \begin{equation*}
-\mathrm{sil} = \sum\limits_{i=1}^{n}s(\mathbf{x}_i)
+\mathrm{sil} = \sum\limits_{i=1}^{n}s(\mathbf{x}_i).
 \end{equation*}
 
-\textbf{Zalety:}
-\begin{itemize}
-\item Miara ta daje wartości z przedziału $[-1, 1]$, gdzie $-1$ oznacza niepoprawny podział, natomiast $1$ to bardzo gęste skupienia. Wartości w okolicy zera sugerują nakładające się skupienia.
-\item Wartość sylwetki jest wyższa, gdy skupienia są gęste i dobrze odseparowane, co jest jedną z najbardziej pożądanych cech analizy skupień.
-\item Miara nie wymaga znajomości prawdziwych klas, na jakie można podzielić zbiór.
-\end{itemize}
+Miara ta daje wartości z przedziału $[-1, 1]$, gdzie $-1$ oznacza niepoprawny podział, natomiast $1$ to bardzo gęste skupienia. Wartości w okolicy zera sugerują nakładające się skupienia. Wartość sylwetki jest wyższa, gdy skupienia są gęste i dobrze odseparowane, co jest jedną z najbardziej pożądanych cech analizy skupień. Miara nie wymaga znajomości prawdziwych klas, na jakie można podzielić zbiór.
 
-
-\textbf{Wady:}
-\begin{itemize}
-\item Miara silhouette przyjmuje w ogólności większe wartości dla wypukłych skupień.
-\end{itemize}
 
 
 \chapter{Kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}

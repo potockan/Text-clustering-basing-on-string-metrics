@@ -102,15 +102,15 @@ wiki_word_clust3_freq <- function(typ){
 
 
 
-#wiki_word_clust3_freq('')
+wiki_word_clust3_freq('')
 
-#wiki_word_clust3_freq('_lcs')
-#wiki_word_clust3_freq('_dl')
-#wiki_word_clust3_freq('_jaccard')
-#wiki_word_clust3_freq('_qgram')
+wiki_word_clust3_freq('_lcs')
+wiki_word_clust3_freq('_dl')
+wiki_word_clust3_freq('_jaccard')
+wiki_word_clust3_freq('_qgram')
 
-#wiki_word_clust3_freq('_red_lcs')
-#swiki_word_clust3_freq('_red_dl')
+wiki_word_clust3_freq('_red_lcs')
+swiki_word_clust3_freq('_red_dl')
 wiki_word_clust3_freq('_red_jaccard')
 wiki_word_clust3_freq('_red_qgram')
 

@@ -1,4 +1,4 @@
-  #!/usr/bin/Rscript --vanilla
+#!/usr/bin/Rscript --vanilla
 
 library(RSQLite)
 library(compiler)
@@ -87,22 +87,55 @@ wiki_word_clust2_freq <- function(typ){
 
 
 
-wiki_word_clust2_freq('')
+# wiki_word_clust2_freq('')
 
+print(system.time({
 wiki_word_clust2_freq('_lcs')
+}))
+print(system.time({
 wiki_word_clust2_freq('_dl')
+}))
+print(system.time({
+wiki_word_clust2_freq('_jw')
+}))
+print(system.time({
 wiki_word_clust2_freq('_jaccard')
+}))
+print(system.time({
 wiki_word_clust2_freq('_qgram')
+}))
 
+print(system.time({
 wiki_word_clust2_freq('_red_lcs')
+}))
+print(system.time({
 wiki_word_clust2_freq('_red_dl')
+}))
+print(system.time({
+wiki_word_clust2_freq('_red_jw')
+}))
+print(system.time({
 wiki_word_clust2_freq('_red_jaccard')
+}))
+print(system.time({
 wiki_word_clust2_freq('_red_qgram')
+}))
 
+print(system.time({
 wiki_word_clust2_freq('_red_lcs_lcs')
+}))
+print(system.time({
 wiki_word_clust2_freq('_red_dl_dl')
+}))
+print(system.time({
+wiki_word_clust2_freq('_red_jw_jw')
+}))
+print(system.time({
 wiki_word_clust2_freq('_red_jaccard_jaccard')
+}))
+print(system.time({
 wiki_word_clust2_freq('_red_qgram_qgram')
+}))
 
 
 # tabele <- c('', '_lcs', '_dl', '_jaccard', '_qgram', 
@@ -141,9 +174,9 @@ wiki_word_clust2_freq('_red_qgram_qgram')
 ########################
 ####### cheking ########
 ########################
-con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+# con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
 
-dbGetQuery(con, 'select * from wiki_word_clust2_red_jaccard_jaccard_freq limit 10')
+# dbGetQuery(con, 'select * from wiki_word_clust2_red_jaccard_jaccard_freq limit 10')
 
 # id_title id_stem_word id_orig_stem_word freq
 # 1         1          702             35688   10
@@ -157,7 +190,7 @@ dbGetQuery(con, 'select * from wiki_word_clust2_red_jaccard_jaccard_freq limit 1
 # 9         1        11648            529517    2
 # 10        1        11902            539051    1
 
-words <- dbGetQuery(con, 'select * from wiki_hunspell_clust2_red_jaccard_jaccard where id_stem_word = 35688')
+# words <- dbGetQuery(con, 'select * from wiki_hunspell_clust2_red_jaccard_jaccard where id_stem_word = 35688')
 
 # id_word id_stem_word
 # 1    35723        35688
@@ -171,9 +204,9 @@ words <- dbGetQuery(con, 'select * from wiki_hunspell_clust2_red_jaccard_jaccard
 # 9    35694        35688
 # 10   35722        35688
 
-id_words <- words$id_word
+# id_words <- words$id_word
 
-dbGetQuery(con, sprintf('select * from wiki_word_freq where id_word in (%s) and id_title = 1', stri_flatten(id_words, collapse = ', ')))
+# dbGetQuery(con, sprintf('select * from wiki_word_freq where id_word in (%s) and id_title = 1', stri_flatten(id_words, collapse = ', ')))
 
 # id_title id_word freq
 # 1        1   35688    5
@@ -181,7 +214,7 @@ dbGetQuery(con, sprintf('select * from wiki_word_freq where id_word in (%s) and 
 # 3        1   35693    1
 # 4        1   35694    1
 
-dbDisconnect(con)
+# dbDisconnect(con)
 ########################
 
 

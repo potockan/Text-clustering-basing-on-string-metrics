@@ -12,7 +12,7 @@ source("./R/db_exec.R")
 wiki_word_clust3_freq <- function(typ){
   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
   
-  message(typ)
+  message(paste0(c("************",typ,"************")))
   # Create table
   
   dbExecQuery(con, sprintf('drop table if exists tmp_word_clust3%s_freq', typ))
@@ -109,16 +109,19 @@ wiki_word_clust3_freq('')
 
 wiki_word_clust3_freq('_lcs')
 wiki_word_clust3_freq('_dl')
+wiki_word_clust3_freq('_jw')
 wiki_word_clust3_freq('_jaccard')
 wiki_word_clust3_freq('_qgram')
 
-# wiki_word_clust3_freq('_red_lcs')
+wiki_word_clust3_freq('_red_lcs')
 wiki_word_clust3_freq('_red_dl')
+wiki_word_clust3_freq('_red_jw')
 wiki_word_clust3_freq('_red_jaccard')
 wiki_word_clust3_freq('_red_qgram')
 
 wiki_word_clust3_freq('_red_lcs_lcs')
 wiki_word_clust3_freq('_red_dl_dl')
+wiki_word_clust3_freq('_red_jw_jw')
 wiki_word_clust3_freq('_red_jaccard_jaccard')
 wiki_word_clust3_freq('_red_qgram_qgram')
 

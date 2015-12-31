@@ -30,6 +30,9 @@ words <- dbGetQuery(con, "
           a.id = b.id_stem_word
             ")
 
+dbDisconnect(con)
+# saveRDS(words, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/words_111.rds")
+
 words <- words %>% distinct()
 
 #str_dist <- stringdistmatrix(words_to_analize, words, method = 'lv')
@@ -62,22 +65,26 @@ words <- words %>% distinct()
 #   return(used)
 # }
 
-word_order2 <- function(words_to_analize, words, method = 'lcs', q = 3, n = 5000){
-  print(paste0("word order ", method))
-  # method <- 'lcs'
-  #N <- 100
-  N <- length(words_to_analize)
-  
-  used <- numeric(N)
-  used <- 1
-
-  x <- unique(c(seq(1, N, by = n), N+1))
-  for(i in 1:(length(x)-1)){
-    #word closest to the i-th word
-    used[x[i]:(x[i+1]-1)] <- apply(stringdistmatrix(words$word, words_to_analize[x[i]:(x[i+1]-1)]), 2, which.min)
-  }
-  return(used)
-}
+# word_order2 <- function(words_to_analize, words, method = 'lcs', q = 3, n = 3000){
+#   print(paste0("word order ", method))
+#   # method <- 'lcs'
+#   #N <- 100
+#   N <- length(words_to_analize)
+#   
+#   used <- numeric(N)
+#   used <- 1
+# 
+#   x <- unique(c(seq(1, N, by = n), N+1))
+#   for(i in 1:(length(x)-1)){
+#     #word closest to the i-th word
+#     used[x[i]:(x[i+1]-1)] <- apply(
+#       stringdistmatrix(words$word, words_to_analize[x[i]:(x[i+1]-1)], method = method),
+#       2, which.min)
+#     if(i %% 10 == 0)
+#       print(x[i])
+#   }
+#   return(used)
+# }
 
 
 
@@ -97,56 +104,58 @@ word_order2 <- function(words_to_analize, words, method = 'lcs', q = 3, n = 5000
 # saveRDS(used_lcs, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
 # used_lcs <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
 
-print(system.time({
-used_dl <- word_order2(words_to_analize, words, method = 'dl')
-}))
-saveRDS(used_dl, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_dl.rds")
+# print(system.time({
+# used_dl <- word_order2(words_to_analize, words, method = 'dl')
+# }))
+# saveRDS(used_dl, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_dl.rds")
 # used_dl <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_dl.rds")
 ####################
-
-word_order <- function(words_to_analize, words, method = 'lcs', q = 3, n = 5000){
-  print(paste0("word order ", method))
-  #method <- 'jaccard'
-  #N <- 100
-  N <- length(words_to_analize)
-  
-  used <- numeric(N)
-  used <- 1
-  #word closest to the first one
-  # used[1] <- which.min(stringdist(words$word, words_to_analize[1], method = method, q = q))
-  
-  
-#   for(i in 2:N){
-#     #word closest to the i-th word
-#     strdst <- stringdist(words$word, words_to_analize[i], method = method, q = q)
-#     used[i] <- ifelse(all(strdst == Inf), NA, which.min(strdst))
-#     if(i%%10000==0)
-#       print(i)
-#   }
+# 
+# word_order <- function(words_to_analize, words, method = 'lcs', q = 3, n = 3000){
+#   print(paste0("word order ", method))
+#   #method <- 'jaccard'
+#   #N <- 100
+#   N <- length(words_to_analize)
 #   
-  
-  N <- length(words_to_analize)
-  
-  used <- numeric(N)
-  used <- 1
-  
-  x <- unique(c(seq(1, N, by = n), N+1))
-  for(i in 1:(length(x)-1)){
-    #word closest to the i-th word
-    used[x[i]:(x[i+1]-1)] <- apply(stringdistmatrix(
-      words$word, words_to_analize[x[i]:(x[i+1]-1)]), 
-      2, 
-      function(t){
-        ifelse(all(t == Inf), NA, which.min(t))
-      })
-  }
-  return(used)
-}
-
+#   used <- numeric(N)
+#   used <- 1
+#   #word closest to the first one
+#   # used[1] <- which.min(stringdist(words$word, words_to_analize[1], method = method, q = q))
+#   
+#   
+# #   for(i in 2:N){
+# #     #word closest to the i-th word
+# #     strdst <- stringdist(words$word, words_to_analize[i], method = method, q = q)
+# #     used[i] <- ifelse(all(strdst == Inf), NA, which.min(strdst))
+# #     if(i%%10000==0)
+# #       print(i)
+# #   }
+# #   
+#   
+#   N <- length(words_to_analize)
+#   
+#   used <- numeric(N)
+#   used <- 1
+#   
+#   x <- unique(c(seq(1, N, by = n), N+1))
+#   for(i in 1:(length(x)-1)){
+#     #word closest to the i-th word
+#     used[x[i]:(x[i+1]-1)] <- apply(stringdistmatrix(
+#       words$word, words_to_analize[x[i]:(x[i+1]-1)], method = method, q = q), 
+#       2, 
+#       function(t){
+#         ifelse(all(t == Inf), NA, which.min(t))
+#       })
+#   }
+#   return(used)
+# }
+# 
 
 
 hunspell_insert <- function(used, typ){
   print(paste0("insert ", typ))
+  con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
+  
   dbExecQuery(con, sprintf("create table if not exists tmp_hunspell%s (
               word VARCHAR(256) NOT NULL,
               id_stem_word INTEGER NOT NULL,
@@ -203,10 +212,18 @@ hunspell_insert <- function(used, typ){
 # #used_qgram <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_qgram.rds")
 # 
 # print(system.time({
-# used_jw <- word_order(words_to_analize, words, method = 'jw')
+# used_jw <- word_order2(words_to_analize, words, method = 'jw')
 # }))
 # saveRDS(used_jw, "/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jw.rds")
-# #used_jw <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jw.rds")
+#used_jw <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jw.rds")
+
+# used_lcs <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_lcs.rds")
+
+# used_jaccard <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jaccard.rds")
+# used_jw <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_jw.rds")
+# used_qgram <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_qgram.rds")
+used_dl <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObjects/used_dl.rds")
+
 
 print(system.time({
 # hunspell_insert(used_lcs, "lcs")

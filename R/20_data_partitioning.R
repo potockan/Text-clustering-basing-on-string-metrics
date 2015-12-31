@@ -18,15 +18,15 @@ source("./R/db_exec.R")
 partitions <- function(typ, art){
 
   message(typ)
-  ciag <- ceiling(seq(1, length(art), length.out = 14))
+  ciag <- ceiling(seq(1, length(art), length.out = 6))
   
   
   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
   
-  for(i in 1:13){
+  for(i in 1:(length(ciag)-1)){
     message("Connecting to db ", i)
     con1 <- dbConnect(SQLite(), dbname = 
-                        sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite", i, typ))
+                        sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions0/czesc%d/wiki%s.sqlite", i, typ))
     
     message("Taking the data from db")
     dane <- dbGetQuery(con, sprintf("select id_title, id_stem_word, freq 
@@ -61,15 +61,15 @@ partitions <- function(typ, art){
 
 category_partitions <- function(art){
   
-  ciag <- ceiling(seq(1, length(art), length.out = 14))
+  ciag <- ceiling(seq(1, length(art), length.out = 6))
   
-  i <- 1
+  #i <- 1
   con <- dbConnect(SQLite(), dbname = "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
   
-  #for(i in 1:13){
+  for(i in 1:(length(ciag)-1)){
     message("Connecting to db ", i)
     con1 <- dbConnect(SQLite(), dbname = 
-                        sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki_art_cat.sqlite", i))
+                        sprintf("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions0/czesc%d/wiki_art_cat.sqlite", i))
     
     message("Taking the data from db")
     dane <- dbGetQuery(con, sprintf("select id, id_new_cat 
@@ -97,7 +97,7 @@ category_partitions <- function(art){
                       values %s", stri_flatten(to_insert, collapse=", ")))
     })
     dbDisconnect(con1)
-  #}
+  }
   dbDisconnect(con)
   
 }

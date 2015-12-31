@@ -1166,7 +1166,30 @@ Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielą
 
 Metody dzielące działają w przeciwnym kierunku: zaczynamy od jednego skupienia zawierającego cały zbiór. Następnie w każdym kroku algorytmu jedno ze skupień dzielone jest na dwa skupienia, w których odmienność jest największa. W ten sposób na kolejnym poziomie otrzymujemy o jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, w każdym kolejnym kroku otrzymując coraz więcej skupień. W ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to liczba obserwacji). Warto przy tym zauważyć, że algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
-Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są o wiele bardziej złożone obliczeniowo, skupimy się na metodach aglomeracyjnych, jako tych częściej stosowanych w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj trzy najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada oraz średnią odmienność. Oznaczmy przez $D_{ij}$ odmienność między skupieniem $i$-tym a $j$-tym, których liczności wynoszą odpowiednio $n_i, n_j$\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są o wiele bardziej złożone obliczeniowo, skupimy się na metodach aglomeracyjnych, jako tych częściej stosowanych w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj cztery najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada, średnią odmienność oraz kryterium Warda~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+
+Metoda Warda jest kryterium stosowanym w hierarchicznej analizie skupień. Ward zaproponował ogólną procedurę metod aglomeracyjnych, gdzie o wyborze połączenia pary skupień decyduje się na podstawie wartości pewnej funkcji celu. Tą funkcją celu może być każda funkcja, która odzwierciedla cel badacza. Wiele standardowych procedur tworzenia skupień jest zawartych w tym bardzo ogólnym podejściu. Aby zilustrować procedurę, Ward użył przykładu, gdy funkcja celu jest sumą kwadratów błędów, a przykład ten jest znany jako \emph{metoda Warda} lub dokładniej jako \emph{metoda minimalnej wariancji Warda}~\cite{Ward1963:hierarchical}.
+
+Metoda ta może być zdefiniowana i zaimplementowana przy pomocy rekurencyjnych wzorów Lance'a-Williamsa. Wzory te to nieskończona rodzina algorytmów grupowania aglomeracyjnego, które są reprezentowane przez rekurencyjny wzór aktualizujący odległości skupień na każdym poziomie. W każdym kroku niezbędne jest, aby zoptymalizować funkcję celu. Rekurencyjna formuła ułatwia więc znalezienie odpowiedniej pary skupień.	
+
+Oznaczmy przez $D_{ij}$ odmienność między skupieniem $i$-tym a $j$-tym, których liczności wynoszą odpowiednio $n_i, n_j$, a przez $D_{(ij)l}$ odległość między połączonym skupieniem $i$-tym i $j$-tym a skupieniem $l$-tym.
+
+\begin{definition}
+Wzory Lance'a-Williamsa definiujemy następująco:
+$$
+D_{(ij)l} = \alpha_i D_{il} + \alpha_j D_{jl} + \beta D_{ij} + \gamma |D_{il} - D_{jl}|,
+$$
+gdzie $\alpha_i, \alpha_, \beta, \gamma$ są parametrami zależnymi od liczności skupień.
+\end{definition}
+
+Metoda minimalnej wariancji Warda wyrażona w terminach wzorów Lance'a-Williamsa przyjmuje następującą postać:
+$$
+D_{(ij)l} = \frac{n_i+n_l}{n_i+n_j+n_l}_i D_{il} + \frac{n_j+n_l}{n_i+n_j+n_l} D_{jl} - \frac{n_l}{n_i+n_j+n_l} D_{ij},
+$$
+gdzie $n_l$ to liczność $l$-tego skupienia. Wartości parametrów z algorytmu Lance'a-Williamsa w powyższym wzorze wynoszą:
+$$
+\alpha_i =  \frac{n_i+n_l}{n_i+n_j+n_l},\ \ \beta = \frac{-n_l}{n_i+n_j+n_l},\ \ \gamma = 0.
+$$
 
 \begin{definition}
 \emph{Odmienność najbliższego sąsiada} (ang. \emph{single linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako najmniejszą spośród wszystkich możliwych odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
@@ -1196,6 +1219,8 @@ Metoda odmienności najdalszego sąsiada ma działanie przeciwne. Dwa skupienia 
 Metoda średniej odmienności jest kompromisem pomiędzy dwoma powyższymi. Próbuje ona dać skupienia relatywnie zwarte i względnie oddalone od siebie~\cite{Hastie2009:elements}. Podobnie jak metoda odmienności najdalszego sąsiada, daje ona skupienia o kształcie kulistym~\cite{Koronacki2005:statystyczne}.
 
 Jeśli odmienności poszczególnych obserwacji mają silną tendencję do skupiania się, przy czym każde skupienie jest zwarte i dobrze odseparowane, to wszystkie trzy metody dadzą podobne rezultaty~\cite{Hastie2009:elements}.
+
+Przejdźmy do metody Warda.
 
 \section{Metody oceny jakości podziału na skupienia}
 

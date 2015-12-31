@@ -1144,7 +1144,7 @@ Zauważmy, że wszystkie znane i stosowane wersje algorytmów $k$-średnich są 
 
 Metody hierarchiczne to zbiór algorytmów analizy skupień, które nie wymagają znajomości liczby skupień. W niniejszym podrozdziale przedstawimy pokrótce schemat ich działania w dowolnej przestrzeni obserwacji.
 
-Powyżej przedstawiliśmy algorytm $k$-średnich, dzielący zbiór z przestrzeni euklidesowej na podzbiory punktów podobnych do siebie, tj. mieliśmy do czynienia ze zmiennymi liczbowym. Problem ten można uogólnić dla obserwacji z dowolnej przestrzeni. Po pierwsze odległość euklidesową z równania~\eqref{eq:014} można zamienić na dowolną funkcję odmienności $d$ między obserwacjami z danej przestrzeni. Przez funkcję odmienności rozumiemy następującą funkcję.
+Powyżej przedstawiliśmy algorytm $k$-średnich, dzielący zbiór z przestrzeni euklidesowej na podzbiory punktów podobnych do siebie, tj. mieliśmy do czynienia ze zmiennymi liczbowym. Problem ten można uogólnić dla obserwacji z dowolnej przestrzeni. Po pierwsze odległość euklidesową z równania~\eqref{eq:014} można zamienić na dowolną funkcję odmienności $d$ między obserwacjami z danej przestrzeni. Przez funkcję odmienności rozumiemy następującą funkcję:
 
 \begin{definition}
 \emph{Funkcją odmienności} nazywamy funkcję $d: X\times X \rightarrow \mathbb{R}_+\cup\{0\}$, która $\forall x, y \in X$ spełnia następujące warunki:
@@ -1166,16 +1166,16 @@ Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielą
 
 Metody dzielące działają w przeciwnym kierunku: zaczynamy od jednego skupienia zawierającego cały zbiór. Następnie w każdym kroku algorytmu jedno ze skupień dzielone jest na dwa skupienia, w których odmienność jest największa. W ten sposób na kolejnym poziomie otrzymujemy o jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, w każdym kolejnym kroku otrzymując coraz więcej skupień. W ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to liczba obserwacji). Warto przy tym zauważyć, że algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
-Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są o wiele bardziej złożone obliczeniowo, skupimy się na metodach aglomeracyjnych, jako tych częściej stosowanych w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj cztery najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada, średnią odmienność oraz kryterium Warda~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są o wiele bardziej złożone obliczeniowo, skupimy się na metodach aglomeracyjnych, jako tych częściej stosowanych w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada, średnią odmienność kryterium Warda, odmienność centroidów i mediany~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
 Metoda Warda jest kryterium stosowanym w hierarchicznej analizie skupień. Ward zaproponował ogólną procedurę metod aglomeracyjnych, gdzie o wyborze połączenia pary skupień decyduje się na podstawie wartości pewnej funkcji celu. Tą funkcją celu może być każda funkcja, która odzwierciedla cel badacza. Wiele standardowych procedur tworzenia skupień jest zawartych w tym bardzo ogólnym podejściu. Aby zilustrować procedurę, Ward użył przykładu, gdy funkcja celu jest sumą kwadratów błędów, a przykład ten jest znany jako \emph{metoda Warda} lub dokładniej jako \emph{metoda minimalnej wariancji Warda}~\cite{Ward1963:hierarchical}.
 
-Metoda ta może być zdefiniowana i zaimplementowana przy pomocy rekurencyjnych wzorów Lance'a-Williamsa. Wzory te to nieskończona rodzina algorytmów grupowania aglomeracyjnego, które są reprezentowane przez rekurencyjny wzór aktualizujący odległości skupień na każdym poziomie. W każdym kroku niezbędne jest, aby zoptymalizować funkcję celu. Rekurencyjna formuła ułatwia więc znalezienie odpowiedniej pary skupień.	
+Metoda ta może być zdefiniowana i zaimplementowana przy pomocy rekurencyjnych wzorów Lance'a-Williamsa~\cite{Lance1967:hierarchical}. Wzory te to nieskończona rodzina algorytmów grupowania aglomeracyjnego, które są reprezentowane przez rekurencyjny wzór aktualizujący odległości skupień na każdym poziomie. W każdym kroku niezbędne jest, aby zoptymalizować funkcję celu. Rekurencyjna formuła ułatwia więc znalezienie odpowiedniej pary skupień.	
 
 Oznaczmy przez $D_{ij}$ odmienność między skupieniem $i$-tym a $j$-tym, których liczności wynoszą odpowiednio $n_i, n_j$, a przez $D_{(ij)l}$ odległość między połączonym skupieniem $i$-tym i $j$-tym a skupieniem $l$-tym.
 
 \begin{definition}
-Wzory Lance'a-Williamsa definiujemy następująco:
+Wzory Lance'a-Williamsa definiujemy następująco~\cite{Lance1967:hierarchical}:
 $$
 D_{(ij)l} = \alpha_i D_{il} + \alpha_j D_{jl} + \beta D_{ij} + \gamma |D_{il} - D_{jl}|,
 $$
@@ -1184,7 +1184,7 @@ gdzie $\alpha_i, \alpha_, \beta, \gamma$ są parametrami zależnymi od licznośc
 
 Metoda minimalnej wariancji Warda wyrażona w terminach wzorów Lance'a-Williamsa przyjmuje następującą postać:
 $$
-D_{(ij)l} = \frac{n_i+n_l}{n_i+n_j+n_l}_i D_{il} + \frac{n_j+n_l}{n_i+n_j+n_l} D_{jl} - \frac{n_l}{n_i+n_j+n_l} D_{ij},
+D_{(ij)l} = \frac{n_i+n_l}{n_i+n_j+n_l} D_{il} + \frac{n_j+n_l}{n_i+n_j+n_l} D_{jl} - \frac{n_l}{n_i+n_j+n_l} D_{ij},
 $$
 gdzie $n_l$ to liczność $l$-tego skupienia. Wartości parametrów z algorytmu Lance'a-Williamsa w powyższym wzorze wynoszą:
 $$
@@ -1198,6 +1198,8 @@ D_{ij} = \min\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_
 $$
 \end{definition}
 
+W terminach wzorów Lance'a-Williamsa można to wyrazić jako $D_{(ij)l} = 0.5 D_{il} + 0.5 D_{jl} - 0.5 |D_{il} - D_{jl}| $, tj. $\alpha_i = 0.5, \gamma = -0.5$, a $\beta = 0$.
+
 \begin{definition}
 \emph{Odmienność najdalszego sąsiada} (ang. \emph{complete linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako największą spośród wszystkich możliwych odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
 $$
@@ -1205,12 +1207,16 @@ D_{ij} = \max\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_
 $$
 \end{definition}
 
+W terminach wzorów Lance'a-Williamsa można to wyrazić jako $D_{(ij)l} = 0.5 D_{il} + 0.5 D_{jl} + 0.5 |D_{il} - D_{jl}| $, tj. $\alpha_i = \gamma = 0.5$, a $\beta = 0$.
+
 \begin{definition}
 \emph{Odmienność średnią} (ang. \emph{average linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako średnią odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
 $$
 D_{ij} = \frac{1}{n_i n_j}\sum\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_a, \mathbf{x}_b).
 $$
 \end{definition}
+
+W terminach wzorów Lance'a-Williamsa można to wyrazić jako $D_{(ij)l} = \frac{n_i}{n_i+n_j} D_{il} + \frac{n_j}{n_i+n_j} D_{jl}$, tj. $\alpha_i = \frac{n_i}{n_i+n_j}$, a $\beta = \gamma = 0$.
 
 Odmienność najbliższego sąsiada wymaga, żeby jedna odmienność $d(\mathbf{x}_a, \mathbf{x}_b)$, gdzie $\mathbf{x}_a \in C(i)$, $\mathbf{x}_b \in C(j)$, miała małą wartość, aby uznać dwa podzbiory za bliskie sobie, bez względu na odmienności innych obserwacji z tych dwóch grup. Metoda ta będzie zatem mieć skłonność do łączenia skupień połączonych przez szereg bliskich obserwacji pośrednich. Takie zjawisko nazywane jest \emph{efektem łańcuchowym} i uważane jest za wadę tej metody. Skupienia otrzymane w wyniku jej działania często nie są zwarte, jako że podobieństwo skupień określone jest na podstawie dwóch najbliższych obserwacji~\cite{Hastie2009:elements}. Odmienność najbliższego sąsiada daje zazwyczaj skupienia wąskie i wydłużone~\cite{Koronacki2005:statystyczne}. 
 
@@ -1220,7 +1226,25 @@ Metoda średniej odmienności jest kompromisem pomiędzy dwoma powyższymi. Pró
 
 Jeśli odmienności poszczególnych obserwacji mają silną tendencję do skupiania się, przy czym każde skupienie jest zwarte i dobrze odseparowane, to wszystkie trzy metody dadzą podobne rezultaty~\cite{Hastie2009:elements}.
 
-Przejdźmy do metody Warda.
+Przejdźmy do odmienności centroidów.
+
+\begin{definition}
+\emph{Odmienność centroidów} (ang. \emph{centroid linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako odległość między środkami skupień:
+$$
+D_{ij} = d(\mathbf{m}_i, \mathbf{m}_j),
+$$
+gdzie $\mathbf{m}_i, \mathbf{m}_j$ oznaczają środki, odpowiednio, skupienia $i$-tego i $j$-tego.
+\end{definition}
+
+\begin{definition}
+\emph{Odmienność median} (ang. \emph{median linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako odległość między medianami obserwacji ze skupień:
+$$
+D_{ij} = d(\mathbf{med}_i, \mathbf{med}_j),
+$$
+gdzie $\mathbf{med}_i, \mathbf{med}_j$ oznaczają medianę obserwacji, odpowiednio, skupienia $i$-tego i $j$-tego.
+\end{definition}
+
+[TO DO: NAPISAC ZE 2 SLOWA O POWYZSZYCH + PRZYKLADY]
 
 \section{Metody oceny jakości podziału na skupienia}
 
@@ -1230,7 +1254,7 @@ Dokonawszy podziału zbioru na skupienia, należy ocenić jakość zastosowanego
 
 Przyjmujemy następującego założenia: Niech $K$ i $C$ oznaczają dwa różne podziały $n$-elementowego zbioru $X$ na skupienia. Zazwyczaj $K$ oznacza podział uzyskany przy pomocy algorytmu dzielącego zbiór, a $C$ jest zbiorem prawdziwych klas, do których należą obserwacje, choć $K$ i $C$ mogą również oznaczać dwa niezależne podziały uzyskane przy pomocy różnych algorytmów.
 
-\subsection{[TO DO] Indeks Fowlkesa-Mallowsa}
+\subsection{Indeks Fowlkesa-Mallowsa}
 
 \begin{definition}
 Niech macierz $M = [m_{ij}],$ $i,j = 1,\ldots, k$ oznacza liczbę elementów z $X$, które należą do $i$-tego skupienia w $K$ i $j$-tego skupienia w $C$. Możemy wówczas zdefiniować \emph{indeks Fowlkesa-Mallowsa}, ozn. indeks $\mathrm{FM}$~\cite{Fowlkes1983:fmindex}:
@@ -1257,20 +1281,9 @@ M = \begin{bmatrix}
 $$
 $T = 2$, $Q = 6$, a $P = 8$. Stąd $\mathrm{FM} = \frac{2}{\sqrt{6\cdot 8}} \approx 0.29$.
 
+Indeks FM przyjmuje wartości z przedziału $[0,1]$, gdzie zero oznacza zupełnie różne podziały, natomiast jeden -- pełną zgodność. Ponieważ indeks FM jest wprost proporcjonalny do sumy liczby wspólnych elementów w obu podziałach, większa wartość indeksu oznacza większe podobieństwo między uzyskanymi podziałami. Ponadto Fowlkes i Mallows~\cite{Fowlkes1983:fmindex} pokazali, że porównując dwa niezależne podziały, to indeks osiąga wartości bliskie zeru, podczas gdy inne wskaźniki, np. indeks Randa~\cite{Rand1971:objective} często szybko dążą w takim przypadku do $1$. Stąd indeks FM jest o wiele bardziej dokładny dla niezależnych podziałów. FM daje również dobre rezultaty w przypadku, gdy do danych zostanie dodany szum -- czym większy szum w danych, tym indeks przyjmuje mniejsze wartości. Czyni go tym samym solidnym narzędziem mierzącym jakość uzyskanego podziału. 
+Jednak w przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
 
-[TO DO]
-
-\textbf{Zalety:}
-\begin{itemize}
-\item Losowe przyporządkowanie do skupień daje wartość $\textrm{ARI}$ bliską zeru dla dowolnej liczby skupień i obserwacji w zbiorze.
-\item Miara $\textrm{ARI}$ daje wartości z przedziału $[-1, 1]$, gdzie $-1$ oznacza niezależne przyporządkowanie, natomiast $1$ oznacza pełną zgodność.
-\item Brak założeń o strukturze skupienia: przy pomocy $\textrm{ARI}$ można porównywać podział na skupienia uzyskany przy pomocy różnych algorytmów, które mają różne założenia o strukturze skupienia.
-\end{itemize}
-
-\textbf{Wady:}
-\begin{itemize}
-\item W przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
-\end{itemize}
 
 \subsection{Jednorodność, zupełność oraz miara V}
 
@@ -1299,6 +1312,8 @@ H(C|K) & = - \sum\limits_{c = 1}^{|C|}\sum\limits_{k = 1}^{|K|}\frac{n_{c,k}}{n}
 gdzie $n_c$ oznacza liczność klasy $c$, $c = \{1,\ldots, |C|\}$, a $n_{c,k}$ oznacza liczbę elementów, która należy do klasy $c$ i skupienia $k$, $k = \{1,\ldots, |K|\}$.
 \end{definition}
 
+Przykładowo, jeśli mamy dany sześcioelementowy zbiór, który dzielimy na trzy skupienia i $K = [1, 1, 2, 2, 3, 3]$, a $C = [2, 1, 3, 1, 2, 2]$, to $h \approx 0.54$.
+
 \textbf{Zgodność}. Miara zgodności jest symetryczna do miary jednorodności. Aby spełnić warunki zgodności, podział zbioru musi przydzielić wszystkie obserwacje z jednej klasy, do tego samego skupienia. Żeby policzyć zgodność, badamy rozkład przypisanych skupień w obrębie jednej klasy. W idealnie zgodnym podziale, każdy z rozkładów będzie skośny i będzie zawierać jedynie tylko jedno skupienie. Możemy oszacować poziom skośności, licząc warunkową entropię zaproponowanego podziału pod warunkiem klas, tj. $H(K|C)$. W idealnie zgodnym rozwiązaniu $H(K|C) = 0$. Jednak w najgorszym możliwym przypadku, gdy wszystkie obserwacje z tej samej klasy są we wszystkich skupieniach, rozkład tych ostatnich jest równy rozkładowi rozmiarów klastrów, $H(K|C)$ jest maksymalne i równe $H(K)$. W końcu, w zdegenerowanym przypadku, kiedy $H(K) = 0$, kiedy mamy tylko jedno skupienie, definiujemy zgodność jako równą $1$. Stąd, robiąc symetryczne wyliczenie do poprzedniego, definiujemy zgodność jako~\cite{Rosenberg2007:vmeasure}:
 
 \begin{definition}
@@ -1316,6 +1331,8 @@ H(K|C) & = - \sum\limits_{c = 1}^{|C|}\sum\limits_{k = 1}^{|K|}\frac{n_{c,k}}{n}
 gdzie $n_c$ oznacza liczność klasy $c$, $c = \{1,\ldots, |C|\}$, a $n_{c,k}$ oznacza liczbę elementów, która należy do klasy $c$ i skupienia $k$, $k = \{1,\ldots, |K|\}$.
 \end{definition}
 
+Przykładowo, jeśli mamy dany sześcioelementowy zbiór, który dzielimy na trzy skupienia i $K = [1, 1, 2, 2, 3, 3]$, a $C = [2, 1, 3, 1, 2, 2]$, to $h = 0.5$.
+
 \textbf{Miara $\textrm{V}$}. Mając zdefiniowane miary jednorodności i zgodności, możemy wyliczyć ich średnią harmoniczną~\cite{Rosenberg2007:vmeasure}:
 
 \begin{definition}
@@ -1328,12 +1345,14 @@ gdzie $\beta \in (0,1)$.
 
 Zauważmy, że jeśli $\beta$ jest mniejsza niż $1$, jednorodność ma większą wagę niż zgodność. Często za $\beta$ przyjmuje się po prostu $1$, dając równą wagę obu miarom.
 
+Przykładowo, jeśli mamy dany sześcioelementowy zbiór, który dzielimy na trzy skupienia i $K = [1, 1, 2, 2, 3, 3]$, a $C = [2, 1, 3, 1, 2, 2]$, to dla $\beta = 1$ mamy $\textrm{V} =  \approx 0.52$.
+
 Warto zwrócić uwagę na fakt, że jednorodność, zgodność oraz miara V są niezależne od liczby klas, skupień, liczby obserwacji oraz użytego algorytmu. Stąd miary te mogą być używane do porównania każdego algorytmu dzielącego na skupienia, niezależnie od powyższych parametrów. Co więcej, wyliczając zarówno jednorodność, jak i zgodność, może zostać otrzymana bardziej precyzyjna ocena jakości podziału skupień.
 
 
 Wszystkie trzy wyżej zaprezentowane miary dają wartości z przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to bardzo dobre rozwiązanie. Mają one intuicyjną interpretację: podział z niską wartością miary V może zostać oceniony w terminach jednorodności i zgodności, aby mieć lepsze pojęcie o błędach jakich dokonał algorytm. Dodatkowo, aby jednorodność, zgodność oraz miara V nie mają założeń o strukturze skupienia: przy ich pomocy można porównywać podział na skupienia uzyskany przy użyciu różnych algorytmów, które mają różne założenia o strukturze skupienia. 
 
-Z drugiej jest strony powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary ARI.
+Z drugiej jest strony powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary FM.
 Dodatkowo, w przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
 
 

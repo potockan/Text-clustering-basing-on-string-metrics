@@ -88,11 +88,18 @@
 \@makeschapterhead{\contentsname}\@afterheading
 \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}
 \@starttoc{toc}}
+
 %------------------------------------------------------------------------------%
 \def\title#1{\gdef\@title{#1}\hypersetup{pdftitle={#1}}}
 \def\@title{\@latex@error{No title given}\@ehc}
 \def\titleaux#1{\gdef\@titleaux{#1}}
 \def\@titleaux{\@latex@error{No polish title given}\@ehc}
+
+\def\titleang#1{\gdef\@titleang{#1}\hypersetup{pdftitle={#1}}}
+\def\@titleang{\@latex@error{No title given}\@ehc}
+\def\titleangaux#1{\gdef\@titleangaux{#1}}
+\def\@titleangaux{\@latex@error{No polish title given}\@ehc}
+
 \def\author#1{\gdef\@author{#1}\hypersetup{pdfauthor={#1}}}
 \def\@author{\@latex@error{No author given}\@ehc}
 \def\supervisor#1{\gdef\@supervisor{#1}}
@@ -128,8 +135,6 @@
 \def\@remark{Uwaga}
 \def\@example{Przyk{\l}ad}
 \def\@property{W{\l}asno\'s\'c}
-
-
 %------------------------------------------------------------------------------%
 \ifthenelse{\boolean{english}}{
   \def\@university{Warsaw University of Technology}
@@ -189,19 +194,28 @@
       \includegraphics[scale=0.75]{mini}
     \end{flushright}
   \end{minipage}\par
-  \vspace{30mm}
+  \vspace{10mm}
   {\large
     \MakeUppercase{\@descriptionfirst}\\
     \MakeUppercase{\@descriptionsecond}
   \par}
   \vfill
+  \vspace{-7mm}
   \begin{spacing}{1.3}
     \textbf{\Large\MakeUppercase{\@title}}
     \ifthenelse{\boolean{english}}{
-      \par\vspace{10mm}
+      \par\vspace{0mm}
       {\Large\MakeUppercase{\@titleaux}}
     }{}
   \end{spacing}
+  \vspace{15mm}
+   \begin{spacing}{1.3}
+      \textbf{\Large\MakeUppercase{\@titleang}}
+      \ifthenelse{\boolean{english}}{
+        \par\vspace{10mm}
+        {\Large\MakeUppercase{\@titleangaux}}
+      }{}
+    \end{spacing}
   \vfill
 \end{center}
 \hspace{.5\textwidth}

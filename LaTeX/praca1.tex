@@ -1166,7 +1166,7 @@ Metody hierarchiczne to zbiór algorytmów analizy skupień, które nie wymagaj�
 Powyżej przedstawiliśmy algorytm $k$-średnich, dzielący zbiór z przestrzeni euklidesowej na podzbiory punktów podobnych do siebie, tj. mieliśmy do czynienia ze zmiennymi liczbowym. Problem ten można uogólnić dla obserwacji z dowolnej przestrzeni. Po pierwsze odległość euklidesową z równania~\eqref{eq:014} można zamienić na dowolną funkcję odmienności $d$ między obserwacjami z danej przestrzeni. Przez funkcję odmienności rozumiemy następującą funkcję:
 
 \begin{definition}
-\emph{Funkcją odmienności} nazywamy funkcję $d: X\times X \rightarrow \mathbb{R}_+\cup\{0\}$, która $\forall x, y \in X$ spełnia następujące warunki:
+\emph{Funkcją odmienności} nazywamy funkcję $d: X\times X \rightarrow \mathbb{R}_+\cup\{0\}$, która \hbox{$\forall x, y \in X$} spełnia następujące warunki:
 \begin{itemize}
 \item $d(x,x) = 0$,
 \item $d(x,y) = d(y,x)$.
@@ -1179,13 +1179,13 @@ Po drugie trzeba zastąpić średnie skupień $\mathbf{m}_l, l=1,\ldots,k$ inną
 \end{equation}
 gdzie $X$ to zbiór obserwacji.
 
-Przejdźmy do metod hierarchicznych analizy skupień. Jak wspomniano wcześniej, nie wymagają one specyfikowania liczby podzbiorów. Zamiast tego trzeba zdefiniować miarę odmienności (rozłącznych) zbiorów obserwacji, opartą na odmienności pojedynczych punktów w tych zbiorach. Jak sugeruje nazwa, metody te konstruują hierarchiczną reprezentację, w której skupienie na każdym poziomie hierarchii powstaje poprzez połączenie skupień z najbliższego niższego poziomu. Na najniższym poziomie znajdują się skupienia złożone z pojedynczych obserwacji. Najwyższy poziom to skupienie zawierające wszystkie obserwacje ze zbioru~\cite{Hastie2009:elements}.
+Przejdźmy do metod hierarchicznych analizy skupień. Jak wspomniano wcześniej, nie wymagają one specyfikowania liczby podzbiorów. Zamiast tego trzeba zdefiniować miarę odmienności (rozłącznych) zbiorów obserwacji, opartą na odmienności pojedynczych punktów w tych zbiorach. Jak sugeruje nazwa, metody te konstruują hierarchiczną reprezentację, w której skupienie na każdym poziomie hierarchii powstaje przez połączenie skupień z najbliższego niższego poziomu. Na najniższym poziomie znajdują się skupienia złożone z pojedynczych obserwacji. Najwyższy poziom to skupienie zawierające wszystkie obserwacje ze zbioru~\cite{Hastie2009:elements}.
 
 Metody hierarchiczne można podzielić na dwie grupy: aglomeracyjne oraz dzielące. W tej pierwszej, na początku tworzy się tyle skupień ile jest obserwacji w zbiorze, traktując każdą obserwację jako osobne skupienie. Następnie w każdym kroku łączona jest ta para podzbiorów, które są od siebie najmniej odmienne. W ten sposób na kolejnym poziomie otrzymujemy (przynajmniej) o jedno skupienie mniej. Procedura łącząca skupienia najmniej odmienne trwa nadal, w każdym kolejnym kroku zmniejszając liczbę skupień. W ostatnim kroku algorytmu otrzymujemy jedno duże skupienie zawierające wszystkie obserwacje z próby~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
 Metody dzielące działają w przeciwnym kierunku: zaczynamy od jednego skupienia zawierającego cały zbiór. Następnie w każdym kroku algorytmu jedno ze skupień dzielone jest na dwa skupienia, w których odmienność jest największa. W ten sposób na kolejnym poziomie otrzymujemy o jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, w każdym kolejnym kroku otrzymując coraz więcej skupień. W ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to liczba obserwacji). Warto przy tym zauważyć, że algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
-Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są o wiele bardziej złożone obliczeniowo, skupimy się na metodach aglomeracyjnych, jako tych częściej stosowanych w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj najbardziej popularne, tj. odmienność najbliższego sąsiada, odmienność najdalszego sąsiada, średnią odmienność kryterium Warda, odmienność centroidów i mediany~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+Zastanówmy się teraz w jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są o wiele bardziej złożone obliczeniowo, skupimy się na metodach aglomeracyjnych, jako tych częściej stosowanych w praktyce. Odmienność między skupieniami można definiować na różne sposoby, jednak literatura podaje zazwyczaj najbardziej popularne, tj. kryterium Warda, odmienność centroidów, mediany, najbliższego sąsiada, najdalszego sąsiada oraz średnią odmienność~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
 Metoda Warda jest kryterium stosowanym w hierarchicznej analizie skupień. Ward zaproponował ogólną procedurę metod aglomeracyjnych, gdzie o wyborze połączenia pary skupień decyduje się na podstawie wartości pewnej funkcji celu. Tą funkcją celu może być każda funkcja, która odzwierciedla cel badacza. Wiele standardowych procedur tworzenia skupień jest zawartych w tym bardzo ogólnym podejściu. Aby zilustrować procedurę, Ward użył przykładu, gdy funkcja celu jest sumą kwadratów błędów, a przykład ten jest znany jako \emph{metoda Warda} lub dokładniej jako \emph{metoda minimalnej wariancji Warda}~\cite{Ward1963:hierarchical}.
 
@@ -1209,6 +1209,28 @@ gdzie $n_l$ to liczność $l$-tego skupienia. Wartości parametrów z algorytmu 
 $$
 \alpha_i =  \frac{n_i+n_l}{n_i+n_j+n_l},\ \ \beta = \frac{-n_l}{n_i+n_j+n_l},\ \ \gamma = 0.
 $$
+
+\begin{definition}
+\emph{Odmienność centroidów} (ang. \emph{centroid linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako odległość między środkami skupień:
+$$
+D_{ij} = d(\mathbf{m}_i, \mathbf{m}_j),
+$$
+gdzie $\mathbf{m}_i, \mathbf{m}_j$ oznaczają środki, odpowiednio, skupienia $i$-tego i $j$-tego.
+\end{definition}
+
+W terminach wzorów Lance'a-Williamsa można to wyrazić jako $D_{(ij)l} = \frac{n_i}{n_i + n_j} D_{il} + \frac{n_j}{n_i + n_j} D_{jl} - \frac{n_i \cdot n_j}{(n_i + n_j)^2} D_{ij} $, tj. $\alpha_i = \frac{n_i}{n_i + n_j}, \beta = - \frac{n_i \cdot n_j}{(n_i + n_j)^2}$, a $\gamma = 0$.
+
+\begin{definition}
+\emph{Odmienność median} (ang. \emph{median linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako odległość między medianami obserwacji ze skupień:
+$$
+D_{ij} = d(\mathbf{med}_i, \mathbf{med}_j),
+$$
+gdzie $\mathbf{med}_i, \mathbf{med}_j$ oznaczają medianę obserwacji, odpowiednio, skupienia $i$-tego i $j$-tego.
+\end{definition}
+
+Zauważmy, że odmienność median ma sens tylko w przypadku, gdy $d$ jest kwadratem odległości euklidesowej, gdyż w innym przypadku mediana z obserwacji nie ma sensu.
+
+W terminach wzorów Lance'a-Williamsa można to wyrazić jako $D_{(ij)l} = 0.5 D_{il} + 0.5 D_{jl} - 0.25 D_{ij} $, tj. $\alpha_i = 0.5, \beta = -0.25$, a $\gamma = 0$.
 
 \begin{definition}
 \emph{Odmienność najbliższego sąsiada} (ang. \emph{single linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako najmniejszą spośród wszystkich możliwych odmienności między parami obserwacji z $i$-tego i $j$-tego skupienia:
@@ -1245,29 +1267,9 @@ Metoda średniej odmienności jest kompromisem pomiędzy dwoma powyższymi. Pró
 
 Jeśli odmienności poszczególnych obserwacji mają silną tendencję do skupiania się, przy czym każde skupienie jest zwarte i dobrze odseparowane, to wszystkie trzy metody dadzą podobne rezultaty~\cite{Hastie2009:elements}.
 
-Przejdźmy do odmienności centroidów.
 
-\begin{definition}
-\emph{Odmienność centroidów} (ang. \emph{centroid linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako odległość między środkami skupień:
-$$
-D_{ij} = d(\mathbf{m}_i, \mathbf{m}_j),
-$$
-gdzie $\mathbf{m}_i, \mathbf{m}_j$ oznaczają środki, odpowiednio, skupienia $i$-tego i $j$-tego.
-\end{definition}
 
-\begin{definition}
-\emph{Odmienność median} (ang. \emph{median linkage dissimilarity}) między skupieniem $i$-tym a $j$-tym, definiujemy jako odległość między medianami obserwacji ze skupień:
-$$
-D_{ij} = d(\mathbf{med}_i, \mathbf{med}_j),
-$$
-gdzie $\mathbf{med}_i, \mathbf{med}_j$ oznaczają medianę obserwacji, odpowiednio, skupienia $i$-tego i $j$-tego.
-\end{definition}
-
-[TO DO: NAPISAC ZE 2 SLOWA O POWYZSZYCH + PRZYKLADY]
-
-\section{Metody oceny jakości podziału na skupienia}
-
-[TUTUAJ KORZYSTALAM MOCNO Z DOKUMENTACJI SCIKIT: \url{http://scikit-learn.org/stable/modules/clustering.html#clustering-evaluation}  ZAWRZEC TO GDZIES??]
+\section{Metody oceny jakości podziału na skupienia}	
 
 Dokonawszy podziału zbioru na skupienia, należy ocenić jakość zastosowanego algorytmu. Ocena skuteczności działania algorytmów analizy skupień nie należy do zadań tak prostych jak np. ocena modelu klasyfikacji pod nadzorem. W szczególności żadna metoda ocena nie powinna brać pod uwagę wartości etykiety skupienia, ale powinna sprawdzać, czy zbiór danych jest dobrze podzielony, tzn. czy obserwacje w poszczególnych skupieniach są do siebie ,,podobne'', a obserwacje z różnych skupień -- ,,niepodobne'', zgodnie z przyjętą metryką podobieństwa. W niniejszych podrozdziale przedstawimy kilka miar oceny jakości podziału na skupienia.
 
@@ -1308,7 +1310,6 @@ Jednak w przypadku sprawdzenia jakości działania jednego algorytmu, wymagana j
 
 Niech $C$ oznacza zbiór prawdziwych klas, do których należą obserwacje. Mówimy, że podział zbioru jest \emph{jednorodny}, jeśli wszystkie skupienia zawierają jedynie obserwacje z jednej klasy. Podział zbioru jest \emph{zupełny}, jeśli wszystkie obserwacje z danej klasy są w tym samym skupieniu. Jednorodność i zupełność podziału mogą być często w opozycji do siebie, tzn. gdy jednorodność rośnie, to zupełność zazwyczaj maleje i odwrotnie. Przykładowo, rozważmy dwa skrajne podziały. W przypadku pierwszego, gdy przydzielamy wszystkie obserwacje do jednego skupienia, to dostajemy idealną zupełność -- wszystkie elementy z jednej klasy należą do tego samego skupienia. Jednakże, podział taki jest tak \emph{nie}jednorodny, jak to tylko możliwe, skoro wszystkie klasy znajdują się w jednym skupieniu. Z drugiej strony, rozważmy przydzielenie każdej obserwacji do osobnego skupienia. W tym przypadku, podział jest idealnie jednorodny -- każde skupienie zawiera jedynie obserwacje z jednej klasy. Jednak w terminach zupełności, taki podział bardzo słaby, chyba że rzeczywiście każda klasa zawiera jeden element. Miara $\textrm{V}$ jest ważoną średnią harmoniczną dwóch powyższych miar~\cite{Rosenberg2007:vmeasure}.
 
-[TO DO POWIEDZIEC COS O ENTROPII]
 
 \textbf{Jednorodność}. Żeby spełnić kryteria, jak musi spełniać podział jednorodny, każde ze skupień musi zawierać tylko i wyłącznie te obserwacje, które należą do jednej klasy. To znaczy, że rozkład klas w każdym ze skupień powinien skośny i zawierać tylko jedną klasę, tj. entropia powinna wynosić zero. Aby ustalić jak blisko idealnego znajduje się dany podział, sprawdzamy warunkową entropię rozkładu klas pod warunkiem zaproponowanego podziału. W idealnie jednorodnym podziale, ta wartość, tj. $H(C|K)$, wynosi zero. Jednak w przeciwnym przypadku, wartość ta zależy od wielkości zbioru i rozkładu klas. Stąd, zamiast badać warunkową entropię, normalizujemy tę wartość przez maksymalną redukcję entropii jaką informacja o podziale może przynieść, tj. $H(C)$~\cite{Rosenberg2007:vmeasure}.
 
@@ -1369,10 +1370,10 @@ Przykładowo, jeśli mamy dany sześcioelementowy zbiór, który dzielimy na trz
 Warto zwrócić uwagę na fakt, że jednorodność, zgodność oraz miara V są niezależne od liczby klas, skupień, liczby obserwacji oraz użytego algorytmu. Stąd miary te mogą być używane do porównania każdego algorytmu dzielącego na skupienia, niezależnie od powyższych parametrów. Co więcej, wyliczając zarówno jednorodność, jak i zgodność, może zostać otrzymana bardziej precyzyjna ocena jakości podziału skupień.
 
 
-Wszystkie trzy wyżej zaprezentowane miary dają wartości z przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to bardzo dobre rozwiązanie. Mają one intuicyjną interpretację: podział z niską wartością miary V może zostać oceniony w terminach jednorodności i zgodności, aby mieć lepsze pojęcie o błędach jakich dokonał algorytm. Dodatkowo, aby jednorodność, zgodność oraz miara V nie mają założeń o strukturze skupienia: przy ich pomocy można porównywać podział na skupienia uzyskany przy użyciu różnych algorytmów, które mają różne założenia o strukturze skupienia. 
+Wszystkie trzy wyżej zaprezentowane miary dają wartości z przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to bardzo dobre rozwiązanie. Mają one intuicyjną interpretację: podział z niską wartością miary V może zostać oceniony w terminach jednorodności i zgodności, aby mieć lepsze pojęcie o błędach jakich dokonał algorytm. Dodatkowo, aby jednorodność, zgodność oraz miara V nie mają założeń o strukturze skupienia: przy ich pomocy można porównywać podział na skupienia uzyskany przy użyciu różnych algorytmów, które mają różne założenia o strukturze skupienia~\cite{scikit}. 
 
 Z drugiej jest strony powyższe miary nie są znormalizowane pod względem losowego przypisania do skupienia. Oznacza to, że w zależności od liczby obserwacji, podziału na skupienia i klasy, losowy przydział do skupień nie zawsze da takie same wartości jednorodności, zgodności oraz miary V. W szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od tysiąca, a liczba skupień mniejsza niż $10$. Dla mniejszej próbki i większej liczby skupień, bezpieczniej jest używać miary FM.
-Dodatkowo, w przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
+Dodatkowo, w przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru~\cite{scikit}.
 
 
 \subsection{Miara silhouettes}

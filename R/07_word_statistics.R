@@ -5,6 +5,7 @@ library(stringi)
 library(ggplot2)
 library(scales)
 library(xtable)
+library(dplyr)
 #library(compiler)
 
 
@@ -55,29 +56,37 @@ word_art <- readRDS("/dragon/Text-clustering-basing-on-string-metrics/Data/RObje
 
 
 
-
+j <- 1
 
 word_stat %>% 
   arrange(desc(word_cnt)) %>% 
-  ggplot(aes(x=log10(word_cnt)), main="Liczba występowania słów w artykułach") + 
+  ggplot(aes(x=word_cnt), main="Liczba występowania słów w artykułach") + 
   geom_histogram(fill="white", colour="black") +
-  xlab("log10(licznosc)") +
-  ylab("czestosc") +
+  xlab("liczba artykulow") +
+  ylab("liczba slow") +
+  scale_x_log10(labels = format_format(scientific = FALSE)) +
+  scale_y_continuous(labels = format_format(scientific = FALSE)) +
   theme(text = element_text(size=25),
         axis.text.x = element_text(size = 25), 
-        axis.text.y = element_text(size = 25)) 
+        axis.text.y = element_text(size = 25)) -> plt
+
+ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = plt)
+
+j <- j+1
 
 word_stat_all %>% 
   arrange(desc(word_cnt_all)) %>% 
-  ggplot(aes(x=log10(word_cnt_all)), main="Liczba występowania słów w artykułach") + 
+  ggplot(aes(x=word_cnt_all), main="Liczba występowania słów w artykułach") + 
   geom_histogram(fill="white", colour="black") +
-  xlab("log10(licznosc)") +
-  ylab("czestosc") +
+  xlab("liczba wystapien slowa") +
+  ylab("liczba slow") +
+  scale_x_log10(labels = format_format(scientific = FALSE)) +
+  scale_y_continuous(labels = format_format(scientific = FALSE)) +
   theme(text = element_text(size=25),
         axis.text.x = element_text(size = 25), 
-        axis.text.y = element_text(size = 25)) +
-  scale_y_continuous(label=scientific_format())
+        axis.text.y = element_text(size = 25))  -> plt
 
+ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = plt)
 
 n_words <- nrow(word_stat)
 (n_once <- sum(word_stat$word_cnt==1)/n_words*100)
@@ -113,15 +122,22 @@ word_length <- bind_cols(word_length, data.frame(l = rep(1, nrow(word_length))))
 # ggplot(aes(factor(l), dl)) +
 #   geom_boxplot()
 
+j <- j+1
+
 word_length %>% 
-  ggplot(aes(x=log2(dl)), main="Liczba występowania słów w artykułach") + 
+  ggplot(aes(x=dl), main="Liczba występowania słów w artykułach") + 
   geom_histogram(fill="white", colour="black") +
-  xlab("log10(licznosc)") +
-  ylab("czestosc") +
+  xlab("dlugosc slowa") +
+  ylab("liczba slow") +
+  scale_x_continuous(trans='log2', labels = format_format(scientific = FALSE)) +
+  scale_y_continuous(labels = format_format(scientific = FALSE)) +
   theme(text = element_text(size=25),
         axis.text.x = element_text(size = 25), 
-        axis.text.y = element_text(size = 25)) +
-  scale_y_continuous(label=scientific_format())
+        axis.text.y = element_text(size = 25)) -> plt
+
+ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = plt)
+
+
 
 
 top10 <- head(word_stat, 20)
@@ -145,17 +161,21 @@ stri_sub(stopwords, aa[1:(length(aa)-1)], aa[2:length(aa)]-1) %>%
 
 
 
+j <- j+1
 
 word_art %>% 
   arrange(desc(cnt)) %>% 
-  ggplot(aes(x=log10(cnt)), main="Liczba występowania słów w artykułach") + 
+  ggplot(aes(x=cnt), main="Liczba występowania słów w artykułach") + 
   geom_histogram(fill="white", colour="black") +
-  xlab("log10(licznosc)") +
-  ylab("czestosc") +
+  xlab("liczba unikalnych slow") +
+  ylab("liczba artykulow") +
+  scale_x_continuous(trans='log2', labels = format_format(scientific = FALSE)) +
+  scale_y_continuous(labels = format_format(scientific = FALSE)) +
   theme(text = element_text(size=25),
         axis.text.x = element_text(size = 25), 
-        axis.text.y = element_text(size = 25)) +
-  scale_y_continuous(label=scientific_format())
+        axis.text.y = element_text(size = 25)) -> plt
+
+ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = plt)
 
 summary(word_art$cnt)
 

@@ -81,22 +81,27 @@ def wagi(typ, ss):
     
     return(data1)
 
-def reading_data(i, typ, wagi):
+def reading_data(i, typ, wagi, ile):
     #c.execute('select * from wiki_stem_word_reorder')
     print("Reading data...")
     
     if typ == "_":
         typ = ""
-     
-    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions/czesc%d/wiki%s.sqlite" % (i, typ))
+        
+    t0 = time.time()
+    con = sqlite3.connect("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/wiki.sqlite")
     #con = sqlite3.connect("/home/samba/potockan/mgr/czesc%d/wiki%s.sqlite" % (i, typ))
     c = con.cursor()
     
     
     c.execute('''select 
     id_title, id_stem_word, freq 
-    from art_word_freq%s
-    '''  % (typ))
+    from wiki_word_clust3%s_freq
+    %s
+    '''
+    #from art_word_freq%s
+    #'''  
+    % (typ, ile))
     #   order by id_title 
     
     data = c.fetchall()
@@ -104,9 +109,9 @@ def reading_data(i, typ, wagi):
     
     data = [list(x) for x in data]
     
-    t0 = time.time()
     
-    data = [[val1[0], val1[1], val1[2] / wagi[val1[1]-1][1]] for val1 in data]
+    
+    #data = [[val1[0], val1[1], val1[2] / wagi[val1[1]-1][1]] for val1 in data]
     print("done in %fs" % (time.time() - t0))  
         
     return(data)
@@ -119,10 +124,10 @@ def transforming_data(my_data):
     return(my_sparse_data)
 
 
-def clustering1(my_sparse_data, true_k, b, ff):
+def clustering1(my_sparse_data, true_k, b, typ, ff, fcja, ttt):
     km = MiniBatchKMeans(n_clusters=true_k, init='k-means++', n_init=3, batch_size=b, max_no_improvement = None, max_iter = 30)
     km.fit(my_sparse_data)
-    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions%d/czesc%d/wyniki_%d_%s.txt" % (ff, i, b, typ), km.labels_, delimiter = ', ')
+    np.savetxt("/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/partitions%d/czesc%d/wyniki_%d_%s_%d_%s.txt" % (ff, i, b, typ, fcja, ttt), km.labels_, delimiter = ', ')
     return(km)
     
 
@@ -159,19 +164,20 @@ def reading_labels(typ, i, id_title):
     
 
 def sticking_data(i, typ, wagi):
-    dane = reading_data(i, typ, wagi)
+    ss = [1, 198627, 397253, 595879, 794505, 993132]
+    dane = reading_data(i, typ, wagi, "where id_title between %d and %d" % (ss[0], ss[1]-1))
+    #dane = reading_data(i, typ, wagi, ile)    
     id_title = list(set([x[0] for x in dane]))
     id_title.sort()
     dane = transforming_data(dane)
-#    for aa in range(3,14):
-#        print(aa)
-#        dane2 = reading_data(aa, typ, wagi)
-#        id_title2 = list(set([x[0] for x in dane2]))
-#        id_title2.sort()
-#        id_title = id_title + id_title2
-#        dane = sps.vstack([dane,transforming_data(dane2)])
-#        print(len(id_title))
-#        del dane2
+    for s in range(1, (len(ss)-1)):
+        dane2 = reading_data(i, typ, wagi, "where id_title between %d and %d" % (ss[s], ss[s+1]-1))
+        id_title2 = list(set([x[0] for x in dane2]))
+        id_title2.sort()
+        id_title = id_title + id_title2
+        dane = sps.vstack([dane,transforming_data(dane2)])
+        print(len(id_title))
+        del dane2
     return [dane, id_title]
 
 
@@ -184,7 +190,7 @@ else:
 if opts.typ:
     typ = opts.typ
 else:
-    typ = "_red_lcs"
+    typ = "_red_lcs_lcs"
     
 if opts.true_k:
     true_k = opts.true_k
@@ -196,48 +202,57 @@ if opts.b:
 else:
     b = 5000
     
-print("____" + typ + "____") 
+    
+nazwy = [ '_jw','_jaccard','_qgram',
+           '_red_lcs','_red_dl','_red_jw','_red_jaccard','_red_qgram',
+           '_red_lcs_lcs','_red_dl_dl','_red_jw_jw','_red_jaccard_jaccard','_red_qgram_qgram']
 np.random.seed(12321)
 t0 = time.time()
-for ttt in ["count"]:#, "sum"]:
+ttt = ""
+#ile = "where id_title <= 25001"
+for typ in nazwy:#, "sum"]:
     print("*******" + str(ttt) + "*******")
     t0 = time.time()
-    wagi0 = wagi(typ, ttt)
+    #wagi0 = wagi(typ, ttt)
     print("done in %fs" % (time.time() - t0))
-    ff = 6
-    for fcja in [0,1,2,3,4]:
-        print("*******" + str(fcja) + "*******")
-        if fcja == 0:
-            wagi1 = [[x[0], x[1]**2] for x in wagi0]
-        elif fcja == 1:
-            wagi1 = [[x[0], x[1]**0.5] for x in wagi0]
-        elif fcja == 2:
-            wagi1 = [[x[0], np.exp(x[1])] for x in wagi0]
-        elif fcja == 3:
-            wagi1 = [[x[0], np.log(x[1])] for x in wagi0]
-        else:
-            wagi1 = wagi0.copy()
-    
+    ff = 1
+    print("____" + typ + "____") 
+    for fcja in [5]:#[0,1,2,3,4]:
+#        print("*******" + str(fcja) + "*******")
+#        if fcja == 0:
+#            wagi1 = [[x[0], x[1]**2] for x in wagi0]
+#        elif fcja == 1:
+#            wagi1 = [[x[0], x[1]**0.5] for x in wagi0]
+#        elif fcja == 2:
+#            wagi1 = [[x[0], np.exp(x[1])] for x in wagi0]
+#        elif fcja == 3:
+#            wagi1 = [[x[0], np.log(x[1])] for x in wagi0]
+#        elif fcja == 4:
+#            wagi1 = wagi0.copy()
+#        else:
+        wagi1 = [1]
         dane = sticking_data(i, typ, wagi1)
         id_title = dane[1]
         dane = dane[0]
-        for dd in [2]: #[100, 15, 2]:
+        batch = [5000, 10000, 35000]
+        for dd in [100, 15, 2]:
             if dd == 15:
-                id_title = id_title[0:152772]
-                dane = dane[0:152772]
-                ff = 7
+                id_title = id_title[0:150000]
+                dane = dane[0:150000]
+                ff = 2
             elif dd == 2:
                 id_title = id_title[0:25000]
                 dane = dane[0:25000,:]
-                ff = 8
+                ff = 3
+                batch = [5000, 10000]
     
             labels = reading_labels(typ, i, tuple(id_title))
             print("n_samples: %d, n_features: %d" % dane.shape)
     
-            for b in [10000]:#[5000, 10000, 35000, 70000]:
+            for b in batch:
                 print("*******" + str(b) + "*******")
                 t0 = time.time()
-                km = clustering1(dane, true_k, b, ff)
+                km = clustering1(dane, true_k, b, typ, ff, fcja, ttt)
                 print("done in %fs" % (time.time() - t0))
                 
                 

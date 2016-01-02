@@ -80,26 +80,21 @@
 
 
 
-Informacje zawarte w danych tekstowych są zazwyczaj o wiele bardziej szczegółowe i istotne niż w innych rodzajach danych. Z drugiej strony ilość tekstów rośnie w bardzo szybkim tempie, przez co niemożliwe jest kontrolowanie ich jakości (np. w internecie). Dane tego typu są trudne w analizie z powodu ich objętości, różnorodności oraz podatności na błędy. Stąd, aby wydobyć z nich informacje, zachodzi potrzeba przetworzenia danych tak, żeby uwzględnić powyższe czynniki.
+Rozwój internetu przyczynił się do powstania ogromnej ilości danych w postaci tekstowej. W konsekwencji stają się one coraz powszechniej wykorzystywanym źródłem, często cennych, informacji. Dane tekstowe są trudne w analizie z powodu ich objętości, różnorodności oraz podatności na błędy. Dlatego bardzo ważnym elementem ekstrakcji wiedzy z danych tego typu  jest ich przetwarzanie.
 
-Kluczowym etapem w klasycznym podejściu do wykrywania skupień w danych tekstowych (np. celem automatycznej kategoryzacji tematycznej zbioru napisów) jest wyznaczanie liczby unikalnych słów w tekście. Dalej odpowiednie metody maszynowego uczenia się bez nadzoru (ang. \emph{unsupervised machine learning}) wyznaczane są na podstawie danych typu \{(słowo$_i$, liczność$_i$), $i=1,\ldots,m$\}. Dane tekstowe mają więc bardzo duży wymiar równy liczbie wszystkich unikalnych słów w nich zawartych. Analiza zbioru danych, gdzie liczba atrybutów jest liczona w dziesiątkach tysięcy, jest często wysoce nieskuteczna (tzw. klątwa wielowymiarowości), a czasem wręcz niemożliwa z powodu braku zasobów pamięciowych i obliczeniowych. Rodzi się więc potrzeba zmniejszenia wymiaru danych.
+Jednym z istotnych zagadnień związanych z danymi tekstowymi jest grupowanie. W wielu przypadkach kategoryzowanie dokumentów pod kątem podobieństwa tematycznego znacząco ułatwia wyszukiwanie informacji. Z grupowaniem wiążą się dwa zasadnicze elementy: sposób reprezentacji danych oraz algorytm używany do wykrywania skupień. Oczywistym jest, że gdy chcemy kategoryzować teksty pod kątem tematycznym, to ich reprezentacja powinna zachowywać informacje o temacie. Zazwyczaj przyjmuje się naturalne założenie, że kolejność słów nie ma znaczenia -- istotny jest jedynie ich rozkład. Podstawowym podejściem jest charakteryzacja tekstu przy użyciu liczności poszczególnych słów w dokumencie -- cały zbiór jest wówczas opisany przez macierz, której $ij$-ty element to liczność wystąpień $j$-tego słowa w $i$-tym tekście. Jednakże taka reprezentacja jest najczęściej nieefektywna - dane opisane w ten sposób mają bardzo duży wymiar (równy liczbie wszystkich unikalnych słów w nich zawartych), a przy tym są one bardzo rzadkie -- liczba zerowych elementów macierzy jest bardzo duża (często ponad 90\%). Analiza skupień na takim zbiorze danych jest często wysoce nieskuteczna (tzw. klątwa wielowymiarowości), a czasem wręcz niemożliwa z powodu braku zasobów pamięciowych i obliczeniowych. Rodzi się więc potrzeba zmniejszenia wymiaru danych.
 
-Często stosowaną praktyką jest grupowanie słów [o tym samym znaczeniu?] w jakimś sensie do siebie podobnych, po to aby reprezentować teksty przez wektory $(n_1,\ldots, n_K)$, gdzie $n_i$ jest licznością słów z $i$-tej grupy, $i = 1,\ldots,K$, a $K$ liczbą grup słów.  Słowa można pogrupować na kilka sposobów. Przede wszystkim można oprzeć się na założeniu, że fleksja danego słowa jest nieistotna, tzn. ważne jest znaczenie wyrazu, a nie jego odmiana. Stąd niejednokrotnie stosowanym elementem przetwarzania danych tekstowych jest stemming, czyli sprowadzenie słowa do jego rdzenia [TO DO: PRZYKŁAD]. Aby tego dokonać trzeba mieć zazwyczaj słownik słów wraz z ich odmianami. Rzadko jednak zawiera on wszystkie możliwe wyrazy, zwłaszcza gdy liczba możliwych odmian jest bardzo duża (jak np. w języku polskim). Co więcej słownik nie zawiera słów z błędami w pisowni i literówkami, które mogą występować w tekstach. Coraz częściej też przedmiotem analizy są nieformalne teksty lub krótkie wiadomości, w których piszący nie użył znaków diakrytycznych lub białych znaków. Zachodzi zatem potrzeba radzenia sobie z błędnie zapisanymi wyrazami. Stosowaną praktyką jest określenie podobieństwa takich słów od innych wyrazów znajdujących się w analizowanych tekstach lub słowniku. Niniejsza praca poświęcona jest badaniom nad odległościami określonymi na przestrzeni napisów (ciągów o dowolnej długości nad pewnym zbiorem skończonym, zwanym alfabetem). Różnych konstrukcji tego rodzaju funkcji można znaleźć wiele w literaturze (np.~\cite{Levenshtein1965:binarycodes, Boytsov2011:indexingmethods, Navarro2001:guidedtour}). W głównej mierze opierają się one na porównywaniu liczby wystąpień takich samych sekwencji znaków lub zliczeniu operacji, które przetwarzają jeden napis w drugi. Odległości na napisach mają wiele zastosowań, m.in. w biologii obliczeniowej, przetwarzaniu sygnałów czy korekcie błędnego tekstu.
+Często stosowaną praktyką jest grupowanie słów, by następnie reprezentować teksty przy użyciu wektorów $(n_1,\ldots, n_K)$, gdzie $n_i$ jest licznością słów z $i$-tej grupy, $i = 1,\ldots,K$, a $K$ liczbą grup słów. Słowa można pogrupować na wiele sposobów. Przede wszystkim można oprzeć się na założeniu, że fleksja danego słowa jest nieistotna, tzn. ważne jest znaczenie wyrazu, a nie jego odmiana, co wydaje się być rozsądnym podejściem w kategoryzacji tematycznej. Stąd niejednokrotnie stosowanym elementem przetwarzania danych tekstowych jest \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia, np. wyrazy \verb|robiący, robiłem, robię| sprowadzają się do słowa \verb|robić|. W najprostszej wersji podejście to wymaga dysponowania słownikiem słów wraz z ich odmianami. Rzadko jednak zawiera on wszystkie istniejące wyrazy, zwłaszcza gdy liczba możliwych odmian jest bardzo duża (jak np. w języku polskim). Ponadto podejście to nie uwzględnia częstych niedoskonałości danych -- słownik nie zawiera słów z błędami w pisowni i literówkami, które mogą występować w tekstach. Coraz częściej przedmiotem analizy są nieformalne teksty lub wiadomości, w których np. piszący świadomie nie używa znaków diakrytycznych. Zachodzi zatem potrzeba radzenia sobie z błędnie zapisanymi wyrazami. 
 
-[POPRZEDNI AKAPIT MUSI OBJAŚNIĆ CO ROBIMY - O CO CHODZI]
-[NAPISAC, ZE GRUPUJEMY SLOWA, POTEM KMEANSY NA ARTYKULACH]
-
-Celem niniejszej pracy jest zbadanie wpływu doboru odległości na przestrzeni napisów na jakość automatycznej kategoryzacji tematycznej tekstów. Innymi słowy, badana jest jakość grupowania artykułów dla różnych reprezentacji tekstu. Reprezentacje te odnoszą się do różnych grup słów, otrzymanych przy użyciu różnych odległości. Danymi, na których przeprowadzona została analiza są artykuły polskiej Wikipedii. W pierwszym etapie grupowane są słowa przy użyciu wybranych odległości. Dalej reprezentujemy artykuły jako liczności występowania poszczególnych grup słów. Na podstawie tak uzyskanych danych przeprowadzamy analizę skupień tekstów. Ocena wyników odbywa się na podstawie otrzymanych  grup z prawdziwymi kategoriami przypisanymi do każdego tekstu Wikipedii.
+Z wymienionych wyżej powodów często stosowaną praktyką jest grupowanie wyrazów w oparciu o pewne miary podobieństwa określone na przestrzeni napisów (ciągów o dowolnej długości nad pewnym zbiorem skończonym, zwanym alfabetem). Można wyróżnić tutaj dwa podejścia: przyporządkowywanie słów do z góry określonych grup (definiowanych przez formy podstawowe) lub wykrywanie skupień spośród wyrazów występujących w tekstach. Niniejsza praca porusza problem wyboru odległości przy zastosowaniu pierwszego z wymienionych podejść. W literaturze można znaleźć wiele różnych definicji odległości (np.~\cite{Levenshtein1965:binarycodes, Boytsov2011:indexingmethods, Navarro2001:guidedtour}). W głównej mierze opierają się one na porównywaniu liczby wystąpień takich samych sekwencji znaków lub zliczeniu operacji, które przetwarzają jeden napis w drugi. Dodajmy, że miary te znajdują zastosowanie również w innych dziedzinach, m.in. biologii obliczeniowej, przetwarzaniu sygnałów czy korekcie błędnego tekstu.
 
 
-Zauważmy, że użycie polskiej Wikipedii wiąże się to z kilkoma istotnymi wyzwaniami. Po pierwsze język polski jest językiem bardzo złożonym, przede wszystkim ze względu na to, że zawiera dużo odmian (przez przypadki, liczby, osoby, czasy, tryby, strony i inne). Stąd liczba istniejących słów w języku polskim jest bardzo duża, a określenie formy bezokolicznikowej czy mianownikowej często nie jest łatwe, a czasem niemożliwe bez znajomości kontekstu (np. słowo \verb|piła| może być zarówno rzeczownikiem, jak i być odmianą czasownika \verb|pić|). Po drugie zbiór tekstów z polskiej Wikipedii jest względnie duży -- ponad milion artykułów,  na które składają się ponad dwa miliony unikalnych słów. Przetwarzanie tak obszernego zbioru rodzi potrzebę odpowiedniego zarządzenia danymi (zbudowaniem adekwatnej bazy danych), optymalizacją procesów z powodu ograniczonych zasobów obliczeniowych i pamięciowych. Ponadto złożoność niektórych metod analizy danych nie pozwala na efektywne stosowanie ich na dużych zbiorach danych. Z tych powodów m.in. zastosowanie klasycznego algorytmu $k$-średnich nie było możliwe. W niniejszej pracy wykorzystana została wersja oparta na metodach najszybszego spadku (ang. \emph{stochastic gradient descent}). Dzięki temu czas obliczeń znacząco się skrócił, potrzebne było mniej pamięci obliczeniowej, choć otrzymane rezultaty są nieco gorsze. [COS DOPISAC, BO JEST Z DUPY]
+Celem niniejszej pracy jest zbadanie wpływu doboru odległości na przestrzeni napisów na jakość automatycznej kategoryzacji tematycznej tekstów. Innymi słowy, badana jest jakość grupowania artykułów dla różnych reprezentacji tekstu. Reprezentacje te odnoszą się do różnych grup słów, otrzymanych przy użyciu różnych odległości. Danymi, na których przeprowadzona została analiza jest zbiór artykułów polskiej Wikipedii. W pierwszym etapie grupowane są słowa przy użyciu wybranych odległości. Dalej reprezentujemy artykuły jako liczności występowania poszczególnych grup słów w danym tekście. Na podstawie tak uzyskanych danych przeprowadzamy analizę skupień tekstów. Ocena wyników odbywa się na podstawie otrzymanych grup z prawdziwymi kategoriami przypisanymi do każdego tekstu Wikipedii.
 
-[WYJASNIC, ZE ROZKLAD SLOW CHARAKTERYZUJE TEMAT - JAKIE SLOWA SIE ILE RAZY POJAWIAJA]
-
-[TO DO: OPIS CO W ROZDZIALACH]
-Rozdział drugi to przegląd odległości na przestrzeni ciągów znaków.  Podano ich formalne definicje, jak i przykłady użyć oraz zastosowania. Zostały one podzielone na trzy kategorie: odległości oparte na operacjach edycyjnych, oparte na $q$-gramach oraz miary heurystyczne. Trzeci rozdział poświęcony jest analizie skupień. Opisane zostały metoda $k$-średnich przy użyciu zarówno metody wsadowego, jak i metod najszybszego spadku. Ponadto w rozdziale tym omówione zostały metody hierarchiczne wraz z różnymi kryteriami odmienności między skupieniami. Co więcej są tam opisane metody oceny jakości podziału na skupienia. Kolejny rozdział dotyczy części praktycznej pracy. Przedstawiony jest tam algorytm zastosowany na analizowanym zbiorze wraz z dokładnym opisem badania. Ponadto w rozdziale czwartym znajdują szczegółowe wyniki. Ostatnia część dotyczy kierunków dalszych prac.
+Zauważmy, że użycie polskiej Wikipedii wiąże się to z kilkoma istotnymi wyzwaniami. Po pierwsze język polski jest językiem bardzo złożonym, przede wszystkim ze względu na to, że zawiera dużo odmian (przez przypadki, liczby, osoby, czasy, tryby, strony i inne). Stąd liczba istniejących słów w języku polskim jest bardzo duża. Dalej określenie formy bezokolicznikowej czy mianownikowej często nie jest łatwe, a czasem niemożliwe bez znajomości kontekstu (np. słowo \verb|piła| może być zarówno rzeczownikiem, jak i być odmianą czasownika \verb|pić|). Po drugie zbiór tekstów z polskiej Wikipedii jest względnie duży -- ponad milion artykułów,  na które składają się ponad dwa miliony unikalnych słów. Przetwarzanie tak obszernego zbioru rodzi potrzebę odpowiedniego zarządzenia danymi (zbudowaniem adekwatnej bazy danych) oraz optymalizacji procesów z powodu ograniczonych zasobów obliczeniowych i pamięciowych. Po trzecie niektóre metody analizy danych nie dają się efektywne stosować na dużych zbiorach danych. 
 
 
+Organizacja niniejszej pracy jest następująca. Rozdział drugi to przegląd odległości na przestrzeni ciągów znaków.  Podano ich formalne definicje, jak i przykłady użyć oraz zastosowania. Zostały one podzielone na trzy kategorie: odległości oparte na operacjach edycyjnych, oparte na $q$-gramach oraz miary heurystyczne. Trzeci rozdział poświęcony jest analizie skupień. Opisane zostały algorytmy $k$-średnich przy użyciu zarówno metody wsadowej, jak i metod najszybszego spadku. Ponadto w rozdziale tym omówione zostały algorytmy hierarchiczne wraz z różnymi kryteriami odmienności między skupieniami. Co więcej są tam opisane metody oceny jakości podziału na skupienia. Kolejny rozdział dotyczy części praktycznej pracy. Przedstawiony został algorytm zastosowany na analizowanym zbiorze wraz z dokładnym opisem badania. Ponadto w rozdziale czwartym znajdują szczegółowe wyniki. Ostatnia część dotyczy kierunków dalszych prac.
 
 
 
@@ -1422,7 +1417,7 @@ Wikipedia\footnote{\url{www.wikipedia.org}} jest to wielojęzyczna encyklopedia 
 
 Każdy artykuł może być stworzony lub zmodyfikowany przez dowolnego użytkownika. Przy procesie edycji oraz pisania artykułu obowiązują liczne reguły, między innymi takie jak wskazanie źródeł bibliograficznych, podlinkowanie do innych artykułów oraz nadanie artykułowi kategorii tematycznych~\cite{wiki}. 
 
-Ta ostatnia zasada może w szczególności przysporzyć nieco kłopotów. Liczba dostępnych kategorii jest bardzo duża (ponad $125$ tys. w polskiej wersji językowej), co więcej poziom ich szczegółowości jest zróżnicowany, tzn. mamy kategorie bardzo ogólne (np. \emph{Matematyka}), jak i dość szczegółowe (np. \emph{Działania dwuargumentowe}). Można się spodziewać, że automatyczny podział tekstów na kategorie na podstawie słów, jakie w nich występują, mógłby dać lepszy, bardziej dopasowany do treści, temat. Sprawdzenie, jak automatyczny podział tekstów na kategorie tematyczne, przy użyciu występujących w nich słów oraz ich liczności, jest zasadniczym celem praktycznej części tej pracy. Idea działania jest następująca: algorytm analizuje jakie słowa w jakich ilościach występują w danym artykule i następnie przydziela go do grupy artykułów, które zawierają takie same i podobne słowa w zbliżonych licznościach. To podejście opiera się na założeniu, że artykuły o podobnej tematyce będą zawierały takie same lub podobne do siebie słowa. 
+Ta ostatnia zasada może w szczególności przysporzyć nieco kłopotów. Liczba dostępnych kategorii jest bardzo duża (ponad $125$ tys. w polskiej wersji językowej), co więcej poziom ich szczegółowości jest zróżnicowany, tzn. mamy kategorie bardzo ogólne (np. \emph{Matematyka}), jak i dość szczegółowe (np. \emph{Działania dwuargumentowe}). Można się spodziewać, że automatyczny podział tekstów na kategorie na podstawie słów, jakie w nich występują, mógłby dać lepszy, bardziej dopasowany do treści, temat. Sprawdzenie, jak automatyczny podział tekstów na kategorie tematyczne, przy użyciu występujących w nich słów oraz ich liczności, jest zasadniczym celem praktycznej części tej pracy. Idea działania jest następująca: algorytm analizuje jakie słowa w jakich ilościach występują w danym artykule i następnie przydziela go do grupy artykułów, które zawierają takie same i podobne słowa w zbliżonych licznościach. To podejście opiera się na założeniu, że artykuły o podobnej tematyce będą zawierały takie same lub podobne do siebie słowa, tzn. że rozkład słów charakteryzuje temat tekstu.
 
 Schemat działania proponowanego przez nas algorytmu jest następujący:
 \begin{enumerate}
@@ -1471,8 +1466,8 @@ Wstępną obróbkę danych przeprowadzamy uwzględniając powyższe aspekty. Poc
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=350pt, height=200pt]{plot1.pdf}\\
-  \caption{Histogram logarytmu dziesiętnego z liczby artykułów, w których dane słowo występuje.}\label{plot:001}
+  \includegraphics[width=290pt]{plot1.pdf}\\
+  \caption{Histogram liczby artykułów, w których dane słowo występuje.}\label{plot:001}
 \end{figure}
 
 
@@ -1482,8 +1477,8 @@ Tak otrzymane teksty dzielimy na słowa, które przekształcamy do wyrazów o ma
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=350pt, height=200pt]{plot2.pdf}\\
-  \caption{Histogram logarytmu dziesiętnego z liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
+  \includegraphics[width=290pt]{plot2.pdf}\\
+  \caption{Histogram z liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
 \end{figure}
 
 $44\%$ słów występuje dokładnie raz we wszystkich artykułach (zob. rys.~\ref{plot:002}). Prawie $4,3\%$ wyrazów pojawia się ponad sto razy, natomiast mniej niż jeden procent słów występuje tysiąc i więcej razy.
@@ -1545,8 +1540,8 @@ Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=350pt, height=200pt]{plot4.pdf}\\
-  \caption{Histogram logarytmu dziesiętnego liczby unikalnych słów w artykule.}\label{plot:004}
+  \includegraphics[width=290pt]{plot4.pdf}\\
+  \caption{Histogram liczby unikalnych słów w artykule.}\label{plot:004}
 \end{figure}
 
 Mediana długości słów wynosi $9$, średnia jest nieco wyższa (zob. rys.~\ref{plot:003}). Najkrótsze występujące słowa są jednoznakowe, jest ich $249$. Najdłuższe słowo ma $128$ znaków. Słowa o długości ponad $11$ znaków stanowią $19,5\%$ wszystkich słów.
@@ -1554,12 +1549,12 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa (zob. rys.~\re
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=350pt, height=200pt]{plot3.pdf}\\
-  \caption{Histogram logarytmu dziesiętnego długości słów.}\label{plot:003}
+  \includegraphics[width=290pt]{plot3.pdf}\\
+  \caption{Histogram długości słów.}\label{plot:003}
 \end{figure}
 
 
-\section{Utworzenie skupień ,,podobnych'' słów / Jakiś mądry tytuł}
+\section{Utworzenie skupień ,,podobnych'' słów}
 
 Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
 
@@ -1765,7 +1760,7 @@ Weźmy pierwszy wykres, tj. jednorodność. Na pierwszy rzut oka widać, że naj
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=470pt]{plot10.pdf}\\
+  \includegraphics[width=400pt]{plot10.pdf}\\
   \caption{Jednorodność.}\label{plot:005}
 \end{figure}
 

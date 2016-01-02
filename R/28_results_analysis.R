@@ -5,11 +5,11 @@ library(stringi)
 library(gridExtra)
 
 obrobka_wynikow <- function(partition){
-  nazwy <- c('_', '_lcs', '_dl','_jaccard','_qgram',
-             '_red_lcs','_red_dl','_red_jaccard','_red_qgram',
-             '_red_lcs_lcs','_red_dl_dl','_red_jaccard_jaccard','_red_qgram_qgram')
-  liczby <- c(5000,10000,35000,70000)
-  if(partition == "partitions5")
+  nazwy <- c('_', '_lcs', '_dl','_jw', '_jaccard','_qgram',
+             '_red_lcs','_red_dl','_red_jw','_red_jaccard','_red_qgram',
+             '_red_lcs_lcs','_red_dl_dl','_red_jw_jw','_red_jaccard_jaccard','_red_qgram_qgram')
+  liczby <- c(5000,10000,35000)
+  if(partition == "partitions3")
     liczby <- liczby[1:2]
   
   k <- 0
@@ -18,13 +18,13 @@ obrobka_wynikow <- function(partition){
     for(j in 1:length(liczby)){
       k<- k+1
       aa[k] <- read.table(sprintf(
-        "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/%s/czesc1/wyni_%d_%s",
+        "/dragon/Text-clustering-basing-on-string-metrics/Data/DataBase/%s/czesc1/wyn_%d_%s_5_",
         partition, liczby[j], nazwy[i]),  
         header = FALSE)
     }
   }
-  j <- 4
-  if(partition == "partitions5")
+  j <- 3
+  if(partition == "partitions3")
     j <- 2
   wyniki <- data.frame(matrix(ncol = 10))
   for(i in length(aa):1){
@@ -40,7 +40,7 @@ obrobka_wynikow <- function(partition){
   wyniki <- wyniki[-nrow(wyniki),]
   wyniki[,1] <- as.character(wyniki[,1])
   
-  for(i in c("dl","lcs","jaccard","qgram")){
+  for(i in c("dl","lcs","jw","jaccard","qgram")){
     j <- i
     if(j == "jaccard")
       j <- "jac"
@@ -75,13 +75,13 @@ obrobka_wynikow <- function(partition){
 }
 
 
-wyniki <- obrobka_wynikow("partitions3")
-wyniki <- cbind(wyniki, liczba_obs = rep("100%", 52))
-wyniki <- obrobka_wynikow("partitions4") %>% 
-  cbind(liczba_obs = rep("15%", 52)) %>% 
+wyniki <- obrobka_wynikow("partitions1")
+wyniki <- cbind(wyniki, liczba_obs = rep("100%", 48))
+wyniki <- obrobka_wynikow("partitions2") %>% 
+  cbind(liczba_obs = rep("15%", 48)) %>% 
   bind_rows(wyniki, .)
-wyniki <- obrobka_wynikow("partitions5") %>% 
-  cbind(liczba_obs = rep("2%", 26)) %>% 
+wyniki <- obrobka_wynikow("partitions3") %>% 
+  cbind(liczba_obs = rep("2%", 32)) %>% 
   bind_rows(wyniki, .)
 
 # knitr::kable(wyniki)
@@ -102,13 +102,17 @@ for(i in 1:length(nazwy)){
                  y=eval(parse(text = paste0("`",nazwy[i], "`"))), 
                  fill=factor(`Batch size`, levels = sort(unique(as.numeric(wyniki$`Batch size`)))))) + 
       geom_bar(stat="identity", position="dodge") +
-      facet_wrap(~liczba_obs) +
+      facet_wrap(~liczba_obs, ncol = 1) +
       ylab(nazwy[i]) +
       xlab("Typ danych") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 0.9), 
+      theme(text = element_text(size=25),
+            axis.text.x = element_text(angle = 45, hjust = 0.9, size = 20), 
+            axis.text.y = element_text(size = 20), 
             legend.position = "top") +
       guides(fill=guide_legend(title="Batch size"))
     ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[i]])
+    
+    
     #pdf(file = paste0("LaTeX/plot",j+5,".pdf"))
     #print(g[[k]])
     #dev.off()

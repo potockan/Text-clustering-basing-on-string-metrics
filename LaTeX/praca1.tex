@@ -1430,9 +1430,18 @@ Schemat działania proponowanego przez nas algorytmu jest następujący:
 \item Użycie algorytmu $k$-średnich do podzielenia tekstów na skupienia.
 \end{enumerate}
 
+Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana będzie na artykułach polskiej wersji Wikipedii. Zauważmy, że użycie takiego zbioru danych wiąże się z kilkoma istotnymi wyzwaniami. Przede wszystkim wybór tekstów w języku polskim powoduje, że analiza może być trudna. Jest to język bardzo złożony gramatycznie. Wynika to z faktu, że zawiera on bardzo dużo odmian, m.in. przez przypadki, liczby, osoby, tryby, czasy czy strony. Stąd określenie formy podstawowej czyli mianownika w przypadku rzeczowników czy bezokolicznika często nie jest łatwe, a czasem więc niemożliwe bez znajomości szerszego kontekstu. Weźmy pod uwagę słowo \verb|piła|. Może ono oznaczać narzędzie, jak i czas przeszły trzeciej osoby liczby pojedynczej słowa \verb|pić|. Z powodu bardzo dużej możliwości odmian słów ich liczba jest znacząco większa niż np. w języku angielskim. 
+
+Co więcej bardzo wiele wyrazów ma wiele znaczeń. Wspomniana już \verb|piła| może wskazywać narzędzie, ale też miasto, film lub gatunek ryby. Podobnie ze słowem \verb|zamek|, które może się odnosić zarówno do budynku, jak też do mechanizmu zamykającego drzwi oraz zamka błyskawicznego. Widać więc, że analiza języka polskiego może być trudna.
+
+Ponadto zbiór polskiej Wikipedii jest względnie duży. Składa się na niego ponad milion artykułów i powyżej dwóch milionów unikalnych słów. Przetwarzanie tak pokaźnej ilości danych w warunkach pojedynczego, prywatnego komputera jest dużym wyzwaniem. Wiąże się to z koniecznością odpowiedniego zarządzania danymi, tj. zbudowaniem adekwatnej bazy danych oraz koniecznością optymalizacji kodów pod względem zużycia zasobów obliczeniowych oraz pamięci RAM.
+
+Dalej niektóre metody analizy danych nie dają się efektywnie stosować na dużych zbiorach danych. Istnieje zatem potrzeba zastosowania algorytmów, które dają sensowne wyniki dla zbiorów dużych. 
+
+
 \section{Opis danych}
 
-Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana będzie na artykułach polskiej wersji Wikipedii. [TO DO: OPIS WYZWAN!] Omówimy teraz rzeczony zbiór danych.
+Omówimy teraz rzeczony zbiór danych.
 
 \begin{figure}[!h]
   \centering
@@ -1469,31 +1478,33 @@ Tak otrzymane teksty dzielimy na słowa, które przekształcamy do wyrazów o ma
 
 Otrzymane dane przechowujemy w bazie danych SQLite, w $7$ tabelach, określających tytuły, kategorie, graf linków między tekstami, słowa oraz tabelę z informacją o tym jaki tekst zawiera jakie słowa w jakich ilościach. Przetworzenie danych wejściowych i utworzenie bazy danych zajęło ok. $12$ godzin.
 
-
-Przejdźmy do podstawowych statystyk dotyczących przetworzonych danych. $49\%$ słów występuje tylko w jednym tekście (zob. Rys.~\ref{plot:001}). Nieco ponad $3,5\%$ słów znajduje się w stu i więcej artykułach, natomiast jedynie $0,6\%$ wszystkich wyrazów pojawia się w więcej niż tysiącu tekstów.
-
 %w ilu tekstach wystąpiło dane słowo
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=250pt]{plot1.pdf}\\
+  \includegraphics[width=240pt]{plot1.pdf}\\
   \caption{Histogram mówiący w ilu tekstach wystąpiło słowo.}\label{plot:001}
 \end{figure}
 
+
+Przejdźmy do podstawowych statystyk dotyczących przetworzonych danych. $49\%$ słów występuje tylko w jednym tekście (zob. Rys.~\ref{plot:001}). Nieco ponad $3,5\%$ słów znajduje się w stu i więcej artykułach, natomiast jedynie $0,6\%$ wszystkich wyrazów pojawia się w więcej niż tysiącu tekstów.
+
 $44\%$ słów występuje dokładnie raz we wszystkich artykułach (zob. Rys.~\ref{plot:002}). Prawie $4,3\%$ wyrazów pojawia się ponad sto razy, natomiast mniej niż jeden procent słów występuje tysiąc i więcej razy.
+
 
 %ile razy w ogóle wystąpiło dane słowo
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=250pt]{plot2.pdf}\\
+  \includegraphics[width=240pt]{plot2.pdf}\\
   \caption{Histogram liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
 \end{figure}
+
 
 Słowa występujące tylko w jednym tekście to zazwyczaj słowa w obcych językach, przykładowo: \verb|jużdortransstroj, youtsos, odety, knežlaz, pallebitzke, rulicach, werkowie|, \verb|rumilla, metyklotiazyd, bazelak|,
 choć czasem są to słowa będące odmianą słów częściej występujących, np. słowo \verb|uchybiają| jest odmianą czasownika \verb|uchybiać|. Takie słowa warto wziąć pod uwagę przy analizie, gdyż są ,,podobne'' do słów częściej występujących, a więc mogą polepszyć jakość dopasowania pod względem tematycznym.
 
-\begin{table}[ht]
+\begin{table}[!h]
 \centering
 \caption{Lista piętnastu najczęściej występujących słów. Kolumna oznaczona jako \emph{Liczba artykułów} oznacza liczbę tekstów, w których wystąpiło dane słowo, natomiast ostatnia kolumna mówi o ilości wystąpień wyrazu ogółem we wszystkich artykułach.} 
 \begin{tabular}{|r|l|r|r|}
@@ -1542,21 +1553,24 @@ wasza, wasze, we, więc, wszystko, wtedy, wy, żaden, zawsze, że
 
 Te i podobne słowa oraz wyrazy jedno-, dwu- i trzyznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Dokonujemy tego w kolejnym etapie wstępnej obróbki tekstów, o czym powiemy w następnym podrozdziale.
 
-Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2\ 272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram liczby unikalnych słów w tekstach przedstawia Rys.~\ref{plot:004}.
-
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=250pt]{plot4.pdf}\\
+  \includegraphics[width=240pt]{plot4.pdf}\\
   \caption{Histogram liczby unikalnych słów w artykule.}\label{plot:004}
 \end{figure}
+
+
+Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2\ 272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram liczby unikalnych słów w tekstach przedstawia Rys.~\ref{plot:004}.
+
+
 
 Mediana długości słów wynosi $9$, średnia jest nieco wyższa (zob. Rys.~\ref{plot:003}). Najkrótsze występujące słowa są jednoznakowe, jest ich $249$. Najdłuższe słowo ma $128$ znaków. Słowa o długości ponad $11$ znaków stanowią $19,5\%$ wszystkich słów.
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=250pt]{plot3.pdf}\\
+  \includegraphics[width=240pt]{plot3.pdf}\\
   \caption{Histogram długości słów.}\label{plot:003}
 \end{figure}
 
@@ -1731,7 +1745,7 @@ Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zb
 \caption{Zbiory skupień wraz z ich liczbą oraz liczbą słów w skupieniu. Redukcja oznacza procent zredukowania z wejściowego zbioru słów do liczby otrzymanych skupień. Ostatnia kolumna mówi ile procent wszystkich słów zbioru wejściowego znajduje się w skupieniu.}
 \begin{tabular}{|rl|rr|rr|}
   \hline
- & Zbiór & Liczba skupień & Redukcja & Liczba słów & \% wsz. słów \\ 
+ & Zbiór & Liczba grup słów & Redukcja & Liczba słów & \% wsz. słów \\ 
   \hline
 1 & clust & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
   2 & clust\_lcs & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
@@ -1756,9 +1770,9 @@ Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zb
 \label{tab:005}
 \end{table}
 
-[TO DO: DODAC PRZYKLADOWE SKUPIENIA DLA WSZYSTKICH 13 ZBIOROW]
+[TO DO: DODAC PRZYKLADOWE SKUPIENIA DLA WSZYSTKICH 16 ZBIOROW !!!] 
 
-\section{Podział tekstów}
+\section{Kateogryzacja tematyczna tekstów}
 
 Mając tak zdefiniowane grupy słów możemy przystąpić do podziału zbioru artykułów. Do tego celu użyjemy algorytmu mini-wsadowego $k$-średnich (Algorytm~\ref{alg:003} z rozdziału~\ref{analiza-skupien}). Przypomnijmy, że algorytm ten jest metodą pośrednią pomiędzy algorytmem wsadowym, który w każdej iteracji opiera się na wszystkich obserwacjach, a algorytmem SGD, biorącym w każdej iteracji po jednej obserwacji ze zbioru. 
 
@@ -1768,40 +1782,44 @@ Zanim określimy wartość parametru $k$, zastanówmy się w jaki sposób będzi
 
 Wstępne testy na ok. $2\%$ artykułów wykazały dość dobre przyporządkowanie (jednorodność i zgodność na poziomie,  ok. $0,3$). Testy na większej próbce ok. $15\%$ tekstów dały wyniki nieco gorsze (jednorodność i zgodność na poziomie nieco poniżej $0,3$). Stąd też postanowiono przeanalizować działanie algorytmu dla trzech różnych liczności próbki, aby sprawdzić, czy jakość działania algorytmu zależy od wielkości próby. Liczba tekstów wziętych do analizy to: $100\%$ ($1\ 075\ 568$ artykułów), ok. $15\%$ ($160\ 000$ artykuły) oraz ok. $2\%$ zbioru ($25\ 000$ artykułów). Dla tej ostatniej próbki za wartość parametru $b$, określającego liczbę obserwacji mających wkład w każdej iteracji algorytmu, przyjęliśmy $5\ 000$ oraz $10\ 000$. Większe wartości (tj. $35\ 000$) nie mają sensu, gdyż są większe od liczności próby.
 
-Wszystkie analizy zostały rozpoczęte z tym samym ziarnem losowania, tj. w każdej analizie obserwacje były losowane w tej samej kolejności. Do przeprowadzenia obliczeń użyto $16$ komputerów, a łączny czas analiz to ok. 40 godzin.
+Wszystkie analizy zostały rozpoczęte z tym samym ziarnem losowania, tj. w każdej analizie obserwacje były losowane w tej samej kolejności. Do przeprowadzenia obliczeń użyto $16$ komputerów, a łączny czas analiz to ok. 40 godzin. Każdą z reprezentacji tekstów wczytywano jako macierz rzadką, gdzie liczba zerowych elementów wynosiła ok. $99,99\%$. [TO DO !] Niemniej taka reprezentacja zajmowała ok. $3$ GB pamięci RAM, natomiast sam proces podziału na skupienia zużywał dodatkowo ok. $4$ GB pamięci RAM.
 
 \section{Analiza wyników}
 
 
 W niniejszym podrozdziale przeanalizujemy uzyskane wyniki dla uzyskanych podziałów tekstów.
 
-Na Rysunkach~\ref{plot:005},~\ref{plot:006},~\ref{plot:007},~\ref{plot:008} oraz~\ref{plot:009} prezentujemy wartości uzyskanych, odpowiednio, jednorodności, zgodności, miary V, skorygowanego indeksu Randa oraz miary silhouettes dla wszystkich zbudowanych podziałów zbiorów. Przypomnijmy, że klasami porównawczymi do uzyskanych podziałów są tematy artykułów.
+Na Rys.~\ref{plot:005},~\ref{plot:006},~\ref{plot:007},~\ref{plot:010} oraz~\ref{plot:009} prezentujemy wartości uzyskanych, odpowiednio, jednorodności, zgodności, miary V, indeksu Fowlkesa-Mallowsa oraz miary silhouettes dla wszystkich zbudowanych reprezentacji tekstów i wszystkich wykonanych analiz. Przypomnijmy, że klasami porównawczymi do uzyskanych podziałów są tematy artykułów.
 
-Weźmy pierwszy wykres, tj. jednorodność. Na pierwszy rzut oka widać, że największe wartości tej miary uzyskał podział zbudowany na $2\%$ zbioru, uzyskując, nieco ponad $0,3$ dla wszystkich uzyskanych podziałów. Nieco mniejszą wartość jednorodności dostaliśmy w przypadku podziału $15\%$ artykułów o średniej równej ok. $0,2$. Dla całego zbioru jednorodność jest bardzo mała i wynosi jedynie ok. $0,03$. Oznacza to, że zdecydowana większość skupień zawiera teksty z różnych klas (tematów), co jest cechą wysoce niepożądaną. Wynika z tego, że czym mniejszy zbiór, tym lepszy jego podział ze względu na temat.
+Weźmy pierwszy wskaźnik, tj. jednorodność. Nie widać wyraźnych różnic w wartościach jednorodności w podziale na wielkość zbioru, choć dla całego zbioru wartości te są nieco wyższe niż w pozostałych przypadkach. Średnie wartość jednorodności wynoszą $0,26$ dla 100\% i 15\% oraz $0,22$ dla 2\%. Oznacza to, że większa liczba skupień zawiera teksty z różnych klas (tematów), co jest cechą wysoce niepożądaną. Wynika z tego, że czym większy zbiór, tym lepszy jego podział ze względu na temat.
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=400pt]{plot10.pdf}\\
+  \includegraphics[width=420pt]{plot10.pdf}\\
   \caption{Jednorodność.}\label{plot:005}
 \end{figure}
 
-Przyjrzyjmy się teraz wartościom jednorodności ze względu na wielkość parametru $b$. Można stwierdzić, że wartość $b$ nie ma istotnego wpływu na wysokość jednorodności. Warto przy tym zauważyć, że często jednorodność ma największą wartość dla $b=5\ 000$ (zwłaszcza w przypadku podziału zbudowanego na całym zbiorze artykułów), co wydaje się być sprzeczne z teorią zaprezentowaną w rozdziale~\ref{analiza-skupien}.
+Przyjrzyjmy się teraz wartościom jednorodności ze względu na wielkość parametru $b$. Można stwierdzić, że w przypadku największego i najmniejszego zbioru mniejsza wartość $b$ daje wyższą wartość jednorodności, co wydaje się być sprzeczne z teorią zaprezentowaną w rozdziale~\ref{analiza-skupien}.
 
-W końcu spójrzmy na wartości jednorodności w podziale na użyty zbiór (skupień) słów. Najwyższą wartość jednorodności uzyskano dla zbiorów \emph{clust\_red\_jac} oraz \emph{clust\_red\_dl}, \emph{clust\_jac} i \emph{clust} dla, odpowiednio, podziału opartego na $2\%$, $15\%$ oraz $100\%$ zbioru. Wysoką wartość jednorodności uzyskano również dla \emph{clust\_lcs}, \emph{clust\_red\_lcs}, \emph{clust\_jac\_red\_jac}. Stąd też można wnioskować, że pozytywny wpływ na jakość podziału miała procedura zmniejszająca liczbę skupień. Co więcej, najlepsze rezultaty uzyskano przy użyciu odległości Jaccarda oraz lcs. Warto przy tym zauważyć, że we wszystkich przypadkach najgorsze podziały uzyskano dla odległości $q$-gramowej.
+W końcu spójrzmy na wartości jednorodności w podziale na użyty zbiór grup słów. Najwyższą wartość jednorodności uzyskano dla zbiorów \emph{clust\_jw\_red\_jw} oraz \emph{clust\_red\_lcs}, \emph{clust\_qg} oraz \emph{clust\_red\_lcs}, \emph{clust} oraz \emph{clust\_red\_jw} dla, odpowiednio, podziału opartego na $100\%$, $15\%$ oraz $2\%$ zbioru. Wysoką wartość jednorodności uzyskano również dla \emph{clust\_lcs\_red\_lcs}, \emph{clust\_lcs}. Stąd też można wnioskować, że pozytywny wpływ na jakość podziału miała procedura zmniejszająca liczbę skupień. Co więcej, najlepsze rezultaty uzyskano przy użyciu odległości Jaro oraz lcs. Warto przy tym zauważyć, że we wszystkich przypadkach najgorsze podziały uzyskano dla odległości $q$-gramowej.
 
-Przejdźmy do analizy zgodności podziału zbiorów na skupienia. Najwyższe wartości tej miary uzyskano na $2\%$ zbioru tekstów i zawierały się w przedziale $[0,58, 0,72]$. Nieco mniejsze wartości zgodności dostaliśmy dla $15\%$ zbioru i wynosiła ona średnio $0,52$. Najniższe wartości zgodności uzyskano dla całego zbioru tekstów i były one równe ok. $0,06$. Oznacza to, że obserwacje z danej klasy (tematu) znajdują się w prawie wszystkich możliwych skupieniach, a więc podział taki jest słaby. Stąd, czym mniejszy zbiór tym lepszy podział pod względem tematycznym.
+Przejdźmy do analizy zgodności podziału zbiorów na skupienia. Wartości tej miary zawierały się w przedziale $[0,17, 0,35]$. Dla wszystkich trzech wielkości zbioru uzyskano podobne wyniki i ich średnia wartość wyniosła ok $0,29$. Widać zatem, że wielkość zbioru nie ma istotnego wpływu na wartość zgodności.
+
+%Nieco mniejsze wartości zgodności dostaliśmy dla $15\%$ zbioru i wynosiła ona średnio $0,52$. Najniższe wartości zgodności uzyskano dla całego zbioru tekstów i były one równe ok. $0,06$. Oznacza to, że obserwacje z danej klasy (tematu) znajdują się w prawie wszystkich możliwych skupieniach, a więc podział taki jest słaby. Stąd, czym mniejszy zbiór tym lepszy podział pod względem tematycznym.
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=400pt]{plot11.pdf}\\
+  \includegraphics[width=420pt]{plot11.pdf}\\
   \caption{Zgodność.}\label{plot:006}
 \end{figure}
 
-Przyjrzyjmy się teraz wartościom zgodności ze względu na wielkość parametru $b$. Dla analizy wykonanej na $2\%$ zbioru istotnie lepsze rezultaty uzyskano dla $b = 10\ 000$ -- w prawie wszystkich przypadkach zgodność jest wyższa o $0,01-0,02$. Dalej, dla $15\%$ tekstów w większości przypadków najlepsze wyniki dał algorytm z $b = 5\ 000$. Dla pełnego zbioru artykułów miara zgodności jest równa dla prawie wszystkich grup.
+Przyjrzyjmy się teraz wartościom zgodności ze względu na wielkość parametru $b$. Można stwierdzić, że czym mniejsze $b$, tym wyższa wartość zgodności. Widać to w szczególności dla najmniejszego i największego zbioru.
 
-Dalej spójrzmy na wartości zgodności w podziale na użyty zbiór (skupień) słów. Widać, że w przypadku dwóch mniejszych zbiorów tekstów, miara ta dla jest istotnie niższa dla skupień, które opierały się na odległości $q$-gramowej, tj. \emph{clust\_qg, clust\_red\_qg} oraz \emph{clust\_qg\_red\_qg} niż w analogicznych grupach, dla których użyto innej odległości. Z drugiej strony, średnio najlepsze wyniki uzyskano dla tych podzbiorów, do utworzenia których zastosowano metrykę lcs. Pośrednio znalazły się odległości dl oraz jac. Lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005}, choć różnice pomiędzy nimi są niewielkie.
+Dalej spójrzmy na wartości zgodności w podziale na użyty zbiór grup słów. Na pierwszy rzut oka można stwierdzić, że najmniejsze wartości zgodności uzyskano w przypadku zastosowania odległości $q$-gramowej. Najlepsze rezultaty otrzymano dla grup \emph{clust\_jw\_red\_jw}, \emph{clust\_jac\_red\_jac}, \emph{clust\_lcs} oraz \emph{clust\_jw}. Widać więc, że istotny wpływ na jakość podziału miała procedura przydzielająca niepogrupowane słowa do już istniejących grup słów (Algorytm~\ref{alg:004}). Najlepsze rezultaty dała przy tym odległość Jaro.
+
+%Widać, że w przypadku dwóch mniejszych zbiorów tekstów, miara ta dla jest istotnie niższa dla skupień, które opierały się na odległości $q$-gramowej, tj. \emph{clust\_qg, clust\_red\_qg} oraz \emph{clust\_qg\_red\_qg} niż w analogicznych grupach, dla których użyto innej odległości. Z drugiej strony, średnio najlepsze wyniki uzyskano dla tych podzbiorów, do utworzenia których zastosowano metrykę lcs. Pośrednio znalazły się odległości dl oraz jac. Lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005}, choć różnice pomiędzy nimi są niewielkie.
 
 \begin{figure}[!h]
   \centering
@@ -1810,19 +1828,23 @@ Dalej spójrzmy na wartości zgodności w podziale na użyty zbiór (skupień) s
   \caption{Miara V.}\label{plot:007}
 \end{figure}
 
-Ponieważ miara V jest średnią harmoniczną dwóch poprzednich miar, skupimy się jedynie na analizie uzyskanych wyników dla różnych zbiorów wejściowych. Jak można było się spodziewać, najlepsze wyniki uzyskano dla zbiorów, które budowane były przy użyciu odległości lcs. W drugiej kolejności najlepiej wypadła metryka dl. Również lepszy podział uzyskano, gdy zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005}. 
+Ponieważ miara V jest średnią harmoniczną dwóch poprzednich miar, skupimy się jedynie na analizie uzyskanych wyników dla różnych zbiorów wejściowych. Jak można było się spodziewać, najlepsze wyniki uzyskano dla zbiorów, które budowane były przy użyciu odległości Jaro. W drugiej kolejności najlepiej wypadła metryka lcs. Również lepszy podział uzyskano, gdy zastosowano algorytm~\ref{alg:004} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005}. 
 
-Przejdźmy do skorygowanego indeksu Randa. Podobnie jak w przypadku poprzednich miar, najwyższe wartości ARI uzyskano dla najmniejszego zbioru, i wynosiły średnio $0,07$; $0,02$ -- dla analizy opartej o $15\%$ zbioru wejściowego oraz $0,00$ na podziale wykonanym na wszystkich artykułach. Oznacza to, że podział tekstów na skupienia jest mocno niezgodny z klasami (tematami) artykułów. 
+Przejdźmy do indeksu Fowlkesa-Mallowsa. Najwyższe wartości FM uzyskano dla najmniejszego zbioru, i wynosiły średnio $0,19$; $0,16$ -- dla analiz opartych o $15\%$ oraz $100\%$ liczby obserwacji. W tym przypadku więc widać zależność między liczbą obserwacji a wielkością indeksu FM.
 
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=400pt]{plot13.pdf}\\
-  \caption{ARI.}\label{plot:008}
-\end{figure}
+%\begin{figure}[!h]
+%  \centering
+%  \includegraphics[width=400pt]{plot13.pdf}\\
+%  \caption{ARI.}\label{plot:008}
+%\end{figure}
 
-W przypadku zbioru $2\%$ tekstów, wyższą wartość ARI uzyskano dla $b = 10\ 000$. Dla drugiego pod względem liczności obserwacji zbioru, najwyższą wartość uzyskano dla $b=70\ 000$. W przypadku analizy opartej na wszystkich artykułach $b$ nie miało wpływu na wartość ARI.
+Przejdźmy do analizy pod kątem parametru $b$. W przypadku indeksu FM nie mamy tendencji, że czym mniejsze $b$, tym wyższa wartość indeksu. Często dla $b=10\ 000$ uzyskano największe wartości tej miary, jednak różnice są niewielkie. Jedynym wyjątkiem jest wartość uzyskana dla \emph{clust\_qg} dla 15\% obserwacji, gdy miara ta wynosi $0,23$, podczas gdy dla innych wielkości parametru $b$ FM jest równy ok. $0,15$. Można więc uznać ten wynik za wyjątek.
 
-Przyjrzyjmy się teraz wartościom ARI pod względem zbioru, który był dzielony na skupienia. Odwrotnie niż wcześniej najwyższe wartości tej miary uzyskano dla \emph{clust\_red\_jac} oraz \emph{clust\_red\_qg} dla najmniejszego zbioru. W przypadku dwóch pozostałych najlepszy okazał się podział zastosowany na zbiorach opartych o odległość lcs. Podobnie jak poprzednio lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005} niż w przypadku zbiorów otrzymanych w wyniku działania tylko~\ref{alg:004}.
+%W przypadku zbioru $2\%$ tekstów, wyższą wartość ARI uzyskano dla $b = 10\ 000$. Dla drugiego pod względem liczności obserwacji zbioru, najwyższą wartość uzyskano dla $b=70\ 000$. W przypadku analizy opartej na wszystkich artykułach $b$ nie miało wpływu na wartość ARI.
+
+Przyjrzyjmy się teraz wartościom FM pod względem grup słów. Jak wcześniej wspomniano największą wartość wskaźnika uzyskano dla \emph{clust\_qg}. Pomijając ten przypadek, najwyższe wartości indeksu FM otrzymano dla \emph{clust}, \emph{clust\_lcs\_red\_lcs}, \emph{clust\_jw\_red\_jw} oraz \emph{clust\_dl\_red\_dl}. Widać więc, że istotny wpływ na wynik analizy miało zastosowanie połączenia Algorytmów~\ref{alg:004}~i~\ref{alg:005}. Co więcej najlepsze rezultaty otrzymano dla odległości lcs, Jaro oraz dl w przypadku wszystkich użytych procedur.
+
+%Odwrotnie niż wcześniej najwyższe wartości tej miary otrzymano dla \emph{clust\_red\_jac} oraz \emph{clust\_red\_qg} dla najmniejszego zbioru. W przypadku dwóch pozostałych najlepszy okazał się podział zastosowany na zbiorach opartych o odległość lcs. Podobnie jak poprzednio lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a następnie~\ref{alg:005} niż w przypadku zbiorów otrzymanych w wyniku działania tylko~\ref{alg:004}.
 
 \begin{figure}[!h]
   \centering
@@ -1838,15 +1860,13 @@ Przejdźmy do miary silhouettes (sylwetek). Ze względu na złożoność oblicze
   \caption{Silhouettes.}\label{plot:009}
 \end{figure}
 
-Największe wartości sylwetek uzyskano dla \emph{clust\_red\_qg}, co oznacza, że uzyskane przyporządkowania tekstów do skupień były lepsze niż w przypadku pozostałych zbiorów. Najniższe wartości uzyskano dla zbiorów opartych na odległości lcs i Jaccarda.
+Największe wartości sylwetek uzyskano dla \emph{clust\_red\_qg}, co oznacza, że uzyskane przyporządkowania tekstów do skupień były lepsze niż w przypadku pozostałych zbiorów. Najniższe wartości uzyskano dla zbiorów opartych na odległości lcs i Jaro.
 
-Podsumowując:
-\begin{itemize}
-\item najlepszy podział artykułów na grupy tematyczne uzyskano dla $2\%$ tekstów,
-\item parametr $b$ nie miał istotnego wpływu na jakość uzyskanego podziału,
-\item najlepsze wyniki uzyskano dla zbiorów powstałych przy użyciu odległości lcs,
-\item lepszy podział dostaliśmy, gdy zbiór przetworzono algorytmem~\ref{alg:005}, tj. zmniejszono liczbę skupień słów.
-\end{itemize}
+\newpage
+Podsumowując, wielkość zbioru, na którym przeprowadzono analizy, nie ma znaczenia na jakość podziału pod względem tematycznym. Uzyskane wartości zaprezentowanych miar nie różniły się znacząco dla różnej liczby analizowanych tekstów. Dalej mniejsze wartości parametru $b$ dawały lepszy podział na skupienia. W przeważającej większości przypadków zaprezentowane miary dawały wyższe wartości dla $b=5000$ niż w pozostałych sytuacjach.
+
+Najlepsze wyniki uzyskano dla reprezentacji tekstów powstałych przy użyciu odległości Jaro oraz najdłuższego wspólnego podnapisu. Nieco gorsze rezultaty uzyskano dla zbiorów opartych na odległościach Dameru-Levenshteina oraz Jaccarda. Najsłabsze wyniki dawała miara $q$-gramowa. Dalej lepszy podział dostaliśmy, gdy zbiór przetworzono Algorytmem~\ref{alg:004}, tzn. powiększono grupy słów o niepogrupowane wcześniej wyrazy lub gdy najpierw zastosowaliśmy Algorytm~\ref{alg:004}, a następnie~\ref{alg:005}. Reasumując użycie odległości na przestrzeni ciągów znaków miało pozytywny wpływ na jakość automatycznej kategoryzacji tematycznej tekstów.
+
 
 [TO DO:\\
 - DLACZEGO WYSZLO TAK SLABO - JESZCZE NIE WIEM\\

@@ -125,7 +125,7 @@ for(i in 1:length(nazwy)){
 #   dev.off()
 }
 
-wyniki <- wyniki[,c(1:6,8,7,9)]
+wyniki <- wyniki[,c(1:5,7,8,9)]
 # write.csv(wyniki, "/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151227.csv", row.names = FALSE)
 wyniki <- read.csv("/dragon/Text-clustering-basing-on-string-metrics/Data/WYNIKI/wyniki_20151227.csv")
 names(wyniki) <- c("Typ danych", "Batch", "Jedn.", "Zup.", "Miara V", "ARI", "FMI", "Silhouettes", "Część")
@@ -148,9 +148,10 @@ print(aa, hline.after = c(-1, 0, seq(2, 26, 2)))
 #%>% filter(liczba_obs == '2%')
 
 wyn <- wyniki %>% 
-  #filter(liczba_obs == '2%') %>% 
-  group_by(liczba_obs, `Typ danych`) %>% 
-  summarise(zg = mean(`Indeks Fowlkesa Mallowsa`))
+  #filter(liczba_obs == '100%') %>% 
+  group_by(`Typ danych`) %>% 
+  summarise(zg = mean(`Indeks Fowlkesa Mallowsa`)) %>% 
+  arrange(desc(zg))
 
 
 

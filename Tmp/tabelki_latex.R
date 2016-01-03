@@ -42,7 +42,7 @@ skupienia <- dbGetQuery(con, sprintf("select *
            wiki_word c
            on a.id_word = c.id
            where a.id_stem_word in (%s)",
-                        stri_flatten(stem_words, collapse = ", ")))
+                                     stri_flatten(stem_words, collapse = ", ")))
 names(skupienia)[c(5,6)] <- c("id2", "word2")
 skupienia <- skupienia %>% arrange(id_stem_word)
 
@@ -95,27 +95,27 @@ xtable::xtable(liczn2, digits = 0)
 
 
 skupienia <- data.frame(zbior = c("clust", "clust_lcs", "clust_dl",  "clust_jw", "clust_jac", "clust_qg", 
-                     "clust_red_lcs", "clust_red_dl", "clust_red_jw", "clust_red_jac", "clust_red_qg", 
-                     "clust_lcs_red_lcs", "clust_dl_red_dl", "clust_jw_red_jw", "clust_jac_red_jac", "clust_qg_red_qg"),
-           liczba_skupien = c(
-             rep("137 223", 6),
-             rep("33 403", 5),
-             "73 101", "78 354", "79 255", "74 642", "61 915"
-           ),
-           redukcja = c(rep("86,5%", 6),
-                        rep("96,7%", 5),
-                        "92,8%", "92,3%", "92,2%", "92,7%", "93,9%"),
-           liczba_slow = c(
-             rep("976 691", 6),
-             rep("473 500", 5),
-             rep("976 691", 5)
-           ),
-           procent_wszystkich = c(
-             rep("95,8%", 6),
-             rep("46,5%", 5),
-             rep("95,8%", 5)
-           )
-           )
+                                  "clust_red_lcs", "clust_red_dl", "clust_red_jw", "clust_red_jac", "clust_red_qg", 
+                                  "clust_lcs_red_lcs", "clust_dl_red_dl", "clust_jw_red_jw", "clust_jac_red_jac", "clust_qg_red_qg"),
+                        liczba_skupien = c(
+                          rep("137 223", 6),
+                          rep("33 403", 5),
+                          "73 101", "78 354", "79 255", "74 642", "61 915"
+                        ),
+                        redukcja = c(rep("86,5%", 6),
+                                     rep("96,7%", 5),
+                                     "92,8%", "92,3%", "92,2%", "92,7%", "93,9%"),
+                        liczba_slow = c(
+                          rep("976 691", 6),
+                          rep("473 500", 5),
+                          rep("976 691", 5)
+                        ),
+                        procent_wszystkich = c(
+                          rep("95,8%", 6),
+                          rep("46,5%", 5),
+                          rep("95,8%", 5)
+                        )
+)
 
 print(xtable::xtable(skupienia),  hline.after = c(0, 6, 11, 16))
 
@@ -127,4 +127,39 @@ dbGetQuery(con, "select count(distinct id_new) from wiki_category_after_reductio
 dbGetQuery(con, "select count(distinct id_new) from wiki_category_after_reduction2")
 
 dbDisconnect(con)
+
+################
+
+wyciagnij <- function(table, stem_words) {
+  
+  dbGetQuery(con, sprintf("select *
+           from wiki_hunspell_clust2%s a
+           join 
+           wiki_word b
+           on a.id_stem_word = b.id
+           join 
+           wiki_word c
+           on a.id_word = c.id
+           where a.id_stem_word in (%s)",
+                          table, stri_flatten(stem_words, collapse = ", ")))
+}
+
+sk1 <- wyciagnij("", stem_words)
+sk2 <- wyciagnij("_lcs", stem_words)
+sk3 <- wyciagnij("_dl", stem_words)
+sk4 <- wyciagnij("_jw", stem_words)
+sk5 <- wyciagnij("_jaccard", stem_words)
+sk6 <- wyciagnij("_qgram", stem_words)
+
+sk7 <- wyciagnij("_red_lcs", stem_words)
+sk8 <- wyciagnij("_red_dl", stem_words)
+sk9 <- wyciagnij("_red_jw", stem_words)
+sk10 <- wyciagnij("_red_jaccard", stem_words)
+sk11 <- wyciagnij("_red_qgram", stem_words)
+
+sk12 <- wyciagnij("_red_lcs_lcs", stem_words)
+sk13 <- wyciagnij("_red_dl_dl", stem_words)
+sk14 <- wyciagnij("_red_jw_jw", stem_words)
+sk15 <- wyciagnij("_red_jaccard_jaccard", stem_words)
+sk16 <- wyciagnij("_red_qgram_qgram", stem_words)
 

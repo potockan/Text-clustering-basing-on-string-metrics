@@ -1,19 +1,23 @@
 
-### 677 444 Polish words
-### 41 087 == 705402 - 664315 English words
-### 20 438 == 725840 - 705402 French words
-### 21 117 == 746957 - 725840 German words
+### new
+### stemmed: 473496 / 1019320 == 46.45 %
+### 430401 Polish words
+### 27274 == 457675 - 430401 English words
+### 8126 == 465801 - 457675 French words
+### 7695 == 473496 - 465801 German words
 
-aa <- data.frame(jezyk = c("polski", "angielski", "niemiecki", "francuski"),
-                 liczba = c("677 444", "41 087", "21 117", "20 438"))
+
+aa <- data.frame(jezyk = c("polski", "angielski", "francuski", "niemiecki"),
+                 liczba = c("430 401", "27 274", "8 126",  "7 695"))
 
 aa[,1] <- as.character(aa[,1])
 aa[,2] <- as.character(aa[,2])
-aa <- rbind(aa, c("ogolem", "733 828"))
+aa <- rbind(aa, c("ogolem", "473 496"))
 
-aa <- cbind(aa, procent = c(24.2, 1.5, 0.8, 0.7, 27.1))
+aa <- cbind(aa, procent = c("42,2%", "2,7%", "0,8%", "0,8%", "46,5%"))
 
 xtable::xtable(aa)
+
 
 
 # wykresy gdzie jest 3x13 slupkow - 
@@ -42,36 +46,38 @@ skupienia <- dbGetQuery(con, sprintf("select *
 names(skupienia)[c(5,6)] <- c("id2", "word2")
 skupienia <- skupienia %>% arrange(id_stem_word)
 
-skupienia <- skupienia %>% filter(!(word %in% c("de", "nad", "np", "roku", "też", "the", "który", "wiele", "miasta", "jednym", "wśród")))
+skupienia <- skupienia %>% filter(!(word %in% c("nawet", "zarówno", "swoich", "mimo", "bardziej", "gdyż")))
 
 skupienia <- skupienia %>% select(word, word2)
 skupienia2 <- skupienia %>% spread(word, word2)
+wschód <- as.character(skupienia2$średnia)
+skupienia2 %>% select(-średnia) %>% cbind(wschód = as.character(wschód)) -> skupienia2
 
 bb <- cumsum(c(0,apply(skupienia2, 2, function(x) sum(!is.na(x)))))
 l <- max(bb)
 
 cc <- list()
 for(i in 1:(length(bb)-1)){
-  cc[[i]] <- c(skupienia2[(bb[i]+1):bb[i+1],i])#, rep(NA, 31))[1:31]
+  cc[[i]] <- as.character(skupienia2[(bb[i]+1):bb[i+1],i])#, rep("", 27))[1:27]
   
 }
 
-skupienia3 <- data.frame(cc)
-names(skupienia3) <- names(skupienia2)
-
-for(i in 1:ncol(skupienia3)){
-  skupienia3[,i] <- as.character(skupienia3[,i])
-  skupienia3[is.na(skupienia3[,i]),i] <- ""
-}
-
-aa <- xtable::xtable(skupienia3)
-print(aa,  include.rownames = FALSE)
+# skupienia3 <- data.frame(cc)
+# names(skupienia3) <- names(skupienia2)
+# 
+# for(i in 1:ncol(skupienia3)){
+#   skupienia3[,i] <- as.character(skupienia3[,i])
+#   skupienia3[is.na(skupienia3[,i]),i] <- ""
+# }
+# 
+# aa <- xtable::xtable(skupienia3)
+# print(aa,  include.rownames = FALSE)
 
 
 skupienia4 <- lapply(cc, stri_flatten, collapse = ", ")
 skupienia4 <- data.frame(reprezentant = names(skupienia2), slowa = matrix(skupienia4))
 aa <- xtable::xtable(skupienia4)
-print(aa,  include.rownames = FALSE)
+print(aa,  include.rownames = FALSE, hline.after = 0:nrow(aa))
 
 #################
 liczn <- dbGetQuery(con, "select count(1) from wiki_hunspell_clust2 group by id_stem_word")
@@ -83,32 +89,35 @@ names(liczn2) <- names(liczn)
 xtable::xtable(liczn2, digits = 0)
 
 
-
 ##################
-skupienia <- data.frame(zbior = c("clust", "clust_lcs", "clust_dl", "clust_jaccard", "clust_qgram", 
-                     "clust_red_lcs", "clust_red_dl", "clust_red_jaccard", "clust_red_qgram", 
-                     "clust_lcs_red_lcs", "clust_dl_red_dl", "clust_jaccard_red_jaccard", "clust_qgram_red_qgram"),
+
+
+
+
+skupienia <- data.frame(zbior = c("clust", "clust_lcs", "clust_dl",  "clust_jw", "clust_jac", "clust_qg", 
+                     "clust_red_lcs", "clust_red_dl", "clust_red_jw", "clust_red_jac", "clust_red_qg", 
+                     "clust_lcs_red_lcs", "clust_dl_red_dl", "clust_jw_red_jw", "clust_jac_red_jac", "clust_qg_red_qg"),
            liczba_skupien = c(
-             rep("186 958", 5),
-             rep("43 919", 4),
-             "65 350", "66 378", "69 570", "62 434"
+             rep("137 223", 6),
+             rep("33 403", 5),
+             "73 101", "78 354", "79 255", "74 642", "61 915"
            ),
-           redukcja = c(rep("6.6%", 5),
-                        rep("98.4%", 4),
-                        "97.7%", "97.6%", "97.5%", "97.8%"),
+           redukcja = c(rep("86,5%", 6),
+                        rep("96,7%", 5),
+                        "92,8%", "92,3%", "92,2%", "92,7%", "93,9%"),
            liczba_slow = c(
-             "746 957", "1 080 260", "1 080 260", "1 070 750", "1 070 750",
-             "743 053", "743 053", "739 338", "739 338",
-             "1 037 393", "1 060 474", "1 063 131", "1 063 131"
+             rep("976 691", 6),
+             rep("473 500", 5),
+             rep("976 691", 5)
            ),
            procent_wszystkich = c(
-             "27%", "38%", "38%", "38%", "38%", 
-             "26%", "26%", "26%", "26%", 
-             "37%", "38%", "38%", "38%"
+             rep("95,8%", 6),
+             rep("46,5%", 5),
+             rep("95,8%", 5)
            )
            )
 
-xtable::xtable(skupienia)
+print(xtable::xtable(skupienia),  hline.after = c(0, 6, 11, 16))
 
 #################
 dbListTables(con)

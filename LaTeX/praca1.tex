@@ -318,7 +318,7 @@ gdzie do $\mathbb{B}$ należy usunięcie, wstawienie, zamiana oraz transpozycja 
 
 
 \begin{example}
-Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak| prezentuje rys.~\ref{rys:001}. Odpowiadająca mu ścieżka edycyjna składa się z zamiany $\verb|f| \rightarrow \verb|k|$, usunięcia $\verb|c| \rightarrow \varepsilon$ oraz transpozycji $\verb|ka| \rightarrow \verb|ak|$.
+Przykład optymalnego dopasowania pomiędzy słowami \verb|foczka| i \verb|kozak| prezentuje Rys.~\ref{rys:001}. Odpowiadająca mu ścieżka edycyjna składa się z zamiany $\verb|f| \rightarrow \verb|k|$, usunięcia $\verb|c| \rightarrow \varepsilon$ oraz transpozycji $\verb|ka| \rightarrow \verb|ak|$.
 \end{example}
 
 \begin{figure}[width=80pt]
@@ -395,7 +395,7 @@ $$
 
 %Odległość Hamminga dopuszcza jedynie zamianę znaku, stąd jest zdefiniowana tylko dla napisów o~równej długości. 
 %Łatwo zauważyć, że~odległość Hamminga spełnia definicję metryki. 
-Odległość Hamminga zlicza liczbę indeksów (zob. rys.~\ref{rys:002}), na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
+Odległość Hamminga zlicza liczbę indeksów (zob. Rys.~\ref{rys:002}), na~których dwa napisy mają różny znak. Odległość ta~przyjmuje wartości ze~zbioru $\{0,\ldots,|s|\}$, gdy $|s|=|t|$, natomiast jest równa nieskończoności, gdy napisy mają różne długości.
 
 \begin{example}
 Odległość Hamminga między słowami \verb|koza| i \verb|foka| wynosi $d_{\mathrm{hamming}}(\verb|koza|,$ $\verb|foka|) = 2$, natomiast między słowami \verb|kozak| i \verb|foczka| wynosi ona $d_{\mathrm{hamming}}(\verb|kozak|, \verb|foczka|) = \infty$, gdyż $|\verb|kozak| | \neq | \verb|foczka| |$.
@@ -462,7 +462,7 @@ Odległość najdłuższego wspólnego podnapisu między napisami \verb|kozak| i
 
 Powyższy przykład pokazuje, że~w~ogólności nie ma~unikalnej najkrótszej drogi transformacji jednego napisu w~drugi, gdyż można zamienić kolejność usuwania (lub wstawiania) znaków i~również uzyskać odległość równą~$5$. Można również usunąć z napisu znak \verb|k| zamiast \verb|a|, otrzymując taką samą odległość między napisami.
 
-Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z~$s$~i~$t$~nie zmieniając ich porządku. Wówczas odległość ta~jest rozumiana jako liczba niesparowanych znaków z~obu napisów. W~powyższym przykładzie może to~być przedstawione jak na rys.~\ref{rys:003}.
+Jak sugeruje nazwa, odległość najdłuższego wspólnego podnapisu, ma~też inną interpretację. Poprzez wyrażenie \emph{najdłuższy wspólny podnapis} rozumiemy najdłuższy ciąg utworzony przez sparowanie znaków z~$s$~i~$t$~nie zmieniając ich porządku. Wówczas odległość ta~jest rozumiana jako liczba niesparowanych znaków z~obu napisów. W~powyższym przykładzie może to~być przedstawione jak na Rys.~\ref{rys:003}.
 	
 	
 
@@ -871,7 +871,7 @@ d_{\mathrm{jaro}}(s,t) = \left\{
 Odległość Jaro przyjmuje wartości z przedziału $[0,1]$, gdzie zero oznacza, że $s = t$, natomiast jeden wskazuje na kompletną odmienność napisów z $m = T = 0$.
 
 \begin{example}
-Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|)  \approx 0,261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (zob. rys.~\ref{rys:005}), co daje odległość równą $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0,261$.
+Odległość Jaro między napisami \verb|kozak| i \verb|foczka| wynosi: $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|)  \approx 0,261$, bo liczba wspólnych znaków wynosi $m = 4$, a liczba potrzebnych transpozycji wynosi $T = 1$ (zob. Rys.~\ref{rys:005}), co daje odległość równą $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0,261$.
 \end{example}
 
 \begin{figure}[width=80pt]
@@ -1041,7 +1041,7 @@ n^{(t+1)}_l& = n^{(t)}_l + \left\{
 \end{align}
 
 
-Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego otoczenie. Na rys.~\ref{rys:006} przedstawiono przykładową drogę aktualizacji parametrów. 
+Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obserwacji do skupienia, choć z powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do lokalnego minimum, a jedynie w jego otoczenie. Na Rys.~\ref{rys:006} przedstawiono przykładową drogę aktualizacji parametrów. 
 
 \begin{figure}[!h]
 \centering
@@ -1097,7 +1097,7 @@ Algorytm SGD opiera się na przeliczaniu średniej po każdym przydzieleniu obse
         
 \end{tikzpicture}
 }
-\caption{Przykładowa droga wsadowego spadku gradientu (rys. a) i stochastycznego spadku gradientu (rys. b).}\label{rys:006}
+\caption{Przykładowa droga wsadowego spadku gradientu (Rys. a) i stochastycznego spadku gradientu (Rys. b).}\label{rys:006}
 \end{figure}
 
 Kolejne elipsy oznaczają warstwice $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ w zależności od wartości zmiennej $\mathbf{m}$, a centrum oznacza (lokalne) minimum tej funkcji. Jeśli algorytm rozpoczyna działanie w punkcie oznaczonym przez $X$, to w przypadku algorytmu wsadowego, w kolejnych iteracjach zmienna $\mathbf{m}$ zmienia swoją wartość, przybliżając się do (lokalnego) minimum funkcji $\widetilde{W}$. Natomiast algorytm stochastyczny w każdej iteracji przybliża się w stronę minimum w sposób quasi-losowy, tzn. może nigdy nie osiągnąć właściwego minimum, a jedynie ,,krążyć'' wokół niego.
@@ -1144,7 +1144,7 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
 \caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
 \end{algorithm}
 
-Porównanie działania trzech wyżej zaprezentowanych algorytmów dla $k=10, 50$ prezentuje rys.~\ref{plot:000}. Na osi rzędnych mamy uzyskany błąd analizy, na osi odciętych natomiast -- czas działania algorytmu na skali logarytmicznej. Można zauważyć, że najszybszy był algorytm SGD (czerwona krzywa), jednak błąd oszacowania był największy. Z drugiej strony mamy algorytm wsadowy (zielony), który ma bardzo mały błąd, choć czas działania algorytmu był najdłuższy. Algorytm mini-wsadowy (niebieski) połączeniem dwóch poprzednich. Błąd w tym przypadku jest podobny jak błąd algorytmu wsadowego, natomiast czas działania jest o wiele krótszy, porównywalnie do algorytmu SGD. 
+Porównanie działania trzech wyżej zaprezentowanych algorytmów dla $k=10, 50$ prezentuje Rys.~\ref{plot:000}. Na osi rzędnych mamy uzyskany błąd analizy, na osi odciętych natomiast -- czas działania algorytmu na skali logarytmicznej. Można zauważyć, że najszybszy był algorytm SGD (czerwona krzywa), jednak błąd oszacowania był największy. Z drugiej strony mamy algorytm wsadowy (zielony), który ma bardzo mały błąd, choć czas działania algorytmu był najdłuższy. Algorytm mini-wsadowy (niebieski) połączeniem dwóch poprzednich. Błąd w tym przypadku jest podobny jak błąd algorytmu wsadowego, natomiast czas działania jest o wiele krótszy, porównywalnie do algorytmu SGD. 
 
 \begin{figure}[!h]
   \centering
@@ -1420,7 +1420,7 @@ Wikipedia\footnote{\url{www.wikipedia.org}} jest to wielojęzyczna encyklopedia 
 
 Każdy artykuł może być stworzony lub zmodyfikowany przez dowolnego użytkownika. Przy procesie edycji oraz pisania artykułu obowiązują liczne reguły, między innymi takie jak wskazanie źródeł bibliograficznych, podlinkowanie do innych artykułów oraz nadanie artykułowi kategorii tematycznych~\cite{wiki}. 
 
-Ta ostatnia zasada może w szczególności przysporzyć nieco kłopotów. Liczba dostępnych kategorii jest bardzo duża (ponad $125$ tys. w polskiej wersji językowej), co więcej poziom ich szczegółowości jest zróżnicowany, tzn. mamy kategorie bardzo ogólne (np. \emph{Matematyka}), jak i dość szczegółowe (np. \emph{Działania dwuargumentowe}). Można się spodziewać, że automatyczny podział tekstów na kategorie na podstawie słów, jakie w nich występują, mógłby dać lepszy, bardziej dopasowany do treści, temat. Sprawdzenie, jak automatyczny podział tekstów na kategorie tematyczne, przy użyciu występujących w nich słów oraz ich liczności, jest zasadniczym celem praktycznej części tej pracy. Idea działania jest następująca: algorytm analizuje jakie słowa w jakich ilościach występują w danym artykule i następnie przydziela go do grupy artykułów, które zawierają takie same i podobne słowa w zbliżonych licznościach. To podejście opiera się na założeniu, że artykuły o podobnej tematyce będą zawierały takie same lub podobne do siebie słowa, tzn. że rozkład słów charakteryzuje temat tekstu.
+Ta ostatnia zasada może w szczególności przysporzyć nieco kłopotów. Liczba dostępnych kategorii jest bardzo duża (ponad $125$ tys. w polskiej wersji językowej), co więcej poziom ich szczegółowości jest zróżnicowany, tzn. mamy kategorie bardzo ogólne (np. \emph{Matematyka}), jak i dość szczegółowe (np. \emph{Działania dwuargumentowe}). Można się spodziewać, że automatyczny podział tekstów na kategorie na podstawie słów, jakie w nich występują, mógłby dać lepszy, bardziej dopasowany do treści, temat. Sprawdzenie, jak automatyczny podział tekstów na kategorie tematyczne, przy użyciu występujących w nich słów oraz ich liczności, jest zasadniczym celem praktycznej części tej pracy. Idea działania jest następująca: algorytm analizuje jakie słowa w jakich licznościach występują w danym artykule i następnie przydziela go do grupy artykułów, które zawierają takie same i podobne słowa w zbliżonych licznościach. To podejście opiera się na założeniu, że artykuły o podobnej tematyce będą zawierały takie same lub podobne do siebie słowa, tzn. że rozkład słów charakteryzuje temat tekstu.
 
 Schemat działania proponowanego przez nas algorytmu jest następujący:
 \begin{enumerate}
@@ -1432,7 +1432,7 @@ Schemat działania proponowanego przez nas algorytmu jest następujący:
 
 \section{Opis danych}
 
-Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana będzie na artykułach polskiej wersji Wikipedii. Omówimy teraz rzeczony zbiór danych.
+Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana będzie na artykułach polskiej wersji Wikipedii. [TO DO: OPIS WYZWAN!] Omówimy teraz rzeczony zbiór danych.
 
 \begin{figure}[!h]
   \centering
@@ -1463,35 +1463,39 @@ Jak wspomniano wcześniej pobrane dane składają się w dużej mierze z treści
 \item Znaczniki języka HTML oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji o tematyce tekstu i służą jedynie odpowiedniemu wyświetleniu treści.
 \end{itemize}
 
-Wstępną obróbkę danych przeprowadzamy uwzględniając powyższe aspekty. Początkowo z części tekstowej usuwamy wszystkie znaki nie będące literami alfabetu języka polskiego. Poddajemy jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, pozostawiamy bez zmian. Wzory oraz kody usuwamy w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierają. Cytaty pozostawiamy bez zmian. Przypisy usuwamy z artykułów, jako że zawierają jedynie dodatkową, z punktu widzenia głównego tekstu, treść. Źródła bibliograficzne usuwamy w całości. Teksty oczyszczamy także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiamy jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usuwamy jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczamy z tytułów, które pojawiają się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}.
+Wstępną obróbkę danych przeprowadzamy uwzględniając powyższe aspekty. Początkowo z części tekstowej usuwamy wszystkie znaki nie będące literami alfabetu języka polskiego. Poddajemy jej dalszej obróbce po przetworzeniu części technicznej. Słowa, które występują w tekście, a pod którymi znajduje się link, pozostawiamy bez zmian. Wzory oraz kody usuwamy w całości ze względu na trudność w rozróżnieniu czego podany fragment dotyczy oraz ze względu na krótkie znaki, które zawierają. Cytaty pozostawiamy bez zmian. Przypisy usuwamy z artykułów, jako że zawierają jedynie dodatkową, z punktu widzenia głównego tekstu, treść. Źródła bibliograficzne usuwamy w całości. Teksty oczyszczamy także z tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiamy jako potencjalne źródło podobnej tematyki do tej zawartej w tekście. Wszelkie znaczniki HTML-owe usuwamy jako bezwartościowe z punktu widzenia treści artykułu. Podobnie teksty oczyszczamy z tytułów, które pojawiają się w większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}. 
+
+Tak otrzymane teksty dzielimy na słowa, które przekształcamy do wyrazów o małych literach. Nie chcemy rozróżniać słów ze względu na wielkość liter, gdyż nie powinna ona mieć znaczenia dla tematyki treści. Do każdego tekstu dodajemy informację o tym, jakie słowa i w jakich licznościach w nim występują. Innymi słowy przechowujemy informację o tekstach w ten sposób, że możemy przedstawić zbiór tekstów jako macierz $M$, gdzie element $m_{ij}$ oznacza liczność $j$-tego słowa w $i$-tym artykule. W ten sposób otrzymujemy $2\ 806\ 765$ unikalnych słów we wszystkich, tj. w $1\ 075\ 568$, artykułach. 
+
+Otrzymane dane przechowujemy w bazie danych SQLite, w $7$ tabelach, określających tytuły, kategorie, graf linków między tekstami, słowa oraz tabelę z informacją o tym jaki tekst zawiera jakie słowa w jakich ilościach. Przetworzenie danych wejściowych i utworzenie bazy danych zajęło ok. $12$ godzin.
+
+
+Przejdźmy do podstawowych statystyk dotyczących przetworzonych danych. $49\%$ słów występuje tylko w jednym tekście (zob. Rys.~\ref{plot:001}). Nieco ponad $3,5\%$ słów znajduje się w stu i więcej artykułach, natomiast jedynie $0,6\%$ wszystkich wyrazów pojawia się w więcej niż tysiącu tekstów.
 
 %w ilu tekstach wystąpiło dane słowo
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=290pt]{plot1.pdf}\\
-  \caption{Histogram liczby artykułów, w których dane słowo występuje.}\label{plot:001}
+  \includegraphics[width=250pt]{plot1.pdf}\\
+  \caption{Histogram mówiący w ilu tekstach wystąpiło słowo.}\label{plot:001}
 \end{figure}
 
-
-Tak otrzymane teksty dzielimy na słowa, które przekształcamy do wyrazów o małych literach. Nie chcemy rozróżniać słów ze względu na wielkość liter, gdyż nie powinna ona mieć znaczenia dla tematyki treści. Do każdego tekstu dodajemy informację o tym, jakie słowa i w jakich licznościach w nim występują. W ten sposób otrzymujemy $2\ 806\ 765$ różnych słów we wszystkich, tj. w $1\ 075\ 568$, artykułach. $49\%$ słów występuje tylko w jednym tekście (zob. rys.~\ref{plot:001}). Nieco ponad $3,5\%$ słów znajduje się w stu i więcej artykułach, natomiast jedynie $0,6\%$ wszystkich wyrazów pojawia się w więcej niż tysiącu tekstów.
+$44\%$ słów występuje dokładnie raz we wszystkich artykułach (zob. Rys.~\ref{plot:002}). Prawie $4,3\%$ wyrazów pojawia się ponad sto razy, natomiast mniej niż jeden procent słów występuje tysiąc i więcej razy.
 
 %ile razy w ogóle wystąpiło dane słowo
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=290pt]{plot2.pdf}\\
-  \caption{Histogram z liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
+  \includegraphics[width=250pt]{plot2.pdf}\\
+  \caption{Histogram liczby wystąpień słów we wszystkich artykułach.}\label{plot:002}
 \end{figure}
-
-$44\%$ słów występuje dokładnie raz we wszystkich artykułach (zob. rys.~\ref{plot:002}). Prawie $4,3\%$ wyrazów pojawia się ponad sto razy, natomiast mniej niż jeden procent słów występuje tysiąc i więcej razy.
 
 Słowa występujące tylko w jednym tekście to zazwyczaj słowa w obcych językach, przykładowo: \verb|jużdortransstroj, youtsos, odety, knežlaz, pallebitzke, rulicach, werkowie|, \verb|rumilla, metyklotiazyd, bazelak|,
 choć czasem są to słowa będące odmianą słów częściej występujących, np. słowo \verb|uchybiają| jest odmianą czasownika \verb|uchybiać|. Takie słowa warto wziąć pod uwagę przy analizie, gdyż są ,,podobne'' do słów częściej występujących, a więc mogą polepszyć jakość dopasowania pod względem tematycznym.
 
 \begin{table}[ht]
 \centering
-\caption{Lista dwudziestu najczęściej występujących słów. Kolumna oznaczona jako \emph{Liczba artykułów} oznacza liczbę tekstów, w których wystąpiło dane słowo, natomiast ostatnia kolumna mówi o ilości wystąpień wyrazu ogółem we wszystkich artykułach.} 
+\caption{Lista piętnastu najczęściej występujących słów. Kolumna oznaczona jako \emph{Liczba artykułów} oznacza liczbę tekstów, w których wystąpiło dane słowo, natomiast ostatnia kolumna mówi o ilości wystąpień wyrazu ogółem we wszystkich artykułach.} 
 \begin{tabular}{|r|l|r|r|}
   \hline
  & Słowo & Liczba artykułów & Liczba wystąpień \\ 
@@ -1511,17 +1515,17 @@ choć czasem są to słowa będące odmianą słów częściej występujących, 
   13 & po & 286\ 818 & 765\ 075 \\ 
   14 & o & 273\ 574 & 674\ 431 \\ 
   15 & ur & 241\ 888 & 365\ 934 \\ 
-  16 & to & 234\ 629 & 527\ 121 \\ 
-  17 & jako & 232\ 919 & 663\ 364 \\ 
-  18 & latach & 232\ 017 & 380\ 362 \\ 
-  19 & był & 229\ 219 & 503\ 938 \\ 
-  20 & został & 228\ 985 & 509\ 705 \\ 
+%  16 & to & 234\ 629 & 527\ 121 \\ 
+%  17 & jako & 232\ 919 & 663\ 364 \\ 
+%  18 & latach & 232\ 017 & 380\ 362 \\ 
+%  19 & był & 229\ 219 & 503\ 938 \\ 
+%  20 & został & 228\ 985 & 509\ 705 \\ 
    \hline
 \end{tabular}
 \label{tab:001}
 \end{table}
 
-Słowa najczęściej występujące prezentuje tabela~\ref{tab:001}. W większości przypadków są to słowa nie istotne w kontekście analizy tematycznej tekstu (ang. \emph{stopwords}). Takich słów można wyróżnić więcej, np.
+Słowa najczęściej występujące prezentuje Tabela~\ref{tab:001}. W większości przypadków są to słowa nie istotne w kontekście analizy tematycznej tekstu (ang. \emph{stopwords}). Takich słów można wyróżnić więcej, np.
 \begin{verbatim}
 ach, aj, albo, bardzo, bez, bo, być, ci, cię, ciebie, co, czy, daleko, dla,
 dlaczego, dlatego, do, dobrze, dokąd, dość, dużo, dwa, dwaj, dwie, dwoje, 
@@ -1536,58 +1540,58 @@ tobie, tu, tutaj, twoi, twój, twoja, twoje, ty, wam, wami, was, wasi, wasz,
 wasza, wasze, we, więc, wszystko, wtedy, wy, żaden, zawsze, że
 \end{verbatim}
 
-Te i podobne słowa oraz wyrazy jedno- i dwuznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Dokonujemy tego w kolejnym etapie wstępnej obróbki tekstów. Łącznie ze zbioru słów usuwamy $1\ 822$ wyrazy.
+Te i podobne słowa oraz wyrazy jedno-, dwu- i trzyznakowe, należy usunąć ze zbioru danych, gdyż nie wnoszą żadnej istotnej informacji o tematyce tekstu. Dokonujemy tego w kolejnym etapie wstępnej obróbki tekstów, o czym powiemy w następnym podrozdziale.
 
-Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2\ 272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram logarytmu dziesiętnego liczby unikalnych słów w tekstach przedstawia rys.~\ref{plot:004}.
+Średnia liczba unikalnych słów występujących w artykule wynosi $121$, mediana to zaledwie $66$ unikalnych wyrazów. W $2\ 272$ tekstach wystąpiło mniej niż pięć słów. Artykuły te zawierały przede wszystkim tabele i rysunki, stąd po wstępnej obróbce danych pozostało w nich niewiele wyrazów. Histogram liczby unikalnych słów w tekstach przedstawia Rys.~\ref{plot:004}.
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=290pt]{plot4.pdf}\\
+  \includegraphics[width=250pt]{plot4.pdf}\\
   \caption{Histogram liczby unikalnych słów w artykule.}\label{plot:004}
 \end{figure}
 
-Mediana długości słów wynosi $9$, średnia jest nieco wyższa (zob. rys.~\ref{plot:003}). Najkrótsze występujące słowa są jednoznakowe, jest ich $249$. Najdłuższe słowo ma $128$ znaków. Słowa o długości ponad $11$ znaków stanowią $19,5\%$ wszystkich słów.
+Mediana długości słów wynosi $9$, średnia jest nieco wyższa (zob. Rys.~\ref{plot:003}). Najkrótsze występujące słowa są jednoznakowe, jest ich $249$. Najdłuższe słowo ma $128$ znaków. Słowa o długości ponad $11$ znaków stanowią $19,5\%$ wszystkich słów.
 
 \begin{figure}[!h]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=290pt]{plot3.pdf}\\
+  \includegraphics[width=250pt]{plot3.pdf}\\
   \caption{Histogram długości słów.}\label{plot:003}
 \end{figure}
 
 
 \section{Utworzenie skupień ,,podobnych'' słów}
 
-Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, gdzie przeważająca większość rekordów byłaby równa zeru. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych. 
+Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z czego blisko połowa występuje jedynie raz we wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w artykule a daną wejściową jest macierz o wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to macierz ta miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, co w postacie gęstej daje ponad $12$ TB pamięci masowej. Ponadto przeważająca większość rekordów byłaby równa zeru -- rzadkość danych wejściowych wynosi ponad $99,99\%$. Algorytm mógłby nie poradzić sobie z tak dużą ilością danych, zwłaszcza gdy większa część rekordów jest ,,niewypełniona''. Stąd zachodzi potrzeba zmniejszenia wymiaru danych.
 
-Ponieważ rekordy składają się ze słów, można wyznaczyć skupienia wyrazów ,,podobnych'' do siebie. Podobieństwo (odmienność) słów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako sumę liczby wystąpień słów z danego skupienia, zamiast liczby wystąpień pojedynczych słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$, które wystąpiły w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
+Jak wspomnieliśmy wcześniej ze zbioru słów należy usunąć wyrazy nieistotne w kontekście analizy tematycznej. Co więcej warto również zredukować liczbę analizowanych słów o wyrazy, które występują bardzo często. Powód jest następujący: jeśli dane słowo pojawia się w dużej liczbie artykułów, to zachodzi podejrzenie, że wyraz ten nie ma jasnego kontekstu tematycznego. Przykładowo słowo \verb|strona| może odnosić się do strony w konflikcie, kartki czy też kierunku, a więc może dotyczyć różnych tematów. Tego typu wyrazów wyznaczyliśmy $350$. Z drugiej strony weźmy po uwagę słowa, które występują bardzo rzadko, np. w jednym lub dwóch tekstach. Artykuł, w którym takie słowo występuje nie da się ich połączyć z żadnym innym tekstem. Zatem wyrazy takie również usuwamy ze zbioru analizowanych słów. Stanowią one ponad $63\%$ wszystkich wyrazów. Dalej zbiór wyrazów redukujemy również o słowa bardzo krótkie, tj. jedno-, dwu- i trzyznakowe, które zazwyczaj są nieistotne w kontekście analizy tematycznej. Takich słów jest $22\ 145$. Łącznie usuwamy ze zbioru $1\ 787\ 445$ słów, co stanowi prawie $64\%$ wszystkich wyrazów i dostajemy $1\ 019\ 320$ słów do dalszej analizy.
+
+Ponieważ rekordy składają się z wyrazów, można wyznaczyć skupienia słów ,,podobnych'' do siebie. Odmienność wyrazów można określić za pomocą odległości na przestrzeni ciągów znaków opisanych w rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako wektor $(n_1, \ldots, n_K)$, gdzie $n_i$ jest licznością słów z $i$-tej grupy, $i=1,\ldots,K$, a $K$ liczbą grup słów. Przykładowo, jeśli skupienie $A$ składa się ze słów $s,\ t,\ u$ i wystąpiły one w danym artykule, odpowiednio, $x,\ y,\ z$ razy, to słowa ze skupienia $A$ wystąpiły w tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na skupienia, możemy znacząco zmniejszyć liczbę wyrazów, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
 
 Aby podzielić zbiór słów na skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od siebie i zastosowanie algorytmu aglomeracyjnego. Jednakowoż wiąże się to z dużą złożonością pamięciową i obliczeniową, stąd też podejście takie nie zostało wykorzystane w niniejszej pracy. Inny pomysł polega na przyłączaniu do skupienia słów dopóty, dopóki średnia odległość w zbiorze nie przekroczy zadanej liczby. Wstępne testy na losowej próbce tysiąca słów wykazały, że jakość takiego podziału jest słaba, a czas obliczeń względnie długi.
 
 \emph{\textbf{Stemming.}}
-Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Odmiana słowa nie zmienia jego tematyki, a dzięki takiemu podejściu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone odpowiednio do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta} (środek), które jednoznacznie charakteryzuje podzbiór. Będziemy je nazywać środkiem, słowem-reprezentantem lub po prostu \emph{reprezentantem} skupienia. W ten sposób do odpowiedniego podzbioru słów możemy odnosić się poprzez jego reprezentanta.
+Stąd postanowiono dokonać podziału zbioru słów w inny sposób. Początkowo przeprowadzamy tzw. \emph{stemming}, czyli sprowadzenie słowa do jego rdzenia. Takie podejście opiera się na założeniu, że odmiana słowa nie zmienia jego tematyki, a dzięki temu możemy znacznie ograniczyć liczbę unikalnych słów w zbiorze. Przykładowo słowa \verb|zjednoczonych|, \verb|zjednoczyli|, \verb|drużynom|, \verb|drużynie| zostaną sprowadzone, odpowiednio, do form \verb|zjednoczyć|, \verb|drużyna|. Dzięki takiemu podejściu, każde skupienie będzie miało swoje \emph{słowo-reprezentanta} (środek czy też centroid), które jednoznacznie charakteryzuje podzbiór. Będziemy je nazywać środkiem, słowem-reprezentantem lub po prostu \emph{reprezentantem} skupienia. W ten sposób do odpowiedniego podzbioru słów możemy odnosić się poprzez jego reprezentanta.
 
 \begin{table}[!h]
 \centering
-\caption{Liczba słów na których zastosowano \emph{stemming} w poszczególnych językach}.
+\caption{Liczba słów na których zastosowano \emph{stemming} w poszczególnych językach. Procent mówi o odsetku jaki dany język stanowił spośród wszystkich analizowanych słów.}
 \begin{tabular}{|rl|rr|}
   \hline
  & Język & Liczba słów & Procent ogółu\\ 
   \hline
-1 & polski & 664 315 & 23.7 \\ 
-  2 & angielski & 41 087 & 1.5 \\ 
-  3 & niemiecki & 21 117 & 0.8 \\ 
-  4 & francuski & 20 438 & 0.7 \\ \hline
-  5 & ogółem & 746 942 & 26.6 \\ 
+1 & polski & 430 401 & 42,2\% \\ 
+  2 & angielski & 27 274 & 2,7\% \\ 
+  3 & francuski & 8 126 & 0,8\% \\ 
+  4 & niemiecki & 7 695 & 0,8\% \\ \hline
+  5 & ogółem & 473 496 & 46,5\% \\ 
    \hline
 \end{tabular}
 \label{tab:002}
 \end{table}
 
-Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. Aplikacja ta ma wbudowany słownik słów języka polskiego wraz z ich odmianami. Do każdego wyrazu jest też przypisany jego rdzeń. Sposób działania jest następujący: program znajduje szukane słowo w słowniku, a następnie zwraca jego rdzeń lub nie zwraca nic, jeśli słowo nie pasuje do żadnego wyrazu ze słownika. W szczególności słownik nie zawiera wyrazów, w których popełniono tzw. ,,literówki'' ani złączeń słów.
-
-Ponieważ część wyrazów stanowią słowa obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (zob. tabela~\ref{tab:002}). W ten sposób grupujemy $746\ 942$ słów, co stanowi ok. $27\%$ wszystkich słów, w $186\ 958$ skupienia. Przykładowe skupienia prezentuje tabela~\ref{tab:003}. Warto zauważyć, że słowa w podzbiorach są podobne tematycznie, choć do skupienia o reprezentancie \verb|główny| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny, choć z drugiej strony ich grupa znaczeniowa jest podobna.
+Do przeprowadzenia \emph{stemmingu} używamy programu \emph{Hunspell}~\footnote{\url{http://hunspell.sourceforge.net/}} -- korektora pisowni i analizatora morfologicznego używany w wielu programach typu \emph{open source}. Aplikacja ta ma wbudowany słownik słów języka polskiego wraz z ich odmianami. Do każdego wyrazu jest też przypisany jego rdzeń. Sposób działania jest następujący: program znajduje szukane słowo w słowniku, a następnie zwraca jego rdzeń lub nie zwraca nic, jeśli słowo nie pasuje do żadnego wyrazu ze słownika. W szczególności słownik nie zawiera wyrazów, w których popełniono literówki, nie użyto znaków diakrytycznych czy też złączeń słów.
 
 \begin{table}[!h]
 \centering
@@ -1596,29 +1600,37 @@ Ponieważ część wyrazów stanowią słowa obcojęzyczne przeprowadzamy \emph{
   \hline
 Reprezentant & Słowa w skupieniu \\ \hline
   \hline
-czas & czasie, czasach, czas, czasom \\ \hline
-  główny & głównie, główne, główną, głównych, głównego, głównym, główna, głównymi, \\
-& główny, głównej, główni, głównemu, niegłówny, niegłównym, niegłówne, \\
-& niegłównych, niegłówną \\ \hline
-  miał & miał, miały, miałem, miału, miałach, miale, miałów, miałami, miałom \\ \hline
-  nazwa & nazwa, nazwę, nazwy, nazwą, nazwie, nazw, nazwami, nazwach, nazwom \\ \hline
-  nr & nr, nry, nru, nrem, nrze, nrów \\ \hline
-  osoba & osób, osoby, osoba, osobą, osobę, osobom, osobie, osobami, osobach, osobo \\ \hline
-  udział & udział, udziału, udziałem, udziale, udziały, udziałów, udziałami, udziałach, \\
-& udziałom \\ \hline
-  wieś & wsi, wsie, wieś, wsią, wsiach, wsiami, wsiom \\ \hline
-  zostać & został, została, zostały, zostało, zostanie, zostali, zostać, zostaną, zostania, \\
-& zostałby, zostałaby, zostałyby, zostaniu, zostałem, zostałoby, zostaniesz,\\
-& zostanę, zostaliby, zostaliśmy, zostaniemy, zostaniem, zostałam, zostałeś, \\ 
-& zostaliście, zostaniecie, zostałaś, zostałbym, zostalibyśmy, zostałbyś, \\
-& zostano, zostałabym \\ 
+działalność & działalność, działalności, działalnością, działalnościach, działalnościami \\ 
+   \hline
+niemiecki & niemiecki, niemieckiej, niemieckiego, niemieckich, niemieckim, niemiecką, \\ & niemiecka, niemieccy, niemieckimi, niemiecku, niemieckiemu, nieniemieckich, \\ & nieniemieckiej, nieniemieckie \\ 
+   \hline
+odkryty & odkryta, odkryte, odkryty, odkrytych, odkrytym, odkrytą, odkrytego, odkrytej, \\ & odkrytymi,  nieodkrytych, nieodkryte, odkrytemu, odkryci, nieodkrytego,  \\ & nieodkryta,  nieodkrytej, nieodkrytą, nieodkrytymi \\ 
+   \hline
+okres & okres, okresu, okresach, okresem, okresy, okresów, okresami, okresom \\ 
+   \hline
+postać & postaci, postacie, postać, postacią, postaciami, postaciach, postaciom, postał, \\ &  postała, postania, postało, postały, postaniu, postanie, postali \\ 
+   \hline
+praca & pracę, pracach, praca, pracą, pracami, praco \\ 
+   \hline
+produkcja & produkcji, produkcja, produkcję, produkcją, produkcje, produkcjach, \\ &  produkcjami, produkcjom \\ 
+   \hline
+wschód & wschód, wschodu, wschodzie, wschodowi, wschodem \\ 
+   \hline
+wydawnictwo & wydawnictwo, wydawnictwa, wydawnictw, wydawnictwie, wydawnictwem,\\ &  wydawnictwach, wydawnictwami, wydawnictwu, wydawnictwom \\ 
+   \hline
+występ & występy, występów, występ, występu, występach, występie, \\ & występem, występami, występom, występowi \\ 
+   \hline
+występować & występował, występujących, występujący, występowania, występujące, \\ &  występowanie, występowała, występują, występować, występująca, występowali, \\ &  występującego, występowały, występującym, występującej, występowało,\\ &  występującą, występowaniem, występującymi, występowaniu, występuję, \\ & występującemu, występowano, występowałyby, występowałby, występowań, \\ & występowałaby, występowałoby, występuj, występujemy, występowaliśmy \\  
    \hline
 \end{tabular}
 \label{tab:003}
 \end{table}
 
+
+Ponieważ część wyrazów stanowią słowa obcojęzyczne przeprowadzamy \emph{stemming} w języku polskim, angielskim, niemieckim oraz francuskim (zob. Tabela~\ref{tab:002}). W ten sposób grupujemy $473\ 496$ słów, co stanowi ok. $47\%$ wszystkich słów, w $137\ 223$ skupienia. Przykładowe skupienia prezentuje Tabela~\ref{tab:003}. Warto zauważyć, że słowa w podzbiorach są podobne tematycznie, choć do skupień o reprezentantach \verb|niemiecki| oraz \verb|odkryty| trafiły wyrazy o znaczeniu przeciwnym. Widać więc, że podział taki nie jest idealny, choć z drugiej strony ich grupa znaczeniowa jest podobna.
+
 \textbf{Podział przy użyciu metryk.}
-Tak zaproponowany podział słów na skupienia wykorzystuje jedynie ok. $27\%$ zbioru wszystkich wyrazów. Co więcej większość z podzbiorów jest zaledwie kilkuelementowa (zob. tabela~\ref{tab:004}). 
+Tak zaproponowany podział słów na skupienia wykorzystuje jedynie ok. $47\%$ zbioru wszystkich wyrazów. Co więcej większość z podzbiorów jest zaledwie kilkuelementowa (zob. tabela~\ref{tab:004}). 
 
 \begin{table}[!h]
 \centering
@@ -1627,14 +1639,14 @@ Tak zaproponowany podział słów na skupienia wykorzystuje jedynie ok. $27\%$ z
   \hline
 Min. & 1st Qu. & Median & Mean & 3rd Qu. & Max. \\ 
   \hline
-1 & 1 & 2 & 4 & 5 & 89 \\ 
+1 & 1 & 2 & 3 & 4 & 46 \\ 
    \hline
 \end{tabular}
 \label{tab:004}
 \end{table}
 
 
-Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Procedury te polegają na [PLIK R/14]:
+Stąd można zastosować następujące schematy postępowania, które po pierwsze zredukują liczbę używanych grup słów, a po drugie wykorzystają dodatkowo zbiór niepogrupowanych wyrazów. Procedury te polegają na:
 \begin{enumerate}
 \item\label{p:001} Dołączeniu do skupień słów jeszcze niepogrupowanych.
 \item\label{p:002} Dołączeniu do skupień zawierających pięć i więcej elementów, podzbiorów o mniejszej liczności.
@@ -1670,7 +1682,7 @@ Zauważmy, że powyższy algorytm podobny jest do metody aglomeracyjnej analizy 
 		\State dane: zbiór reprezentantów $R$, wektor wielkości skupień $\mathbf{s}$, odległość $d$
 		\State $R_m = \emptyset, R_d = \emptyset$
 		\For {$r \in R$}
-			\If {$s_r \leq 5$}
+			\If {$s_r \leq 4$}
 				\State $R_m = R_m \cup r$
 			\Else
 				\State $R_d = R_d \cup r$
@@ -1689,11 +1701,11 @@ Zauważmy, że powyższy algorytm podobny jest do metody aglomeracyjnej analizy 
 \caption{Algorytm łączący małe i duże skupienia.}\label{alg:005}
 \end{algorithm}
 
-Schemat działania jest następujący (zob. Algorytm~\ref{alg:005}): sprawdzamy, jakie są liczności wszystkich skupień. Jeśli liczność skupienia jest większa od pięciu, to taki podzbiór oznaczamy jako ,,duży''. Do takich skupień będziemy przyłączać mniejsze podgrupy. Jeśli liczność skupienia jest mniejsza lub równa $5$, to podzbiór oznaczamy jako ,,mały''. Takie skupienie będziemy przyłączać do podzbiorów ,,dużych''. Te pierwsze skupienia nazwijmy dużymi skupieniami, natomiast te drugie -- małymi. 
+Schemat działania jest następujący (zob. Algorytm~\ref{alg:005}): sprawdzamy, jakie są liczności wszystkich skupień. Jeśli liczność skupienia jest większa od pięciu, to taki podzbiór oznaczamy jako ,,duży''. Do takich skupień będziemy przyłączać mniejsze podgrupy. Jeśli liczność skupienia jest mniejsza lub równa $4$, to podzbiór oznaczamy jako ,,mały''. Takie skupienie będziemy przyłączać do podzbiorów ,,dużych''. Te pierwsze skupienia nazwijmy dużymi skupieniami, natomiast te drugie -- małymi. 
 
 Mając tak podzielone skupienia, weźmy reprezentantów małych podzbiorów. Jeśli długość słowa-reprezentanta nie przekracza trzech znaków, to skupienie takie pomijamy w dalszej analizie. Ma to na celu uniknięcie analizy słów, które nie mają znaczenia, jak zbitek dwóch lub trzech takich samych liter (np. \verb|aa| lub \verb|bbb|). Następnie postępowanie jest podobne jak w Algorytmie~\ref{alg:004}: liczymy odległość środka małego skupienia od wszystkich słów-reprezentantów dużych skupień. Sprawdzamy, która z wyliczonych odległości była najmniejsza. Podzbiór, którego reprezentantem jest analizowane słowo, przydzielamy do tego skupienia, do którego środka było mu (słowu) najbliżej. Jeśli wyraz ma taką samą (najmniejszą) odległość do kilku reprezentantów, wybieramy pierwszego w kolejności.
 
-Zauważmy, że druga część algorytmu to po prostu metoda aglomeracyjna z innym niż zaprezentowane w rozdziale~\ref{analiza-skupien} kryterium liczenia odmienności dwóch skupień. W tej procedurze odmienność między podzbiorami określona jest jako odległość między środkami (reprezentantami) skupień.
+Zauważmy, że powyższy algorytm podobny jest do metody aglomeracyjnej analizy skupień z użyciem odmienności centroidu. Różnice polegają na tym, że do utworzonych już skupień przyłączamy inne skupienia, z tym że podzbiory, do których małe skupienie może zostać dołączone, są z góry ustalone.
 
 
 
@@ -1705,33 +1717,40 @@ Odległość Hamminga odrzucamy, gdyż można ją sensownie zastosować jedynie 
 
 Z odległości opartych na $q$-gramach wyselekcjonowaliśmy odległość Jaccarda (jac) oraz $q$-gramową (qg) jako najbardziej reprezentatywne. W obu przypadkach wybraliśmy $q=4$. Dzięki takiemu podejściu unikniemy przetwarzania słów o długości mniejszej niż cztery znaki.
 
-Z miar heurystycznych wybraliśmy odległość Jaro, jako że odległość Jaro-Winklera jest jedynie pewnym rozwinięciem tej pierwszej.
+Z miar heurystycznych wybraliśmy odległość Jaro, czy też Jaro-Winklera z $p=0$.
 
-\textbf{Otrzymane zbiory.} Na zbiorze skupień otrzymanym po wykonaniu \emph{stemmingu} zastosowano trzy powyższe algorytmy przy użyciu każdej z czterech odległości, dostając łącznie $13$ różnych zbiorów skupień (wliczając w to zbiór, otrzymany ze \emph{stemmingu}). Zbiory te oznaczmy jako \emph{clust\_X} gdzie X jest przyrostkiem oznaczającym algorytm i zastosowaną odległość. Oznaczenia są następujące: w przypadku, gdy dołączaliśmy słowa do istniejących skupień (tj. zastosowany był algorytm~\ref{alg:004} / procedura $1$) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jac} lub \emph{qg}, np. \emph{clust\_lcs}. Jeśli użyliśmy algorytmu~\ref{alg:005} / procedury $2$, zmniejszającego liczbę skupień, to dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to łączymy je w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Zbiór otrzymany po wykonaniu \emph{stemmingu} oznaczamy po prostu \emph{clust}. 
+\textbf{Otrzymane zbiory.} Na zbiorze skupień otrzymanym po wykonaniu \emph{stemmingu} zastosowano trzy powyższe algorytmy przy użyciu każdej z czterech odległości, dostając łącznie $16$ różnych zbiorów skupień (wliczając w to zbiór, otrzymany ze \emph{stemmingu}). Cała procedura utworzenia grup słów zajęła prawie $50$ godzin. 
+
+Grupy słów oznaczmy jako \emph{clust\_X} gdzie X jest przyrostkiem oznaczającym algorytm i zastosowaną odległość. Oznaczenia są następujące: w przypadku, gdy dołączaliśmy słowa do istniejących skupień (tj. zastosowany był algorytm~\ref{alg:004}) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jw, jac} lub \emph{qg}, np. \emph{clust\_lcs}. Jeśli użyliśmy algorytmu~\ref{alg:005}, zmniejszającego liczbę skupień, to dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to łączymy je w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Grupę słów otrzymaną po wykonaniu \emph{stemmingu} oznaczamy po prostu \emph{clust}. 
 
 
-Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zbiorów zawiera tabela~\ref{tab:005}. Zbiory, na których zastosowano algorytm~\ref{alg:004} lub jedynie \emph{stemming} zawierają $186\ 958$ skupień, co dało redukcję ok. $93\%$ względem oryginalnego zbioru słów (tj. $2\ 806\ 765$). W skupieniach tych znajduje się od  prawie $750\ 000$ do ponad $1\ 000\ 000$ słów, czyli między $27\%$ a $38\%$ wszystkich wejściowych wyrazów. Druga grupa zbiorów, tj. taka, która jest wynikiem działania algorytmu~\ref{alg:005} zawiera dokładnie $43\ 919$ skupienia, co daje redukcję równą $98,4\%$. Słowa zawarte w tych skupieniach stanowią ok. $26\%$ wejściowego zbioru wyrazów. Trzecia grupa zbiorów, ma nieco mniejszą redukcję niż poprzednia i wynosi prawie $98\%$, zawierając jednocześnie ok. $38\%$ wszystkich wyrazów.
+Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zbiorów zawiera tabela~\ref{tab:005}. Zbiory, na których zastosowano algorytm~\ref{alg:004} lub jedynie \emph{stemming} zawierają $137\ 223$ grup wyrazów, co dało redukcję ok. $86,5\%$ względem zbioru słów (tj. $1\ 019\ 320$). W skupieniach tych znajduje się $976\ 691$ słów, czyli prawie $96\%$  wszystkich wejściowych wyrazów. Druga grupa zbiorów, tj. taka, która jest wynikiem działania Algorytmu~\ref{alg:005} zawiera dokładnie 33 403 skupienia, co daje redukcję równą $97\%$. Słowa zawarte w tych skupieniach stanowią ok. $47\%$ wejściowego zbioru wyrazów. Trzecia grupa zbiorów, ma nieco redukcję niż poprzednia i wynosi między $92\%$ a $94\%$, zawierając jednocześnie ok. $96\%$ wszystkich wyrazów.
 
 \begin{table}[!h]
 \centering
 \caption{Zbiory skupień wraz z ich liczbą oraz liczbą słów w skupieniu. Redukcja oznacza procent zredukowania z wejściowego zbioru słów do liczby otrzymanych skupień. Ostatnia kolumna mówi ile procent wszystkich słów zbioru wejściowego znajduje się w skupieniu.}
 \begin{tabular}{|rl|rr|rr|}
   \hline
- & Zbiór & Liczba skupień & Redukcja & Liczba słów & Procent \\ 
+ & Zbiór & Liczba skupień & Redukcja & Liczba słów & \% wsz. słów \\ 
   \hline
-1 & clust & 186 958 & 93.3\% & 746 957 & 27\% \\ 
-  2 & clust\_lcs & 186 958 & 93.3\% & 1 080 260 & 38\% \\ 
-  3 & clust\_dl & 186 958 & 93.3\% & 1 080 260 & 38\% \\ 
-  4 & clust\_jaccard & 186 958 & 93.3\% & 1 070 750 & 38\% \\ 
-  5 & clust\_qgram & 186 958 & 93.3\% & 1 070 750 & 38\% \\ \hline
-  6 & clust\_red\_lcs & 43 919 & 98.4\% & 743 053 & 26\% \\ 
-  7 & clust\_red\_dl & 43 919 & 98.4\% & 743 053 & 26\% \\ 
-  8 & clust\_red\_jaccard & 43 919 & 98.4\% & 739 338 & 26\% \\ 
-  9 & clust\_red\_qgram & 43 919 & 98.4\% & 739 338 & 26\% \\ \hline
-  10 & clust\_lcs\_red\_lcs & 65 350 & 97.7\% & 1 037 393 & 37\% \\ 
-  11 & clust\_dl\_red\_dl & 66 378 & 97.6\% & 1 060 474 & 38\% \\ 
-  12 & clust\_jaccard\_red\_jaccard & 69 570 & 97.5\% & 1 063 131 & 38\% \\ 
-  13 & clust\_qgram\_red\_qgram & 62 434 & 97.8\% & 1 063 131 & 38\% \\ 
+1 & clust & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
+  2 & clust\_lcs & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
+  3 & clust\_dl & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
+  4 & clust\_jw & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
+  5 & clust\_jac & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
+  6 & clust\_qg & 137 223 & 86,5\% & 976 691 & 95,8\% \\ 
+   \hline
+7 & clust\_red\_lcs & 33 403 & 96,7\% & 473 500 & 46,5\% \\ 
+  8 & clust\_red\_dl & 33 403 & 96,7\% & 473 500 & 46,5\% \\ 
+  9 & clust\_red\_jw & 33 403 & 96,7\% & 473 500 & 46,5\% \\ 
+  10 & clust\_red\_jac & 33 403 & 96,7\% & 473 500 & 46,5\% \\ 
+  11 & clust\_red\_qg & 33 403 & 96,7\% & 473 500 & 46,5\% \\ 
+   \hline
+12 & clust\_lcs\_red\_lcs & 73 101 & 92,8\% & 976 691 & 95,8\% \\ 
+  13 & clust\_dl\_red\_dl & 78 354 & 92,3\% & 976 691 & 95,8\% \\ 
+  14 & clust\_jw\_red\_jw & 79 255 & 92,2\% & 976 691 & 95,8\% \\ 
+  15 & clust\_jac\_red\_jac & 74 642 & 92,7\% & 976 691 & 95,8\% \\ 
+  16 & clust\_qg\_red\_qg & 61 915 & 93,9\% & 976 691 & 95,8\% \\ 
    \hline
 \end{tabular}
 \label{tab:005}
@@ -1741,15 +1760,15 @@ Liczbę skupień oraz liczbę słów zawartą w skupieniu dla poszczególnych zb
 
 \section{Podział tekstów}
 
-Mając tak zdefiniowane skupienia słów możemy przystąpić do podziału zbioru artykułów. Do tego celu użyjemy algorytmu mini-wsadowego $k$-średnich (algorytm~\ref{alg:003} z rozdziału~\ref{analiza-skupien}). Przypomnijmy, że algorytm ten jest metodą pośrednią pomiędzy algorytmem wsadowym, który w każdej iteracji opiera się na wszystkich obserwacjach, a algorytmem SGD, biorącym w każdej iteracji po jednej obserwacji ze zbioru. 
+Mając tak zdefiniowane grupy słów możemy przystąpić do podziału zbioru artykułów. Do tego celu użyjemy algorytmu mini-wsadowego $k$-średnich (Algorytm~\ref{alg:003} z rozdziału~\ref{analiza-skupien}). Przypomnijmy, że algorytm ten jest metodą pośrednią pomiędzy algorytmem wsadowym, który w każdej iteracji opiera się na wszystkich obserwacjach, a algorytmem SGD, biorącym w każdej iteracji po jednej obserwacji ze zbioru. 
 
-Aby więc użyć algorytmu mini-wsadowego musimy wybrać najpierw liczbę skupień $k$ oraz parametr $b$, określający ile obserwacji będzie miało swój wkład w każdej iteracji. Zajmijmy się najpierw tą drugą wartością. Ponieważ nie wiemy jak bardzo jakość podziału zależy od parametru $b$, postanowiliśmy sprawdzić działanie algorytmu dla czterech wartości $b$: $5\ 000$, $10\ 000$, $35\ 000$ oraz $70\ 000$. Dostaniemy w ten sposób $52$ wyniki analizy, oparte na $13$ różnych zbiorach wejściowych.
+Aby więc użyć algorytmu mini-wsadowego musimy wybrać najpierw liczbę skupień $k$ oraz parametr $b$, określający ile obserwacji będzie miało swój wkład w każdej iteracji. Zajmijmy się najpierw tą drugą wartością. Ponieważ nie wiemy jak bardzo jakość podziału zależy od parametru $b$, postanowiliśmy sprawdzić działanie algorytmu dla trzech wartości $b$: $5\ 000$, $10\ 000$, $35\ 000$. Dostaniemy w ten sposób 48 różnych podziałów, opartych na $16$ różnych reprezentacjach tekstów wynikających z otrzymanych grup słów.
 
 Zanim określimy wartość parametru $k$, zastanówmy się w jaki sposób będziemy mierzyć jakość otrzymanych podziałów. Cztery na pięć zaprezentowanych miar w rozdziale~\ref{analiza-skupien} wymaga znajomości prawdziwego podziału zbioru. Przypomnijmy, że nasz zbiór danych to artykuły z polskiej Wikipedii, które mają określoną kategorię tematyczną. Można więc wykorzystać znaną nam wiedzę o kategoriach i na jej podstawie określić jakość podziału otrzymanego w wyniku działania algorytmu. Liczba różnych kategorii, które określają tematykę artykułów wynosi $56\ 283$. Próba wykonania analizy skupień przy użyciu algorytmu mini-wsadowego z tak dużym $k$, zakończyła się niepowodzeniem, mimo posiadania dużej ilości pamięci RAM (wraz z partycją wymiany (SWAP) ponad $100$ GB). Stąd też nastąpiła potrzeba zredukowania tej liczby. Ponieważ struktura kategorii Wikipedii jest drzewiasta\footnote{por. \url{http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii}}, można zastąpić kategorię przypisaną do artykułu kategorią ogólniejszą. Po takiej redukcji otrzymano $6\ 922$ grup tematycznych. Jednak rozkład liczby artykułów w otrzymanych kategoriach był mocno skośny. Taka sytuacja jest silnie niesprzyjająca, gdyż chcemy mieć podobne liczności w grupach. Ręcznie podzielono zatem najbardziej liczne tematy na podtematy, natomiast te o najmniejszej liczności połączono zachowując przy tym podobieństwo tematyki. W ten sposób uzyskano sto różnych tematów o podobnym rozkładzie liczby artykułów. Wstępne testy wykazały, że tak otrzymane $k$ pozwala na dokonanie obliczeń w relatywnie krótkim czasie i nie zajmując dużej ilości pamięci RAM.
 
-Wstępne testy na ok. $2\%$ artykułów wykazały dość dobre przyporządkowanie (jednorodność i zgodność na poziomie, odpowiednio, $0,3$ i $0,7$). Testy na większej próbce ok. $15\%$ tekstów dały wyniki nieco gorsze (jednorodność i zgodność na poziomie, odpowiednio $0,2$ i $0,5$). Stąd też postanowiono przeanalizować działanie algorytmu dla trzech różnych liczności próbki: $100\%$ ($1\ 075\ 568$ artykułów), ok. $15\%$ ($152\ 772$ artykuły) oraz ok. $2\%$ zbioru ($25\ 000$ artykułów). Dla tej ostatniej próbki za wartość parametru $b$, określającego liczbę obserwacji mających wkład w każdej iteracji algorytmu, przyjęliśmy $5\ 000$ oraz $10\ 000$. Większe wartości (tj. $35\ 000$ oraz $70\ 000$) nie mają sensu, gdyż są większe od liczności próby.
+Wstępne testy na ok. $2\%$ artykułów wykazały dość dobre przyporządkowanie (jednorodność i zgodność na poziomie,  ok. $0,3$). Testy na większej próbce ok. $15\%$ tekstów dały wyniki nieco gorsze (jednorodność i zgodność na poziomie nieco poniżej $0,3$). Stąd też postanowiono przeanalizować działanie algorytmu dla trzech różnych liczności próbki, aby sprawdzić, czy jakość działania algorytmu zależy od wielkości próby. Liczba tekstów wziętych do analizy to: $100\%$ ($1\ 075\ 568$ artykułów), ok. $15\%$ ($160\ 000$ artykuły) oraz ok. $2\%$ zbioru ($25\ 000$ artykułów). Dla tej ostatniej próbki za wartość parametru $b$, określającego liczbę obserwacji mających wkład w każdej iteracji algorytmu, przyjęliśmy $5\ 000$ oraz $10\ 000$. Większe wartości (tj. $35\ 000$) nie mają sensu, gdyż są większe od liczności próby.
 
-Wszystkie analizy zostały rozpoczęte z tym samym ziarnem losowania, tj. w każdej analizie obserwacje były losowane w tej samej kolejności. 
+Wszystkie analizy zostały rozpoczęte z tym samym ziarnem losowania, tj. w każdej analizie obserwacje były losowane w tej samej kolejności. Do przeprowadzenia obliczeń użyto $16$ komputerów, a łączny czas analiz to ok. 40 godzin.
 
 \section{Analiza wyników}
 

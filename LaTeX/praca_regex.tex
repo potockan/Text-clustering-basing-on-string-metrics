@@ -21,6 +21,9 @@
 \usepackage{algpseudocode}
 \usepackage{algorithm}
 \usepackage{rotating}
+\usepackage{array}
+\usepackage{rotating}
+\usepackage{longtable}
 %%\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{verbatim}
@@ -48,7 +51,19 @@
 \renewcommand{\thealgorithm}{\thechapter.\arabic{algorithm}}
 \newalgname{Algorytm}% All algorithms will be~called "Algorithme"
 \makeatother
+
+
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\
+\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\
+\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\
+\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{P}[1]{>{\raggedright\tabularxbackslash}p{#1}}
 %\newtheorem{theorem}{\@theorem}[chapter]
+
+
 
 \author{Natalia Potocka}
 \title{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w~przestrzeni ciągów znaków}
@@ -171,7 +186,7 @@ We wszystkich przykładach niniejszego rozdziału zakładamy, jeśli nie podano 
 
 \section{Odległości na~przestrzeni ciągów znaków}
 
-Określanie odległości między napisami jest ważną częścią przetwarzania danych, zwłaszcza w~problemach takich jak dopasowanie statystyczne, wyszukiwanie tekstów, klasyfikacja tekstów czy sprawdzanie pisowni. Największa trudność polega na~policzeniu podobieństwa między dwoma napisami w~terminach metryk na~przestrzeni ciągów znaków.  W~niniejszym podrozdziale zajmiemy się odległościami na~napisach, tj. funkcjami $d: \Sigma^* \times \Sigma^* \rightarrow [0, \infty)$. W~literaturze można znaleźć wiele różnych funkcji tego typu, które różnią się genezą powstania, podejściem do~problemu oraz zastosowaniami. W~pracy zajmiemy się odległościami, która można podzielić na~trzy garupy:
+Określanie odległości między napisami jest ważną częścią przetwarzania danych, zwłaszcza w~problemach takich jak dopasowanie statystyczne, wyszukiwanie tekstów, klasyfikacja tekstów czy sprawdzanie pisowni. Największa trudność polega na~policzeniu podobieństwa między dwoma napisami w~terminach metryk na~przestrzeni ciągów znaków.  W~niniejszym podrozdziale zajmiemy się odległościami na~napisach, tj. funkcjami $d: \Sigma^* \times \Sigma^* \rightarrow [0, \infty)$. W~literaturze można znaleźć wiele różnych funkcji tego typu, które różnią się genezą powstania, podejściem do~problemu oraz zastosowaniami. W~pracy zajmiemy się odległościami, które można podzielić na~trzy grupy:
 \begin{itemize}
 \item oparte na~operacjach edycyjnych (\emph{edit operations}),
 \item oparte na~$q$-gramach,
@@ -183,7 +198,7 @@ Aby wyliczyć odległość opartą na~operacjach edycyjnych, trzeba określić l
 
 Odległości między napisami były i~nadal są~niezbędne w~problemach biologii obliczeniowej, przetwarzaniu sygnałów oraz przeszukiwaniu tekstów. Ten pierwszy obszar zastosowań koncentruje się na~wyszukiwaniu wzorców w~DNA i~sekwencjach białkowych, które mogą być zapisane jako długie napisy nad specyficznym alfabetem (np. $\{$\verb|A, C, T, G|$\}$). Wyszukiwanie w~nich szczególnych ciągów znaków okazuje się być fundamentalną operacją przy składaniu części DNA uzyskanych z~eksperymentów, czy też określaniu jak bardzo różnią się dwie sekwencje genów~\cite{Navarro2001:guidedtour}. Więcej na~temat zastosowań odległości między napisami w~biologii obliczeniowej można znaleźć~w~\cite{Sellers1980:evolutionary},~\cite{Needleman1970:proteins} czy też~\cite{Sankoff1983:timewarps}. 
 
-Kolejnym obszarem zastosowań odległości na~przestrzeni ciągów znaków jest przetwarzanie sygnałów. Jednym z~jego zagadnień jest określenie transmitowanego tekstu, mając dany sygnał audio. Nawet uproszczony problem, sprowadzony jedynie do~rozpoznawania słowa z~małego zbioru alternatyw jest złożony, jako że~sygnał może być skompresowany w~czasie, części słów mogą być niewyraźne itd. Idealne dopasowanie jest praktycznie niemożliwe~\cite{Navarro2001:guidedtour}. Innym problemem jest korekta błędów pisowni. Fizyczna transmisja sygnału podatna jest na~błędy. Aby zagwarantować transmisję fizycznym kanałem, konieczne jest, żeby odzyskać poprawną wiadomość po~modyfikacji uzyskanej wskutek transmisji. W~tym przypadku można nie wiedzieć nawet czego szukać, a~trzeba dostać tekst, który jest poprawny i~najbliższy otrzymanej wiadomości~\cite{Navarro2001:guidedtour}. Więcej na~temat zastosowań odległości między napisami w~przetwarzaniu sygnałów można znaleźć~w~\cite{Levenshtein1965:binarycodes},~\cite{Vintsyuk1968:speech}, czy też~\cite{Dixon1979:automatic}.
+Kolejnym obszarem zastosowań odległości na~przestrzeni ciągów znaków jest przetwarzanie sygnałów. Jednym z~jego zagadnień jest określenie transmitowanego tekstu, mając dany sygnał audio. Nawet uproszczony problem, sprowadzony jedynie do~rozpoznawania słowa z~małego zbioru alternatyw jest złożony, jako że~sygnał może być skompresowany w~czasie, części słów mogą być niewyraźne itd. Idealne dopasowanie jest praktycznie niemożliwe~\cite{Navarro2001:guidedtour}. Innym problemem jest korekta błędów pisowni. Fizyczna transmisja sygnału podatna jest na~błędy. Aby zagwarantować transmisję fizycznym kanałem, konieczne jest, żeby odzyskać poprawną wiadomość po~modyfikacji uzyskanej wskutek transmisji. W~tym przypadku można nie wiedzieć nawet czego szukać, a~w~wyniku dostaje się tekst, który jest poprawny i~najbliższy otrzymanej wiadomości~\cite{Navarro2001:guidedtour}. Więcej na~temat zastosowań odległości między napisami w~przetwarzaniu sygnałów można znaleźć~w~\cite{Levenshtein1965:binarycodes},~\cite{Vintsyuk1968:speech}, czy też~\cite{Dixon1979:automatic}.
 
 Problem korekty źle napisanego tekstu jest prawdopodobnie najstarszym potencjalnym zastosowaniem dla odległości na~napisach. Odniesienia do~tego problemu można znaleźć nawet z~lat $20.$ ubiegłego wieku~\cite{Masters1927:spelling}. Od~lat $60.$ optymalne dopasowanie napisów przy pomocy odległości stało się jednym z~najbardziej popularnych narzędzi, które radziłoby sobie z~poprawą tekstów. Przykładowo, ok. $80\%$ błędów można poprawić używając tylko jednego wstawienia, usunięcia, zamiany bądź transpozycji znaków~\cite{Damerau1964:technique}. Bardzo ważnym zastosowaniem poprawy tekstów jest wydobywanie informacji (ang. \emph{Information Retrieval} -- IR) -- jest to~jedna z~najbardziej wymagających gałęzi zastosowań odległości na~napisach. W~IR chodzi o~wydobycie istotnych informacji z~dużych zbiorów tekstów, a~optymalne dopasowanie napisów jest jego kluczowym narzędziem. Obecnie, każde narzędzie wydobywające informacje z~tekstów, dopasowuje napisy bądź wzorce, aby zniwelować liczbę błędów w~tekście. Więcej na~temat zastosowań odległości między napisami w~problemie optymalnego dopasowania napisów można znaleźć~w~ literaturze, m.in.~\cite{Boytsov2011:indexingmethods},~\cite{Navarro2001:guidedtour},~\cite{Wagner1974:stringtostring},~\cite{Wagner1975:extensionstring},~\cite{Owolabi1988:fast} czy też~\cite{Kukich1992:correcting}.
 
@@ -246,7 +261,7 @@ Po drugie, zbiór operacji edycyjnych $\mathbb{B}$ może zostać rozszerzony o~w
 Mając dany zbiór bazowych operacji edycyjnych $\mathbb{B}$ oraz funkcję $\delta$,~która nadaje koszt wszystkim bazowym operacjom edycyjnym z~$\mathbb{B}$,~uogólniona odległość edycyjna między napisami $s$~i~$t$~jest zdefiniowana jako minimalny spośród kosztów wszystkich możliwych ścieżek edycyjnych, które przekształcają $s$~w~$t$~\cite{Boytsov2011:indexingmethods}.
 \end{definition}
 
-Zazwyczaj koszt pojedynczej operacji z~$\mathbb{B}$ jest równy jeden. Czasem jednak nadaje się poszczególnym operacjom różne koszty, dając np. transpozycji mniejszą wagę niż wstawieniu znaku. Gdy koszt wszystkich operacji jest równy jeden, to~mówimy po~prostu o~odległości edycyjnej, natomiast gdy różne operacje mają różne wagi, to~mówimy o~\emph{ważonej} odległości edycyjnej.
+%Zazwyczaj koszt pojedynczej operacji z~$\mathbb{B}$ jest równy jeden. Czasem jednak nadaje się poszczególnym operacjom różne koszty, dając np. transpozycji mniejszą wagę niż wstawieniu znaku. Gdy koszt wszystkich operacji jest równy jeden, to~mówimy po~prostu o~odległości edycyjnej, natomiast gdy różne operacje mają różne wagi, to~mówimy o~\emph{ważonej} odległości edycyjnej.
 
 \begin{property}\label{wl:002}
 Zakładamy, że~funkcja kosztu $\delta(s \rightarrow t)$ ma~następujące własności~\cite{Boytsov2011:indexingmethods}:
@@ -303,11 +318,12 @@ Niech napisy $s$ i~$t$ zostaną podzielone na~tę samą liczbę, być może pust
 Dowolna nieścisła odległość edycyjna ogranicza z~dołu odpowiadającą jej ścisłą odległość edycyjną~\cite{Boytsov2011:indexingmethods}.
 \end{lemma}
 
-Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z~jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w~\verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierw zamienia znaki \verb|a| i~\verb|b|, a~następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że~wstawienie przekształca już transformowany napis. Jednakowoż, jeśli kolejne przekształcenia tego samego podnapisu są~wykluczone, to~najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w~\verb|acb|, składa się z~trzech operacji edycyjnych, np. $(\verb|b| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|c|, \varepsilon \rightarrow \verb|b|)$. Stąd nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
+Rozważmy napisy \verb|ab|, \verb|ba| oraz \verb|acb|. Z~jednej strony, najkrótsza nieścisła ścieżka edycyjna, która przekształca \verb|ba| w~\verb|acb|, tj. $(\verb|ba| \rightarrow \verb|ab|, \varepsilon \rightarrow \verb|c|)$ zawiera dwie operacje: najpierw zamienia znaki \verb|a| i~\verb|b|, a~następnie wstawia \verb|c| pomiędzy nie. Zauważmy, że~wstawienie przekształca już transformowany napis. Jednakże, jeśli kolejne przekształcenia tego samego podnapisu są~wykluczone, to~najkrótsza ścieżka edycyjna, która przekształca \verb|ba| w~\verb|acb|, składa się z~trzech operacji edycyjnych, np. $(\verb|b| \rightarrow \varepsilon, \varepsilon \rightarrow \verb|c|, \varepsilon \rightarrow \verb|b|)$. Stąd nieścisła odległość edycyjna jest równa dwa, podczas gdy ścisła odległość wynosi trzy~\cite{Boytsov2011:indexingmethods}. 
 %\newpage
+
 \textbf{Optymalne dopasowanie.} 
 \begin{definition}
-Niech napisy $s$ i~$t$ zostaną podzielone na~tę samą liczbę, być może pustych, podnapisów: $s = s_1 s_2 \ldots s_l$ i~$t = t_1 t_2 \ldots t_l$, takich, że~$s_i \rightarrow t_i \in \mathbb{B}$. Co~więcej, zakładamy, że~$s_i$ i~$t_j$ nie mogą być puste dla $i = j$. Mówimy, że~ten podział definiuje \emph{dopasowanie} $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ pomiędzy napisami $s$ i~$t$, w~którym podnapis $s_i$ jest dopasowany do~podnapisu $t_i$~\cite{Boytsov2011:indexingmethods}.
+Niech napisy $s$ i~$t$ zostaną podzielone na~tę samą liczbę, być może pustych, podnapisów: $s = s_1 s_2 \ldots s_l$ i~$t = t_1 t_2 \ldots t_l$, takich, że~$s_i \rightarrow t_i \in \mathbb{B}$. Co~więcej zakładamy, że~$s_i$ i~$t_j$ nie mogą być puste dla $i = j$. Mówimy, że~ten podział definiuje \emph{dopasowanie} $A = (s_1 s_2\ldots s_l, t_1 t_2 \ldots t_l)$ pomiędzy napisami $s$ i~$t$, w~którym podnapis $s_i$ jest dopasowany do~podnapisu $t_i$~\cite{Boytsov2011:indexingmethods}.
 \end{definition}
 
 Dopasowanie reprezentuje ścisłą ścieżkę edycyjną $E = s_1 \rightarrow t_1, s_2 \rightarrow t_2, \ldots, s_l \rightarrow t_l$. Definiujemy \emph{koszt dopasowania} $A$ jako koszt odpowiadającej mu~ścieżki edycyjnej i~oznaczamy go~przez $\delta(A)$:
@@ -555,13 +571,13 @@ Odległość Levenshteina między napisami \verb|kozak| i~\verb|foczka| wynosi: 
 Powyższy przykład ilustruje dodatkową elastyczność w~porównaniu do~odległości najdłuższego wspólnego podnapisu, bowiem daje ona mniejszą wartość odległości między napisami, jako że~w~przypadku pierwszego znaku potrzebujemy jedynie zamiany, zamiast wstawienia i~usunięcia~\cite{Loo2014:stringdist}. Co~więcej, ścieżka edycyjna między tymi słowami może być inna i~zawierać usunięcie i~wstawienie zamiast dwóch ostatnich zamian znaków.
 
 
-Przypomnijmy, że~mówimy o~ważonej odległości, gdy zmienimy koszty poszczególnych operacji na~różne od~jeden.
-Gdy za~koszt przyjmiemy np. $(0,1, 1, 0,3)$ dla usunięć, wstawień i~zamian znaków odpowiednio, to~uogólniona odległość Levenshteina między napisami \verb|kozak| i~\verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 1,9$, bo~$\verb|kozak|  \xrightarrow[0,3]{zm.\ k\ na\ f} \verb|fozak| \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[0,3]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[0,3]{zm.\ k\ na\ a} \verb|foczka|$.
+Przypomnijmy, że~mówimy o~uogólnionej odległości, gdy zmienimy koszty poszczególnych operacji na~różne od~jeden.
+Gdy za~koszt przyjmiemy np. $(0,\!1,\ 1,\ 0,\!3)$ dla usunięć, wstawień i~zamian znaków odpowiednio, to~uogólniona odległość Levenshteina między napisami \verb|kozak| i~\verb|foczka| wynosi: $d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 1,9$, bo~$\verb|kozak|  \xrightarrow[0,3]{zm.\ k\ na\ f} \verb|fozak| \xrightarrow[1]{wst.\ c} \verb|foczak| \xrightarrow[0,3]{zm.\ a\ na\ k} \verb|foczkk| \xrightarrow[0,3]{zm.\ k\ na\ a} \verb|foczka|$.
 
-Ważona odległość Levenshteina spełnia definicję metryki, gdy koszt usunięcia jest równy kosztowi wstawienia znaku. W~przeciwnym przypadku nie spełnia ona założenia o~symetrii. Jednakowoż, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz kosztów usunięcia i~wstawienia znaku,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy transformacji napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład:
+Ważona odległość Levenshteina spełnia definicję metryki, gdy koszt usunięcia jest równy kosztowi wstawienia znaku. W~przeciwnym przypadku nie spełnia ona założenia o~symetrii. Jednakże, symetria zostaje zachowana przy jednoczesnej zamianie $s$~i~$t$~oraz kosztów usunięcia i~wstawienia znaku,~jako że~liczba usunięć znaków przy przetwarzaniu napisu $s$~w~napis $t$~jest równa liczbie wstawień znaków przy transformacji napisu $t$~w~napis $s$~\cite{Loo2014:stringdist}.~Dobrze obrazuje to~następujący przykład:
 
 \begin{example}
-Przyjmijmy za~koszt usunięcia, wstawienia i~zamiany znaku odpowiednio $(0,1, 1, 0,3)$. Wówczas uogólniona odległość Levenshteina dla napisów \verb|kozak| i~\verb|foczka| wynosi:
+Przyjmijmy za~koszt usunięcia, wstawienia i~zamiany znaku odpowiednio $(0,\!1,\ 1,\ 0,\!3)$. Wówczas uogólniona odległość Levenshteina dla napisów \verb|kozak| i~\verb|foczka| wynosi:
 \begin{equation}
 \label{eq:001}
 d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 1,9,
@@ -578,7 +594,7 @@ gdyż
 $$
 \verb|foczka|  \xrightarrow[0,3]{zm.\ f\ na\ k} \verb|koczka|  \xrightarrow[0,1]{us. c} \verb|kozka| \xrightarrow[0,3]{zm.\ k\ na\ a} \verb|kozaa| \xrightarrow[0,3]{zm.\ a\ na\ k} \verb|kozak|.
 $$
-Gdy za~koszty przyjmiemy $(1, 0,1, 0,3)$, to~uogólniona odległość Levenshteina wynosi:
+Gdy za~koszty przyjmiemy $(1,\ 0,\!1,\ 0,\!3)$, to~uogólniona odległość Levenshteina wynosi:
 $$
 d_{\mathrm{lv}}(\verb|kozak|, \verb|foczka|) = 1,
 $$
@@ -654,7 +670,7 @@ C_{i,j} = \min\left\{
 Rekurencja \eqref{eq:007} liczy czyli ścisłą odległość Damerau-Levenshteina, która nie zawsze jest równa odległości Damerau-Levenshteina. Dla przykładu, odległość między napisami \verb|ba| i~\verb|acb| wyliczona przy pomocy rekurencji \eqref{eq:007} jest równa trzy, natomiast odległość Damerau-Levenshteina między tymi napisami wynosi dwa (zob. poniżej).
 
 \begin{lemma}
-Nieścisła odległość Damerau-Levenshteina oraz ścisła odległość Damerau-~Levenshteina są~różnymi funkcjami. Co~więcej, ścisła odległość Damerau-Levenshteina nie jest metryką, gdyż nie jest subaddytywna~\cite{Boytsov2011:indexingmethods}.
+Nieścisła odległość Damerau-Levenshteina oraz ścisła odległość \hbox{Damerau-Levens-} hteina są~różnymi funkcjami. Co~więcej, ścisła odległość Damerau-Levenshteina nie jest metryką, gdyż nie jest subaddytywna~\cite{Boytsov2011:indexingmethods}.
 \end{lemma}
 
 \begin{proof}
@@ -674,7 +690,7 @@ $$
 2 = ED(\verb|ba|, \verb|ab|) + ED(\verb|ab|, \verb|acb|) \leq ED(\verb|ba|, \verb|acb|) = 3.
 $$
 
-Ponieważ ścisła i~nieścisła odległość Damerau-Levenshteina są~różnymi funkcjami, tę~pierwszą nazywa się często \emph{odległością optymalnego dopasowania napisów}. Od~tego momentu w~niniejszej pracy ścisłą odległość Damerau-Levenshteina nazywamy odległością optymalnego dopasowania napisów, natomiast nieścisłą odległość Damerau-Levenshteina nazywamy odległością Damerau-Levenshteina~\cite{Loo2014:stringdist}.
+Ponieważ ścisła i~nieścisła odległość Damerau-Levenshteina są~różnymi funkcjami, tę~pierwszą nazywa się często \emph{odległością optymalnego dopasowania napisów}. Od~tego momentu w~niniejszej pracy ścisłą odległość Damerau-Levenshteina nazywamy odległością optymalnego dopasowania napisów, ozn. $d_{\mathrm{osa}}$, natomiast nieścisłą odległość Damerau-Levenshteina nazywamy odległością Damerau-Levenshteina~\cite{Loo2014:stringdist}.
 
 Rekurencyjna definicja odległości Damerau-Levenshteina została po~raz pierwszy podana przez Lowrance'a i~Wagnera~\cite{Wagner1975:extensionstring}. W~ich definicji zamiana zostaje zastąpiona przez minimalizację po~możliwych transpozycjach między danym znakiem a~wszystkimi nie przetransformowanymi znakami, przy czym koszt transpozycji wzrasta wraz z~odległością między transponowanymi znakami~\cite{Loo2014:stringdist}. Innymi słowy, do~$\mathbb{B}$ należą wstawienia, usunięcia, zamiany oraz operacje $axb \rightarrow bya$ o~koszcie równym $|x| + |y| + 1$~\cite{Boytsov2011:indexingmethods}. Mając tak zdefiniowane $\mathbb{B}$ ogólna rekurencja~\eqref{eq:004} dla odległości Damerau-Levenshteina przedstawia się następująco: 
 
@@ -768,7 +784,7 @@ Skoro zdefiniowana została odległość $q$-gramowa w~języku wektorów, każda
 \label{eq:010}
 d_{\mathrm{cos}}(s,t,q) = 1 - \frac{ \mathbf{v}(s,q) \cdot \mathbf{v}(t,q) }{ \norm{\mathbf{v}(s,q)}_2  \norm{\mathbf{v}(t,q)}_2 },
 \end{equation}
-gdzie $\norm{\cdot}_2$ oznacza zwykłą normę Euklidesową. Odległość cosinusowa wynosi zero, gdy $s=t$ oraz jeden, gdy $s$ i~$t$ nie mają wspólnych $q$-gramów. Odległość ta~powinna być interpretowana jako kąt pomiędzy $\mathbf{v}(s,q)$ i~$\mathbf{v}(t,q)$, jako że~drugie wyrażenie równania \eqref{eq:010} przedstawia cosinus kąta między dwoma wektorami.
+gdzie $\norm{\cdot}_2$ oznacza zwykłą normę euklidesową. Odległość cosinusowa wynosi zero, gdy $s=t$ oraz jeden, gdy $s$ i~$t$ nie mają wspólnych $q$-gramów. Odległość ta~powinna być interpretowana jako kąt pomiędzy $\mathbf{v}(s,q)$ i~$\mathbf{v}(t,q)$, jako że~drugie wyrażenie równania \eqref{eq:010} przedstawia cosinus kąta między dwoma wektorami.
 
 \begin{example}
 Niech $\Sigma = \{\verb|a|, \verb|j|, \verb|p|\}$. Wówczas odległość cosinusowa między napisami \verb|papaja| i~\verb|japa| dla $q = 2$ wynosi: $d_{\mathrm{cos}}(\verb|papaja|, \verb|japa|, 2) \approx 0,127$, bo~$\mathbf{v}( \verb|papaja|,2) = (1, 1, 1, 2)$, a~ $\mathbf{v}( \verb|japa|,2) = (0, 1, 1, 1)$ (zob. przykład \ref{ex:001}), więc $d_{\mathrm{cos}}(\verb|papaja|, \verb|japa|, 2) = 1 - \frac{4}{\sqrt{3}\cdot\sqrt{7}} \approx 0,127$.
@@ -874,10 +890,6 @@ d_{\mathrm{jaro}}(s,t) = \left\{
 
 Odległość Jaro przyjmuje wartości z~przedziału $[0,1]$, gdzie zero oznacza, że~$s = t$, natomiast jeden wskazuje na~kompletną odmienność napisów z~$m = T~= 0$.
 
-\begin{example}
-Odległość Jaro między napisami \verb|kozak| i~\verb|foczka| wynosi: $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|)  \approx 0,261$, bo~liczba wspólnych znaków wynosi $m = 4$, a~liczba potrzebnych transpozycji wynosi $T = 1$ (zob. Rys.~\ref{rys:005}), co~daje odległość równą $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0,261$.
-\end{example}
-
 \begin{figure}[width=80pt]
 \centering
 \begin{tikzpicture}
@@ -903,6 +915,11 @@ Odległość Jaro między napisami \verb|kozak| i~\verb|foczka| wynosi: $d_{\mat
 \cprotect\caption{Przykład odległości Jaro między napisami \verb|kozak| i~\verb|foczka|.}\label{rys:005}
 \end{figure}
 
+\begin{example}
+Odległość Jaro między napisami \verb|kozak| i~\verb|foczka| wynosi: $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|)  \approx 0,261$, bo~liczba wspólnych znaków wynosi $m = 4$, a~liczba potrzebnych transpozycji wynosi $T = 1$ (zob. Rys.~\ref{rys:005}), co~daje odległość równą $d_{\mathrm{jaro}}(\verb|kozak|, \verb|foczka|) = 1 - \frac{1}{3}(\frac{3}{5} + \frac{4}{6} + \frac{3}{4}) = \frac{47}{180} \approx 0,261$.
+\end{example}
+
+
 
 Winkler rozszerzył odległość Jaro przez włączenie dodatkowej kary za~błędny znak wśród pierwszych czterech znaków napisu~\cite{Loo2014:stringdist}:
 
@@ -915,7 +932,7 @@ d_{\mathrm{jw}}(s,t, p) = d_{\mathrm{jaro}}(s,t)[1 - p\ell(s,t)]
 \end{equation}
 \end{definition}
 
-Czynnik $p$ określa jak bardzo różnice w~czterech pierwszych znakach w~obu napisach wpływają na~odległość między nimi. Zmienna $p$ jest liczbą z~przedziału $[0, \frac{1}{4}]$, by~mieć pewność, że~odległość Jaro-Winklera miała wartości w~przedziale $[0,1]$ ($0 \leq d_{jw}(s,t) \leq 1$). Jeśli $p=0$, to~odległość ta~redukuje się do~odległości Jaro i~wszystkie znaki wnoszą taki sam wkład do~funkcji odległości. Jeśli $p = \frac{1}{4}$, to~odległość Jaro-Winklera jest równa zero nawet wówczas gdy tylko cztery pierwsze znaki w~obu napisach pokrywają się. Powód jest taki, że~podobno ludzie są~mniej skłonni do~popełniania błędów w~czterech pierwszych znakach lub też są~one lepiej zauważalne, więc różnice w~pierwszych czterech znakach wskazują na~większe prawdopodobieństwo, że~dwa napisy są~rzeczywiście różne~\cite{Loo2014:stringdist}. Winkler~\cite{Winkler1990:stringcomparator} używał w~swoich badaniach $p = 0,1$ i~zauważył lepsze rezultaty niż dla $p = 0$.
+Czynnik $p$ określa jak bardzo różnice w~czterech pierwszych znakach w~obu napisach wpływają na~odległość między nimi. Zmienna $p$ jest liczbą z~przedziału $[0, \frac{1}{4}]$, by~mieć pewność, że~odległość Jaro-Winklera miała wartości w~przedziale $[0,1]$. Jeśli $p=0$, to~odległość ta~redukuje się do~odległości Jaro i~wszystkie znaki wnoszą taki sam wkład do~funkcji odległości. Jeśli $p = \frac{1}{4}$, to~odległość Jaro-Winklera jest równa zero nawet wówczas gdy wyłącznie cztery pierwsze znaki w~obu napisach pokrywają się. Powód jest taki, że~podobno ludzie są~mniej skłonni do~popełniania błędów w~czterech pierwszych znakach lub też są~one lepiej zauważalne, więc różnice w~pierwszych czterech znakach wskazują na~większe prawdopodobieństwo, że~dwa napisy są~rzeczywiście różne~\cite{Loo2014:stringdist}. Winkler~\cite{Winkler1990:stringcomparator} używał w~swoich badaniach $p = 0,1$ i~zauważył lepsze rezultaty niż dla $p = 0$.
 
 \begin{example}
 Odległość Jaro-Winklera między napisami \verb|faktura| i~\verb|faktyczny| dla $p = 0$, $p = 0,1$ oraz $p = 0,25$ wynosi odpowiednio: 
@@ -932,13 +949,13 @@ Odległość Jaro-Winklera między napisami \verb|faktura| i~\verb|faktyczny| dl
 
 %\subsection{Podsumowanie}
 
-W niniejszym rozdziale przedstawiono odległości określone na~przestrzeni ciągów znaków. Mając do~wyboru wachlarz różnych funkcji nasuwa się pytanie, której użyć. Ostateczna decyzja zależy od~konkretnego przypadku, jednak istnieją pewne ogólne reguły. Wybór pomiędzy odległościami opartymi na~operacjach edycyjnych i~$q$-gramach z~jednej strony, a~miarami heurystycznymi z~drugiej zależy w~dużej mierze od~długości napisów -- te~ostatnie są~dedykowane krótszym napisom takim jak np. dane osobowe. W~odróżnieniu od~odległości opartych na~operacjach edycyjnych i~miarach heurystycznych, odległości oparte na~$q$-gramach można łatwo policzyć dla bardzo długich tekstów, jako że~liczba $q$-gramów możliwych do~utworzenia z~języka naturalnego (dla niezbyt małego $q$, tj. $q \geq 3$) jest z~reguły o~wiele mniejsza niż liczba $q$-gramów, którą można otrzymać z~całego alfabetu. Wybór pośród odległości opartych na~operacjach edycyjnych zależy przede wszystkim od~dokładności jaką chce się otrzymać. Przykładowo do~wyszukiwania haseł w~słowniku, gdzie różnice między dobranymi napisami są~niewielkie, odległości pozwalające na~więcej operacji edycyjnych (tak jak np. odległość Damerau-Levenshteina) mogą dać lepsze rezultaty. Odległości Jaro i~Jaro-Winklera zostały skonstruowane do~krótkich, napisanych przez człowieka, napisów, więc ich zakres zastosowania powinien być jasny.
+W niniejszym rozdziale przedstawiono odległości określone na~przestrzeni ciągów znaków. Mając do~wyboru wachlarz różnych funkcji nasuwa się pytanie, której użyć. Ostateczna decyzja zależy od~konkretnego przypadku, jednak istnieją pewne ogólne reguły. Wybór pomiędzy odległościami opartymi na~operacjach edycyjnych i~$q$-gramach z~jednej strony, a~miarami heurystycznymi z~drugiej zależy w~dużej mierze od~długości napisów -- te~ostatnie są~dedykowane krótszym napisom takim jak np. dane osobowe. W~odróżnieniu od~odległości opartych na~operacjach edycyjnych i~miarach heurystycznych, odległości oparte na~$q$-gramach można łatwo policzyć dla bardzo długich tekstów, jako że~liczba $q$-gramów możliwych do~utworzenia z~języka naturalnego (dla niezbyt małego $q$, tj. $q \geq 3$) jest z~reguły o~wiele mniejsza niż liczba $q$-gramów, którą można otrzymać z~całego alfabetu. Wybór pośród odległości opartych na~operacjach edycyjnych zależy przede wszystkim od~dokładności jaką chce się otrzymać. Przykładowo do~wyszukiwania haseł w~słowniku, gdzie różnice między dobranymi napisami są~niewielkie, odległości pozwalające na~więcej operacji edycyjnych (tak jak np. odległość Damerau-Levenshteina) mogą dać lepsze rezultaty. %Odległości Jaro i~Jaro-Winklera zostały skonstruowane do~krótkich, napisanych przez człowieka, napisów, więc ich zakres zastosowania powinien być jasny.
 
 
 \chapter{Analiza skupień metodą $k$-średnich}
 \label{analiza-skupien}
 
-Analiza skupień polega na~wyróżnieniu w~zbiorze ustalonej liczby rozłącznych i~niepustych podzbiorów obserwacji w~jakimś sensie do~siebie podobnych, równocześnie zachowując maksymalne zróżnicowanie obserwacji pomiędzy poszczególnymi podzbiorami~\cite{Koronacki2005:statystyczne}. W~niniejszym rozdziale przedstawimy analizę skupień metodą $k$-średnich w~trzech odsłonach: metodę wsadową, przy użyciu stochastycznego spadku gradientu oraz metodę pośrednią, tzw. mini-wsadową. Dodatkowo zaprezentujemy metody hierarchiczne analizy skupień.
+Analiza skupień polega na~wyróżnieniu w~zbiorze ustalonej liczby rozłącznych i~niepustych podzbiorów obserwacji w~jakimś sensie do~siebie podobnych, równocześnie zachowując maksymalne zróżnicowanie obserwacji pomiędzy poszczególnymi podzbiorami~\cite{Koronacki2005:statystyczne}. W~niniejszym rozdziale przedstawimy analizę skupień metodą $k$-średnich w~trzech odsłonach: metodę wsadową, przy użyciu stochastycznego spadku gradientu oraz metodę pośrednią, tzw. mini-wsadową. Dodatkowo zaprezentujemy metody hierarchiczne analizy skupień oraz miary oceny jakości podziału na skupienia.
 
 \section{Metoda $k$-średnich}
 
@@ -992,7 +1009,7 @@ Algorytm \emph{wsadowy} (ang. \emph{batch algorithm}) zostaje zainicjalizowany p
 \caption{Algorytm wsadowy $k$-średnich}\label{alg:001}
 \end{algorithm}
 
-Algorytm wsadowy jest najbardziej popularnym i~najczęściej stosowanym algorytmem, gdyż jest szybki i~zazwyczaj daje dobre rezultaty. Jednakże jeśli liczba obserwacji w~zbiorze jest bardzo duża, to~obliczanie średnich z~obserwacji we~wszystkich skupieniach jest dość kosztowne obliczeniowo, zbiegając w~czasie $O(knp)$, gdzie $p$ to~liczba zmiennych. Stąd Bottou i~Bengio~\cite{Bottou1995:convergenceproperties} zaproponowali algorytm oparty na~stochastycznym spadku gradientu.
+Algorytm wsadowy jest najbardziej popularnym i~najczęściej stosowanym algorytmem, gdyż jest szybki i~zazwyczaj daje dobre rezultaty. Jednakże jeśli liczba obserwacji w~zbiorze jest bardzo duża, to~obliczanie średnich z~obserwacji we~wszystkich skupieniach jest dość kosztowne obliczeniowo, zbiegając w~czasie $O(knp)$, gdzie $p$ to~liczba zmiennych. Stąd Bottou i~Bengio~\cite{Bottou1995:convergenceproperties} zaproponowali algorytm oparty na~metodach najszybszego spadku.
 
 \subsection{Algorytmy oparte na~metodach najszybszego spadku}
 
@@ -1039,7 +1056,7 @@ n^{(t+1)}_l& = n^{(t)}_l + \left\{
 \end{align}
 
 
-Algorytm SGD opiera się na~przeliczaniu średniej po~każdym przydzieleniu obserwacji do~skupienia, choć z~powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do~lokalnego minimum, a~jedynie w~jego otoczenie. Na~Rys.~\ref{rys:006} przedstawiono przykładową drogę aktualizacji parametrów. 
+Algorytm SGD opiera się na~przeliczaniu średniej po~każdym przydzieleniu obserwacji do~skupienia, choć z~powodu stochastycznego szumu, takie rozwiązanie może nie prowadzić do~lokalnego minimum, a~jedynie w~jego otoczenie. Na~Rys.~\ref{rys:006} przedstawiono przykładową drogę osiągania kolejnych wartości $\widetilde{W}$. 
 
 \begin{figure}[!h]
 \centering
@@ -1095,7 +1112,7 @@ Algorytm SGD opiera się na~przeliczaniu średniej po~każdym przydzieleniu obse
         
 \end{tikzpicture}
 }
-\caption{Przykładowa droga wsadowego spadku gradientu (Rys. a) i~stochastycznego spadku gradientu (Rys. b).}\label{rys:006}
+\caption{Przykładowa droga algorytmu wsadowego (Rys. a) i~algorytmu stochastycznego (Rys. b).}\label{rys:006}
 \end{figure}
 
 Kolejne elipsy oznaczają warstwice $\widetilde{W}(\mathbf{m}, \mathbf{x}_i)$ w~zależności od~wartości zmiennej $\mathbf{m}$, a~centrum oznacza (lokalne) minimum tej funkcji. Jeśli algorytm rozpoczyna działanie w~punkcie oznaczonym przez $X$, to~w przypadku algorytmu wsadowego, w~kolejnych iteracjach zmienna $\mathbf{m}$ zmienia swoją wartość, przybliżając się do~(lokalnego) minimum funkcji $\widetilde{W}$. Natomiast algorytm stochastyczny w~każdej iteracji przybliża się w~stronę minimum w~sposób quasi-losowy, tzn. może nigdy nie osiągnąć właściwego minimum, a~jedynie ,,krążyć'' wokół niego.
@@ -1142,7 +1159,7 @@ Algorytm \emph{mini-wsadowy} (ang. \emph{mini-batch $k$-means}) jest połączeni
 \caption{Algorytm mini-wsadowy $k$-średnich}\label{alg:003}
 \end{algorithm}
 
-Porównanie działania trzech wyżej zaprezentowanych algorytmów dla $k=10, 50$ prezentuje Rys.~\ref{plot:000}. Na~osi rzędnych mamy uzyskany błąd analizy, na~osi odciętych natomiast -- czas działania algorytmu na~skali logarytmicznej. Można zauważyć, że~najszybszy był algorytm SGD (czerwona krzywa), jednak błąd oszacowania był największy. Z~drugiej strony mamy algorytm wsadowy (zielony), który ma~bardzo mały błąd, choć czas działania algorytmu był najdłuższy. Algorytm mini-wsadowy (niebieski) połączeniem dwóch poprzednich. Błąd w~tym przypadku jest podobny jak błąd algorytmu wsadowego, natomiast czas działania jest o~wiele krótszy, porównywalnie do~algorytmu SGD. 
+Porównanie działania trzech wyżej zaprezentowanych algorytmów dla $k=10, 50$ prezentuje Rys.~\ref{plot:000}. Na~osi rzędnych mamy uzyskany błąd analizy, na~osi odciętych natomiast -- czas działania algorytmu na~skali logarytmicznej. Można zauważyć, że~najszybszy był algorytm SGD (czerwona krzywa), jednak błąd oszacowania był największy. Z~drugiej strony mamy algorytm wsadowy (zielony), który ma~bardzo mały błąd, choć czas działania algorytmu był najdłuższy. Algorytm mini-wsadowy (niebieski) połączeniem dwóch poprzednich. Błąd w~tym przypadku jest podobny do błędu algorytmu wsadowego, natomiast czas działania jest o~wiele krótszy, porównywalnie do~algorytmu SGD. 
 
 \begin{figure}[!h]
   \centering
@@ -1181,7 +1198,7 @@ Metody hierarchiczne można podzielić na~dwie grupy: aglomeracyjne oraz dzielą
 
 Metody dzielące działają w~przeciwnym kierunku: zaczynamy od~jednego skupienia zawierającego cały zbiór. Następnie w~każdym kroku algorytmu jedno ze~skupień dzielone jest na~dwa skupienia, w~których odmienność jest największa. W~ten sposób na~kolejnym poziomie otrzymujemy o~jedno skupienie więcej. Procedura dzieląca skupienia najbardziej odmienne trwa nadal, w~każdym kolejnym kroku otrzymując coraz więcej skupień. W~ostatnim kroku algorytmu dostajemy podzbiory jednoelementowe, dostając $n$ rozłącznych skupień (gdzie $n$ to~liczba obserwacji). Warto przy tym zauważyć, że~algorytm ten jest znacznie bardziej złożony obliczeniowo niż algorytm aglomeracyjny~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
-Zastanówmy się teraz w~jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są~o wiele bardziej złożone obliczeniowo, skupimy się na~metodach aglomeracyjnych, jako tych częściej stosowanych w~praktyce. Odmienność między skupieniami można definiować na~różne sposoby, jednak literatura podaje zazwyczaj najbardziej popularne, tj. kryterium Warda, odmienność centroidów, mediany, najbliższego sąsiada, najdalszego sąsiada oraz średnią odmienność~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
+Zastanówmy się teraz w~jaki sposób mierzyć odmienność między podzbiorami. Ponieważ metody dzielące są~o wiele bardziej złożone obliczeniowo, skupimy się na~metodach aglomeracyjnych, jako tych częściej stosowanych w~praktyce. Odmienność między skupieniami można definiować na~różne sposoby, jednak literatura podaje zazwyczaj najbardziej popularne, tj. kryterium Warda, odmienność centroidów, mediany, najbliższego sąsiada, najdalszego sąsiada oraz średnią~\cite{Hastie2009:elements, Koronacki2005:statystyczne}.
 
 Metoda Warda jest kryterium stosowanym w~hierarchicznej analizie skupień. Ward zaproponował ogólną procedurę metod aglomeracyjnych, gdzie o~wyborze połączenia pary skupień decyduje się na~podstawie wartości pewnej funkcji celu. Tą~funkcją celu może być każda funkcja, która odzwierciedla cel badacza. Wiele standardowych procedur tworzenia skupień jest zawartych w~tym bardzo ogólnym podejściu. Aby zilustrować procedurę, Ward użył przykładu, gdy funkcja celu jest sumą kwadratów błędów, a~przykład ten jest znany jako \emph{metoda Warda} lub dokładniej jako \emph{metoda minimalnej wariancji Warda}~\cite{Ward1963:hierarchical}.
 
@@ -1194,7 +1211,7 @@ Wzory Lance'a-Williamsa definiujemy następująco~\cite{Lance1967:hierarchical}:
 $$
 D_{(ij)l} = \alpha_i D_{il} + \alpha_j D_{jl} + \beta D_{ij} + \gamma |D_{il} - D_{jl}|,
 $$
-gdzie $\alpha_i, \alpha_, \beta, \gamma$ są~parametrami zależnymi od~liczności skupień.
+gdzie $\alpha_i, \alpha_, \beta, \gamma$ są~parametrami często zależnymi od~liczności skupień.
 \end{definition}
 
 Metoda minimalnej wariancji Warda wyrażona w~terminach wzorów Lance'a-Williamsa przyjmuje następującą postać:
@@ -1226,7 +1243,7 @@ gdzie $\mathbf{med}_i, \mathbf{med}_j$ oznaczają medianę obserwacji, odpowiedn
 
 Zauważmy, że~odmienność median ma~sens tylko w~przypadku, gdy $d$ jest kwadratem odległości euklidesowej, gdyż w~innym przypadku mediana z~obserwacji nie ma~sensu.
 
-W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = 0,5 D_{il} + 0,5 D_{jl} - 0,25 D_{ij} $, tj. $\alpha_i = 0,5, \beta = -0,25$, a~$\gamma = 0$.
+W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = 0,5 D_{il} + 0,5 D_{jl} - 0,25 D_{ij} $, tj. $\alpha_i = \alpha_j = 0,5, \beta = -0,25$, a~$\gamma = 0$.
 
 \begin{definition}
 \emph{Odmienność najbliższego sąsiada} (ang. \emph{single linkage dissimilarity}) między skupieniem $i$-tym a~$j$-tym, definiujemy jako najmniejszą spośród wszystkich możliwych odmienności między parami obserwacji z~$i$-tego i~$j$-tego skupienia:
@@ -1235,7 +1252,7 @@ D_{ij} = \min\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_
 $$
 \end{definition}
 
-W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = 0,5 D_{il} + 0,5 D_{jl} - 0,5 |D_{il} - D_{jl}| $, tj. $\alpha_i = 0,5, \gamma = -0,5$, a~$\beta = 0$.
+W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = 0,5 D_{il} + 0,5 D_{jl} - 0,5 |D_{il} - D_{jl}| $, tj. $\alpha_i = \alpha_j =  0,5, \gamma = -0,5$, a~$\beta = 0$.
 
 \begin{definition}
 \emph{Odmienność najdalszego sąsiada} (ang. \emph{complete linkage dissimilarity}) między skupieniem $i$-tym a~$j$-tym, definiujemy jako największą spośród wszystkich możliwych odmienności między parami obserwacji z~$i$-tego i~$j$-tego skupienia:
@@ -1244,7 +1261,7 @@ D_{ij} = \max\limits_{\mathbf{x}_a \in C(i), \mathbf{x}_b \in C(j)}d(\mathbf{x}_
 $$
 \end{definition}
 
-W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = 0,5 D_{il} + 0,5 D_{jl} + 0,5 |D_{il} - D_{jl}| $, tj. $\alpha_i = \gamma = 0,5$, a~$\beta = 0$.
+W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = 0,5 D_{il} + 0,5 D_{jl} + 0,5 |D_{il} - D_{jl}| $, tj. $\alpha_i = \alpha_j = \gamma = 0,5$, a~$\beta = 0$.
 
 \begin{definition}
 \emph{Odmienność średnią} (ang. \emph{average linkage dissimilarity}) między skupieniem $i$-tym a~$j$-tym, definiujemy jako średnią odmienności między parami obserwacji z~$i$-tego i~$j$-tego skupienia:
@@ -1255,7 +1272,7 @@ $$
 
 W terminach wzorów Lance'a-Williamsa można to~wyrazić jako $D_{(ij)l} = \frac{n_i}{n_i+n_j} D_{il} + \frac{n_j}{n_i+n_j} D_{jl}$, tj. $\alpha_i = \frac{n_i}{n_i+n_j}$, a~$\beta = \gamma = 0$.
 
-Zauważmy, że w przypadku, gdy $d$ oznacza odległość euklidesową, to średnia odmienność da te same rezultaty co odmienność centroidu.
+Zauważmy, że~w przypadku, gdy $d$ oznacza odległość euklidesową, to~średnia odmienność da~te same rezultaty co~odmienność centroidu.
 
 Odmienność najbliższego sąsiada wymaga, żeby jedna odmienność $d(\mathbf{x}_a, \mathbf{x}_b)$, gdzie $\mathbf{x}_a \in C(i)$, $\mathbf{x}_b \in C(j)$, miała małą wartość, aby uznać dwa podzbiory za~bliskie sobie, bez względu na~odmienności innych obserwacji z~tych dwóch grup. Metoda ta~będzie zatem mieć skłonność do~łączenia skupień połączonych przez szereg bliskich obserwacji pośrednich. Takie zjawisko nazywane jest \emph{efektem łańcuchowym} i~uważane jest za~wadę tej metody. Skupienia otrzymane w~wyniku jej działania często nie są~zwarte, jako że~podobieństwo skupień określone jest na~podstawie dwóch najbliższych obserwacji~\cite{Hastie2009:elements}. Odmienność najbliższego sąsiada daje zazwyczaj skupienia wąskie i~wydłużone~\cite{Koronacki2005:statystyczne}. 
 
@@ -1269,16 +1286,16 @@ Jeśli odmienności poszczególnych obserwacji mają silną tendencję do~skupia
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=400pt]{plot32.pdf}\\
-  \caption{Przykładowe odmienności między skupieniami dla odmienności najbliższego i najdalszego sąsiada, centroidu i mediany.}\label{plot:008}
+  \caption{Przykładowe odmienności między skupieniami dla odmienności najbliższego i~najdalszego sąsiada, centroidu i~mediany.}\label{plot:008}
 \end{figure}
 
-Na Rys.~\ref{plot:008} prezentujemy jak niektóre z odmienności można przedstawić graficznie. Na rysunkach użyto odległości euklidesowej. Jak powiedziano wcześniej odmienności najbliższego i najdalszego sąsiada opierają się na, odpowiednio, dwóch najbliższych i najdalszych obserwacjach z obu skupień. Odmienność centroidu to w tym przypadku odmienność średnia. Zauważmy, że odmienność ta nieco się różni od odmienności mediany, która na prezentowanym rysunku jest nieco większa.
+Na Rys.~\ref{plot:008} prezentujemy jak niektóre z~odmienności można przedstawić graficznie. Na~rysunkach użyto odległości euklidesowej. Jak powiedziano wcześniej odmienności najbliższego i~najdalszego sąsiada opierają się na, odpowiednio, dwóch najbliższych i~najdalszych obserwacjach z~obu skupień. Odmienność centroidu to~w tym przypadku odmienność średnia. Zauważmy, że~odmienność ta~nieco się różni od~odmienności mediany, która na~prezentowanym rysunku jest nieco większa.
 
 \section{Metody oceny jakości podziału na~skupienia}	
 
 Dokonawszy podziału zbioru na~skupienia, należy ocenić jakość zastosowanego algorytmu. Ocena skuteczności działania algorytmów analizy skupień nie należy do~zadań tak prostych jak np. ocena modelu klasyfikacji pod nadzorem. W~szczególności żadna metoda ocena nie powinna brać pod uwagę wartości etykiety skupienia, ale powinna sprawdzać, czy zbiór danych jest dobrze podzielony, tzn. czy obserwacje w~poszczególnych skupieniach są~do siebie ,,podobne'', a~obserwacje z~różnych skupień -- ,,niepodobne'', zgodnie z~przyjętą metryką podobieństwa. W~niniejszych podrozdziale przedstawimy kilka miar oceny jakości podziału na~skupienia.
 
-Przyjmujemy następującego założenia: Niech $K$ i~$C$ oznaczają dwa różne podziały $n$-elementowego zbioru $X$ na~skupienia. Zazwyczaj $K$ oznacza podział uzyskany przy pomocy algorytmu dzielącego zbiór, a~$C$ jest zbiorem prawdziwych klas, do~których należą obserwacje, choć $K$ i~$C$ mogą również oznaczać dwa niezależne podziały uzyskane przy pomocy różnych algorytmów.
+Przyjmujemy następującego założenia: Niech $K$ i~$C$ oznaczają dwa różne podziały $n$-elemen- towego zbioru $X$ na~skupienia. Zazwyczaj $K$ oznacza podział uzyskany przy pomocy algorytmu dzielącego zbiór, a~$C$ jest zbiorem prawdziwych klas, do~których należą obserwacje, choć $K$ i~$C$ mogą również oznaczać dwa niezależne podziały uzyskane przy pomocy różnych algorytmów.
 
 \subsection{Indeks Fowlkesa-Mallowsa}
 
@@ -1290,8 +1307,8 @@ Niech macierz $M = [m_{ij}],$ $i,j = 1,\ldots, k$ oznacza liczbę elementów z~$
 gdzie 
 \begin{align*}
 & T~= \sum\limits_{i=1}^{k}\sum\limits_{j=1}^{k} m_{ij}^2 - n,\\
-& P~= \sum\limits_{i=1}^{k} (\sum\limits_{j=1}^{k} m_{ij})^2 - n,\\
-& Q~= \sum\limits_{j=1}^{k} (\sum\limits_{i=1}^{k} m_{ij})^2 - n.
+& P~= \sum\limits_{i=1}^{k} \bigg(\sum\limits_{j=1}^{k} m_{ij}\bigg)^2 - n,\\
+& Q~= \sum\limits_{j=1}^{k} \bigg(\sum\limits_{i=1}^{k} m_{ij}\bigg)^2 - n.
 \end{align*}
 \end{definition}
 
@@ -1307,13 +1324,13 @@ M = \begin{bmatrix}
 $$
 $T = 2$, $Q = 6$, a~$P = 8$. Stąd $\mathrm{FM} = \frac{2}{\sqrt{6\cdot 8}} \approx 0,29$.
 
-Indeks FM~przyjmuje wartości z~przedziału $[0,1]$, gdzie zero oznacza zupełnie różne podziały, natomiast jeden -- pełną zgodność. Ponieważ indeks FM~jest wprost proporcjonalny do~sumy liczby wspólnych elementów w~obu podziałach, większa wartość indeksu oznacza większe podobieństwo między uzyskanymi podziałami. Ponadto Fowlkes i~Mallows~\cite{Fowlkes1983:fmindex} pokazali, że~porównując dwa niezależne podziały, to~indeks osiąga wartości bliskie zeru, podczas gdy inne wskaźniki, np. indeks Randa~\cite{Rand1971:objective} często szybko dążą w~takim przypadku do~$1$. Stąd indeks FM~jest o~wiele bardziej dokładny dla niezależnych podziałów. FM~daje również dobre rezultaty w~przypadku, gdy do~danych zostanie dodany szum -- czym większy szum w~danych, tym indeks przyjmuje mniejsze wartości. Czyni go~tym samym solidnym narzędziem mierzącym jakość uzyskanego podziału. 
+Indeks FM~przyjmuje wartości z~przedziału $[0,1]$, gdzie zero oznacza zupełnie różne podziały, natomiast jeden -- pełną zgodność. Ponieważ indeks FM~jest wprost proporcjonalny do~sumy liczby wspólnych elementów w~obu podziałach, większa wartość indeksu oznacza większe podobieństwo między uzyskanymi podziałami. Ponadto Fowlkes i~Mallows~\cite{Fowlkes1983:fmindex} pokazali, że~porównując dwa niezależne podziały, to~indeks osiąga wartości bliskie zeru, podczas gdy inne wskaźniki, np. indeks Randa~\cite{Rand1971:objective}, często szybko dążą w~takim przypadku do~$1$. Stąd indeks FM~jest o~wiele bardziej dokładny dla niezależnych podziałów. FM~daje również dobre rezultaty w~przypadku, gdy do~danych zostanie dodany szum -- czym większy szum w~danych, tym indeks przyjmuje mniejsze wartości. Czyni go~tym samym solidnym narzędziem mierzącym jakość uzyskanego podziału. 
 Jednak w~przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co~w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru.
 
 
 \subsection{Jednorodność, zupełność oraz miara V}
 
-Niech $C$ oznacza zbiór prawdziwych klas, do~których należą obserwacje. Mówimy, że~podział zbioru jest \emph{jednorodny}, jeśli wszystkie skupienia zawierają jedynie obserwacje z~jednej klasy. Podział zbioru jest \emph{zupełny}, jeśli wszystkie obserwacje z~danej klasy są~w tym samym skupieniu. Jednorodność i~zupełność podziału mogą być często w~opozycji do~siebie, tzn. gdy jednorodność rośnie, to~zupełność zazwyczaj maleje i~odwrotnie. Przykładowo, rozważmy dwa skrajne podziały. W~przypadku pierwszego, gdy przydzielamy wszystkie obserwacje do~jednego skupienia, to~dostajemy idealną zupełność -- wszystkie elementy z~jednej klasy należą do~tego samego skupienia. Jednakże, podział taki jest tak \emph{nie}jednorodny, jak to~tylko możliwe, skoro wszystkie klasy znajdują się w~jednym skupieniu. Z~drugiej strony, rozważmy przydzielenie każdej obserwacji do~osobnego skupienia. W~tym przypadku, podział jest idealnie jednorodny -- każde skupienie zawiera jedynie obserwacje z~jednej klasy. Jednak w~terminach zupełności, taki podział bardzo słaby, chyba że~rzeczywiście każda klasa zawiera jeden element. Miara $\textrm{V}$ jest ważoną średnią harmoniczną dwóch powyższych miar~\cite{Rosenberg2007:vmeasure}.
+W niniejszej sekcji zakładamy, że $C$ oznacza zbiór prawdziwych klas, do~których należą obserwacje. Mówimy, że~podział zbioru jest \emph{jednorodny}, jeśli wszystkie skupienia zawierają jedynie obserwacje z~jednej klasy. Podział zbioru jest \emph{zupełny}, jeśli wszystkie obserwacje z~danej klasy są~w tym samym skupieniu. Jednorodność i~zupełność podziału mogą być często w~opozycji do~siebie, tzn. gdy jednorodność rośnie, to~zupełność zazwyczaj maleje i~odwrotnie. Przykładowo, rozważmy dwa skrajne podziały. W~przypadku pierwszego, gdy przydzielamy wszystkie obserwacje do~jednego skupienia, to~dostajemy idealną zupełność -- wszystkie elementy z~jednej klasy należą do~tego samego skupienia. Jednakże, podział taki jest tak \emph{nie}jednorodny, jak to~tylko możliwe, skoro obserwacje ze wszystkich klas znajdują się w~jednym skupieniu. Z~drugiej strony, rozważmy przydzielenie każdej obserwacji do~osobnego skupienia. W~tym przypadku, podział jest idealnie jednorodny -- każde skupienie zawiera jedynie obserwacje z~jednej klasy. Jednak w~terminach zupełności, taki podział bardzo słaby, chyba że~rzeczywiście każda klasa zawiera jeden element. Miara $\textrm{V}$ jest ważoną średnią harmoniczną dwóch powyższych miar~\cite{Rosenberg2007:vmeasure}.
 
 
 \textbf{Jednorodność}. Żeby spełnić kryteria, jak musi spełniać podział jednorodny, każde ze~skupień musi zawierać tylko i~wyłącznie te~obserwacje, które należą do~jednej klasy. To~znaczy, że~rozkład klas w~każdym ze~skupień powinien skośny i~zawierać tylko jedną klasę, tj. entropia powinna wynosić zero. Aby ustalić jak blisko idealnego znajduje się dany podział, sprawdzamy warunkową entropię rozkładu klas pod warunkiem zaproponowanego podziału. W~idealnie jednorodnym podziale, ta~wartość, tj. $H(C|K)$, wynosi zero. Jednak w~przeciwnym przypadku, wartość ta~zależy od~wielkości zbioru i~rozkładu klas. Stąd, zamiast badać warunkową entropię, normalizujemy tę~wartość przez maksymalną redukcję entropii jaką informacja o~podziale może przynieść, tj. $H(C)$~\cite{Rosenberg2007:vmeasure}.
@@ -1375,7 +1392,7 @@ Przykładowo, jeśli mamy dany sześcioelementowy zbiór, który dzielimy na~trz
 Warto zwrócić uwagę na~fakt, że~jednorodność, zgodność oraz miara V~są niezależne od~liczby klas, skupień, liczby obserwacji oraz użytego algorytmu. Stąd miary te~mogą być używane do~porównania każdego algorytmu dzielącego na~skupienia, niezależnie od~powyższych parametrów. Co~więcej, wyliczając zarówno jednorodność, jak i~zgodność, może zostać otrzymana bardziej precyzyjna ocena jakości podziału skupień.
 
 
-Wszystkie trzy wyżej zaprezentowane miary dają wartości z~przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to~bardzo dobre rozwiązanie. Mają one intuicyjną interpretację: podział z~niską wartością miary V~może zostać oceniony w~terminach jednorodności i~zgodności, aby mieć lepsze pojęcie o~błędach jakich dokonał algorytm. Dodatkowo, aby jednorodność, zgodność oraz miara V~nie mają założeń o~strukturze skupienia: przy ich pomocy można porównywać podział na~skupienia uzyskany przy użyciu różnych algorytmów, które mają różne założenia o~strukturze skupienia~\cite{scikit}. 
+Wszystkie trzy wyżej zaprezentowane miary dają wartości z~przedziału $[0, 1]$, gdzie $0$ oznacza najgorszy możliwy przypadek, natomiast $1$ to~bardzo dobre rozwiązanie. Mają one intuicyjną interpretację: podział z~niską wartością miary V~może zostać oceniony w~terminach jednorodności i~zgodności, aby mieć lepsze pojęcie o~błędach jakich dokonał algorytm. Dodatkowo, jednorodność, zgodność oraz miara V~nie mają założeń o~strukturze skupienia: przy ich pomocy można porównywać podział na~skupienia uzyskany przy użyciu różnych algorytmów, które mają różne założenia o~strukturze skupienia~\cite{scikit}. 
 
 Z drugiej jest strony powyższe miary nie są~znormalizowane pod względem losowego przypisania do~skupienia. Oznacza to, że~w zależności od~liczby obserwacji, podziału na~skupienia i~klasy, losowy przydział do~skupień nie zawsze da~takie same wartości jednorodności, zgodności oraz miary V. W~szczególności, losowe przyporządkowanie może nie dać wartości powyższych miar równych zero, zwłaszcza gdy liczba skupień jest duża. Problem ten może być bezpiecznie zignorowany, gdy liczba obserwacji jest większa od~tysiąca, a~liczba skupień mniejsza niż $10$. Dla mniejszej próbki i~większej liczby skupień, bezpieczniej jest używać miary FM.
 Dodatkowo, w~przypadku sprawdzenia jakości działania jednego algorytmu, wymagana jest znajomość prawdziwego podziału zbioru, co~w praktyce rzadko występuje lub wymaga ręcznego podziału zbioru~\cite{scikit}.
@@ -1437,11 +1454,11 @@ Schemat działania proponowanego przez nas algorytmu jest następujący:
 \item Użycie algorytmu $k$-średnich do~podzielenia tekstów na~skupienia.
 \end{enumerate}
 
-Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana będzie na~artykułach polskiej wersji Wikipedii. Zauważmy, że~użycie takiego zbioru danych wiąże się z~kilkoma istotnymi wyzwaniami. Przede wszystkim wybór tekstów w~języku polskim powoduje, że~analiza może być trudna. Jest to~język bardzo złożony gramatycznie. Wynika to~z faktu, że~zawiera on~bardzo dużo odmian, m.in. przez przypadki, liczby, osoby, tryby, czasy czy strony. Stąd określenie formy podstawowej, czyli mianownika w~przypadku rzeczowników czy bezokolicznika w przypadku czasowników często nie jest łatwe, a~czasem więc niemożliwe bez znajomości szerszego kontekstu. Weźmy pod uwagę słowo \verb|piła|. Może ono oznaczać narzędzie, jak i~czas przeszły trzeciej osoby liczby pojedynczej słowa \verb|pić|. Z~powodu bardzo dużej możliwości odmian słów ich liczba jest znacząco większa niż np. w~języku angielskim. 
+Skuteczność algorytmu automatycznej kategoryzacji tematycznej testowana będzie na~artykułach polskiej wersji Wikipedii. Zauważmy, że~użycie takiego zbioru danych wiąże się z~kilkoma istotnymi wyzwaniami. Przede wszystkim wybór tekstów w~języku polskim powoduje, że~analiza może być trudna. Jest to~język bardzo złożony gramatycznie. Wynika to~z faktu, że~zawiera on~bardzo dużo odmian, m.in. przez przypadki, liczby, osoby, tryby, czasy czy strony. Stąd określenie formy podstawowej, czyli mianownika w~przypadku rzeczowników czy bezokolicznika w~przypadku czasowników często nie jest łatwe, a~czasem wręcz niemożliwe bez znajomości szerszego kontekstu. Weźmy pod uwagę słowo \verb|piła|. Może ono oznaczać narzędzie, jak i~czas przeszły trzeciej osoby liczby pojedynczej słowa \verb|pić|. Z~powodu bardzo dużej możliwości odmian słów ich liczba jest znacząco większa niż np. w~języku angielskim. 
 
-Co więcej bardzo wiele wyrazów ma~wiele znaczeń. Wspomniana już \verb|piła| może wskazywać narzędzie, ale też miasto, tytuł filmu lub gatunek ryby. Podobnie ze~słowem \verb|zamek|, które może się odnosić zarówno do~budynku, jak też do~mechanizmu zamykającego drzwi oraz zamka błyskawicznego. Czasem więc znajomość szerszego kontekstu jest niezbędna w analizie.
+Co więcej bardzo wiele wyrazów ma~wiele znaczeń. Wspomniana już \verb|piła| może wskazywać narzędzie, ale też miasto, tytuł filmu lub gatunek ryby. Podobnie ze~słowem \verb|zamek|, które może się odnosić zarówno do~budynku, jak też do~mechanizmu zamykającego drzwi oraz zamka błyskawicznego. Czasem więc znajomość szerszego kontekstu jest niezbędna w~analizie.
 
-Dalej język polski jest podatny na błędy w pisowni, zarówno ortograficzne, językowe, jak i literówki. Ogromna liczba reguł i wyjątków od nich powoduje, że niektóre słowa są trudne w pisowni. Przykładem wyjątku może być słowo \verb|skuwka| pisana przez \verb|u| ,,zwykłe'', mimo obowiązującej reguły, że przed literą \verb|w| stawia się \verb|o| ,,kreskowane''. Częstym błędem również jest brak lub niepotrzebna spacja. Jako przykład warto podać dwa zwroty: \verb|naprawdę| oraz \verb|na pewno|. Jak widać pierwsze piszę się razem, a drugie oddzielnie. Ponadto język polski jest podatny na literówki z powodu dużej ilości znaków diakrytycznych. Nierzadko spotykanym błędem jest pisanie przyimka \verb|ze|, mimo że chodziło o spójnik \verb|że|. Widać więc, że~analiza języka polskiego może być trudna.
+Dalej język polski jest podatny na~błędy w~pisowni, zarówno ortograficzne, językowe, jak i~literówki. Ogromna liczba reguł i~wyjątków od~nich powoduje, że~niektóre słowa są~trudne w~pisowni. Przykładem wyjątku może być słowo \verb|skuwka| pisana przez \verb|u| ,,zwykłe'', mimo obowiązującej reguły, że~przed literą \verb|w| stawia się \verb|o| ,,kreskowane''. Częstym błędem również jest brak lub niepotrzebna spacja. Jako przykład warto podać dwa zwroty: \verb|naprawdę| oraz \verb|na pewno|. Jak widać pierwsze piszę się razem, a~drugie oddzielnie. Ponadto język polski jest podatny na~literówki z~powodu dużej ilości znaków diakrytycznych. Nierzadko spotykanym błędem jest pisanie przyimka \verb|ze|, mimo że~chodziło o~spójnik \verb|że|. Widać więc, że~liczba możliwości popełnienia błędu jest bardzo duża.
 
 Ponadto zbiór polskiej Wikipedii jest względnie duży. Składa się na~niego ponad milion artykułów i~powyżej dwóch milionów unikalnych słów. Przetwarzanie tak pokaźnej ilości danych w~warunkach pojedynczego, prywatnego komputera jest dużym wyzwaniem. Wiąże się to~z koniecznością odpowiedniego zarządzania danymi, tj. zbudowaniem adekwatnej bazy danych oraz koniecznością optymalizacji kodów pod względem zużycia zasobów obliczeniowych oraz pamięci RAM.
 
@@ -1473,7 +1490,7 @@ Jak wspomniano wcześniej pobrane dane składają się w~dużej mierze z~treści
 \item Cytaty mogą być ważne, choć często mogą mocno odbiegać od~głównej tematyki tekstu.
 \item Przypisy są~dodatkową informacją zawartą w~tekście, często poruszające tematy poboczne.
 \item Odniesienia bibliograficzne, choć ważne z~punktu widzenia wartości treści zawartych w~artykule, nie wnoszą istotnych informacji o~tematyce artykułu.
-\item Część artykułów zawiera bardzo dużo tabel, które czasem stanowią niemal jedyną treść. Jednakowoż służą one uporządkowaniu wiedzy i~treść w~nich zawarta często nie wnosi istotnych informacji o~tematyce tekstu, zawierając jedynie słowa hasłowe bądź wylistowania danych zagadnień.
+\item Część artykułów zawiera bardzo dużo tabel, które czasem stanowią niemal jedyną treść. Jednakże służą one uporządkowaniu wiedzy i~treść w~nich zawarta często nie wnosi istotnych informacji o~tematyce tekstu, zawierając jedynie słowa hasłowe bądź wylistowania danych zagadnień.
 \item Podpisy pod rysunkami są~zazwyczaj powtórzeniem zdań bądź ich fragmentów z~części opisowej.
 \item Spis treści zawiera tytuły, które są~następnie powtórzone w~tekście.
 \item Sekcja ,,Zobacz też'' może być ważna, gdyż wskazuje na~połączenia tematyczne między tekstami.
@@ -1481,11 +1498,11 @@ Jak wspomniano wcześniej pobrane dane składają się w~dużej mierze z~treści
 \item Znaczniki języka HTML oraz wyróżnienia powyższych elementów nie wnoszą żadnej informacji o~tematyce tekstu i~służą jedynie odpowiedniemu wyświetleniu treści.
 \end{itemize}
 
-Wstępną obróbkę danych przeprowadzamy uwzględniając powyższe aspekty. Początkowo część tekstową przetwarzamy do standardu NFKC znaków, tj. ujednoznaczniamy kodowanie znaków. Poddajemy jej dalszej obróbce po~przetworzeniu części technicznej. Słowa, które występują w~tekście, a~pod którymi znajduje się link, pozostawiamy bez zmian. Wzory oraz kody usuwamy w~całości ze~względu na~trudność w~rozróżnieniu czego podany fragment dotyczy oraz ze~względu na~krótkie znaki, które zawierają. Cytaty pozostawiamy bez zmian. Przypisy usuwamy z~artykułów, jako że~zawierają jedynie dodatkową, z~punktu widzenia głównego tekstu, treść. Źródła bibliograficzne usuwamy w~całości. Teksty oczyszczamy także z~tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiamy jako potencjalne źródło podobnej tematyki do~tej zawartej w~tekście. Wszelkie znaczniki HTML-owe usuwamy jako bezwartościowe z~punktu widzenia treści artykułu. Podobnie teksty oczyszczamy z~tytułów, które pojawiają się w~większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}. 
+Wstępną obróbkę danych przeprowadzamy uwzględniając powyższe aspekty. Początkowo część tekstową przetwarzamy do~standardu NFKC znaków, tj. ujednoznaczniamy kodowanie znaków. Poddajemy jej dalszej obróbce po~przetworzeniu części technicznej. Słowa, które występują w~tekście, a~pod którymi znajduje się link, pozostawiamy bez zmian. Wzory oraz kody usuwamy w~całości ze~względu na~trudność w~rozróżnieniu czego podany fragment dotyczy oraz ze~względu na~krótkie znaki, które zawierają. Cytaty pozostawiamy bez zmian. Przypisy usuwamy z~artykułów, jako że~zawierają jedynie dodatkową, z~punktu widzenia głównego tekstu, treść. Źródła bibliograficzne usuwamy w~całości. Teksty oczyszczamy także z~tabel, rysunków, podpisów pod nimi oraz spisu treści. Sekcję ,,Zobacz też'' oraz kategorie pozostawiamy jako potencjalne źródło podobnej tematyki do~tej zawartej w~tekście. Wszelkie znaczniki HTML-owe usuwamy jako bezwartościowe z~punktu widzenia treści artykułu. Podobnie teksty oczyszczamy z~tytułów, które pojawiają się w~większości tekstów, tj. \emph{Zobacz też, Linki zewnętrzne} oraz \emph{Bibliografia}. 
 
 Tak otrzymane teksty dzielimy na~słowa, które przekształcamy do~wyrazów o~małych literach. Nie chcemy rozróżniać słów ze~względu na~wielkość liter, gdyż nie powinna ona mieć znaczenia dla tematyki treści. Do~każdego tekstu dodajemy informację o~tym, jakie słowa i~w jakich licznościach w~nim występują. Innymi słowy przechowujemy informację o~tekstach w~ten sposób, że~możemy przedstawić zbiór tekstów jako macierz $M$, gdzie element $m_{ij}$ oznacza liczność $j$-tego słowa w~$i$-tym artykule. W~ten sposób otrzymujemy $2\ 806\ 765$ unikalnych słów we~wszystkich, tj. w~$1\ 075\ 568$, artykułach. 
 
-Otrzymane dane przechowujemy w~bazie danych SQLite, w~$7$ tabelach, określających tytuły, kategorie, graf linków między tekstami, słowa oraz tabelę określającą liczności słów w artykułach. Przetworzenie danych wejściowych i~utworzenie bazy danych zajęło ok. $12$ godzin.
+Otrzymane dane przechowujemy w~bazie danych SQLite, w~$7$ tabelach, określających tytuły, kategorie, graf linków między tekstami, słowa oraz tabelę określającą liczności słów w~artykułach. Przetworzenie danych wejściowych i~utworzenie bazy danych zajęło ok. $12$ godzin.
 
 %w ilu tekstach wystąpiło dane słowo
 \begin{figure}[!h]
@@ -1586,11 +1603,11 @@ Mediana długości słów wynosi $9$, średnia jest nieco wyższa (zob. Rys.~\re
 
 \section{Utworzenie skupień ,,podobnych'' słów}
 
-Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z~czego blisko połowa występuje jedynie raz we~wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w~artykule a~daną wejściową jest macierz o~wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to~macierz ta~miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, co~w postacie gęstej daje ponad $12$ TB~pamięci masowej. Dane o takim rozmiarze byłyby trudne w przetworzeniu nawet gdybyśmy mieli do dyspozycji duży klaster obliczeniowy. Ponadto przeważająca większość rekordów byłaby równa zeru -- rzadkość danych wejściowych wynosi ponad $99,99\%$. Algorytm mógłby nie poradzić sobie z~tak dużą rzadkością danych. Stąd zachodzi potrzeba zmniejszenia wymiaru i rzadkości danych.
+Po wstępnej obróbce danych dostajemy $2\ 806\ 765$ unikalnych słów, z~czego blisko połowa występuje jedynie raz we~wszystkich tekstach. Algorytm dzielący teksty tematycznie bierze pod uwagę liczności słów, które znajdują się w~artykule a~daną wejściową jest macierz o~wymiarach liczba artykułów $\times$ liczba słów. Jeśliby nie przetworzyć dalej danych, to~macierz ta~miałaby wymiary $1\ 075\ 568\ \times\ 2\ 806\ 765$, co~w postacie gęstej daje ponad $12$ TB~pamięci masowej. Dane o~takim rozmiarze byłyby trudne w~przetworzeniu nawet gdybyśmy mieli do~dyspozycji duży klaster obliczeniowy. Ponadto przeważająca większość rekordów byłaby równa zeru -- rzadkość danych wejściowych wynosi ponad $99,99\%$. Algorytm mógłby nie poradzić sobie z~tak dużą rzadkością danych. Stąd zachodzi potrzeba zmniejszenia wymiaru i~rzadkości danych.
 
-Jak wspomnieliśmy wcześniej ze~zbioru słów należy usunąć wyrazy nieistotne w~kontekście analizy tematycznej. Co~więcej warto również zredukować liczbę analizowanych słów o~wyrazy, które występują bardzo często. Powód jest następujący: jeśli dane słowo pojawia się w~dużej liczbie artykułów, to~zachodzi podejrzenie, że~wyraz ten nie ma~jasnego kontekstu tematycznego. Przykładowo słowo \verb|strona| może odnosić się do~strony w~konflikcie, kartki czy też kierunku, a~więc może dotyczyć różnych tematów. Tego typu wyrazów, które znajdują się w bardzo dużej liczbie tekstów, a nie mają jasnego kontekstu tematycznego, wyznaczyliśmy $350$. Weźmy po~uwagę słowa, które występują bardzo rzadko, np. w~jednym lub dwóch tekstach. Artykuł, w~którym takie słowo występuje nie da~się ich połączyć z~żadnym innym tekstem. Zatem wyrazy takie również usuwamy ze~zbioru analizowanych słów. Stanowią one ponad $63\%$ wszystkich wyrazów. Dalej zbiór wyrazów redukujemy również o~słowa bardzo krótkie, tj. jedno-, dwu- i~trzyznakowe, które zazwyczaj są~nieistotne w~kontekście analizy tematycznej. Takich słów jest $22\ 145$. Łącznie usuwamy ze~zbioru $1\ 787\ 445$ słów, co~stanowi prawie $64\%$ wszystkich wyrazów i~dostajemy $1\ 019\ 320$ słów do~dalszej analizy.
+Jak wspomnieliśmy wcześniej ze~zbioru słów należy usunąć wyrazy nieistotne w~kontekście analizy tematycznej. Co~więcej warto również zredukować liczbę analizowanych słów o~wyrazy, które występują bardzo często. Powód jest następujący: jeśli dane słowo pojawia się w~dużej liczbie artykułów, to~zachodzi podejrzenie, że~wyraz ten nie ma~jasnego kontekstu tematycznego. Przykładowo słowo \verb|strona| może odnosić się do~strony w~konflikcie, kartki czy też kierunku, a~więc może dotyczyć różnych tematów. Tego typu wyrazów, które znajdują się w~bardzo dużej liczbie tekstów, a~nie mają jasnego kontekstu tematycznego, wyznaczyliśmy $350$. Weźmy pod~uwagę słowa, które występują bardzo rzadko, np. w~jednym lub dwóch tekstach. Artykuł, w~którym takie słowo występuje nie da~się ich połączyć z~żadnym innym tekstem. Zatem wyrazy takie również usuwamy ze~zbioru analizowanych słów. Stanowią one ponad $63\%$ wszystkich wyrazów. Dalej zbiór wyrazów redukujemy również o~słowa bardzo krótkie, tj. jedno-, dwu- i~trzyznakowe, które zazwyczaj są~nieistotne w~kontekście analizy tematycznej. Takich słów jest $22\ 145$. Łącznie usuwamy ze~zbioru $1\ 787\ 445$ słów, co~stanowi prawie $64\%$ wszystkich wyrazów i~dostajemy $1\ 019\ 320$ słów do~dalszej analizy.
 
-Ponieważ rekordy składają się z~wyrazów, można wyznaczyć skupienia słów ,,podobnych'' do~siebie. Odmienność wyrazów można określić za~pomocą odległości na~przestrzeni ciągów znaków opisanych w~rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako wektor $(n_1, \ldots, n_K)$, gdzie $n_i$ jest licznością słów z~$i$-tej grupy, $i=1,\ldots,K$, a~$K$ liczbą grup słów. Przykładowo, jeśli skupienie $A$ składa się ze~słów $s,\ t,\ u$ i~wystąpiły one w~danym artykule, odpowiednio, $x,\ y,\ z$ razy, to~słowa ze~skupienia $A$ wystąpiły w~tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na~skupienia, możemy znacząco zmniejszyć liczbę wyrazów, a przy tym i rzadkość danych, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
+Aby zmniejszyć jeszcze bardziej wymiar danych, można wyznaczyć skupienia słów ,,podobnych'' do~siebie. Odmienność wyrazów można określić za~pomocą odległości na~przestrzeni ciągów znaków opisanych w~rozdziale~\ref{metryki-na-przestrzeni-ciagow-znakow}. Następnie dany tekst można przedstawić jako wektor $(n_1, \ldots, n_K)$, gdzie $n_i$ jest licznością słów z~$i$-tej grupy, $i=1,\ldots,K$, a~$K$ liczbą grup słów. Przykładowo, jeśli skupienie $A$ składa się ze~słów $s,\ t,\ u$ i~wystąpiły one w~danym artykule, odpowiednio, $x,\ y,\ z$ razy, to~słowa ze~skupienia $A$ wystąpiły w~tym tekście łącznie $x+y+z$ razy. Dzieląc wszystkie wyrazy na~skupienia, możemy znacząco zmniejszyć liczbę wyrazów, a~przy tym i~rzadkość danych, biorąc pod uwagę liczności grup słów, zamiast liczności pojedynczych wyrazów.
 
 Aby podzielić zbiór słów na~skupienia, najbardziej naturalne wydaje się zbudowanie macierzy odległości wszystkich słów od~siebie i~zastosowanie algorytmu aglomeracyjnego. Jednakże wiąże się to~z dużą złożonością pamięciową i~obliczeniową, stąd też podejście takie nie zostało wykorzystane w~niniejszej pracy. Inny pomysł polega na~przyłączaniu do~skupienia słów dopóty, dopóki średnia odległość w~zbiorze nie przekroczy zadanej liczby. Wstępne testy na~losowej próbce tysiąca słów wykazały, że~jakość takiego podziału jest słaba, a~czas obliczeń względnie długi.
 
@@ -1653,7 +1670,7 @@ występować & występował, występujących, występujący, występowania, wyst
 
 
 \textbf{Podział przy użyciu metryk.}
-Tak zaproponowany podział słów na~grupy wykorzystuje jedynie ok. $47\%$ zbioru wszystkich wyrazów. Co~więcej większość z~podzbiorów jest zaledwie kilkuelementowa (zob. tabela~\ref{tab:004}). 
+Tak zaproponowany podział słów na~grupy wykorzystuje jedynie ok. $47\%$ zbioru wszystkich wyrazów. Co~więcej większość z~podzbiorów jest zaledwie kilkuelementowa (zob. Tabela~\ref{tab:004}). 
 
 \begin{table}[!h]
 \centering
@@ -1744,10 +1761,10 @@ Z miar heurystycznych wybraliśmy odległość Jaro, czy też Jaro-Winklera z~$p
 
 \textbf{Otrzymane zbiory.} Na~zbiorze skupień otrzymanym po~wykonaniu \emph{stemmingu} zastosowano trzy powyższe algorytmy przy użyciu każdej z~czterech odległości, dostając łącznie $16$ różnych zbiorów skupień (wliczając w~to zbiór, otrzymany ze~\emph{stemmingu}). Cała procedura utworzenia grup słów zajęła prawie $50$ godzin. 
 
-Grupy słów oznaczmy jako \emph{clust\_X} gdzie X~jest przyrostkiem oznaczającym algorytm i~zastosowaną odległość. Oznaczenia są~następujące: w~przypadku, gdy dołączaliśmy słowa do~istniejących skupień (tj. zastosowany był algorytm~\ref{alg:004}) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jw, jac} lub \emph{qg}, np. \emph{clust\_lcs}. Jeśli użyliśmy algorytmu~\ref{alg:005}, zmniejszającego liczbę skupień, to~dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to~łączymy je~w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Grupę słów otrzymaną po~wykonaniu \emph{stemmingu} oznaczamy po~prostu \emph{clust}. 
+Grupy słów oznaczmy jako \emph{clust\_X} gdzie X~jest przyrostkiem oznaczającym algorytm i~zastosowaną odległość. Oznaczenia są~następujące: w~przypadku, gdy dołączaliśmy słowa do~istniejących skupień (tj. zastosowany był Algorytm~\ref{alg:004}) dodajemy jedynie przyrostek oznaczający zastosowaną odległość, tj. \emph{lcs, dl, jw, jac} lub \emph{qg}, np. \emph{clust\_lcs}. Jeśli użyliśmy Algorytmu~\ref{alg:005}, zmniejszającego liczbę skupień, to~dodajemy przyrostek \emph{red\_} oraz zastosowaną odległość, np. \emph{clust\_red\_lcs}. Jeśli oba algorytmy zostały zastosowane, to~łączymy je~w nazwie, dostając np. \emph{clust\_lcs\_red\_lcs}. Grupę słów otrzymaną po~wykonaniu \emph{stemmingu} oznaczamy po~prostu \emph{clust}. 
 
 
-Liczbę skupień oraz liczbę słów zawartą w~skupieniu dla poszczególnych zbiorów zawiera tabela~\ref{tab:005}. Zbiory, na~których zastosowano algorytm~\ref{alg:004} lub jedynie \emph{stemming} zawierają $137\ 223$ grup wyrazów, co~dało redukcję wymiaru o ok. $86,5\%$ względem wcześniejszego wymiaru (tj. $1\ 019\ 320$). W~skupieniach tych znajduje się $976\ 691$ słów, czyli prawie $96\%$  wszystkich wejściowych wyrazów. Druga grupa zbiorów, tj. taka, która jest wynikiem działania Algorytmu~\ref{alg:005} zawiera dokładnie 33 403 skupienia, co~daje redukcję wymiaru równą $97\%$. Słowa zawarte w~tych skupieniach stanowią ok. $47\%$ wejściowego zbioru wyrazów. Tak mała liczba użytych słów wynika z faktu usunięcia grup, których środki były krótsze niż cztery znaki. Trzecia grupa zbiorów, ma~nieco mniejszą redukcję wymiaru niż poprzednia i~wynosi między $92\%$ a~$94\%$, zawierając jednocześnie ok. $96\%$ wszystkich wyrazów.
+Liczbę skupień oraz liczbę słów zawartą w~skupieniu dla poszczególnych zbiorów zawiera Tabela~\ref{tab:005}. Zbiory, na~których zastosowano Algorytm~\ref{alg:004} lub jedynie \emph{stemming} zawierają $137\ 223$ grup wyrazów, co~dało redukcję wymiaru o~ok. $86,5\%$ względem wcześniejszego wymiaru (tj. $1\ 019\ 320$). W~skupieniach tych znajduje się $976\ 691$ słów, czyli prawie $96\%$  wszystkich wejściowych wyrazów. Druga grupa zbiorów, tj. taka, która jest wynikiem działania Algorytmu~\ref{alg:005} zawiera dokładnie 33 403 skupienia, co~daje redukcję wymiaru równą $97\%$. Słowa zawarte w~tych skupieniach stanowią ok. $47\%$ wejściowego zbioru wyrazów. Tak mała liczba użytych słów wynika z~faktu usunięcia grup, których środki były krótsze niż cztery znaki. Trzecia grupa zbiorów, ma~nieco mniejszą redukcję wymiaru niż poprzednia i~wynosi między $92\%$ a~$94\%$, zawierając jednocześnie ok. $96\%$ wszystkich wyrazów.
 
 \begin{table}[!h]
 \centering
@@ -1779,11 +1796,11 @@ Liczbę skupień oraz liczbę słów zawartą w~skupieniu dla poszczególnych zb
 \label{tab:005}
 \end{table}
 
-Przykładowe grupy słów zawiera Tabela ~\ref{tab:006}~i~\ref{tab:007}. Przedstawia ona słowa, które zostały przyporządkowane do grupy o reprezentancie \verb|praca|. Pierwszy zbiór słów, tj. \emph{clust} zawiera się we wszystkich innych grupach. Łatwo zauważyć, że do prawie wszystkich skupień zostały dołączone słowa z języków obcych -- angielskiego, czeskiego czy włoskiego. Poza nimi, znajdują się w nich wyrazy dotyczące pracy, jak \verb|pracą, pracami, pracuś| czy \verb|telepraca| również z literówkami. Jednakże do niektórych skupień należą też słowa o innych znaczeniach, jak \verb|praczas, petrarca| czy \verb|praczami|. Warto jeszcze zwrócić uwagę na fakt, że pary zbiorów \emph{clust\_jac} i \emph{clust\_qg} oraz \emph{clust\_jac\_jac} i \emph{clust\_qg\_qg} są sobie równe.
+Przykładowe grupy słów zawiera Tabela ~\ref{tab:006}. Przedstawia ona słowa, które zostały przyporządkowane do~grupy o~reprezentancie \verb|praca|. Pierwszy zbiór słów, tj. \emph{clust} zawiera się we~wszystkich innych grupach. Łatwo zauważyć, że~do prawie wszystkich skupień zostały dołączone słowa z~języków obcych -- angielskiego, czeskiego czy włoskiego. Poza nimi, znajdują się w~nich wyrazy dotyczące pracy, jak \verb|pracą, pracami, pracuś| czy \verb|telepraca| również z~literówkami. Jednakże do~niektórych skupień należą też słowa o~innych znaczeniach, jak \verb|praczas, petrarca| czy \verb|praczami|. Warto jeszcze zwrócić uwagę na~fakt, że~pary zbiorów \emph{clust\_jac} i~\emph{clust\_qg} oraz \emph{clust\_jac\_jac} i~\emph{clust\_qg\_qg} są~sobie równe.
 
 \begin{table}[!h]
 \centering
-\caption{Przykładowe słowa w grupach słów. Środkiem jest słowo \emph{praca}.}
+\caption{Przykładowe słowa w~grupach słów. Środkiem jest słowo \emph{praca}.}
 \begin{tabular}{|l|l|}
 \hline
  Grupa & Słowa \\ 
@@ -1827,7 +1844,7 @@ clust\_qg\_red\_qg & mcpraca, praca, pracach, pracami, praco, pracą, pracę, ws
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 %\begin{table}[!h]
 %\centering
-%\caption{Przykładowe słowa w grupach słów. Środkiem jest słowo \emph{okres}.}
+%\caption{Przykładowe słowa w~grupach słów. Środkiem jest słowo \emph{okres}.}
 %\begin{tabular}{|l|l|}
 %\hline
 % Grupa & Słowa \\ 
@@ -1878,7 +1895,7 @@ Aby więc użyć algorytmu mini-wsadowego musimy wybrać najpierw liczbę skupie
 
 Zanim określimy wartość parametru $k$, zastanówmy się w~jaki sposób będziemy mierzyć jakość otrzymanych podziałów. Cztery na~pięć zaprezentowanych miar w~rozdziale~\ref{analiza-skupien} wymaga znajomości prawdziwego podziału zbioru. Przypomnijmy, że~nasz zbiór danych to~artykuły z~polskiej Wikipedii, które mają określoną kategorię tematyczną. Można więc wykorzystać znaną nam wiedzę o~kategoriach i~na jej podstawie określić jakość podziału otrzymanego w~wyniku działania algorytmu. Liczba różnych kategorii, które określają tematykę artykułów wynosi $56\ 283$. Próba wykonania analizy skupień przy użyciu algorytmu mini-wsadowego z~tak dużym $k$, zakończyła się niepowodzeniem, mimo posiadania dużej ilości pamięci RAM (wraz z~partycją wymiany (SWAP) ponad $100$ GB). Stąd też nastąpiła potrzeba zredukowania tej liczby. Ponieważ struktura kategorii Wikipedii jest drzewiasta\footnote{por. \url{http://pl.wikipedia.org/wiki/Wikipedia:Drzewo_kategorii}}, można zastąpić kategorię przypisaną do~artykułu kategorią ogólniejszą. Po~takiej redukcji otrzymano $6\ 922$ grup tematycznych. Jednak rozkład liczby artykułów w~otrzymanych kategoriach był mocno skośny. Taka sytuacja jest silnie niesprzyjająca, gdyż chcemy mieć podobne liczności w~grupach. Ręcznie podzielono zatem najbardziej liczne tematy na~podtematy, natomiast te~o najmniejszej liczności połączono zachowując przy tym podobieństwo tematyki. W~ten sposób uzyskano sto różnych tematów o~podobnym rozkładzie liczby artykułów. Wstępne testy wykazały, że~tak otrzymane $k$ pozwala na~dokonanie obliczeń w~relatywnie krótkim czasie i~nie zajmując dużej ilości pamięci RAM.
 
-Wstępne testy na~ok. $2\%$ artykułów wykazały dość dobre przyporządkowanie (jednorodność i~zgodność na~poziomie,  ok. $0,3$). Testy na~większej próbce ok. $15\%$ tekstów dały wyniki nieco gorsze (jednorodność i~zgodność na~poziomie nieco poniżej $0,3$). Stąd też postanowiono przeanalizować działanie algorytmu dla trzech różnych liczności próbki, aby sprawdzić, czy jakość działania algorytmu zależy od~wielkości próby. Liczba tekstów wziętych do~analizy to: $100\%$ ($1\ 075\ 568$ artykułów), ok. $15\%$ ($160\ 000$ artykuły) oraz ok. $2\%$ zbioru ($25\ 000$ artykułów). Dla tej ostatniej próbki za~wartość parametru $b$, określającego liczbę obserwacji mających wkład w~każdej iteracji algorytmu, przyjęliśmy $5\ 000$ oraz $10\ 000$. Większe wartości nie mają sensu, gdyż są~większe od~liczności próby.
+Wstępne testy na~ok. $2\%$ artykułów wykazały dość dobre przyporządkowanie (jednorodność i~zgodność na~poziomie,  ok. $0,3$). Testy na~większej próbce ok. $15\%$ tekstów dały wyniki nieco gorsze (jednorodność i~zgodność na~poziomie nieco poniżej $0,3$). Stąd też postanowiono przeanalizować działanie algorytmu dla trzech różnych liczności próbki, aby sprawdzić, czy jakość działania algorytmu zależy od~wielkości próby. Liczba tekstów wziętych do~analizy to: $100\%$ ($1\ 075\ 568$ artykułów), ok. $15\%$ ($160\ 000$ artykuły) oraz ok. $2\%$ zbioru ($25\ 000$ artykułów). Dla tej ostatniej próbki za~wartość parametru $b$, określającego liczbę obserwacji mających wkład w~każdej iteracji algorytmu, przyjęliśmy $5\ 000$ oraz $10\ 000$. Większe wartości nie mają sensu, gdyż są~przekraczają od~liczność próby.
 
 Wszystkie analizy zostały rozpoczęte z~tym samym ziarnem losowania, tj. w~każdej analizie obserwacje były losowane w~tej samej kolejności. Do~przeprowadzenia obliczeń użyto $16$ komputerów, a~łączny czas analiz to~ok. 40 godzin. Każdą z~reprezentacji tekstów wczytywano jako macierz rzadką, gdzie liczba zerowych elementów wynosiła ok. $99,99\%$. Niemniej taka reprezentacja zajmowała ok. $3$ GB~pamięci RAM, natomiast sam proces podziału na~skupienia zużywał dodatkowo ok. $4$ GB~pamięci RAM.
 
@@ -1889,7 +1906,7 @@ W niniejszym podrozdziale przeanalizujemy uzyskane wyniki dla uzyskanych podzia�
 
 Na Rys.~\ref{plot:005},~\ref{plot:006},~\ref{plot:007},~\ref{plot:010} oraz~\ref{plot:009} prezentujemy wartości uzyskanych, odpowiednio, jednorodności, zgodności, miary V, indeksu Fowlkesa-Mallowsa oraz miary silhouettes dla wszystkich zbudowanych reprezentacji tekstów i~wszystkich wykonanych analiz. Przypomnijmy, że~klasami porównawczymi do~uzyskanych podziałów są~tematy artykułów.
 
-Weźmy pierwszy wskaźnik, tj. jednorodność. Nie widać wyraźnych różnic w~wartościach jednorodności w~podziale na~wielkość zbioru, choć dla całego zbioru wartości te~są nieco wyższe niż w~pozostałych przypadkach. Średnie wartość jednorodności wynoszą $0,26$ dla 100\% i~15\% oraz $0,22$ dla 2\%. Oznacza to, że~większa liczba skupień zawiera teksty z~różnych klas (tematów), co~jest cechą wysoce niepożądaną. Wynika z~tego, że~czym większy zbiór, tym lepszy jego podział ze~względu na~temat.
+Weźmy pierwszy wskaźnik, tj. jednorodność. Nie widać wyraźnych różnic w~wartościach jednorodności w~podziale na~wielkość zbioru, choć dla całego zbioru (100\%) obserwacji wartości te~są nieco wyższe niż w~pozostałych przypadkach. Średnie wartość jednorodności wynoszą $0,26$ dla 100\% i~15\% oraz $0,22$ dla 2\%. Oznacza to, że~większa liczba skupień zawiera teksty z~różnych klas (tematów), co~jest cechą wysoce niepożądaną. Wynika z~tego, że~czym większy zbiór, tym lepszy jego podział ze~względu na~temat.
 
 \begin{figure}[!h]
   \centering
@@ -1900,9 +1917,9 @@ Weźmy pierwszy wskaźnik, tj. jednorodność. Nie widać wyraźnych różnic w~
 
 Przyjrzyjmy się teraz wartościom jednorodności ze~względu na~wielkość parametru $b$. Można stwierdzić, że~w przypadku największego i~najmniejszego zbioru mniejsza wartość $b$ daje wyższą wartość jednorodności, co~wydaje się być sprzeczne z~teorią zaprezentowaną w~rozdziale~\ref{analiza-skupien}.
 
-W końcu spójrzmy na~wartości jednorodności w~podziale na~użyty zbiór grup słów. Najwyższą wartość jednorodności uzyskano dla zbiorów \emph{clust\_jw\_red\_jw} oraz \emph{clust\_red\_lcs}, \emph{clust\_qg} oraz \emph{clust\_red\_lcs}, \emph{clust} oraz \emph{clust\_red\_jw} dla, odpowiednio, podziału opartego na~$100\%$, $15\%$ oraz $2\%$ zbioru. Wysoką wartość jednorodności uzyskano również dla \emph{clust\_lcs\_red\_lcs}, \emph{clust\_lcs}. Stąd też można wnioskować, że~pozytywny wpływ na~jakość podziału miała procedura zmniejszająca liczbę skupień. Co~więcej najlepsze rezultaty uzyskano przy użyciu odległości Jaro oraz lcs. Warto przy tym zauważyć, że~we wszystkich przypadkach najgorsze podziały uzyskano dla odległości $q$-gramowej.
+W końcu spójrzmy na~wartości jednorodności w~podziale na~użyty zbiór grup słów. Najwyższą wartość jednorodności uzyskano dla zbiorów \emph{clust\_jw\_red\_jw} oraz \emph{clust\_red\_lcs}, \emph{clust\_qg} oraz \emph{clust\_red\_lcs}, \emph{clust} oraz \emph{clust\_red\_jw} dla, odpowiednio, podziału opartego na~$100\%$, $15\%$ oraz $2\%$ obserwacji. Wysoką wartość jednorodności uzyskano również dla \emph{clust\_lcs\_red\_lcs}, \emph{clust\_lcs}. Stąd też można wnioskować, że~pozytywny wpływ na~jakość podziału miała procedura zmniejszająca liczbę skupień. Co~więcej najlepsze rezultaty uzyskano przy użyciu odległości Jaro oraz lcs. Warto przy tym zauważyć, że~we wszystkich przypadkach najgorsze podziały uzyskano dla odległości $q$-gramowej.
 
-Przejdźmy do~analizy zgodności podziału zbiorów na~skupienia. Wartości tej miary zawierały się w~przedziale $[0,17, 0,35]$. Dla wszystkich trzech wielkości zbioru uzyskano podobne wyniki i~ich średnia wartość wyniosła ok~$0,29$. Widać zatem, że~wielkość zbioru nie ma~istotnego wpływu na~wartość zgodności.
+Przejdźmy do~analizy zgodności podziału zbiorów na~skupienia. Wartości tej miary zawierały się w~przedziale $[0,\!17,\ 0,\!35]$. Dla wszystkich trzech wielkości zbioru uzyskano podobne wyniki i~ich średnia wartość wyniosła ok.~$0,29$. Widać zatem, że~wielkość zbioru nie ma~istotnego wpływu na~wartość zgodności.
 
 %Nieco mniejsze wartości zgodności dostaliśmy dla $15\%$ zbioru i~wynosiła ona średnio $0,52$. Najniższe wartości zgodności uzyskano dla całego zbioru tekstów i~były one równe ok. $0,06$. Oznacza to, że~obserwacje z~danej klasy (tematu) znajdują się w~prawie wszystkich możliwych skupieniach, a~więc podział taki jest słaby. Stąd, czym mniejszy zbiór tym lepszy podział pod względem tematycznym.
 
@@ -1913,7 +1930,7 @@ Przejdźmy do~analizy zgodności podziału zbiorów na~skupienia. Wartości tej 
   \caption{Zgodność.}\label{plot:006}
 \end{figure}
 
-Przyjrzyjmy się teraz wartościom zgodności ze~względu na~wielkość parametru $b$. Można stwierdzić, że~czym mniejsze $b$, tym wyższa wartość zgodności. Widać to~w szczególności dla najmniejszego i~największego zbioru.
+Przyjrzyjmy się teraz wartościom zgodności ze~względu na~wielkość parametru $b$. Można stwierdzić, że~czym mniejsze $b$, tym wyższa wartość zgodności. Widać to~w szczególności w~przypadku użycia 100\% i~2\% obserwacji.
 
 Dalej spójrzmy na~wartości zgodności w~podziale na~użyty zbiór grup słów. Na~pierwszy rzut oka można stwierdzić, że~najmniejsze wartości zgodności uzyskano w~przypadku zastosowania odległości $q$-gramowej. Najlepsze rezultaty otrzymano dla grup \emph{clust\_jw\_red\_jw}, \emph{clust\_jac\_red\_jac}, \emph{clust\_lcs} oraz \emph{clust\_jw}. Widać więc, że~istotny wpływ na~jakość podziału miała procedura przydzielająca niepogrupowane słowa do~już istniejących grup słów (Algorytm~\ref{alg:004}). Najlepsze rezultaty dała przy tym odległość Jaro.
 
@@ -1926,9 +1943,9 @@ Dalej spójrzmy na~wartości zgodności w~podziale na~użyty zbiór grup słów.
   \caption{Miara V.}\label{plot:007}
 \end{figure}
 
-Ponieważ miara V~jest średnią harmoniczną dwóch poprzednich miar, skupimy się jedynie na~analizie uzyskanych wyników dla różnych zbiorów wejściowych. Jak można było się spodziewać, najlepsze wyniki uzyskano dla zbiorów, które budowane były przy użyciu odległości Jaro. W~drugiej kolejności najlepiej wypadła metryka lcs. Również lepszy podział uzyskano, gdy zastosowano algorytm~\ref{alg:004} lub najpierw algorytm~\ref{alg:004}, a~następnie~\ref{alg:005}. 
+Ponieważ miara V~jest średnią harmoniczną dwóch poprzednich miar, skupimy się jedynie na~analizie uzyskanych wyników dla różnych zbiorów wejściowych. Jak można było się spodziewać, najlepsze wyniki uzyskano dla zbiorów, które budowane były przy użyciu odległości Jaro. W~drugiej kolejności najlepiej wypadła metryka lcs. Również lepszy podział uzyskano, gdy zastosowano Algorytm~\ref{alg:004} lub najpierw Algorytm~\ref{alg:004}, a~następnie~\ref{alg:005}. 
 
-Przejdźmy do~indeksu Fowlkesa-Mallowsa. Najwyższe wartości FM~uzyskano dla najmniejszego zbioru, i~wynosiły średnio $0,19$; $0,16$ -- dla analiz opartych o~$15\%$ oraz $100\%$ liczby obserwacji. W~tym przypadku więc widać zależność między liczbą obserwacji a~wielkością indeksu FM.
+Przejdźmy do~indeksu Fowlkesa-Mallowsa. Najwyższe wartości FM~uzyskano dla analizy opartej o 2\%obserwacji, i~wynosiły średnio $0,19$; $0,16$ -- dla analiz opartych o~$15\%$ oraz $100\%$ liczby obserwacji. W~tym przypadku więc widać zależność między liczbą obserwacji a~wielkością indeksu FM.
 
 %\begin{figure}[!h]
 %  \centering
@@ -1940,7 +1957,7 @@ Przejdźmy do~analizy pod kątem parametru $b$. W~przypadku indeksu FM~nie mamy 
 
 %W przypadku zbioru $2\%$ tekstów, wyższą wartość ARI uzyskano dla $b = 10\ 000$. Dla drugiego pod względem liczności obserwacji zbioru, najwyższą wartość uzyskano dla $b=70\ 000$. W~przypadku analizy opartej na~wszystkich artykułach $b$ nie miało wpływu na~wartość ARI.
 
-Przyjrzyjmy się teraz wartościom FM~pod względem grup słów. Jak wcześniej wspomniano największą wartość wskaźnika uzyskano dla \emph{clust\_qg}. Pomijając ten przypadek, najwyższe wartości indeksu FM~otrzymano dla \emph{clust}, \emph{clust\_lcs\_red\_lcs}, \emph{clust\_jw\_red\_jw} oraz \emph{clust\_dl\_red\_dl}. Widać więc, że~istotny wpływ na~wynik analizy miało zastosowanie połączenia Algorytmów~\ref{alg:004}~i~\ref{alg:005}. Co~więcej najlepsze rezultaty otrzymano dla odległości lcs, Jaro oraz dl~w przypadku wszystkich użytych procedur.
+Przyjrzyjmy się teraz wartościom FM~pod względem użytych grup słów. Jak wcześniej wspomniano największą wartość wskaźnika uzyskano dla \emph{clust\_qg}. Pomijając ten przypadek, najwyższe wartości indeksu FM~otrzymano dla \emph{clust}, \emph{clust\_lcs\_red\_lcs}, \emph{clust\_jw\_red\_jw} oraz \emph{clust\_dl\_red\_dl}. Widać więc, że~istotny wpływ na~wynik analizy miało zastosowanie połączenia Algorytmów~\ref{alg:004}~i~\ref{alg:005}. Co~więcej najlepsze rezultaty otrzymano dla odległości lcs, Jaro oraz dl~w przypadku wszystkich użytych procedur.
 
 %Odwrotnie niż wcześniej najwyższe wartości tej miary otrzymano dla \emph{clust\_red\_jac} oraz \emph{clust\_red\_qg} dla najmniejszego zbioru. W~przypadku dwóch pozostałych najlepszy okazał się podział zastosowany na~zbiorach opartych o~odległość lcs. Podobnie jak poprzednio lepsze rezultaty dały algorytmy, gdzie zastosowano algorytm~\ref{alg:005} lub najpierw algorytm~\ref{alg:004}, a~następnie~\ref{alg:005} niż w~przypadku zbiorów otrzymanych w~wyniku działania tylko~\ref{alg:004}.
 
@@ -1963,55 +1980,75 @@ Największe wartości sylwetek uzyskano dla \emph{clust\_red\_qg}, co~oznacza, �
 
 Podsumowując, wielkość zbioru, na~którym przeprowadzono analizy, nie ma~znaczenia na~jakość podziału pod względem tematycznym. Uzyskane wartości zaprezentowanych miar nie różniły się znacząco dla różnej liczby analizowanych tekstów. Dalej mniejsze wartości parametru $b$ dawały lepszy podział na~skupienia. W~przeważającej większości przypadków zaprezentowane miary dawały wyższe wartości dla $b=5000$ niż w~pozostałych sytuacjach.
 
-Najlepsze wyniki uzyskano dla reprezentacji tekstów powstałych przy użyciu odległości Jaro oraz najdłuższego wspólnego podnapisu. Nieco gorsze rezultaty uzyskano dla zbiorów opartych na~odległościach Dameru-Levenshteina oraz Jaccarda. Najsłabsze wyniki dawały reprezentcje tekstów oparte o~\emph{stemming} oraz o~miarę $q$-gramową. Dalej lepszy podział dostaliśmy, gdy zbiór przetworzono Algorytmem~\ref{alg:004}, tzn. powiększono grupy słów o~niepogrupowane wcześniej wyrazy lub gdy najpierw zastosowaliśmy Algorytm~\ref{alg:004}, a~następnie~\ref{alg:005}. Reasumując użycie odległości na~przestrzeni ciągów znaków miało pozytywny wpływ na~jakość automatycznej kategoryzacji tematycznej tekstów.
+Najlepsze wyniki uzyskano dla reprezentacji tekstów powstałych przy użyciu odległości Jaro oraz najdłuższego wspólnego podnapisu. Nieco gorsze rezultaty uzyskano dla zbiorów opartych na~odległościach Damerau-Levenshteina oraz Jaccarda. Najsłabsze wyniki dawały reprezentcje tekstów oparte o~\emph{stemming} oraz o~miarę $q$-gramową. Dalej lepszy podział dostaliśmy, gdy zbiór przetworzono Algorytmem~\ref{alg:004}, tzn. powiększono grupy słów o~niepogrupowane wcześniej wyrazy lub gdy najpierw zastosowaliśmy Algorytm~\ref{alg:004}, a~następnie~\ref{alg:005}. Reasumując użycie odległości na~przestrzeni ciągów znaków miało pozytywny wpływ na~jakość automatycznej kategoryzacji tematycznej tekstów.
 
 \section{Szczegółowe wyniki}
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{lll}
- zb & tytuly & slowa \\ 
-  \hline
-clust & azja, azja zachodnia, hatteria, kumak górski, lew, ptaki, salamandra plamista, traszka karpacka, wiatr, antarktyda, kultura łużycka, tornado, chomik europejski, antropogeneza, kręgowce, fauna polski, odkrycia i badania afryki, puchacz zwyczajny, australia (kontynent), panda wielka, sroka zwyczajna, bojownik wspaniały, kruk zwyczajny, dolny Śląsk, zięba zwyczajna, geografia brazylii, suseł perełkowany, węże, niedźwiedź polarny, hipopotam nilowy, winorośl właściwa, ryś, bocian biały, góry kaczawskie, allobrogowie, Żółkiew, bazyliszek (stworzenie mityczne), gladiator (film), muzyka obrzędowa, prakolczatka, afganistan, erytrocyt, ptolemeusz xii neos dionizos (auletes), foyer, medinet habu & antygenesa, antoniaceae, airy, arcyważną, aryzacyjne, anzah, apateja, atsuya, attalosie, anacoco \\ 
-   \hline
-clust\_lcs & ciepło, energia geotermalna, energia (fizyka), napięcie elektryczne, odnawialne źródła energii, pierwsza zasada termodynamiki, prawo ohma, spektroskopia magnetycznego rezonansu jądrowego, spektrometria mas, transformator, turbina parowa, turbina, elektrownia jądrowa, energia potencjalna, prąd elektryczny, natężenie prądu elektrycznego, energetyka słoneczna, siła elektromotoryczna, energia wiatru, energia elektryczna, kondensator, Ładunek elektryczny, lampa elektronowa, maszyna elektryczna, równania maxwella, rezystywność, konduktywność, elektrownia wiatrowa, nadprzewodnictwo, energia jądrowa, energetyka jądrowa, promieniowanie słoneczne, fundacja mozilla, camino (przeglądarka), władcy litwy, rock neoprogresywny, coemeterium, hartowanie, cement żużlowy, mineralogia, rezydencja, przestrzeń (fizyka), regresja hipnotyczna, chloramfenikol & akuniok, akuotninkai, ancher, adobo, aubignan, amieszkała, atuma, atsv, antymugolskie, abrahamowiczem \\ 
-   \hline
-clust\_dl & dendrymery, grupa alkilowa, grupa etniczna, internet engineering task force, kladystyka, konflikt etniczny, konwent europejski, naród, nacjonalizm, organiczne grupy funkcyjne, usenet, grupa nitrowa, teoria grup, taniec towarzyski, grupa odniesienia, friuli-wenecja julijska, anonimowi alkoholicy, grupa dyskusyjna, lista dyskusyjna, grupy fci, międzyrzecki rejon umocniony, socjalizacja, języki chińsko-tybetańskie, języki indoaryjskie, języki północnosłowiańskie, język friulski, friulowie, dorosłe dzieci alkoholików, język wenecki, grupa trzymająca władzę, grupy krwi, kexi, miasto na prawach powiatu, amoeba (rodzaj), bodziec wyzwalający agresję, kolej drezynowa, prestiż, brytyjska inwazja, figura zaszczytna, bezrefleksyjny konformizm & aficiones, antropometryczna, arsukidzego, amanites, antropometrycznym, amergina, anamari, andréas, andritzke, abazyńskimi \\ 
-   \hline
-clust\_jw & bolesław iii krzywousty, bolesław iv kędzierzawy, bolesław v wstydliwy, henryk iv prawy, henryk ii pobożny, henryk i brodaty, kazimierz i odnowiciel, konrad i mazowiecki, leszek biały, mieszko i, mieszko ii lambert, małopolska, mieszko iii stary, piastowie, władysław ii wygnaniec, władysław i herman, władysław i Łokietek, książęta dzielnicowi polski, gall anonim, piotr włostowic, henryk iii biały, bolesław i wysoki, bitwa pod legnicą, wielkopolska, mazowsze, wacław ii, kazimierz ii sprawiedliwy, przemysł ii, leszek czarny, władysław iii laskonogi, kronika polska (anonima tzw. galla), bogusław x, styropian, john palliser, funkcja pierwotna, limfocyty, białoruś, jomon & amadito, arcylwowianie, arcymag, antiqitatis, agrum, angielskiemu, antyferromagnetycznych, allwein, abarkuh, achlustin \\ 
-   \hline
-clust\_jac & pistolet beretta m9, broń palna, bojowy wóz piechoty, pistolet maszynowy błyskawica, pistolet maszynowy bechowiec, czołg, pistolet maszynowy pm-84 glauberyt, kaliber broni, pistolet maszynowy mors, pistolet, piotr wilniewczyc, pistolet maszynowy pm-63, skot, pistolet maszynowy sten, tk-3, tks, pistolet tt, pistolet vis wz. 35, 7tp, taczanka, wielkokalibrowy karabin maszynowy, karabin maszynowy, szabla, renault ft, ciężki karabin maszynowy, t-34/85, panzerkampfwagen v panther, karabin maszynowy wz. 38fk, broń, karabinek ak, elefant, lufa, nabój 9 $\times$ 19 mm parabellum, mark i, granatnik wz. 36, t-72, t-26, ak-230, lekki karabin maszynowy, pistolet p08 parabellum, karabin maszynowy hotchkiss mle 14, elburs & a, aldeanita, atsür, angielskiemu, aukštojo, abarkuh, antykolonializmie, alexandro, antywitamina, adaf \\ 
-   \hline
-clust\_qg & antoni gorecki, biblioteka, czesław miłosz, ignacy krasicki, jan kochanowski, literatura polska, literatura polska – romantyzm, literatura niemieckojęzyczna, literatura polska – średniowiecze, polska literatura współczesna, mikołaj rej, poezja, wisława szymborska, william butler yeats, wacław potocki, stanisław lem, witold gombrowicz, piotr skarga (kaznodzieja), szymon szymonowic, zbigniew herbert, karol maliszewski, william szekspir, grzegorz piramowicz, victor hugo, tomasz kajetan węgierski, kultura (miesięcznik), bruno schulz, nowa ruda, tragedia, iliada, jacek kaczmarski, leopold staff, lista jednostek samorządowych nowej fundlandii i labradoru, walter benjamin, stanisław staszic, oskar lange, bitwa pod niszem, jacenty dędek & aaaaaaaa, amphibolips, asafie, acala, amerykańskiego, aplewicza, arcyszlachetna, acanthocirrus, aluminiumowej, archiargiolestes \\ 
-   \hline
-clust\_red\_lcs & całka riemanna, funkcja holomorficzna, funkcja, funkcja ackermanna, liczba, moc zbioru, pochodna, praporządek, relacja (matematyka), relacja równoważności, zbiór, przestrzeń topologiczna, funkcja ciągła, całka niewłaściwa, graf (matematyka), ekstremum, wielomian, funkcja odwrotna, miara (matematyka), funkcja okresowa, algebra boole’a, miara lebesgue’a, dystrybuanta, wzór taylora, funkcja boolowska, funkcja charakterystyczna (teoria prawdopodobieństwa), wartość bezwzględna, funkcja liniowa, zasadnicze twierdzenie algebry, funkcja monotoniczna, kresy dolny i górny, funkcja rekurencyjna, algebra ogólna, model relacyjny, transformacja fouriera, potęgowanie, laureaci nagrody banku szwecji im. alfreda nobla w dziedzinie ekonomii, skarpa (architektura), porządek koryncki, monotypia, argument liczby zespolonej, syn boży, funkcja różniczkowalna, funkcja potęgowa, edmund niziurski & abtar, adhirath, abdulhak, abdulhaka, ahy, abbejnu, aiws, agnostycyzmem, aiton, afterall \\ 
-   \hline
-clust\_red\_dl & uniwersytet medyczny w białymstoku, politechnika białostocka, stanisław haller, uniwersytet warszawski, stefan rowecki, fala (wojsko), armia „poznań”, krzyż walecznych, stanisław dąbek, stopnie wojskowe w polsce, czesław kiszczak, emil krukowicz-przedrzymirski, august emil fieldorf, tadeusz komorowski, roman abraham, gustaw orlicz-dreszer, jan chmurowicz, organizacja wojenna polskiej brygady kawalerii w 1939, 25 pułk ułanów wielkopolskich, bronisław prugar-ketling, edward pietrzyk, czesław piątas, generał, lekarz, gwardia narodowa (francja), zbigniew religa, mieczysław maciejowski, edmund knoll-kownacki, jerzy kirchmayer, niepokalanów, nidzica, 20 brygada zmechanizowana, księga pieśni, winorośl, kazuarowe, edward Żeligowski, christoph von dohnányi, apollo 17, historia polski (1795-1807), reinhard heydrich, campo santo, obrona alkazaru, anthony quinn, pilsko, miklós fehér, ss wisła (1922), franciszek gesing, harald iii srogi, kultura oryniacka & adling, adamówka, agianthus, ahogho, achenara, abrazos, afroazjatycki, aedgidus, aegithalidae, akceleromierzem \\ 
-   \hline
-clust\_red\_jw & bitwa warszawska 1920, generalne gubernatorstwo, ii wojna światowa, i wojna światowa, józef piłsudski, kampania wrześniowa, narodowe siły zbrojne, niezależny samorządny związek zawodowy „solidarność”, powstanie styczniowe, powstanie warszawskie, powstanie wielkopolskie, ukraina, wushu, Średniowiecze, rewolucja francuska, salvador allende, korea północna, narodowy socjalizm, bitwa na Łuku kurskim, faszyzm, front wschodni (ii wojna światowa), niemcy, historia wojska polskiego, ukraińska powstańcza armia, historia warszawy, wojna polsko-bolszewicka, ludowe wojsko polskie, polska rzeczpospolita ludowa, josip broz tito, generałowie wojska polskiego, historia francji, międzynarodowa korporacja finansowa, domino, chromodynamika kwantowa, adsorbent, razbora klinowa, książęta moskiewscy, chanaka, politechnika warszawska, włochy, fast food, prowokacja gliwicka, jolanta kwaśniewska & adamo, advogados, agreda, abloville, agárdi, adipocytów, agrauloides, adamom, ademarus, agiadą \\ 
-   \hline
-clust\_red\_jac & bitwa warszawska 1920, kalendarium ii wojny światowej, generalne gubernatorstwo, ii wojna światowa, i wojna światowa, józef piłsudski, kampania wrześniowa, okręt podwodny, orp orzeł (1939), orp błyskawica, powstanie styczniowe, powstanie warszawskie, powstanie wielkopolskie, 1939, 1944, 1914, 1918, 1919, 1920, 1943, 1945, rewolucja francuska, narodowy socjalizm, bitwa na Łuku kurskim, front wschodni (ii wojna światowa), niemcy, historia warszawy, wojna polsko-bolszewicka, josip broz tito, historia kanady, bitwa jutlandzka, 2008, 2009, międzynarodowa korporacja finansowa, chromodynamika kwantowa, adsorbent, razbora klinowa, chanaka, 1937, białka, karol darwin, ssaki, rewolucyjny komitet chińskiego kuomintangu & aforysty, akbe, aignerowi, adipocytów, aguarico, africati, ajntab, afrykanerską, absorbowana, abbeanum \\ 
-   \hline
-clust\_red\_qg & aparat golgiego, apoptoza, błona komórkowa, błona biologiczna, klonowanie, mutacja, mejoza, mitoza, retikulum endoplazmatyczne, tkanki roślinne, neuron, Ściana komórkowa, synapsa, gąbki, chloroplast, interferon, jądro komórkowe, leukocyty, plazmid, wakuola, cytoszkielet, układ limfatyczny, zalążek, sieć krystaliczna, odporność swoista, merystem wierzchołkowy, tkanka twórcza, gametofit, jaguarundi, blenda (architektura), frank zappa, lingwistyka kognitywna, morze norweskie, limfocyt b, celtowie, egipt, izrael, związek socjalistycznych republik radzieckich, jasir arafat, cytotoksyczność naturalna, utf-16, benoît clapeyron, bitwa pod cheroneą (86 p.n.e.) & abchaz, agiadą, akbarneżad, adsorbat, ahy, aerobicu, affable, akademgorodku, akceptowalność, aigus \\ 
-   \hline
-clust\_lcs\_red\_lcs & armia czerwona, bitwa pod lenino, bitwa warszawska 1920, hagana, kampania wrześniowa, narodowe siły zbrojne, powstanie warszawskie, powstanie wielkopolskie, reichswehra, wehrmacht, waffen-ss, wojciech jaruzelski, 14 dywizja grenadierów ss (1 ukraińska), armia „modlin”, armia „pomorze”, bitwa na Łuku kurskim, front wschodni (ii wojna światowa), historia wojska polskiego, ukraińska powstańcza armia, wojna polsko-bolszewicka, ludowe wojsko polskie, generałowie wojska polskiego, dywizje polskie, afrika korps, 3 dywizja piechoty legionów, 12 dywizja piechoty (ii rp), operacja overlord, domino, włodzimierz michalski, chromodynamika kwantowa, bitwa pod chunani, Żupa solna, 3 brygada górska, wilhelm maybach, andrzej malewski, prusowie, zbór, adsorbent, razbora klinowa, chanaka, szybka kolej miejska, tkanka, postać normalna chomsky'ego, prowokacja gliwicka, pius iii & akumulatorowy, adit, akumulatorowymi, aldehydo, amerykańsk, akademickości, alverton, alugueres, alternacyjnego, anchoviella \\ 
-   \hline
-clust\_dl\_red\_dl & rower poziomy, wątek (architektura), szkielet kadłuba jednostki pływającej, balkon, mur pruski, tryglif, więźba, dźwigar, kratownica, wiązar płatwiowo-kleszczowy, Ściana, Ściana szkieletowa, konstrukcja sumikowo-łątkowa, podwalina, kadarka, wissarion bielinski, konstrukcja wieńcowa, wiązar (mechanika), krzyżulec (budownictwo), Żelatyna wybuchowa, bojer, graf skierowany, elewacja, 148, 161, medalion (architektura), sztablatura, układ gazowo-parowy, direct connect, sklepienie klasztorne, lumbricus, początki kolonizacji afryki, atabaskowie, ingrid thulin, kętrzyn, edward iv york, klif, helmut newton, kanon (sztuka), złącza ciesielskie, izolacja, sicz zaporoska & alternifolium, ambasciatori, albergatiego, acanto, aeneopolita, aegidien, achmatową, alboglossiphonia, anglli, altszulerów \\ 
-   \hline
-clust\_jw\_red\_jw & diecezja, kościół łaciński, marcel lefebvre, synod, synod biskupów, sobór powszechny, sobór efeski, jordan (pierwszy biskup polski), sukcesja apostolska, radzim gaudenty, walenty, teodor, Łukasz, księstwo nyskie, arcybiskup, anglikanizm, julian z panonii, tum, przewód jezdny, rybi pęcherz, pachomiusz, ms gorlice, kuna (narzędzie kary), marcin de guideto, zdolność do czynności prawnych, jan z miśni, jussi hautamäki, ordery i odznaczenia (europa), bakterie gram-dodatnie, 90125, ostra białaczka szpikowa, pascha (święto w judaizmie), a trick of the tail, pąkle, teby (egipt), logika temporalna, armando calderón sol, paweł edmund strzelecki, oflag, słup pokoju, michał lewicki, bajki robotów, peter ustinov & abablewo, aeliania, alziator, angolo, anemometrycznej, ankiecie, agao, addbr, aniserwicz, akdwxx \\ 
-   \hline
-clust\_jac\_red\_jac & ford ft-b, rynek (ekonomia), samochód, samochód pancerny, skot, tk-3, fso warszawa, zsd nysa, syrena (samochód), t-34/85, teoria modeli, fsr tarpan, fsc Żuk, mikrus mr-300, sfm junak, samochód pożarniczy, modelowanie matematyczne, t-72, intrall lublin, nokia, ferdinand porsche, zx spectrum, t-26, zenit (aparat fotograficzny), opel, porsche, ferrari, bugatti, alfa romeo, man se, ford motor company, lancia, lancia lybra, chevrolet, cadillac, teoria oddziaływań elektrosłabych, rezerwuar, ratusz w poznaniu, delta diraca, bitwa pod winwaed, lista plemion ameryki północnej, guntars krasts, taishang laojun, aphelium, songcen gampo, przeciwciało, kapiszon & a, anestetyzacji, alce, alhambrą, andjelko, alemdjrodo, alienationen, aljoša, akrostychem, adviqo \\ 
-   \hline
-clust\_qg\_red\_qg & arpanet, bitnet, biblioteka, zapora sieciowa, fidonet, gadu-gadu, historia internetu, internet, internet service provider, ipv4, network address translation, peer-to-peer, prawo telekomunikacyjne, router, sieć komputerowa, sieć lokalna, sieć rozległa, sms, sieć telekomunikacyjna, orange polska, telekomunikacja, telekomunikacja w polsce, usenet, internet explorer, komunikator internetowy, publiczna komutowana sieć telefoniczna, protokół trasowania, address resolution protocol, ethernet, numer telefonu, sieć krystaliczna, niderlandy (region historyczny), siewkowe, kościół św. marcina w warszawie, prawo hooke’a, mchy, analiza długości fragmentów restrykcyjnych, skrajnia kolejowa, zwrotnik (geografia), carl schlechter & aaaaaa, akbarnamy, akcyjnemu, albertone, adiutem, alodią, aarin, aftertouch, amojan, amenemope \\ 
-   \hline
-\end{tabular}
-\end{table}
+W Tabeli~\ref{tab:007} prezentujemy przykładowe skupienia uzyskane dla każdej z~16 reprezentacji tekstu. Sprawdzimy teraz, czy pogrupowane artykuły są~z tej samej kategorii tematycznej. Być może kategorie Wikipedii nie są~adekwatnie przypisane do~tekstów. Ręczna weryfikacja powinna to~potwierdzić lub wykluczyć. 
 
+Tabela~\ref{tab:007} zawiera jedno losowo wybrane skupienie tekstów, oparte na~jednej z~wykonanych analiz. Wybierano skupienia, które zawierają między 20 a~50 elementów. Tabela~\ref{tab:007} nie zawiera jednak wszystkich elementów, gdyż wówczas tabela stawała się długa i~przez to~nieczytelna. Z~list usunięto więc między 10 a~20 tytułów w~każdej grupie.
+
+Przejdźmy do~analizy uzyskanych skupień. Grupa o~reprezentacji \emph{clust} zawiera dużo tekstów dotyczących fauny i~flory (np. panda, lew, ptaki), choć znalazło się w~niej kilka elementów ewidentnie nie pasujących tematycznie, jak ptolemeusz czy muzyka obrzędowa. Podobnie jest ze~skupieniem dla grupy \emph{clust\_lcs}, choć w~tym przypadku ewidentnym tematem przewodnim jest fizyka. Nie da~się wyróżnić tematu pasującego do~wszystkich tekstów z~grupy \emph{red\_dl}. Skupienie to~pod względem tematycznym nie ma~sensu. Następna grupa, czyli \emph{clust\_jw} ewidentnie dotyczy władców polskich. Dalej, \emph{clust\_jac} zawiera teksty dotyczące różnych rodzajów broni, w~tym przypadku również nie ma~problemów z~określeniem tematu. Podobnie z~\emph{clust\_qg} -- teksty poruszają tematykę literatury, przede wszystkim polskiej. 
+
+Dla następnych pięciu grup również łatwo wyznaczyć temat przewodni tekstów, jest to, odpowiednio: matematyka, wojsko, historia Polski, historia, biologia. Jeśli chodzi o~pięć ostatnich grup, to~jedynym skupieniem, w~którym nie da~się jasno określić tematyki tekstów jest \emph{clust\_dl\_red\_dl}. W~pozostałych przypadkach nie powinno sprawić to~większego problemu.
+
+Analiza ta~potwierdza wyniki z~poprzedniego podrozdziału dla odległości lcs, jw~oraz dl. Na~podstawie przedstawionych skupień jednak widać, że~teksty pogrupowane przy użyciu odległości jac i~qg również mają sens. Wyniki dla grupy opartej na~samym \emph{stemmingu}, tj. \emph{clust}, zgadzają się z~rezultatami z~poprzedniego podrozdziału -- reprezentacja oparta na~samym \emph{stemmingu} nie jest adekwatna dla tematycznej analizy skupień. Ręczny przegląd kilku innych losowo wybranych skupień potwierdza powyższe wnioski. Można więc wyciągnąć konkluzję, że~kategorie Wikipedii nie są~dobrze przypisane do~tekstów.
+
+
+%\newpage
+\newgeometry{left=2cm,bottom=1cm}
+%\begin{sidewaystable}[ht]
+%\begin{longtable}
+%\begin{table}
+%\centering
+\begin{longtable}{|L{0.5cm}|L{15cm}|} %|L{3cm}}
+\caption{Przykładowe skupienia tekstów.} 
+\label{tab:007} \\
+  \hline
+  & Tytuły \\ % & slowa \\ 
+  \hline
+\begin{sideways}clust\end{sideways} & azja, azja zachodnia, hatteria, kumak górski, lew, ptaki, salamandra plamista, traszka karpacka, wiatr, antarktyda, kultura łużycka, tornado, kręgowce, fauna polski, chomik bazyliszek (stworzenie mityczne), panda wielka, sroka zwyczajna, gladiator (film), muzyka obrzędowa, prakolczatka, afganistan, erytrocyt, ptolemeusz xii neos dionizos (auletes), foyer, medinet habu \\ %& antygenesa, antoniaceae, airy, arcyważną, aryzacyjne, anzah, apateja, atsuya, attalosie, anacoco \\ 
+   \hline
+\begin{sideways}clust\_lcs\end{sideways} & ciepło, energia geotermalna, energia (fizyka), napięcie elektryczne, odnawialne źródła energii, pierwsza zasada termodynamiki, prawo ohma, spektroskopia magnetycznego rezonansu jądrowego, spektrometria mas, transformator, turbina parowa, turbina, elektrownia jądrowa, energia potencjalna, władcy litwy, rock neoprogresywny, coemeterium, hartowanie, cement żużlowy \\ %& akuniok, akuotninkai, ancher, adobo, aubignan, amieszkała, atuma, atsv, antymugolskie, abrahamowiczem \\ 
+   \hline
+\begin{sideways}clust\_dl\end{sideways} & dendrymery, grupa alkilowa, grupa etniczna, internet engineering task force, kladystyka, konflikt etniczny, konwent europejski, naród, nacjonalizm, organiczne grupy funkcyjne, usenet, grupa nitrowa, teoria grup, miasto na~prawach powiatu, amoeba (rodzaj), bodziec wyzwalający agresję, kolej drezynowa, prestiż, brytyjska inwazja, figura zaszczytna, bezrefleksyjny konformizm\\ % & aficiones, antropometryczna, arsukidzego, amanites, antropometrycznym, amergina, anamari, andréas, andritzke, abazyńskimi \\ 
+   \hline
+\begin{sideways}clust\_jw\end{sideways} & bolesław iii krzywousty, bolesław iv~kędzierzawy, bolesław v~wstydliwy, henryk iv~prawy, henryk ii~pobożny, henryk i~brodaty, kazimierz i~odnowiciel, konrad i~mazowiecki, leszek biały, mieszko i, mieszko ii~lambert, małopolska, mieszko iii stary, piastowie, władysław ii~wygnaniec, władysław i~herman, władysław i~Łokietek, książęta dzielnicowi polski, gall anonim, piotr włostowic, funkcja pierwotna, limfocyty \\ %& amadito, arcylwowianie, arcymag, antiqitatis, agrum, angielskiemu, antyferromagnetycznych, allwein, abarkuh, achlustin \\ 
+   \hline
+\begin{sideways}clust\_jac\end{sideways} & pistolet beretta m9, broń palna, bojowy wóz piechoty, pistolet maszynowy błyskawica, pistolet maszynowy bechowiec, czołg, pistolet maszynowy pm-84 glauberyt, kaliber broni, pistolet maszynowy mors, pistolet, piotr wilniewczyc, pistolet maszynowy pm-63, skot, pistolet maszynowy sten, tk-3, tks, pistolet tt, pistolet vis wz. 35, 7tp, taczanka, wielkokalibrowy karabin maszynowy, karabin maszynowy hotchkiss mle 14, elburs \\ %& a, aldeanita, atsür, angielskiemu, aukštojo, abarkuh, antykolonializmie, alexandro, antywitamina, adaf \\ 
+   \hline
+\begin{sideways}clust\_qg\end{sideways} & antoni gorecki, biblioteka, czesław miłosz, ignacy krasicki, jan kochanowski, literatura polska, literatura polska – romantyzm, literatura polska – średniowiecze, polska literatura współczesna, mikołaj rej, poezja, wisława szymborska, william butler yeats, wacław potocki, stanisław lem, witold gombrowicz, piotr skarga (kaznodzieja), szymon szymonowic, zbigniew herbert, karol maliszewski, william szekspir, grzegorz piramowicz, victor hugo, tomasz kajetan węgierski, kultura (miesięcznik), jacenty dędek \\ %& aaaaaaaa, amphibolips, asafie, acala, amerykańskiego, aplewicza, arcyszlachetna, acanthocirrus, aluminiumowej, archiargiolestes \\ 
+   \hline
+\begin{sideways}clust\_red\_lcs\end{sideways} & całka riemanna, funkcja holomorficzna, funkcja, funkcja ackermanna, liczba, moc zbioru, pochodna, praporządek, relacja (matematyka), graf (matematyka), ekstremum, wielomian, funkcja odwrotna, miara (matematyka), funkcja rekurencyjna, algebra ogólna, model relacyjny, transformacja fouriera, potęgowanie, laureaci nagrody banku szwecji im. alfreda nobla w~dziedzinie ekonomii, skarpa (architektura) argument liczby zespolonej, syn boży, funkcja różniczkowalna, funkcja potęgowa, edmund niziurski \\ %& abtar, adhirath, abdulhak, abdulhaka, ahy, abbejnu, aiws, agnostycyzmem, aiton, afterall \\ 
+   \hline
+\begin{sideways}clust\_red\_dl\end{sideways} & uniwersytet medyczny w~białymstoku, politechnika białostocka, stanisław haller, uniwersytet warszawski, stefan rowecki, fala (wojsko), armia „poznań”, krzyż walecznych, stanisław dąbek, stopnie wojskowe w~polsce, czesław kiszczak, emil krukowicz-przedrzymirski, august emil fieldorf, jerzy kirchmayer, niepokalanów, nidzica, 20 brygada zmechanizowana, księga pieśni, winorośl, kazuarowe, edward Żeligowski, christoph von dohnányi, apollo 17, miklós fehér, ss~wisła (1922), franciszek gesing, harald iii srogi, kultura oryniacka \\ %& adling, adamówka, agianthus, ahogho, achenara, abrazos, afroazjatycki, aedgidus, aegithalidae, akceleromierzem \\ 
+   \hline
+\begin{sideways}clust\_red\_jw\end{sideways} & bitwa warszawska 1920, generalne gubernatorstwo, ii~wojna światowa, i~wojna światowa, józef piłsudski, kampania wrześniowa, narodowe siły zbrojne, niezależny samorządny związek zawodowy „solidarność”, powstanie styczniowe, powstanie warszawskie, powstanie wielkopolskie, historia warszawy, wojna polsko-bolszewicka, ludowe wojsko polskie, polska rzeczpospolita ludowa, josip broz tito, generałowie wojska polskiego, historia francji, książęta moskiewscy, chanaka, politechnika warszawska, włochy, fast food, prowokacja gliwicka, jolanta kwaśniewska \\ %& adamo, advogados, agreda, abloville, agárdi, adipocytów, agrauloides, adamom, ademarus, agiadą \\ 
+   \hline
+\begin{sideways}clust\_red\_jac\end{sideways} & bitwa warszawska 1920, kalendarium ii~wojny światowej, generalne gubernatorstwo, ii~wojna światowa, i~wojna światowa, józef piłsudski, kampania wrześniowa, okręt podwodny, orp orzeł (1939), orp błyskawica, powstanie styczniowe, powstanie warszawskie, powstanie wielkopolskie, 1939, 1944, 1914, 1918, 1919, 1920, 1943, 1945, rewolucja francuska, narodowy socjalizm, bitwa na~Łuku kurskim, front wschodni (ii wojna światowa), niemcy, historia warszawy, wojna polsko-bolszewicka, josip broz tito, historia kanady, bitwa jutlandzka, 2008, 2009 \\ %& aforysty, akbe, aignerowi, adipocytów, aguarico, africati, ajntab, afrykanerską, absorbowana, abbeanum \\ 
+   \hline
+\begin{sideways}clust\_red\_qg\end{sideways} & aparat golgiego, apoptoza, błona komórkowa, błona biologiczna, klonowanie, mutacja, mejoza, mitoza, cytoszkielet, układ limfatyczny, zalążek, sieć krystaliczna, odporność swoista, merystem wierzchołkowy, tkanka twórcza, gametofit, jaguarundi, blenda (architektura), frank zappa, lingwistyka kognitywna, morze norweskie, limfocyt b, celtowie, egipt, izrael, benoît clapeyron, bitwa pod cheroneą (86 p.n.e.) \\ %& abchaz, agiadą, akbarneżad, adsorbat, ahy, aerobicu, affable, akademgorodku, akceptowalność, aigus \\ 
+   \hline
+\begin{sideways}clust\_lcs\_red\_lcs\end{sideways} & armia czerwona, bitwa pod lenino, bitwa warszawska 1920, hagana, kampania wrześniowa, narodowe siły zbrojne, powstanie warszawskie, powstanie wielkopolskie, reichswehra, wehrmacht, waffen-ss, wojciech jaruzelski, 14 dywizja grenadierów ss~(1 ukraińska), armia „modlin”, armia „pomorze”, bitwa na~Łuku kurskim, front wschodni (ii wojna światowa), historia wojska polskiego, ukraińska powstańcza armia, wojna polsko-bolszewicka, ludowe wojsko polskie, generałowie wojska polskiego, dywizje polskie, afrika korps, 3 dywizja piechoty legionów, \\ %& akumulatorowy, adit, akumulatorowymi, aldehydo, amerykańsk, akademickości, alverton, alugueres, alternacyjnego, anchoviella \\ 
+   \hline
+\begin{sideways}clust\_dl\_red\_dl\end{sideways} & rower poziomy, wątek (architektura), szkielet kadłuba jednostki pływającej, balkon, mur pruski, tryglif, więźba, dźwigar, kratownica, wiązar płatwiowo-kleszczowy, Ściana, Ściana szkieletowa, direct connect, sklepienie klasztorne, lumbricus, początki kolonizacji afryki, atabaskowie, ingrid thulin, kętrzyn, edward iv~york, klif, helmut newton, kanon (sztuka), złącza ciesielskie, izolacja, sicz zaporoska \\ %& alternifolium, ambasciatori, albergatiego, acanto, aeneopolita, aegidien, achmatową, alboglossiphonia, anglli, altszulerów \\ 
+   \hline
+\begin{sideways}clust\_jw\_red\_jw\end{sideways} & diecezja, kościół łaciński, marcel lefebvre, synod, synod biskupów, sobór powszechny, sobór efeski, jordan (pierwszy biskup polski), sukcesja apostolska, radzim gaudenty, walenty, teodor, Łukasz, księstwo nyskie, arcybiskup, anglikanizm, julian z~panonii, tum, przewód jezdny, pąkle, teby (egipt), logika temporalna, armando calderón sol, paweł edmund strzelecki, oflag, słup pokoju, michał lewicki, bajki robotów, peter ustinov \\ %& abablewo, aeliania, alziator, angolo, anemometrycznej, ankiecie, agao, addbr, aniserwicz, akdwxx \\ 
+   \hline
+\begin{sideways}clust\_jac\_red\_jac\end{sideways} & ford ft-b, rynek (ekonomia), samochód, samochód pancerny, skot, tk-3, fso warszawa, zsd nysa, syrena (samochód), t-34/85, teoria modeli, fsr tarpan, fsc Żuk, mikrus mr-300, sfm junak, rezerwuar, ratusz w~poznaniu, delta diraca, bitwa pod winwaed, lista plemion ameryki północnej, guntars krasts, taishang laojun, aphelium, songcen gampo, przeciwciało, kapiszon \\ %& a, anestetyzacji, alce, alhambrą, andjelko, alemdjrodo, alienationen, aljoša, akrostychem, adviqo \\ 
+   \hline
+\begin{sideways}clust\_qg\_red\_qg\end{sideways} & arpanet, bitnet, biblioteka, zapora sieciowa, fidonet, gadu-gadu, historia internetu, internet, internet service provider, ipv4, network address translation, peer-to-peer, prawo telekomunikacyjne, router, sieć komputerowa, sieć lokalna, sieć rozległa, sms, sieć telekomunikacyjna, orange polska, telekomunikacja, telekomunikacja w~polsce, usenet, internet explorer, analiza długości fragmentów restrykcyjnych, skrajnia kolejowa, zwrotnik (geografia), carl schlechter \\ %& aaaaaa, akbarnamy, akcyjnemu, albertone, adiutem, alodią, aarin, aftertouch, amojan, amenemope \\ 
+   \hline
+\end{longtable}
+%\end{table}
+%\end{longtable}
+%\end{sidewaystable}
+\restoregeometry
 \chapter{Podsumowanie pracy i~dalsze kierunki badań}
 
 W pracy zaprezentowaliśmy odległości na~przestrzeni ciągów znaków, w~podziale na~trzy grupy: odległości oparte na~operacjach edycyjnych, na~$q$-gramach oraz miary heurystyczne. Przybliżono ich własności oraz zastosowania. Dalej omówiliśmy różne metody analizy skupień, w~tym algorytm $k$-średnich oraz metody hierarchiczne. Co~więcej zaprezentowane zostały miary oceny jakości podziału na~skupienia. Zasadniczym celem części praktycznej tej pracy było zbadanie wpływu przedstawionych odległości na~jakość automatycznej kategoryzacji tematycznej tekstów. Zbadana została jakość grupowania artykułów dla różnych reprezentacji tekstu. Reprezentacje te~odnosiły się do~różnych grup słów, które zostały otrzymane przy użyciu różnych odległości. W~pierwszym etapie pogrupowane były słowa. Użyto w~tym celu \emph{stemmingu} oraz pięciu różnych odległości na~napisach, zastosowanych w~trzech algorytmach grupujących, otrzymując w~efekcie $16$ reprezentacji tekstów. Na~tak otrzymanych danych przeprowadziliśmy analizę skupień metodą mini-wsadową. Ocenę wyników wykonaliśmy na~podstawie kategorii tematycznych przypisanych do~każdego tekstu. Podsumujmy więc uzyskane wyniki.
 
-Na działanie algorytmów dzielących słowa na~grupy składały się dwa czynniki: używana odległość oraz zastosowany algorytm. Z~wykorzystanych odległości najlepsze rezultaty dawała odległość najdłuższego wspólnego podnapisu (lcs) oraz odległość Jaro. Porównując tę~pierwszą z~odległością Damerau-Levenshteina, można wyciągnąć wniosek, że~czym mniejsza liczba bazowych operacji edycyjnych tym lepsza kategoryzacja tematyczna. Tak dobre rezultaty uzyskane w~przypadku odległości Jaro mogą wynikać z~faktu, że~została ona skonstruowana dla krótkich napisów. Nieco gorszą kategoryzację dawały reprezentacje tekstów oparte na~odległościach Damerau-Levenshteina oraz Jaccarda. Najsłabsze wyniki uzyskano w~przypadku zastosowania jedynie \emph{stemmingu} a także odległości $q$-gramowej. Słabe wyniki dla odległości Jaccarda oraz $q$-gramowej mogą sugerować, że~miary oparte na~$q$-gramach nie nadają się do~tego typu problemów lub że~użyta wielkość $q=4$ była niedostosowana do~problemu.
+Na działanie algorytmów dzielących słowa na~grupy składały się dwa czynniki: używana odległość oraz zastosowany algorytm. Z~wykorzystanych odległości najlepsze rezultaty dawała odległość najdłuższego wspólnego podnapisu (lcs) oraz odległość Jaro. Porównując tę~pierwszą z~odległością Damerau-Levenshteina, można wyciągnąć wniosek, że~czym mniejsza liczba bazowych operacji edycyjnych tym lepsza kategoryzacja tematyczna. Tak dobre rezultaty uzyskane w~przypadku odległości Jaro mogą wynikać z~faktu, że~została ona skonstruowana dla krótkich napisów. Nieco gorszą kategoryzację dawały reprezentacje tekstów oparte na~odległościach Damerau-Levenshteina oraz Jaccarda. Najsłabsze wyniki uzyskano w~przypadku zastosowania jedynie \emph{stemmingu} a~także odległości $q$-gramowej. Słabe wyniki dla odległości Jaccarda oraz $q$-gramowej mogą sugerować, że~miary oparte na~$q$-gramach nie nadają się do~tego typu problemów lub że~użyta wielkość $q=4$ była niedostosowana do~problemu.
 
 Przejdźmy do~zastosowanego algorytmu. Zaproponowaliśmy trzy algorytmy grupujące słowa. Pierwszy (Alg.~\ref{alg:004}) przydzielał niepogrupowane jeszcze słowa do~uzyskanych w~wyniku \emph{stemmingu} grup słów. Drugi (Alg.~\ref{alg:005}) dołączał małe grupy słów, tj. takie, które miały mniej niż pięć elementów, do~większych skupień. Trzeci był połączeniem dwóch poprzednich, tj. najpierw przyłączał niepogrupowane słowa, a~następnie redukował liczbę grup słów. Najlepszą kategoryzację tematyczną uzyskano dla reprezentacji tekstów opartych na~trzecim algorytmie. Podobne, choć nieco gorsze, wyniki dostaliśmy w~przypadku algorytmu pierwszego. Najgorszą kategoryzację otrzymano dla drugiego algorytmu. Wnioski są~więc następujące: po~pierwsze większa liczba użytych słów miała istotny wpływ na~jakość otrzymanej kategoryzacji tematycznej. Po~drugie redukcja liczby grup słów nie miała aż~tak znaczącej wagi. Po~trzecie połączenie obu tych procedur dawało lepsze rezultaty niż każda z~nich osobno.
 
@@ -2025,5 +2062,5 @@ Pierwsza istotna kwestia nie dotyczy bezpośrednio kategoryzacji, ale wcześniej
 \bibliographystyle{plain}
 \bibliography{bibliography}
 
-%\makestatement
+\makestatement
 \end{document}

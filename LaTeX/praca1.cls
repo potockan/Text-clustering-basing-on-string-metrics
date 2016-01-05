@@ -252,7 +252,7 @@
 \cleardoublepage
 \thispagestyle{empty}
 \pdfbookmark[0]{\@statementcap}{statement}
-\@author\hfill Warszawa, \@date\\
+\@author\hfill Warszawa, 15 grudnia 2015\\
 Nr albumu \@album
 \par\vspace{25mm}
 \begin{center}

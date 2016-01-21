@@ -1,0 +1,275 @@
+\documentclass[11pt,pdftex,mathserif]{beamer}
+% ewentualnie (w trakcie przygotowania prezentacji):
+% \documentclass[...,handout]{beamer} % jedna 'frame' == jeden slajd
+\usepackage[T1]{polski}        % jeśli po angielsku, to skasuj
+\usepackage[polish]{babel}     % jeśli po angielsku, to skasuj
+\selectlanguage{polish}        % jeśli po angielsku, to skasuj
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}  % kodowanie polskich znaków CP1250 (windows)
+% Alternatywnie - latin2 dla kodowania ISO-8859-2 (raczej nie Windows)
+% latex/pdflatex nie wspiera niestety Unicode (np. UTF-8)
+\usepackage{amsmath,amssymb}     % więcej symboli matematycznych
+\usepackage{graphicx}            % jeśli chcemy wstawiać grafikę
+\usepackage{hyperref}            % odnośniki internetowe, zaawansowane ust. PDF
+%\hypersetup{pdfstartview={FitW}}
+\usepackage{natbib}
+\usepackage{examplep}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{cprotect}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{rotating}
+\usepackage{array}
+\usepackage{rotating}
+\usepackage{longtable}
+%%%%%%%%%%%% MOJE ULUBIONE USTAWIENIA BEAMERA %%%%%%%%%%%%%
+%
+\usetheme{Boadilla} % Warsaw to nazwa stylu - zmień na SWOJĄ ulubioną
+\usecolortheme{spruce}
+\useoutertheme{infolines}
+\useinnertheme{circles}
+\usefonttheme{structuresmallcapsserif}
+%%
+\setbeamertemplate{navigation symbols}{} % WYŁĄCZA PASEK NAWIGACJI U DOŁU
+\setbeamercovered{invisible} % WPŁYWA NA WYŚWIETLANIE "SPAUZOWANYCH" ELEMENTÓW
+
+%
+\setbeamertemplate{theorems}[numbered]
+\definecolor{green2}{rgb}{0.3, 0.6 ,0.4}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\title[Kategoryzacja tematyczna tekstów ]{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w przestrzeni ciągów znaków}
+\author[N. Potocka]{Natalia Potocka}
+%\institute[MiNI PW]{}
+\date[25.01.2016]{25.01.2016}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newtheorem{twierdzenie}{Twierdzenie}
+\renewcommand{\proofname}{Dowód}
+\newtheorem{lemat}[twierdzenie]{Lemat}
+\newtheorem{wniosek}[twierdzenie]{Wniosek}
+\newtheorem{stwierdzenie}[twierdzenie]{Stwierdzenie}
+
+\theoremstyle{definition}
+\newtheorem*{definicja}{Definicja}
+\newtheorem*{oznaczenie}{Oznaczenie}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\xsr}{\overline{X}_n}
+\newcommand{\skw}{S_n^2}
+\newcommand{\al}{\alpha}
+\newcommand*{\om}{\omega}
+
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+
+\newenvironment{zrodlo}{\emph{Źródło: }}{\par}
+
+\begin{document}   % jedziemy :-)
+%%%%%%%%%%%%% SLAJD TYTUŁOWY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}% wyłącza paski na górze i na dole
+\begin{frame}%
+
+   \begin{center}%
+%
+%
+%   %%%%%%%%%%%% NAGLOWEK %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+      \begin{columns}%
+         \begin{column}[c]{1.2cm}\centering%
+         \includegraphics[height=1.0cm]{logopw.pdf} \\%
+         \end{column}
+
+         \begin{column}[c]{7cm}\centering
+            {\footnotesize{Politechnika Warszawska}}\\%
+            {\footnotesize{Wydział Matematyki i~Nauk Informacyjnych}}%
+         \end{column}
+
+         \begin{column}[c]{1.2cm}\centering%
+         \includegraphics[height=1.0cm]{logomini.pdf} \\%
+         \end{column}%
+      \end{columns}
+
+   %%%%%%%% TYTUL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+      \vspace*{2em}
+
+      \colorbox{green2}{\parbox{10cm}{\color{black}\centering\LARGE{Automatyczna kategoryzacja tematyczna tekstów przy użyciu metryk w~przestrzeni ciągów znaków}}}
+
+      \vspace*{1.5em}%
+      {\Large{Natalia Potocka}}\\%
+%      {\color{blue}\footnotesize\texttt{M.Gagolewski@mini.pw.edu.pl}}
+
+      %\vspace*{2.5em}%
+      {\it\footnotesize Warszawa, 25.01.2016}  % DATA
+
+   \end{center}
+
+\end{frame}
+
+
+
+\begin{frame}{Cel pracy}
+Celem pracy jest skategoryzowanie tekstów z~polskiej Wikipedii pod względem tematu na~podstawie liczności słów występujących w~tekście. %Można się spodziewać, że~jeśli w~dwóch tekstach występuje dużo podobnych do~siebie słów, to~pochodzą one z~tej samej kategorii tematycznej. \\
+\pause
+Problemy:
+\begin{itemize}
+\item duże wymiary danych (1 075 568 $\times$ 2 806 765),
+\item dane bardzo rzadkie (ponad $99{,}99\%$),
+\item duża złożoność obliczeniowa i pamięciowa.
+\end{itemize}
+\pause
+Remedium to redukcja liczba słów przy użyciu \emph{stemmingu} oraz \emph{odległości na przetrzeni ciągów znaków}.
+\end{frame}
+
+
+
+\begin{frame}{\emph{Stemming}}
+\begin{table}[h]
+\centering
+\caption{Przykładowe skupienia uzyskane przy pomocy \emph{stemmingu}.}
+\begin{tabular}{|lllll|}
+  \hline
+działalność & niemiecki & odkryty & okres & postać \\ 
+  \hline
+działalność & niemiecki & odkryta & okres & postaci \\ 
+  działalności & niemieckiej & odkryte & okresu & postacie \\ 
+  działalnością & niemieckiego & odkryty & okresach & postać \\ 
+  działalnościach & niemieckich & odkrytych & okresem & postacią \\ 
+  działalnościami & niemieckim & odkrytym & okresy & postaciami \\ 
+   & niemiecką & odkrytą & okresów & postaciach \\ 
+   & niemiecka & odkrytego & okresami & postaciom \\ 
+   & niemieccy & odkrytej & okresom & postał \\ 
+   & niemieckimi & odkrytymi &  & postała \\ 
+   & niemiecku & nieodkrytych &  & postania \\ 
+   & niemieckiemu & nieodkryte &  & postało \\ 
+   & nieniemieckich & odkrytemu &  & postały \\ 
+   & nieniemieckiej & odkryci &  & postaniu \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+
+
+\begin{frame}{Operacje edytowania}
+Odegłości oparte na operacjach edytowania zliczają liczbę opercji potrzebnych do~przetworzenia jednego napisu w~drugi. Najczęściej wymieniamymi operacjami~są~\cite{Boytsov2011:indexingmethods}:
+\begin{itemize}
+\item zamiana znaku, np. $'ela' \rightarrow 'ala'$
+\item usunięcie znaku, np. $'ela' \rightarrow 'ea'$
+\item wstawienie znaku, np. $'ela' \rightarrow 'elka'$
+\item transpozycja dwóch przylegających znaków, np. $'ela' \rightarrow 'lea'$
+\end{itemize}
+\pause
+Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damerau-Levenshteina.
+
+\end{frame}
+
+\begin{frame}{Odległości oparte na $q$-gramach}
+\begin{block}{Definicja}
+Podnapis złożony z~kolejnych, przylegających do~siebie znaków, o~ustalonej długości $q\geq 1$ jest nazywany \emph{$q$-gramem}.
+\end{block}
+
+\begin{block}{Definicja}
+Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w~napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{\mathrm{jac}}$, między napisami $s$ i~$t$ definiuje się jako:
+\begin{equation*}
+d_{\mathrm{jac}}(s,t,q) = 1 - \frac{|\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q)|}{|\mathcal{Q}(s,q) \cup \mathcal{Q}(t,q)|},
+\end{equation*}
+gdzie $|\cdot|$ oznacza liczność zbioru.
+\end{block} 
+\end{frame}
+
+
+%\begin{frame}{Metryki oparte na $q$-gramach}
+%\begin{block}{Definicja}
+%Niech $s = s_1 s_2 \ldots s_n$ będzie i~niech $x$ będzie $q$-gramem o długości $q$. Jeśli $s_i s_{i+1} \ldots s_{i+q-1} = x$ dla pewnego $i$, to~$x$ \emph{wystąpiło} w~$s$. Niech $\mathbf{v}(s,q)$ będzie wektorem o~długości $|\Sigma|^q$, którego zmienne oznaczają liczbę wystąpień wszystkich możliwych $q$-gramów z~$\Sigma^q$ w~$s$. Niech $s, t~\in \Sigma^*$ oraz $q>0$ będzie liczbą naturalną. \emph{Odległość $q$-gramową} między napisami $s$ i~$t$ definiuje się następująco %~\cite{Ukkonen1992:approxqgrams}:
+%\begin{equation*}
+%\label{eq:009}
+%d_{\mathtt{q}\mathrm{gram}}(s,t,q) = \norm{\mathbf{v}(s,q) - \mathbf{v}(t,q)}_1 = \sum\limits_{i = 1}^{|\Sigma|^q} |v_i(s,q) - v_i(t,q)|.
+%\end{equation*}
+%\end{block} 
+%\end{frame}
+
+\begin{frame}{Miary heurystyczne}
+Niech $s$~i~$t$ będą napisami. Niech $m$ oznacza liczbę wspólnych znaków z~$s$~i~$t$, przy czym zakładając, że~$s_i = t_j$, to~znak ten jest \emph{wspólny} dla obu napisów, jeśli $ |i -j| < \lfloor\frac{max\{|s|, |t|\}}{2}\rfloor$
+i każdy znak z~$s$ może być wspólny ze~znakiem z~$t$ tylko raz. W~końcu, jeśli $s^\prime$ i~$t^\prime$ są~podnapisami utworzonymi z~$s$ i~$t$ poprzez usunięcie znaków, które nie są~wspólne dla obu napisów, to~$T$ jest liczbą transpozycji potrzebnych to~otrzymania $t^\prime$ z~$s^\prime$. Transpozycje znaków nieprzylegających są~dozwolone.
+\begin{block}{Definicja}
+\emph{Odległość Jaro} definiuje się jako~\cite{Loo2014:stringdist}:
+\begin{equation*}
+\label{eq:011}
+d_{\mathrm{jaro}}(s,t) = \left\{
+\begin{array}{l l}     
+    0, & \text{gdy } s~= t~= \varepsilon, \\
+    1, & \text{gdy } m~= 0 \text{ i~} |s| + |t| > 0, \\
+    1 - \frac{1}{3} (\frac{m}{|s|} + \frac{m}{|t|} + \frac{m - T}{m}) & \text{w przeciwnym przypadku}.
+\end{array}\right.
+\end{equation*}
+\end{block}
+\end{frame}
+
+\begin{frame}{Utworzenie skupień słów}
+Zaproponowano trzy algorytmy opierające się na wybranych odległościach:
+\begin{enumerate}
+\item\label{p:001} Dołączeniu do~skupień słów jeszcze niepogrupowanych.
+\item\label{p:002} Dołączeniu do~skupień zawierających pięć i~więcej elementów, podzbiorów o~mniejszej liczności.
+\item Zastosowaniu najpierw punktu~\ref{p:001}, a~następnie punktu~\ref{p:002}.
+\end{enumerate}
+\pause
+W ten sposób otrzymano 16 różnych reprezentacji tekstów, odpowiadających różnym grupom słów, otrzymanych przy użyciu różnych odległości i powyższych algorytmów.
+\end{frame}
+
+
+
+\begin{frame}{Postępy prac}
+
+\end{frame}
+
+\begin{frame}{Postępy prac}
+
+\end{frame}
+
+
+\begin{frame}{Co dalej?}
+
+\end{frame}
+
+\begin{frame}{Bibliografia}
+%\nocite{Hornik2012:sphkmeans}
+%\nocite{Wild2002:sphkmeans}
+%\nocite{Loo2014:stringdist}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+\end{frame}
+
+
+% \begin{frame}{Bibliografia}
+% 
+% \begin{thebibliography}{}
+% \bibitem[1]{AS} Ananda Sen, \textit{On the Interrelation Between the Sample Mean and Sample Variance}, The American Statistician, 66 (2012), 112-117.
+% %\bibitem[2]{CZ} L. N. de Castro, F. J. Von Zuben, "\href{http://www.dca.fee.unicamp.br/~vonzuben/research/lnunes_dout/artigos/gecco00.pdf}{\textit{The Clonal Selection Algorithm with Engineering Applications}}", GECCO 2000, Workshop on
+% %        Artificial Immune Systems and Their Applications, Las Vegas, USA, str.
+% %        36-37, 2000.
+% %\bibitem[3]{M} \href{http://mst.mimuw.edu.pl/lecture.php?lecture=mbm&part=Ch12}{http://mst.mimuw.edu.pl/lecture.php?lecture=mbm&part=Ch12}
+% %\bibitem[4]{IPIPAN} \href{www.ipipan.waw.pl/\~{}stw/ais/daaisy.html}{www.ipipan.waw.pl/\~{}stw/ais/daaisy.html}
+% 
+% 
+% 
+% \end{thebibliography}
+% \end{frame}
+
+%\begin{frame}{}
+%   \begin{center}
+%      \Huge{Dziękuję za uwagę.}
+%   \end{center}
+%\end{frame}
+
+
+
+\end{document}

@@ -62,6 +62,12 @@ for(i in 1:(length(bb)-1)){
   
 }
 
+# 
+# cc <- list()
+# for(i in 1:(length(bb)-1)){
+#   cc[[i]] <- as.character(skupienia2[(bb[i]+1):bb[i+1],i], rep("", l))[1:l]
+#   
+# }
 # skupienia3 <- data.frame(cc)
 # names(skupienia3) <- names(skupienia2)
 # 
@@ -70,6 +76,7 @@ for(i in 1:(length(bb)-1)){
 #   skupienia3[is.na(skupienia3[,i]),i] <- ""
 # }
 # 
+# skupienia3 <- skupienia3[1:14,-c(3,7:14)]
 # aa <- xtable::xtable(skupienia3)
 # print(aa,  include.rownames = FALSE)
 

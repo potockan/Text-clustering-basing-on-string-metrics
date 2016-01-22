@@ -116,16 +116,17 @@
 
 
 \begin{frame}{Cel pracy}
-Celem pracy jest skategoryzowanie tekstów z~polskiej Wikipedii pod względem tematu na~podstawie liczności słów występujących w~tekście. %Można się spodziewać, że~jeśli w~dwóch tekstach występuje dużo podobnych do~siebie słów, to~pochodzą one z~tej samej kategorii tematycznej. \\
+Celem pracy jest zbadanie wpływu doboru odległości na~przestrzeni napisów na~jakość automatycznej kategoryzacji tematycznej tekstów. \\
+%skategoryzowanie tekstów z~polskiej Wikipedii pod względem tematu na~podstawie liczności słów występujących w~tekście. %Można się spodziewać, że~jeśli w~dwóch tekstach występuje dużo podobnych do~siebie słów, to~pochodzą one z~tej samej kategorii tematycznej. \\
 \pause
 Problemy:
 \begin{itemize}
-\item duże wymiary danych (1 075 568 $\times$ 2 806 765),
+\item duże wymiary danych ($1\ 075\ 568 \times 2\ 806\ 765$),
 \item dane bardzo rzadkie (ponad $99{,}99\%$),
 \item duża złożoność obliczeniowa i pamięciowa.
 \end{itemize}
 \pause
-Remedium to redukcja liczba słów przy użyciu \emph{stemmingu} oraz \emph{odległości na przetrzeni ciągów znaków}.
+Grupujemy więc słowa przy użyciu \emph{stemmingu} oraz \emph{odległości na przestrzeni ciągów znaków}.
 \end{frame}
 
 
@@ -217,9 +218,9 @@ d_{\mathrm{jaro}}(s,t) = \left\{
 \begin{frame}{Utworzenie skupień słów}
 Zaproponowano trzy algorytmy opierające się na wybranych odległościach:
 \begin{enumerate}
-\item\label{p:001} Dołączeniu do~skupień słów jeszcze niepogrupowanych.
-\item\label{p:002} Dołączeniu do~skupień zawierających pięć i~więcej elementów, podzbiorów o~mniejszej liczności.
-\item Zastosowaniu najpierw punktu~\ref{p:001}, a~następnie punktu~\ref{p:002}.
+\item\label{p:001} dołączenie do~skupień słów jeszcze niepogrupowanych,
+\item\label{p:002} dołączenie do~skupień zawierających pięć i~więcej elementów, podzbiorów o~mniejszej liczności,
+\item zastosowanie najpierw punktu~\ref{p:001}, a~następnie punktu~\ref{p:002}.
 \end{enumerate}
 \pause
 W ten sposób otrzymano 16 różnych reprezentacji tekstów, odpowiadających różnym grupom słów, otrzymanych przy użyciu różnych odległości i powyższych algorytmów.
@@ -227,17 +228,67 @@ W ten sposób otrzymano 16 różnych reprezentacji tekstów, odpowiadających r�
 
 
 
-\begin{frame}{Postępy prac}
+\begin{frame}{Algorytm $k$-średnich}
+\begin{block}{Algorytm $k$-średnich}
+W~metodzie $k$-średnich minimalizujemy
+$$
+\sum_i d(\mathbf{x}_i, \mathbf{m}_{C(i)}),
+$$
+gdzie $\mathbf{x}_i$ to~wektor cech, $C(i) \in \{1,\ldots,k\}$ to~identyfikator skupienia, $\mathbf{m}_1,\ldots,\mathbf{m}_k$ to~środek skupienia ($\mathbf{m}_l = \frac{1}{n_l} \sum\limits_{C(i) = l} \mathbf{x}_i$, gdzie $n_l$~to~liczność $l$-tego skupienia), a~$d$~to~odległość Euklidesowa.
+\end{block}
+\pause
+W metodach najszybszego spadku~\cite{Bottou1995:convergenceproperties}
+\begin{align}
+%n^{(t+1)}_l& = n^{(t)}_l + \left\{
+%\begin{array}{l l}     
+%    1, & \text{gdy } l~= C(i), \\
+%    0, & \text{wpp.}
+%\end{array}\right. \\
+\mathbf{m}_l^{(t+1)}& = \mathbf{m}_l^{(t)} + \left\{
+\begin{array}{l l}     
+    \frac{1}{n_l}(\mathbf{x}_i - \mathbf{m}^{(t)}_l), & \text{gdy } l~= C(i), \\
+    0, & \text{wpp.}
+\end{array}\right.
+\end{align}
+\end{frame}
+
+\begin{frame}{Indeks Fowlkesa-Mallowsa}
+\begin{block}{Definicja}
+Niech macierz $M = [m_{ij}],$ $i,j = 1,\ldots, k$ oznacza liczbę elementów z~próby, które należą do~$i$-tego skupienia w~$K$ i~$j$-tej klasy w~$C$, a~$n$~to~liczba obserwacji. Możemy wówczas zdefiniować \emph{indeks Fowlkesa-Mallowsa}, ozn. indeks $\mathrm{FM}$~\cite{Fowlkes1983:fmindex}:
+$$
+\mathrm{FM} = \frac{T}{\sqrt{P\cdot Q}},
+$$
+gdzie 
+$$
+T~= \sum\limits_{i=1}^{k}\sum\limits_{j=1}^{k} m_{ij}^2 - n,\ \ 
+P~= \sum\limits_{i=1}^{k} \bigg(\sum\limits_{j=1}^{k} m_{ij}\bigg)^2 - n,\ \ 
+Q~= \sum\limits_{j=1}^{k} \bigg(\sum\limits_{i=1}^{k} m_{ij}\bigg)^2 - n.
+$$
+\end{block}
+\end{frame}
+
+\begin{frame}{Uzyskane wyniki}
+\begin{figure}[!h]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=350pt]{plot6.pdf}\\
+  \caption{Indeks Fowlkesa-Mallowsa.}\label{plot:005}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Uzyskane wyniki}
+\textbf{clust}: azja,kumak górski, lew, ptaki, salamandra plamista, traszka karpacka, wiatr, antarktyda, kultura łużycka, erytrocyt, ptolemeusz xii neos dionizos (auletes), foyer, medinet habu, \ldots \\ \pause 
+\textbf{clust\_qg}: antoni gorecki, biblioteka, czesław miłosz, ignacy krasicki, jan kochanowski, literatura polska, literatura polska – romantyzm, literatura polska – średniowiecze, polska literatura współczesna, mikołaj rej, poezja, wisława szymborska, \ldots \\ \pause 
+\textbf{clust\_jw\_red\_jw}: armia czerwona, bitwa pod lenino, bitwa warszawska 1920, hagana, kampania wrześniowa, narodowe siły zbrojne, powstanie warszawskie, powstanie wielkopolskie, reichswehra, wehrmacht, waffen-ss, wojciech jaruzelski, \ldots \\ 
 
 \end{frame}
 
-\begin{frame}{Postępy prac}
-
-\end{frame}
-
-
-\begin{frame}{Co dalej?}
-
+\begin{frame}{Wnioski}
+\begin{itemize}
+\item Użycie odległości na przestrzeni ciągów znaków ma pozytywny wpływ na kategoryzację tematyczną tekstów.
+\item Najlepsze rezultaty uzyskano przy użyciu odległości Jaro.
+\item Algorytm 3 miał najlepsze wyniki.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Bibliografia}

@@ -8,7 +8,8 @@ obrobka_wynikow <- function(partition){
   nazwy <- c('_', '_lcs', '_dl','_jw', '_jaccard','_qgram',
              '_red_lcs','_red_dl','_red_jw','_red_jaccard','_red_qgram',
              '_red_lcs_lcs','_red_dl_dl','_red_jw_jw','_red_jaccard_jaccard','_red_qgram_qgram')
-  liczby <- c(5000,10000,35000)
+  # liczby <- c(5000,10000,35000)
+  liczby <- c(5000)
   if(partition == "partitions3")
     liczby <- liczby[1:2]
   
@@ -94,15 +95,23 @@ wyniki <- obrobka_wynikow("partitions3") %>%
 
 j <- 10
 g <- list()
+names(wyniki) <- c("Typ danych", 
+                   "Batch size", 
+                   "Jednorodnosc", 
+                   "Zgodnosc", 
+                   "Miara V", 
+                   "ARI", 
+                   "Silhouettes", 
+                   "Indeks FM")
 nazwy <- names(wyniki)[3:8]
 for(i in 1:length(nazwy)){
     g[[i]] <- 
       ggplot(wyniki, 
              aes(x=factor(`Typ danych`, levels = unique(wyniki$`Typ danych`)), 
-                 y=eval(parse(text = paste0("`",nazwy[i], "`"))), 
-                 fill=factor(`Batch size`, levels = sort(unique(as.numeric(wyniki$`Batch size`)))))) + 
+                 y=eval(parse(text = paste0("`",nazwy[i], "`")))))+#, 
+                 #fill=factor(`Batch size`, levels = sort(unique(as.numeric(wyniki$`Batch size`)))))) + 
       geom_bar(stat="identity", position="dodge") +
-      facet_wrap(~liczba_obs, ncol = 1) +
+      # facet_wrap(~liczba_obs, ncol = 1) +
       ylab(nazwy[i]) +
       xlab("Typ danych") +
       theme(text = element_text(size=25),
@@ -110,7 +119,8 @@ for(i in 1:length(nazwy)){
             axis.text.y = element_text(size = 20), 
             legend.position = "top") +
       guides(fill=guide_legend(title="Batch size"))
-    ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[i]])
+    # ggsave(filename = paste0("LaTeX/plot",j,".pdf"), plot = g[[i]])
+    ggsave(filename = paste0("Seminarium/plot",j,".pdf"), plot = g[[i]])
     
     
     #pdf(file = paste0("LaTeX/plot",j+5,".pdf"))

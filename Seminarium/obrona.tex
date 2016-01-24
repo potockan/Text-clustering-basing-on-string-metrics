@@ -126,7 +126,7 @@ Problemy:
 \item duża złożoność obliczeniowa i pamięciowa.
 \end{itemize}
 \pause
-Grupujemy więc słowa przy użyciu \emph{stemmingu} oraz \emph{odległości na przestrzeni ciągów znaków}.
+Grupujemy słowa przy użyciu \emph{stemmingu} oraz \emph{odległości na przestrzeni ciągów znaków}.
 \end{frame}
 
 
@@ -158,34 +158,51 @@ działalność & niemiecki & odkryta & okres & postaci \\
 
 \end{frame}
 
-
-
-\begin{frame}{Operacje edytowania}
-Odegłości oparte na operacjach edytowania zliczają liczbę opercji potrzebnych do~przetworzenia jednego napisu w~drugi. Najczęściej wymieniamymi operacjami~są~\cite{Boytsov2011:indexingmethods}:
-\begin{itemize}
-\item zamiana znaku, np. $'ela' \rightarrow 'ala'$
-\item usunięcie znaku, np. $'ela' \rightarrow 'ea'$
-\item wstawienie znaku, np. $'ela' \rightarrow 'elka'$
-\item transpozycja dwóch przylegających znaków, np. $'ela' \rightarrow 'lea'$
-\end{itemize}
-\pause
-Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damerau-Levenshteina.
-
-\end{frame}
-
-\begin{frame}{Odległości oparte na $q$-gramach}
+\begin{frame}
 \begin{block}{Definicja}
-Podnapis złożony z~kolejnych, przylegających do~siebie znaków, o~ustalonej długości $q\geq 1$ jest nazywany \emph{$q$-gramem}.
+\emph{Odległością Levenshteina}~\cite{Levenshtein1965:binarycodes} nazywamy:
+$$
+d_{lv}(s, t) = \left\{
+\begin{array}{l l}     
+    0, & \text{gdy } s~= t~= \varepsilon,\\
+    min\{ & \\
+\qquad    d_{lv}(s, t_{1:|t|-1}), & \\
+\qquad    d_{lv}(s_{1:|s|-1}, t), & \\
+\qquad    d_{\mathrm{lv}}(s_{1:|s|-1}, t_{1:|t|-1}) +\\  
+\qquad\qquad\qquad\qquad     \delta(s_{|s|}, t_{|t|}) & \\
+\qquad    \}, & \text{w przeciwnym przypadku},
+\end{array}\right.
+$$
+gdzie $s, t$ to napisy, a $\delta(s_{i}, t_{j}) = 0$, gdy $s_i = t_j$ i 1~w~przeciwnym przypadku. 
 \end{block}
-
-\begin{block}{Definicja}
-Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w~napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{\mathrm{jac}}$, między napisami $s$ i~$t$ definiuje się jako:
-\begin{equation*}
-d_{\mathrm{jac}}(s,t,q) = 1 - \frac{|\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q)|}{|\mathcal{Q}(s,q) \cup \mathcal{Q}(t,q)|},
-\end{equation*}
-gdzie $|\cdot|$ oznacza liczność zbioru.
-\end{block} 
 \end{frame}
+
+%\begin{frame}{Operacje edytowania}
+%Odegłości oparte na operacjach edytowania zliczają liczbę opercji potrzebnych do~przetworzenia jednego napisu w~drugi. Najczęściej wymieniamymi operacjami~są~\cite{Boytsov2011:indexingmethods}:
+%\begin{itemize}
+%\item zamiana znaku, np. $'ela' \rightarrow 'ala'$
+%\item usunięcie znaku, np. $'ela' \rightarrow 'ea'$
+%\item wstawienie znaku, np. $'ela' \rightarrow 'elka'$
+%\item transpozycja dwóch przylegających znaków, np. $'ela' \rightarrow 'lea'$
+%\end{itemize}
+%\pause
+%Przykładowe odległości: Hamminga, najdłuższego wspólnego podnapisu (\emph{longest common substring}), Levenshteina, optymalnego dopasowania napisów (\emph{optimal string alignment}), Damerau-Levenshteina.
+%
+%\end{frame}
+%
+%\begin{frame}{Odległości oparte na $q$-gramach}
+%\begin{block}{Definicja}
+%Podnapis złożony z~kolejnych, przylegających do~siebie znaków, o~ustalonej długości $q\geq 1$ jest nazywany \emph{$q$-gramem}.
+%\end{block}
+%
+%\begin{block}{Definicja}
+%Niech $\mathcal{Q}(s,q)$ oznacza zbiór unikalnych $q$-gramów występujących w~napisie $s$. Wówczas \emph{odległość Jaccarda}, $d_{\mathrm{jac}}$, między napisami $s$ i~$t$ definiuje się jako:
+%\begin{equation*}
+%d_{\mathrm{jac}}(s,t,q) = 1 - \frac{|\mathcal{Q}(s,q) \cap \mathcal{Q}(t,q)|}{|\mathcal{Q}(s,q) \cup \mathcal{Q}(t,q)|},
+%\end{equation*}
+%gdzie $|\cdot|$ oznacza liczność zbioru.
+%\end{block} 
+%\end{frame}
 
 
 %\begin{frame}{Metryki oparte na $q$-gramach}
@@ -198,22 +215,22 @@ gdzie $|\cdot|$ oznacza liczność zbioru.
 %\end{block} 
 %\end{frame}
 
-\begin{frame}{Miary heurystyczne}
-Niech $s$~i~$t$ będą napisami. Niech $m$ oznacza liczbę wspólnych znaków z~$s$~i~$t$, przy czym zakładając, że~$s_i = t_j$, to~znak ten jest \emph{wspólny} dla obu napisów, jeśli $ |i -j| < \lfloor\frac{max\{|s|, |t|\}}{2}\rfloor$
-i każdy znak z~$s$ może być wspólny ze~znakiem z~$t$ tylko raz. W~końcu, jeśli $s^\prime$ i~$t^\prime$ są~podnapisami utworzonymi z~$s$ i~$t$ poprzez usunięcie znaków, które nie są~wspólne dla obu napisów, to~$T$ jest liczbą transpozycji potrzebnych to~otrzymania $t^\prime$ z~$s^\prime$. Transpozycje znaków nieprzylegających są~dozwolone.
-\begin{block}{Definicja}
-\emph{Odległość Jaro} definiuje się jako~\cite{Loo2014:stringdist}:
-\begin{equation*}
-\label{eq:011}
-d_{\mathrm{jaro}}(s,t) = \left\{
-\begin{array}{l l}     
-    0, & \text{gdy } s~= t~= \varepsilon, \\
-    1, & \text{gdy } m~= 0 \text{ i~} |s| + |t| > 0, \\
-    1 - \frac{1}{3} (\frac{m}{|s|} + \frac{m}{|t|} + \frac{m - T}{m}) & \text{w przeciwnym przypadku}.
-\end{array}\right.
-\end{equation*}
-\end{block}
-\end{frame}
+%\begin{frame}{Miary heurystyczne}
+%Niech $s$~i~$t$ będą napisami. Niech $m$ oznacza liczbę wspólnych znaków z~$s$~i~$t$, przy czym zakładając, że~$s_i = t_j$, to~znak ten jest \emph{wspólny} dla obu napisów, jeśli $ |i -j| < \lfloor\frac{max\{|s|, |t|\}}{2}\rfloor$
+%i każdy znak z~$s$ może być wspólny ze~znakiem z~$t$ tylko raz. W~końcu, jeśli $s^\prime$ i~$t^\prime$ są~podnapisami utworzonymi z~$s$ i~$t$ poprzez usunięcie znaków, które nie są~wspólne dla obu napisów, to~$T$ jest liczbą transpozycji potrzebnych to~otrzymania $t^\prime$ z~$s^\prime$. Transpozycje znaków nieprzylegających są~dozwolone.
+%\begin{block}{Definicja}
+%\emph{Odległość Jaro} definiuje się jako~\cite{Loo2014:stringdist}:
+%\begin{equation*}
+%\label{eq:011}
+%d_{\mathrm{jaro}}(s,t) = \left\{
+%\begin{array}{l l}     
+%    0, & \text{gdy } s~= t~= \varepsilon, \\
+%    1, & \text{gdy } m~= 0 \text{ i~} |s| + |t| > 0, \\
+%    1 - \frac{1}{3} (\frac{m}{|s|} + \frac{m}{|t|} + \frac{m - T}{m}) & \text{w przeciwnym przypadku}.
+%\end{array}\right.
+%\end{equation*}
+%\end{block}
+%\end{frame}
 
 \begin{frame}{Utworzenie skupień słów}
 Zaproponowano trzy algorytmy opierające się na wybranych odległościach:
@@ -223,7 +240,7 @@ Zaproponowano trzy algorytmy opierające się na wybranych odległościach:
 \item zastosowanie najpierw punktu~\ref{p:001}, a~następnie punktu~\ref{p:002}.
 \end{enumerate}
 \pause
-W ten sposób otrzymano 16 różnych reprezentacji tekstów, odpowiadających różnym grupom słów, otrzymanych przy użyciu różnych odległości i powyższych algorytmów.
+W ten sposób otrzymano 16 różnych reprezentacji tekstów.
 \end{frame}
 
 
@@ -252,42 +269,12 @@ W metodach najszybszego spadku~\cite{Bottou1995:convergenceproperties}
 \end{align}
 \end{frame}
 
-\begin{frame}{Indeks Fowlkesa-Mallowsa}
-\begin{block}{Definicja}
-Niech macierz $M = [m_{ij}],$ $i,j = 1,\ldots, k$ oznacza liczbę elementów z~próby, które należą do~$i$-tego skupienia w~$K$ i~$j$-tej klasy w~$C$, a~$n$~to~liczba obserwacji. Możemy wówczas zdefiniować \emph{indeks Fowlkesa-Mallowsa}, ozn. indeks $\mathrm{FM}$~\cite{Fowlkes1983:fmindex}:
-$$
-\mathrm{FM} = \frac{T}{\sqrt{P\cdot Q}},
-$$
-gdzie 
-$$
-T~= \sum\limits_{i=1}^{k}\sum\limits_{j=1}^{k} m_{ij}^2 - n,\ \ 
-P~= \sum\limits_{i=1}^{k} \bigg(\sum\limits_{j=1}^{k} m_{ij}\bigg)^2 - n,\ \ 
-Q~= \sum\limits_{j=1}^{k} \bigg(\sum\limits_{i=1}^{k} m_{ij}\bigg)^2 - n.
-$$
-\end{block}
-\end{frame}
-
-\begin{frame}{Uzyskane wyniki}
-\begin{figure}[!h]
-  \centering
-  % Requires \usepackage{graphicx}
-  \includegraphics[width=350pt]{plot6.pdf}\\
-  \caption{Indeks Fowlkesa-Mallowsa.}\label{plot:005}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Uzyskane wyniki}
-\textbf{clust}: azja,kumak górski, lew, ptaki, salamandra plamista, traszka karpacka, wiatr, antarktyda, kultura łużycka, erytrocyt, ptolemeusz xii neos dionizos (auletes), foyer, medinet habu, \ldots \\ \pause 
-\textbf{clust\_qg}: antoni gorecki, biblioteka, czesław miłosz, ignacy krasicki, jan kochanowski, literatura polska, literatura polska – romantyzm, literatura polska – średniowiecze, polska literatura współczesna, mikołaj rej, poezja, wisława szymborska, \ldots \\ \pause 
-\textbf{clust\_jw\_red\_jw}: armia czerwona, bitwa pod lenino, bitwa warszawska 1920, hagana, kampania wrześniowa, narodowe siły zbrojne, powstanie warszawskie, powstanie wielkopolskie, reichswehra, wehrmacht, waffen-ss, wojciech jaruzelski, \ldots \\ 
-
-\end{frame}
 
 \begin{frame}{Wnioski}
 \begin{itemize}
 \item Użycie odległości na przestrzeni ciągów znaków ma pozytywny wpływ na kategoryzację tematyczną tekstów.
-\item Najlepsze rezultaty uzyskano przy użyciu odległości Jaro.
-\item Algorytm 3 miał najlepsze wyniki.
+\item Dla dwóch odległości zaobserwowano lepsze wyniki niż w przypadku pozostałych.
+\item Najlepsze rezultaty zostały otrzymane przy użyciu algorytmu 3.
 \end{itemize}
 \end{frame}
 
@@ -300,26 +287,6 @@ $$
 \end{frame}
 
 
-% \begin{frame}{Bibliografia}
-% 
-% \begin{thebibliography}{}
-% \bibitem[1]{AS} Ananda Sen, \textit{On the Interrelation Between the Sample Mean and Sample Variance}, The American Statistician, 66 (2012), 112-117.
-% %\bibitem[2]{CZ} L. N. de Castro, F. J. Von Zuben, "\href{http://www.dca.fee.unicamp.br/~vonzuben/research/lnunes_dout/artigos/gecco00.pdf}{\textit{The Clonal Selection Algorithm with Engineering Applications}}", GECCO 2000, Workshop on
-% %        Artificial Immune Systems and Their Applications, Las Vegas, USA, str.
-% %        36-37, 2000.
-% %\bibitem[3]{M} \href{http://mst.mimuw.edu.pl/lecture.php?lecture=mbm&part=Ch12}{http://mst.mimuw.edu.pl/lecture.php?lecture=mbm&part=Ch12}
-% %\bibitem[4]{IPIPAN} \href{www.ipipan.waw.pl/\~{}stw/ais/daaisy.html}{www.ipipan.waw.pl/\~{}stw/ais/daaisy.html}
-% 
-% 
-% 
-% \end{thebibliography}
-% \end{frame}
-
-%\begin{frame}{}
-%   \begin{center}
-%      \Huge{Dziękuję za uwagę.}
-%   \end{center}
-%\end{frame}
 
 
 

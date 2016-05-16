@@ -166,14 +166,14 @@ d_{lv}(s, t) = \left\{
 \begin{array}{l l}     
     0, & \text{gdy } s~= t~= \varepsilon,\\
     min\{ & \\
-\qquad    d_{lv}(s, t_{1:|t|-1}), & \\
-\qquad    d_{lv}(s_{1:|s|-1}, t), & \\
+\qquad    d_{lv}(s, t_{1:|t|-1}) + 1, & \\
+\qquad    d_{lv}(s_{1:|s|-1}, t) + 1, & \\
 \qquad    d_{\mathrm{lv}}(s_{1:|s|-1}, t_{1:|t|-1}) +\\  
 \qquad\qquad\qquad\qquad     \delta(s_{|s|}, t_{|t|}) & \\
 \qquad    \}, & \text{w przeciwnym przypadku},
 \end{array}\right.
 $$
-gdzie $s, t$ to napisy, a $\delta(s_{i}, t_{j}) = 0$, gdy $s_i = t_j$ i 1~w~przeciwnym przypadku. 
+gdzie $s, t$ to napisy, $\varepsilon$ to napis pusty, a $\delta(s_{i}, t_{j}) = 0$, gdy $s_i = t_j$ i~1~w~przeciwnym przypadku. 
 \end{block}
 \end{frame}
 
